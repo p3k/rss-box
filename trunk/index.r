@@ -63,7 +63,7 @@ REBOL [
 ;print "Content-type: text/plain^/"
 
 rss-box-viewer: make object! [
-   baseuri: "http://p3k.org/rss/"
+   baseuri: "http://p3k.org/rss-1.0RC/"
 
    defaults: make object! [
       url: "http://blog.p3k.org/rss"
@@ -380,17 +380,12 @@ rss-box-viewer: make object! [
       foreach [title macro] macrolist [
          newstr: get in param to-word title
          if none? newstr [newstr: ""]
-         if not empty? to-string newstr [
-            parts: parse macro "="
-            display: select parts "display"
-            either not none? display [
-               newstr: display
-            ][
-               prefix: select parts "prefix"
-               suffix: select parts "suffix"
-               if not none? prefix [insert newstr prefix]
-               if not none? suffix [append newstr suffix]
-            ]
+         if not empty? newstr [
+            prefix: suffix: make string! 255
+            parse macro [thru "prefix='" copy prefix to "'"]
+            if not empty? prefix [insert newstr prefix]
+            parse macro [thru "suffix='" copy suffix to "'"]
+            if not empty? suffix [append newstr suffix]
          ]
          replace/all result macro newstr
       ]

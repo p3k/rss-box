@@ -1,4 +1,4 @@
 <form method="get" action="<% param.link %>">
-<% param.description suffix="<br />" %>
+<% param.description suffix='<br />' %>
 <input type="text" name="<% param.name %>" size="15" /> <input type="submit" value="<% param.title %>" />
 </form>
