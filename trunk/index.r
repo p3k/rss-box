@@ -280,21 +280,27 @@ rss-box-viewer: make object! [
          image: make object! [
             title: source: link: width: height: description: none
             either format = "Scripting News" [
-               title: xml/get-content channel "imageTitle"
                source: xml/get-content channel "imageUrl"
-               link: xml/get-content channel "imageLink"
-               width: xml/get-content channel "imageWidth"
-               height: xml/get-content channel "imageHeight"
-               description: xml/get-content channel "imageCaption"
+               if not empty? source [
+                  title: xml/get-content channel "imageTitle"
+                  link: xml/get-content channel "imageLink"
+                  width: xml/get-content channel "imageWidth"
+                  height: xml/get-content channel "imageHeight"
+                  description: xml/get-content channel "imageCaption"
+               ]
             ][
                use [element][
+                  source: ""
                   element: xml/get-element rss "image"
-                  title: xml/get-content element "title"
-                  source: xml/get-content element "url"
-                  link: xml/get-content element "link"
-                  width: xml/get-content element "width"
-                  height: xml/get-content element "height"
-                  description: xml/get-content element "description"
+                  if empty? element [element: xml/get-element channel "image"]
+                  if not empty? element [
+                     source: xml/get-content element "url"
+                     title: xml/get-content element "title"
+                     link: xml/get-content element "link"
+                     width: xml/get-content element "width"
+                     height: xml/get-content element "height"
+                     description: xml/get-content element "description"
+                  ]
                ]
             ]
          ]
