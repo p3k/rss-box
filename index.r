@@ -68,7 +68,7 @@ rss-box-viewer: make object! [
       url: "http://blog.p3k.org/rss"
       align: "left"
       width: "200"
-      frameColor: "darkgray"
+      frameColor: "black"
       titleBarColor: "lightblue"
       titleBarTextColor: "black"
       boxFillColor: "white"
@@ -79,7 +79,7 @@ rss-box-viewer: make object! [
       compact: ""
       setup: "false"
       javascript: "false"
-      cache: "true"
+      nocache: "false"
    ]
 
    get-id: func [ /local url id] [
@@ -97,12 +97,9 @@ rss-box-viewer: make object! [
    ]
 
    get-source: func [ /local src] [
-      if not (settings/cache = "false") and exists? cache [
+      if settings/nocache <> "true" and exists? cache [
          modify-time: modified? cache
-         if all [
-            (now - modify-time) < 1
-            (difference now modified? cache) < 1:00
-         ][
+         if (difference now modify-time) < 1:00 [
             print "<!-- read from cache -->"
             return decompress read/binary cache
          ]
@@ -113,7 +110,6 @@ rss-box-viewer: make object! [
       if error? try [
          src: read settings/url
       ][
-         msg: "Sorry, could not read from url"
          return make string! 0 
       ]
       print "<!-- fetch from url -->"
@@ -212,7 +208,7 @@ rss-box-viewer: make object! [
          if none? lastBuildDate [
             lastBuildDate: xml/get-content channel "dc:date"
             either empty? lastBuildDate [
-               lastBuildDate: now
+               lastBuildDate: modified? cache
             ][
                replace lastBuildDate "T" "/"
                lastBuildDate: parse-date lastBuildDate
@@ -229,94 +225,99 @@ rss-box-viewer: make object! [
          skipDays: xml/get-content channel "skipDays"
          skipHours: xml/get-content channel "skipHours"
          text-input: make object! [
-            element: xml/get-element rss "textinput"
             link: description: name: title: none
-            if not empty? element [
-               link: xml/get-content element "link"
-               description: xml/get-content element "description"
-               name: xml/get-content element "name"
-               title: xml/get-content element "title"
+            use [element][
+               element: xml/get-element rss "textinput"
+               if not empty? element [
+                  link: xml/get-content element "link"
+                  description: xml/get-content element "description"
+                  name: xml/get-content element "name"
+                  title: xml/get-content element "title"
+               ]
             ]
          ]
          image: make object! [
-            title: url: link: width: height: description: none
-            either format = "scriptingNews" [
+            title: source: link: width: height: description: none
+            either format = "Scripting News" [
                title: xml/get-content channel "imageTitle"
-               url: xml/get-content channel "imageUrl"
+               source: xml/get-content channel "imageUrl"
                link: xml/get-content channel "imageLink"
                width: xml/get-content channel "imageWidth"
                height: xml/get-content channel "imageHeight"
                description: xml/get-content channel "imageCaption"
             ][
-               element: xml/get-element channel "image"
-               if format = "RDF" [element: xml/get-element rss "image"]
-               title: xml/get-content element "title"
-               url: xml/get-content element "url"
-               link: xml/get-content element "link"
-               width: xml/get-content element "width"
-               height: xml/get-content element "height"
-               description: xml/get-content element "description"
+               use [element][
+                  element: xml/get-element rss "image"
+                  title: xml/get-content element "title"
+                  source: xml/get-content element "url"
+                  link: xml/get-content element "link"
+                  width: xml/get-content element "width"
+                  height: xml/get-content element "height"
+                  description: xml/get-content element "description"
+               ]
             ]
          ]
          items: make block! 100
-         element: either format = "RSS" [
-            xml/get-element channel "item"
-         ][
-            xml/get-element rss "item"
-         ]
-         foreach [label attr child] element [
-            item: make object! [
-               description: title: link: none
-               source: make object! [
-                  link: title: none
-                  use [src][
-                     src: xml/get-element child "source"
-                     if not empty? src [
-                        link: xml/get-attribute src "url"
-                        title: (xml/get-content src)
-                     ]
-                  ]
-               ]
-               enclosure: make object! [
-                  link: length: type: none
-                  use [enc][
-                     enc: xml/get-element child "enclosure"
-                     if not empty? enc [
-                        link: xml/get-attribute enc "url"
-                        length: xml/get-attribute enc "length"
-                        type: xml/get-attribute enc "type"
-                     ]
-                  ]
-               ]
-               category: make object! [
-                  domain: content: none
-                  use [cat][
-                     cat: xml/get-element child "category"
-                     if not empty? cat [
-                        domain: xml/get-attribute cat "domain"
-                        content: xml/get-attribute cat "content"
-                     ]
-                  ]
-               ]
-               either format = "Scripting News" [
-                  description: xml/get-content child "text"
-                  use [link linetext url] [
-                     link: xml/get-element child "link"
-                     foreach [label attr item] link [
-                        linetext: xml/get-content item "linetext"
-                        url: xml/get-content item "url"
-                        replace/case description linetext rejoin [
-                           {<a href="} url {">} linetext "</a>"
+         use [element][
+            element: either format = "RSS" [
+               xml/get-element channel "item"
+            ][
+               xml/get-element rss "item"
+            ]
+            foreach [label attr child] element [
+               item: make object! [
+                  description: title: link: none
+                  source: make object! [
+                     link: title: none
+                     use [src][
+                        src: xml/get-element child "source"
+                        if not empty? src [
+                           link: xml/get-attribute src "url"
+                           title: (xml/get-content src)
                         ]
                      ]
                   ]
-               ][
-                  description: xml/get-content child "description"
-                  title: xml/get-content child "title"
-                  link: xml/get-content child "link"
+                  enclosure: make object! [
+                     link: length: type: none
+                     use [enc][
+                        enc: xml/get-element child "enclosure"
+                        if not empty? enc [
+                           link: xml/get-attribute enc "url"
+                           length: xml/get-attribute enc "length"
+                           type: xml/get-attribute enc "type"
+                        ]
+                     ]
+                  ]
+                  category: make object! [
+                     domain: content: none
+                     use [cat][
+                        cat: xml/get-element child "category"
+                        if not empty? cat [
+                           domain: xml/get-attribute cat "domain"
+                           content: xml/get-attribute cat "content"
+                        ]
+                     ]
+                  ]
+                  either format = "Scripting News" [
+                     description: xml/get-content child "text"
+                     use [link linetext url] [
+                        link: xml/get-element child "link"
+                        foreach [label attr item] link [
+                           linetext: xml/get-content item "linetext"
+                           url: xml/get-content item "url"
+                           replace/case description linetext rejoin [
+                              {<a href="} url {">} linetext "</a>"
+                           ]
+                        ]
+                     ]
+                  ][
+                     description: xml/get-content child "description"
+                     title: xml/get-content child "title"
+                     link: xml/get-content child "link"
+                  ]
                ]
+               append items item
             ]
-            append items item
          ]
       ]
       return data
@@ -327,8 +328,7 @@ rss-box-viewer: make object! [
       param [object!]
       /local newstr result macrolist
    ][
-      template: read template-file
-      result: copy template
+      result: read template-file
       macrolist: make block! 20
       parse result [
          any [
@@ -405,8 +405,10 @@ rss-box-viewer: make object! [
             if not none? data/text-input/link [
                textInput: render-template %textInput.skin data/text-input
             ]
-            if not empty? data/image/url [
-               image: render-template %image.skin data/image
+            if not empty? data/image/source [
+               image: render-template %image.skin make data/image [
+                  align: "right" hspace: "5" vspace: "10"
+               ]
             ]
          ][
             settings/compact: {checked="checked"}
