@@ -1,0 +1,1 @@
+<p class="rssBoxItemContent"><a class="rssBoxItemTitle" href="<% param.link %>"><% param.title prefix="<strong>" suffix="</strong>" %></a><% param.description prefix="<br />" %><% param.buttons prefix="<br />" %></p>
