@@ -118,8 +118,15 @@ function clearForm() {
    <td nowrap="nowrap"><br /> </td>
 </tr>
 <tr>
-   <td align="right" valign="baseline"><a name="referrers"></a><small>Referrers:</small></td>
+   <td align="right" valign="baseline"><a name="referrers"></a><small>Referrers:<br />
+   (recent 50)</small></td>
    <td valign="baseline"><% param.sitelist %></td>
+</tr>
+<tr>
+   <td align="right" valign="baseline"><small>Blocked&nbsp;requests:<br />
+   (high traffic)</small></td>
+   <td valign="baseline">ipaper.com<br />
+   bakermedia.com</td>
 </tr>
 </table>
 
@@ -133,6 +140,8 @@ function clearForm() {
 
    <p><strong>Recent changes:</strong></p>
    <ul>
+   <li>16.12.2004<br />
+   Bugfix: Sometimes the logfile which is used to generate the list of sites using this script gets corrupted. This affected the whole setup page to return an error and thus, it needed to be caught. (You will see a "currently out of order" message then.)<p></p></li>
    <li>26.04.2004<br />
    Last efforts to officially release the <a href="http://cvs.p3k.org/viewcvs.cgi/rss-box">code</a> to the open source community. There have been some bugs in the (image) rendering framework which I fixed so far. I now include a dynamically rendered list of sites using (or pointing to) this script to give some examples for the curious at heart (me included). Finally, there's a <a href="http://cvs.p3k.org/viewcvs.cgi/*checkout*/rss-box/README?rev=HEAD&content-type=text/plain">README</a> file with a short installation guide to make the script run on your own server.<p></p></li>
    <li>28.01.2004<br />
