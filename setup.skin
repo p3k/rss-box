@@ -63,6 +63,18 @@ function clearForm() {
    <td valign="baseline"><% param.contact %></td>
 </tr>
 <tr>
+   <td align="right" nowrap="nowrap"><small>Compact view:</small></td>
+   <td><input type="checkbox" name="compact" value="1" <% param.compact %> /> <small></td>
+</tr>
+<tr>
+   <td align="right" nowrap="nowrap"><small>XML button:</small></td>
+   <td><input type="checkbox" name="showXmlButton" value="1" <% param.showXmlButton %> /> <small></td>
+</tr>
+<tr>
+   <td align="right" valign="baseline"><small>Max. items:</small></td>
+   <td valign="baseline"><input type="text" name="maxItems" value="<% param.maxItems %>" /></td>
+</tr>
+<tr>
    <td align="right" valign="baseline"><small>Width:</small></td>
    <td valign="baseline"><input type="text" name="width" value="<% param.width %>" /></td>
 </tr>
@@ -93,18 +105,6 @@ function clearForm() {
 <tr>
    <td align="right" valign="baseline" nowrap="nowrap"><small>Font face:</small></td>
    <td valign="baseline"><input type="text" name="fontFace" value="<% param.fontFace %>" /></td>
-</tr>
-<tr>
-   <td align="right" valign="baseline"><small>Max. items:</small></td>
-   <td valign="baseline"><input type="text" name="maxItems" value="<% param.maxItems %>" /></td>
-</tr>
-<tr>
-   <td align="right" nowrap="nowrap"><small>Compact view:</small></td>
-   <td><input type="checkbox" name="compact" value="1" <% param.compact %> /> <small>(check to enable)</td>
-</tr>
-<tr>
-   <td align="right" nowrap="nowrap"><small>XML button:</small></td>
-   <td><input type="checkbox" name="showXmlButton" value="1" <% param.showXmlButton %> /> <small>(check to enable)</td>
 </tr>
 <tr>
    <td></td>
