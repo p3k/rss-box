@@ -9,13 +9,13 @@ REBOL [
    Date:    19-Mar-2001
    Name:    copy Title  ; For window title bar
 
-   Version: 1.0.0
-   File:    %rss-box.r
-   Home:    http://forever.p3k.org/rss
+   Version: 1.0.1
+   File:    %index.r
+   Home:    http://p3k.org/rss
 
    Author:  "Tobi Schaefer"
    Owner:   "p3k organisation"
-   Rights:  "Copyright (C) p3k organisation 2003"
+   Rights:  "Copyright (C) p3k organisation 2004"
 
    Needs:   [
       %xml-lib.r
