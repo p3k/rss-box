@@ -54,6 +54,7 @@ REBOL [
       0.9.9 [26-Jan-2004 {Rewrote whole application from scratch using object-oriented approach.} "ts"]
       1.0.0 [28-Jan-2004 {Added output of "error" box if something goes wrong. Labeled as release candidate} "ts"]
       1.0.1 [26-Apr-2004 {Fixed some minor bugs, mainly in the rendering framework. Added list of sites using this script.} "ts"]
+      1.0.2 [16-Dec-2004 {Bugfix: catch error when displaying sitelist and logfile is corrupted.} "ts"]
    ]
 
    Language: 'English
@@ -159,10 +160,11 @@ rss-box-viewer: make object! [
       if not exists? %log/ [make-dir %log/]
       cgi: system/options/cgi
       referrer: select cgi/other-headers "HTTP_REFERER"
+      if find referrer "ipaper.com" [quit]
       write/append rss-box-viewer/logfile rejoin [
          now/time "^-" cgi/remote-addr "^-{" referrer "}^/"
       ]
-      return
+      return referrer
    ]
 
    get-id: func [ /local url id] [
@@ -492,7 +494,9 @@ rss-box-viewer: make object! [
               set p encode-url get in settings p
             ]
          ]
-         sitelist: render-site-list
+         if error? sitelist: try [render-site-list][
+            sitelist: ["(currently out of order)"]
+         ]
       ]
    ]
 
@@ -565,11 +569,13 @@ rss-box-viewer: make object! [
    data: get-data (xml/get-element document)
 ]
 
+
+
 ;; the main section
 rss-box: rss-box-viewer/render
 either rss-box-viewer/settings/setup = "true" [
    print rss-box-viewer/render-setup rss-box
 ][
-   print rss-box
    rss-box-viewer/log
+   print rss-box
 ]
