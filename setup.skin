@@ -48,7 +48,7 @@ function clearForm() {
 </tr>
 <tr>
    <td align="right" valign="baseline" nowrap="nowrap"><small>Last build:</small></td>
-   <td valign="baseline"><% param.lastBuild suffix=" GMT" %></td>
+   <td valign="baseline"><% param.lastBuild suffix=' GMT' %></td>
 </tr>
 <tr>
    <td align="right" valign="baseline"><small>Source:</small></td>
@@ -100,11 +100,11 @@ function clearForm() {
 </tr>
 <tr>
    <td align="right" nowrap="nowrap"><small>Compact view:</small></td>
-   <td><input type="checkbox" name="compact" value="1" <% param.compact %> /> enabled</td>
+   <td><input type="checkbox" name="compact" value="1" <% param.compact %> /> <small>(check to enable)</td>
 </tr>
 <tr>
    <td align="right" nowrap="nowrap"><small>XML button:</small></td>
-   <td><input type="checkbox" name="showXmlButton" value="1" <% param.showXmlButton %> /> enabled</td>
+   <td><input type="checkbox" name="showXmlButton" value="1" <% param.showXmlButton %> /> <small>(check to enable)</td>
 </tr>
 <tr>
    <td></td>
@@ -129,14 +129,14 @@ function clearForm() {
 	<p><strong>About JavaScript RSS box viewer:</strong></p>
    <p>This <a href="http://www.salon.com/tech/col/rose/2003/12/04/rss/index.html">RSS</a>-box viewer can display the formats <a href="?setup=true&amp;url=http://www.macslash.com/macslash.rdf">RSS 0.91</a>, <a href="?setup=true&amp;url=http://www.iawiki.net/rss092.xml">RSS 0.92</a>, <a href="?setup=true&amp;url=http://blog.p3k.org/rss">RSS 1.0</a> (w/o modules) and <a href="?setup=true&amp;url=http://instructionaltechnology.editthispage.com/xml/scriptingNews2.xml">Scripting News 2</a>. It provides a simple way to embed such RSS boxes in any HTML document via a generated JavaScript tag.</p>
    <p>Simply enter the URL of any compatible RSS feed, modify the layout settings as you like and push the submit button. When finished, copy the HTML code into your HTML document and voil&agrave;!</p>
-   <p>The script running behind this is written in <a href="http://www.rebol.com">Rebol</a>, a cool internet messaging language. You can get the source code together with all the other necessary files (except the Rebol runtime) from <a href="http://cvs.p3k.org/rss-box">CVS</a>.</p>
+   <p>The script running behind this is written in <a href="http://www.rebol.com">Rebol</a>, a cool internet messaging language. You can get the source code together with all the other necessary files (except the Rebol runtime) from <a href="http://cvs.p3k.org/viewcvs.cgi/rss-box">CVS</a>.</p>
 
    <p><strong>Recent changes:</strong></p>
    <ul>
    <li>28.01.2004<br />
    When something goes wrong (most of the time this might be a wrong URL, ie. a 404 as result) an <a href="?setup=true&amp;url=error">"error" box</a> will be displayed to signal the failure. Increased version up to 1.0 and labeled it as release candidate (RC).<p></p></li>
    <li>26.01.2004<br />
-   Retouched the code in a very last effort to make the script running stand-alone (with Rebol but <em>without</em> PHP, that is). Everything needed is now in <a href="http://cvs.p3k.org/rss-box">CVS</a> so everybody can download from there. Potentially, a few minor bug fixes might follow short-term. Uh, and the HTML code is <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fforever.p3k.org%2Frss2%2Findex.r%3Fsetup%3Dtrue">valid XHTML 1.0</a> now.<p></p></li>
+   Retouched the code in a very last effort to make the script running stand-alone (with Rebol but <em>without</em> PHP, that is). Everything needed is now in <a href="http://cvs.p3k.org/viewcvs.cgi/rss-box">CVS</a> so everybody can download from there. Potentially, a few minor bug fixes might follow short-term. Uh, and the HTML code is <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fforever.p3k.org%2Frss2%2Findex.r%3Fsetup%3Dtrue">valid XHTML 1.0</a> now.<p></p></li>
    <li>12.12.2003<br />
    The mirror at <a href="http://publish.curry.com/rss/">curry.com</a> is not working for quite a long time. I tried to contact Adam Curry but so far without success.<p></p></li>
    <li>30.03.2003<br />
