@@ -64,8 +64,7 @@ REBOL [
 ;print "Content-type: text/plain^/"
 
 rss-box-viewer: make object! [
-   ;baseuri: "http://forever.p3k.org/rss2/"
-   baseuri: "http://localhost/rss-box/index.r"
+   baseuri: "http://p3k.org/rss/"
 
    defaults: make object! [
       url: "http://blog.p3k.org/rss"
