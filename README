@@ -1,0 +1,55 @@
+This JavaScript RSS Box Viewer was coded in RebolTM by Tobi Schaefer 
+between 2001 and 2004.
+
+He cannot be held responsible for any uncomfortable situation caused
+by the code. That means: sorry, no warranty for anything. It's just
+code but I like it. If you do not that's your problem.
+
+Here is an ultra-short guide on how to install the script on your 
+own server:
+
+1) Download the RebolTM executable from http://rebol.com and install 
+   it at the place of your choice.
+
+2) You need a web server enabled to run RebolTM scripts via the 
+   Common Gateway Interface (CGI).
+   I recommend Apache [http://httpd.apache.org] because all you have
+   to configure is
+
+   AddHandler cgi-script .r
+   DirectoryIndex index.r
+   
+   (But be aware that this is a too simple and pretty insecure 
+    set-up, only acceptable as a quick start.)
+
+3) Get the JavaScript RSS Box Viewer script and everything else 
+   necessary via CVS. There are many CVS clients out there, some even 
+   have a pretty graphical interface. However, for the command line 
+   part you might want to use only something like this:
+
+   cvs -d :pserver:anonymous@cvs.p3k.org:/home/cvs login
+   [hit return at the prompt, there's no password needed.]
+
+   cvs -d :pserver:anonymous@cvs.p3k.org:/home/cvs ex -r HEAD rss-box
+
+4) If you are on a *nix box check the permission settings of the script 
+   and its environment. The web server needs to execute the script as 
+   well as to write to the installation directory. Something like the 
+   following should do the job:
+
+   chown -R httpd.httpd rss-box
+   chmod ug+wx rss-box/index.r
+
+   If you use a different system you should rather ask your system 
+   administrator. (That's the technically skilled person you either pay 
+   or should have paid a lot of money.)
+
+5) Set the she-bang (ie. the first line of the script starting with "#")
+   in the index.r script to the path of your RebolTM installation.
+
+6) Set the baseuri variable in the index.r script to the base URI of
+   where your script will be located at.
+
+7) Point your browser to this URI and cross your fingers.
+
+Have Fun!
