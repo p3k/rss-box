@@ -5,8 +5,7 @@
 <small style="color: <% param.titleBarTextColor %>;"><% param.lastBuildDate suffix=" GMT" %></small></div></td>
 </tr>
 <tr bgcolor="<% param.boxFillColor %>">
-<td class="rssBoxContent" style="color: <% param.textColor %>;"> 
-<div><% param.image %><% param.content %></div>
-<div><% param.textInput %></div></td>
+<td class="rssBoxContent" style="color: <% param.textColor %>;"><% param.image %><% param.content %>
+<% param.textInput %></td>
 </tr>
 </table>
