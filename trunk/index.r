@@ -1,8 +1,9 @@
-#!/usr/bin/rebol -cs
+#!"C:\Program Files\rebol\core031\rebol031.exe" -cs
+; #!/usr/bin/rebol -cs
 
-; original usertalk call:
-; viewRssBox(url, boxTitle, align, width, frameColor, titleBarTextColor, \
-; titleBarColor, boxFillColor, timeZone, hspace, vspace, maxItems)
+;; original usertalk call:
+;; viewRssBox(url, boxTitle, align, width, frameColor, titleBarTextColor, \
+;; titleBarColor, boxFillColor, timeZone, hspace, vspace, maxItems)
 
 REBOL [
    Title:   "JavaScript RSS-Box Viewer"
@@ -53,6 +54,7 @@ REBOL [
       0.9.8 [12-Feb-2002 {Corrected parent of textinput element (ie. rss, was channel)} "ts"]
       0.9.9 [26-Jan-2004 {Rewrote whole application from scratch using object-oriented approach.} "ts"]
       1.0.0 [28-Jan-2004 {Added output of "error" box if something goes wrong. Labeled as release candidate} "ts"]
+      1.0.1 [26-Apr-2004 {Fixed some minor bugs. Added list of sites using this script.} "ts"]
    ]
 
    Language: 'English
@@ -62,9 +64,10 @@ REBOL [
 ;print "Content-type: text/plain^/"
 
 rss-box-viewer: make object! [
-   baseuri: "http://forever.p3k.org/rss2/"
+   ;baseuri: "http://forever.p3k.org/rss2/"
+   baseuri: "http://localhost/rss-box/index.r"
 
-   defaults:  make object! [
+   defaults: make object! [
       url: "http://blog.p3k.org/rss"
       align: "left"
       width: "200"
@@ -80,41 +83,6 @@ rss-box-viewer: make object! [
       setup: "false"
       javascript: "false"
       nocache: "false"
-   ]
-
-   get-id: func [ /local url id] [
-      url: copy settings/url
-      replace url "http://" ""
-      id: copy/part enbase/base url 16 256
-      replace/all id #"^/"
-      return id
-   ]
-
-   get-filename: func [ /local fname] [
-      fname: first parse last parse settings/url "/" "?"
-      if empty? fname [ fname: "..." ]
-      return fname
-   ]
-
-   get-source: func [ /local src] [
-      if settings/nocache <> "true" and exists? cache [
-         modify-time: modified? cache
-         if (difference now modify-time) < 1:00 [
-            print "<!-- read from cache -->"
-            return decompress read/binary cache
-         ]
-      ]
-      if not (find settings/url http://) = settings/url [
-         insert settings/url http://
-      ]
-      if error? try [
-         src: read settings/url
-      ][
-         return make string! 0 
-      ]
-      print "<!-- fetch from url -->"
-      write/binary cache compress src
-      return src
    ]
 
    parse-date: func [str [string!]] [
@@ -157,6 +125,81 @@ rss-box-viewer: make object! [
          ]
       ]
       return result
+   ]
+
+   encode-url: func [
+      {URL-encode a string}
+      data "String to encode"
+      /local new-data
+   ][
+      new-data: make string! ""
+      normal-char: charset [
+         #"A" - #"Z" #"a" - #"z"
+         #"@" #"." #"*" #"-" #"_"
+         #"0" - #"9"
+      ]
+      try [
+         data: to-string data
+      ][
+         return new-data
+      ]
+      forall data [
+         append new-data either find normal-char first data [
+            first data
+         ][
+            rejoin ["%" to-string skip tail (to-hex to-integer first data) -2]
+         ]
+      ]
+      return new-data
+   ]
+
+   logfile: rejoin [
+      %log/ format-date now "y-M-d" ".log"
+   ]
+
+   log: func [/local cgi referrer] [
+      if not exists? %log/ [make-dir %log/]
+      cgi: system/options/cgi
+      referrer: select cgi/other-headers "HTTP_REFERER"
+      write/append rss-box-viewer/logfile rejoin [
+         now/time "^-" cgi/remote-addr "^-{" referrer "}^/"
+      ]
+      return
+   ]
+
+   get-id: func [ /local url id] [
+      url: copy settings/url
+      replace url "http://" ""
+      id: copy/part enbase/base url 16 256
+      replace/all id #"^/"
+      return id
+   ]
+
+   get-filename: func [ /local fname] [
+      fname: first parse last parse settings/url "/" "?"
+      if empty? fname [ fname: "..." ]
+      return fname
+   ]
+
+   get-source: func [ /local src] [
+      if settings/nocache <> "true" and exists? cache [
+         modify-time: modified? cache
+         if (difference now modify-time) < 1:00 [
+            print "<!-- read from cache -->"
+            return decompress read/binary cache
+         ]
+      ]
+      if not (find settings/url http://) = settings/url [
+         insert settings/url http://
+      ]
+      if error? try [
+         src: read settings/url
+      ][
+         return make string! 0 
+      ]
+      print "<!-- fetch from url -->"
+      write/binary cache compress src
+      return src
    ]
 
    init-settings: func [ /local cgi query-string] [
@@ -364,7 +407,6 @@ rss-box-viewer: make object! [
          boxTitle: data/title
          lastBuildDate: format-date to-utc-date data/lastBuildDate "y-M-d, H:m"
          if settings/showXmlButton = "1" [
-            settings/showXmlButton: {checked="checked"}
             xmlButton: render-template %image.skin make object! [
                link: settings/url
                source: join baseuri "xml.gif" border: "0"
@@ -401,7 +443,7 @@ rss-box-viewer: make object! [
                buttons: rejoin [enclosure " " source]
             ]
          ]
-         either empty? settings/compact [
+         if empty? settings/compact [
             if not none? data/text-input/link [
                textInput: render-template %textInput.skin data/text-input
             ]
@@ -410,8 +452,6 @@ rss-box-viewer: make object! [
                   align: "right" hspace: "5" vspace: "10"
                ]
             ]
-         ][
-            settings/compact: {checked="checked"}
          ]
       ]
    ]
@@ -426,11 +466,48 @@ rss-box-viewer: make object! [
          format: data/format
          version: data/version
          contact: data/managingEditor
+         if settings/showXmlButton = "1" [
+            showXmlButton: {checked="checked"}
+         ]
+         if settings/compact = "1" [
+            compact: {checked="checked"}
+         ]
          javascript: render-template %javascript.skin make settings [
             baseuri: rss-box-viewer/baseuri
+            foreach p [
+               'width 'align 'frameColor 'titleBarColor 'titleBarTextColor
+               'boxFillColor 'textColor 'fontFace 'maxItems 'url
+            ][
+              set p encode-url get in settings p
+            ]
          ]
-         replace/all javascript "#" "%23"
+         sitelist: render-site-list
       ]
+   ]
+
+   render-site-list: func [] [
+      log: load rss-box-viewer/logfile
+      reverse log
+      first-entries: copy/part log 900
+      list: make block! 0
+      foreach [url ip time] first-entries [
+         if url <> "none" [
+            parts: parse/all url "/"
+            hostname: parts/3
+            if none? find list hostname [
+               append list url
+               append list hostname
+            ]
+         ]
+      ]
+      str: make string! 1000
+      foreach [url hostname] copy/part list 100 [
+         append str build-tag [a href (url)]
+         append str hostname
+         append str </a>
+         append str <br />
+      ]
+      return str
    ]
 
    js-print: func [str [string!]][
@@ -466,374 +543,22 @@ rss-box-viewer: make object! [
    cache: join cache-dir id
    source: get-source
    if empty? source [
-      source: render-template %error.skin make object! [
+      source: render-template %error.skin make settings [
          timestamp: to-utc-date now
          date: format-date timestamp "y-M-d"
          append date rejoin ["T" format-date timestamp "H-m" "Z"]
-         url: baseuri
+         url: rejoin [baseuri "?setup=true&url=" encode-url settings/url]
       ]
    ]
    document: xml/get-document source
    data: get-data (xml/get-element document)
 ]
 
-dump: func [obj [object!]] [
-   foreach key next first obj [
-      print rejoin [key ": " get in obj key]
-   ]
-]
-
-box: rss-box-viewer/render
-print either rss-box-viewer/settings/setup = "true" [
-   rss-box-viewer/render-setup box   
+;; the main section
+rss-box: rss-box-viewer/render
+either rss-box-viewer/settings/setup = "true" [
+   print rss-box-viewer/render-setup rss-box
 ][
-   box
+   print rss-box
+   rss-box-viewer/log
 ]
-
-
-
-
-
-
-
-
-
-
-
-
-comment [---------------
-
-url: ""
-rss-box-url: "http://piefke.helma.at/rss/rss-box.r?"
-
-title: link: date: about: image-html: make string! 1000
-content: make string! 5000
-
-query-string: url: ""   
-cgi: system/options/cgi
-query-string: cgi/query-string
-if not none? query-string [do decode-cgi query-string]
-
-foreach [def value] defaults [
-   if do join "not value? '" def [do rejoin [def ": " mold value]]
-   if do join "empty? " def [do rejoin [def ": " mold value]]
-]
-
-url: to-url url ;either find/match url "http://" [to-url url][to-file url]
-short-url: first parse last parse url "/" "?"
-if empty? short-url [short-url: "..."]
-fname: copy/part enbase/base url 16 256
-replace/all fname #"^/"
-
-rss-text: ""
-cache-file: join %cache/ fname
-message: "fetched from url"
-if exists? cache-file [
-   mod: modified? cache-file
-   ;mod: modified? url
-   ;if none? mod [mod: modified? cache-file]
-   if not any [(now - mod) >= 1 (now/time - mod/time) >= 1:00][
-      rss-text: read cache-file
-      message: "fetched from cache"
-   ]
-]
-
-if empty? rss-text [
-   rss-text: read url
-   write cache-file rss-text
-]
-
-; begin core...
-
-document: get-xml-document rss-text
-rss: (get-xml-element document)
-version: get-xml-attribute rss "version"
-
-format: switch (get-xml-label rss) [
-   "rss" ["RSS"]
-   "rdf:RDF" ["RDF"]
-   "scriptingNews" ["scriptingNews"]
-]
-
-either format = "scriptingNews" [
-   channel: get-xml-element rss "header"
-   title: get-xml-content channel "channelTitle"
-   about: get-xml-content channel "channelDescription"
-   link: get-xml-content channel "channelLink"
-   version: get-xml-content channel "scriptingNewsVersion"
-][
-   channel: get-xml-element rss "channel"
-   title: get-xml-content channel "title"
-   about: get-xml-content channel "description"
-   link: get-xml-content channel "link"
-]
-
-pubDate: get-xml-content channel "pubDate"
-lastBuildDate: get-xml-content channel "lastBuildDate"
-if empty? lastBuildDate [
-   lastBuildDate: get-xml-content channel "dc:date"
-   if not empty? lastBuildDate [
-      replace lastBuildDate "T" "/"
-      lastBuildDate: to-idate to-date lastBuildDate
-   ]
-]
-
-timezone: "GMT"
-date: copy lastBuildDate
-either empty? date [
-   date: now
-   time: date/time - date/zone
-   if time < 0:00 [
-      time: 24:00 + time
-      date: date - 1
-   ]
-   date/zone: 0:00
-][
-   rev-date: copy date
-   date: parse-header-date date
-   reverse rev-date
-   timezone: copy ""
-   if error? try [
-      foreach c rev-date [
-         if (to-integer c) = 32 [break]
-         timezone: join c timezone
-         time: date/time
-      ]
-      c: first timezone
-      if any [c = #"+" c = #"-"][
-         timezone: "GMT"
-         time: date/time - date/zone
-         if time < 0:00 [
-            time: 24:00 + time
-            date: date - 1
-         ]
-         date/zone: 0:00
-      ]
-   ][]
-]
-time: to-string time
-if (length? time) > 5 [time: copy/part time (length? time) - 3]
-date: rejoin [date/day "." date/month "." date/year ", " time " " timezone]
-
-copyright: get-xml-content channel "copyright"
-if empty? copyright
-   [copyright: get-xml-content channel "dc:rights"]
-
-managingEditor: get-xml-content channel "managingEditor"
-if empty? managingEditor
-   [managingEditor: get-xml-content channel "dc:creator"]
-
-webMaster: get-xml-content channel "webMaster"
-rating: get-xml-content channel "rating"
-skipDays: get-xml-content channel "skipDays"
-skipHours: get-xml-content channel "skipHours"
-
-input-form: copy ""
-text-input: get-xml-element rss "textinput"
-if not empty? text-input [
-   input-form: {<form method="get" action="}
-   append input-form get-xml-content text-input "link"
-   append input-form {">^/}
-   ti-description: get-xml-content text-input "description"
-   if not empty? ti-description [
-      append input-form join ti-description {<br>^/}
-   ]
-   append input-form {<input type="text" name="}
-   append input-form get-xml-content text-input "name"
-   append input-form {" size="15"> }
-   append input-form {<input type="submit" value="}
-   append input-form get-xml-content text-input "title"
-   append input-form {">^/</form>}
-]
-
-image-html: make string! 500
-either format = "scriptingNews" [
-   image-title: get-xml-content channel "imageTitle"
-   image-url: get-xml-content channel "imageUrl"
-   image-link: get-xml-content channel "imageLink"
-   image-width: get-xml-content channel "imageWidth"
-   image-height: get-xml-content channel "imageHeight"
-   image-description: get-xml-content channel "imageCaption"
-][
-   image: get-xml-element channel "image"
-   if format = "RDF" [image: get-xml-element rss "image"]
-   image-title: get-xml-content image "title"
-   image-url: get-xml-content image "url"
-   image-link: get-xml-content image "link"
-   image-width: get-xml-content image "width"
-   image-height: get-xml-content image "height"
-   image-description: get-xml-content image "description"
-]
-if not empty? image-url [
-   image-html: {<table border="0" cellspacing="0" cellpadding="10" align="right">}
-   append image-html {<tr><td>}
-   append image-html build-tag [a href (image-link) title (image-title)]
-   append image-html rejoin [{<img src="} image-url {" border="0"}]
-   if not empty? image-description [append image-html rejoin [{ alt="} image-description {"}]]
-   if not empty? image-width [append image-html rejoin [{ width="} image-width {"}]]
-   if not empty? image-height [append image-html rejoin [{ height="} image-height {"}]]
-   append image-html {></a></td></tr></table>}
-]
-
-items: get-xml-element channel "item"
-if format <> "RSS" [items: get-xml-element rss "item"]
-
-content: make string! 10000
-item-counter: 0
-item-delimiter: to-integer maxItems
-foreach [label attr item] items [
-   item-counter: item-counter + 1
-   
-   append content {<p class="rssBoxItemContent">}
-   
-   news-source: get-xml-element item "source"
-   if not empty? news-source [
-      source-url: get-xml-attribute news-source "url"
-      source-name: (get-xml-content news-source)
-      append content build-tag [a href (source-url) title (source-name)]
-      append content {&nbsp;<img src="http://publish.curry.com/rss/source.gif" width="15" height="15" border="0" align="left"></a>}
-   ]
-
-   enclosure: get-xml-element item "enclosure"
-   if not empty? enclosure [
-      encl-url: get-xml-attribute enclosure "url"
-      encl-length: get-xml-attribute enclosure "length"
-      encl-type: get-xml-attribute enclosure "type"
-      append content build-tag [a href (encl-url) title "Click here to download this enclosure."]
-      append content {<img src="http://publish.curry.com/rss/enclosure.gif" width="15" height="15" border="0" align="left"></a>}
-   ]
-
-   category: get-xml-element item "category"
-   if not empty? category [
-      cat-domain: get-xml-attribute category "domain"
-      cat-content: (get-xml-content category)
-      append content {&nbsp;&nbsp;&nbsp;[}
-      append content build-tag [a href (join cat-domain cat-content)]
-      append content {<small>category</small></a>]}
-   ]
-
-   either format = "scriptingNews" [
-      description: get-xml-content item "text"
-      sn-link: get-xml-element item "link"
-      foreach [label2 attr2 item2] sn-link [
-         sn-linetext: get-xml-content item2 "linetext"
-         sn-link: get-xml-content item2 "url"
-         replace/case description sn-linetext rejoin [
-            {<a href="} sn-link {">} sn-linetext "</a>"
-         ]
-      ]
-      append content description
-   ][
-      description: get-xml-content item "description"
-      item-title: get-xml-content item "title"
-      item-link: get-xml-content item "link"
-      if not empty? item-title [
-         ;if not empty? description [append content "<b>"]
-         append content "<b>"
-         if not empty? item-link [
-            append content build-tag [a href (item-link) class "rssBoxItemTitle"]
-         ]
-         append content item-title
-         if not empty? item-link [append content {</a>}]
-         append content "</b>"
-         if not empty? description [append content "<br>^/"]
-      ]
-      if (empty? compact) or (empty? item-title) [
-         append content description
-      ]
-   ]
-   append content "</p>^/"
-
-   if item-counter = item-delimiter [break]
-]
-
-template: read %rss-box-template.html
-if (setup = "true") and (javascript = "false") [
-   setup-template: read %rss-setup-template.html
-   src: copy rss-box-url
-   forskip defaults 2 [
-      var: first defaults
-      if all [var <> 'javascript var <> 'setup][
-         src: rejoin [src var "=" do to-string var "&"]
-      ]
-   ]
-   src: rejoin [src "javascript=true"]
-   replace/all src "#" "%23"
-   replace setup-template "{javascript}" rejoin [
-      {<script language="javascript" src="}
-      src
-      {"></script>}
-   ]
-   append template setup-template
-   get-table-row: func [title content /local tr][
-      if empty? content [return ""]
-      tr: copy {^-^-<tr>^/^-^-^-<td align="right" valign="top">{title}:</td>^/^-^-^-<td valign="bottom">{content}</td>^/^-^-^-^</tr>^/}
-      replace tr "{title}" title
-      replace tr "{content}" content
-      return tr
-   ]
-   info: make string! 500
-   append info get-table-row "Title" title
-   append info get-table-row "Description" about
-   append info get-table-row "Published" pubdate
-   append info get-table-row "Last Build" lastBuildDate
-   append info get-table-row "Source" rejoin [{<a href="} url {">} short-url "</a>"]
-   append info get-table-row "Format" reform [format version]
-   docs: get-xml-content channel "docs"
-   if not empty? docs [
-      append info get-table-row "Docs" rejoin [{<a href="} docs {">} docs "</a>"]
-   ]
-   append info get-table-row "Copyright" copyright
-   append info get-table-row "Managing Editor" managingEditor
-   append info get-table-row "Webmaster" webMaster
-   append info get-table-row "PICS-Rating" rating
-   replace template "{info}" info
-]
-
-xml-button: copy ""
-if xmlButton = "on" [
-   xmlButton: " checked"
-   xml-button: rejoin [{<a href="} url {" title="Click here to see the XML version of this channel."><img src="http://publish.curry.com/rss/xml.gif" width="36" height="14" border="0" title="Click here to see the XML version of this channel." align="right" valign="top"></a>}]
-]
-
-if compact = "on" [compact: " checked"]
-
-; temporarily added dehex to be sure that values are url-decoded:
-replace/all template "{url}" dehex url
-replace/all template "{boxTitle}" dehex title
-replace/all template "{align}" dehex align
-replace/all template "{width}" dehex width
-replace/all template "{frameColor}" dehex frameColor
-replace/all template "{titleBarTextColor}" dehex titleBarTextColor
-replace/all template "{titleBarColor}" dehex titleBarColor
-replace/all template "{boxFillColor}" dehex boxFillColor
-replace/all template "{textColor}" dehex textColor
-replace/all template "{fontFace}" dehex fontFace
-replace/all template "{maxItems}" maxItems
-replace/all template "{xmlButton}" xmlButton
-replace template "{xml-button}" xml-button
-replace template "{compact}" compact
-replace template "{text-input}" input-form
-
-replace template "{link}" link
-replace template "{date}" date
-replace template "{description}" about
-replace template "{content}" content
-
-replace template "{image}" either compact = " checked" [""][image-html]
-
-either javascript = "true" [
-   do %js-lib.r
-   document.write encode-javascript template
-][
-   print template
-   ;print input-form
-]
-
-referrer: select cgi/other-headers "HTTP_REFERER"
-ip: cgi/remote-addr
-logfile: rejoin [%log/ now/date ".log"]
-write/append logfile rejoin [now/time "^-" ip "^-" referrer "^/"]
-
------------------------]
-
