@@ -133,6 +133,8 @@ function clearForm() {
 
    <p><strong>Recent changes:</strong></p>
    <ul>
+   <li>26.04.2004<br />
+   Last efforts to officially release the code to the open source community. There have been some bugs in the (image) rendering framework which I fixed so far. I now include a list of sites using this script to give some examples for the curious at heart.<p></p></li>
    <li>28.01.2004<br />
    When something goes wrong (most of the time this might be a wrong URL, ie. a 404 as result) an <a href="?setup=true&amp;url=error">"error" box</a> will be displayed to signal the failure. Increased version up to 1.0 and labeled it as release candidate (RC).<p></p></li>
    <li>26.01.2004<br />

@@ -53,7 +53,7 @@ REBOL [
       0.9.8 [12-Feb-2002 {Corrected parent of textinput element (ie. rss, was channel)} "ts"]
       0.9.9 [26-Jan-2004 {Rewrote whole application from scratch using object-oriented approach.} "ts"]
       1.0.0 [28-Jan-2004 {Added output of "error" box if something goes wrong. Labeled as release candidate} "ts"]
-      1.0.1 [26-Apr-2004 {Fixed some minor bugs. Added list of sites using this script.} "ts"]
+      1.0.1 [26-Apr-2004 {Fixed some minor bugs, mainly in the rendering framework. Added list of sites using this script.} "ts"]
    ]
 
    Language: 'English
