@@ -1,4 +1,7 @@
-The JavaScript RSS Box Viewer was coded in RebolTM by Tobi Schaefer 
+JavaScript RSS Box Viewer 1.0RC
+===============================
+
+The JavaScript RSS Box Viewer was coded in Rebol by Tobi Schaefer 
 between 2001 and 2004.
 
 He cannot be held responsible for any uncomfortable situation caused
@@ -8,10 +11,10 @@ code but I like it. If you do not that's your problem.
 Same applies to the following  ultra-short guide on how to install 
 the script on your own server:
 
-1) Download the RebolTM executable from http://rebol.com and install 
+1) Download the Rebol executable from http://rebol.com and install 
    it at the place of your choice.
 
-2) You need a web server enabled to run RebolTM scripts via the 
+2) You need a web server enabled to run Rebol scripts via the 
    Common Gateway Interface (CGI).
    I recommend Apache [http://httpd.apache.org] because all you have
    to configure is:
@@ -43,7 +46,7 @@ the script on your own server:
    featured proprietary software.)
 
 5) Set the she-bang (ie. the first line of the script starting with "#")
-   in the index.r script to the path of your RebolTM installation.
+   in the index.r script to the path of your Rebol installation.
 
 6) Set the baseuri variable in the index.r script to the base URI of
    where your script will be located at.
