@@ -76,8 +76,8 @@ rss-box-viewer: make object! [
       textColor: "black"
       fontFace: ""
       maxItems: "7"
-      showXmlButton: "1"
-      compact: "1"
+      showXmlButton: ""
+      compact: ""
       setup: "false"
       javascript: "false"
       nocache: "false"
@@ -341,13 +341,16 @@ rss-box-viewer: make object! [
                   ]
                   either format = "Scripting News" [
                      description: xml/get-content child "text"
+                     replace/all description to-char 10 " "
                      use [link linetext url] [
                         link: xml/get-element child "link"
                         foreach [label attr item] link [
-                           linetext: xml/get-content item "linetext"
+                           linktext: xml/get-content item "linktext"
+                           replace/all linktext to-char 10 " "
+                           linktext: trim linktext
                            url: xml/get-content item "url"
-                           replace/case description linetext rejoin [
-                              {<a href="} url {">} linetext "</a>"
+                           replace/case description linktext rejoin [
+                              {<a href="} url {">} linktext "</a>"
                            ]
                         ]
                      ]
@@ -415,7 +418,11 @@ rss-box-viewer: make object! [
          ]
          for n 1 (minimum max length? data/items) 1 [
             item: first at data/items n
-            if all [not empty? settings/compact not empty? item/title] [
+            if all [
+               not empty? settings/compact 
+               not none? item/title 
+               not empty? item/title
+            ][
                clear item/description
             ]
             append content render-template %item.skin make item [
@@ -434,6 +441,11 @@ rss-box-viewer: make object! [
                   ]
                ]
                buttons: rejoin [enclosure " " source]
+               break: either all [
+                  not none? item/title
+                  not empty? item/title
+                  not empty? item/description
+               ]["<br />"][""]
             ]
          ]
          if empty? settings/compact [
@@ -540,7 +552,7 @@ rss-box-viewer: make object! [
          timestamp: to-utc-date now
          date: format-date timestamp "y-M-d"
          append date rejoin ["T" format-date timestamp "H-m" "Z"]
-         url: rejoin [baseuri "?setup=true&url=" encode-url settings/url]
+         url: rejoin [baseuri "?setup=true&compact=&url=" encode-url settings/url]
       ]
    ]
    document: xml/get-document source
