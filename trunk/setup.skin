@@ -114,6 +114,13 @@ function clearForm() {
    <td align="right" valign="baseline"><br /><small>HTML code:<br />(copy&amp;paste)</small></td>
    <td valign="baseline"><br /><textarea rows="10" cols="20" readonly="readonly"><% param.javascript %></textarea></td>
 </tr>
+<tr>
+   <td nowrap="nowrap"><br /> </td>
+</tr>
+<tr>
+   <td align="right" valign="baseline"><small>Examples:</small></td>
+   <td valign="baseline"><% param.sitelist %></td>
+</tr>
 </table>
 
 <table width="250" cellspacing="0" cellpadding="5" border="0">
