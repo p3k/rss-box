@@ -1,1 +1,1 @@
-<a href="<% param.link %>"><img src="<% param.source %>" width="<% param.width %>" height="<% param.height %>" alt="<% param.title %>" title="<% param.title %>" align="<% param.align %>" valign="<% param.valign %>" border="0" /></a>
+<a href="<% param.link %>"><img src="<% param.source %>" width="<% param.width %>" height="<% param.height %>" alt="<% param.title %>" title="<% param.title %>" align="<% param.align %>" valign="<% param.valign %>" hspace="<% param.hspace %>" vspace="<% param.vspace %>" border="0" /></a>
