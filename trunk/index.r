@@ -1,5 +1,4 @@
-#!"C:\Program Files\rebol\core031\rebol031.exe" -cs
-; #!/usr/bin/rebol -cs
+#!/usr/bin/rebol -cs
 
 ;; original usertalk call:
 ;; viewRssBox(url, boxTitle, align, width, frameColor, titleBarTextColor, \
