@@ -8,7 +8,7 @@
 
   <channel rdf:about="<% param.url %>">
     <title>Error Report</title>
-    <link>http://forever.p3k.org/rss/dummy.xml</link>
+    <link><% param.url %></link>
     <description>This file was automatically generated to report an error occurring during a request to the JavaScript RSS Box Viewer.</description>
     <dc:publisher>weblogs.at</dc:publisher>
     <dc:creator>p3k (mailto:&amp;#105;&amp;#110;&amp;#116;&amp;#101;&amp;#114;&amp;#102;&amp;#97;&amp;#99;&amp;#101;&amp;#64;&amp;#112;&amp;#51;&amp;#107;&amp;#46;&amp;#111;&amp;#114;&amp;#103;)</dc:creator>
