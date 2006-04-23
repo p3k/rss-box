@@ -1,4 +1,4 @@
-#!/usr/bin/rebol -cs
+#!/usr/local/bin/rebol -cs
 
 ;; original usertalk call:
 ;; viewRssBox(url, boxTitle, align, width, frameColor, titleBarTextColor, \
@@ -160,7 +160,7 @@ rss-box-viewer: make object! [
       if not exists? %log/ [make-dir %log/]
       cgi: system/options/cgi
       referrer: select cgi/other-headers "HTTP_REFERER"
-      if find referrer "ipaper.com" [quit]
+      if find referrer "boredom.com" [quit]
       write/append rss-box-viewer/logfile rejoin [
          now/time "^-" cgi/remote-addr "^-{" referrer "}^/"
       ]
@@ -366,6 +366,9 @@ rss-box-viewer: make object! [
                      description: xml/get-content child "description"
                      title: xml/get-content child "title"
                      link: xml/get-content child "link"
+                     if empty? link [
+                        link: xml/get-content child "guid"
+                     ]
                   ]
                ]
                append items item

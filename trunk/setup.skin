@@ -24,6 +24,23 @@ function clearForm() {
 </head>
 <body bgcolor="white">
 
+<script type="text/javascript"><!--
+google_ad_client = "pub-3965028043153138";
+google_ad_width = 728;
+google_ad_height = 90;
+google_ad_format = "728x90_as";
+google_ad_type = "text";
+google_ad_channel ="";
+google_color_border = "A8DDA0";
+google_color_bg = "EBFFED";
+google_color_link = "0000CC";
+google_color_url = "008000";
+google_color_text = "6F6F6F";
+//--></script>
+<script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script><br /><br clear="all" />
+
 <% param.box %>
 
 <form id="setupForm" method="get" action="index.r">
@@ -111,7 +128,7 @@ function clearForm() {
    <td><input type="button" value="Clear" onclick="clearForm()" /> &nbsp; <input type="submit" value="Submit" /></td>
 </tr>
 <tr>
-   <td align="right" valign="baseline"><br /><small>HTML code:<br />(copy&amp;paste)></small></td>
+   <td align="right" valign="baseline"><br /><small>HTML code:<br />(copy&amp;paste)</small></td>
    <td valign="baseline"><br /><textarea rows="10" cols="20" readonly="readonly"><% param.javascript %></textarea></td>
 </tr>
 <tr>
@@ -125,7 +142,7 @@ function clearForm() {
 <tr>
    <td align="right" valign="baseline"><small>Blocked&nbsp;requests:<br />
    (high traffic)</small></td>
-   <td valign="baseline">ipaper.com<br />
+   <td valign="baseline">boredom.com<br />
    bakermedia.com</td>
 </tr>
 </table>
@@ -134,12 +151,24 @@ function clearForm() {
 <tr>
    <td colspan="2"><p><small><em>"JavaScript RSS Viewer puts little or long customizable RSS boxes anywhere you put HTML; build your own slashbox hell or heaven, it's feedarific!" &#8211; <a href="http://www.ourpla.net/cgi-bin/pikie.cgi?AbbeNormal">Abbe Normal</a></em></small></p>
    <p><strong>About JavaScript RSS box viewer:</strong></p>
-   <p>This <a href="http://www.salon.com/tech/col/rose/2003/12/04/rss/index.html">RSS</a> box viewer can display the formats <a href="?setup=true&amp;url=http%3A//www.macslash.com/macslash.rdf">RSS 0.91</a>, <a href="?setup=true&amp;url=http://www.iawiki.net/rss092.xml">RSS 0.92</a>, <a href="?setup=true&amp;url=http%3A//blog.p3k.org/rss">RSS 1.0</a> (w/o modules), <a href="?setup=true&amp;url=http%3A//www.alistapart.com/rss.xml">RSS 2.0</a>  and <a href="?setup=true&amp;url=http%3A//www.intertwingly.net/blog/index.sn2">Scripting News 2</a>. <em>(Sorry, no <a href="http://www.mnot.net/drafts/draft-nottingham-atom-format-02.html">Atom</a>.)</em> It provides a simple way to embed such RSS boxes in any HTML document via a generated JavaScript tag.</p>
+   <p>This <a href="http://www.salon.com/tech/col/rose/2003/12/04/rss/index.html">RSS</a> box viewer can display the formats <a href="?setup=true&amp;url=http%3A//www.macslash.com/macslash.rdf">RSS 0.91</a>, <a href="?setup=true&amp;url=http://www.iawiki.net/rss092.xml">RSS 0.92</a>, <a href="?setup=true&amp;url=http%3A//blog.p3k.org/rss">RSS 1.0</a> (w/o modules), <a href="?setup=true&amp;url=http%3A//www.alistapart.com/rss.xml">RSS 2.0</a>  and <strike title="Sam Ruby changed his feed format; and I don't know any other scriptingNews feed..."><a href="?setup=true&amp;url=http%3A//www.intertwingly.net/blog/index.sn2">Scripting News 2</a></strike>. <em>(Sorry, no <a href="http://www.atompub.org">Atom</a>.)</em> It provides a simple way to embed such RSS boxes in any HTML document via a generated JavaScript tag.</p>
    <p>Simply enter the URL of any compatible RSS feed, modify the layout settings as you like and push the submit button. When finished, copy the HTML code into your HTML document and voil&agrave;!</p>
-   <p>The script running behind this is written in <a href="http://www.rebol.com">Rebol</a>, a cool internet messaging language. You can get the source code together with all the other necessary files (except the Rebol runtime) from <a href="http://cvs.p3k.org/viewcvs.cgi/rss-box">CVS</a>.</p>
+   <p>The script running behind this is written in <a href="http://www.rebol.com">Rebol</a>, a cool internet messaging language. You can get the source code together with all the other necessary files (except the Rebol runtime) from the <a href="http://p3k.org/viewcvs/rss-box/trunk/">svn repository</a>.</p>
 
    <p><strong>Recent changes:</strong></p>
    <ul>
+   <li>20.04.2006<br />
+   Andrew Pam brought up a serious issue that probably might have affected some more people already: the viewer does not support UTF-8 (or Unicode, resp.) Unfortunately, this is "built-in" into the underlying scripting language (aka Rebol). I'm sorry to cancel those tickets... :(<p></p></li>
+   <li>13.04.2006<br />
+   Fixed a bug reported by Mando Gomez that caused feeds using the &lt;guid&gt; element being displayed without item links... Don't forget to check out Mando's excellent website <a href="http://www.mandolux.com/">mandolux</a>!<p></p></li>
+   <li>12.04.2006<br />
+   Obviously Sam Ruby changed his feed format from scriptingNews to Atom; which renders my example link above pretty useless... So far I don't know about any other scriptingNews feed, do you?<p></p></li>
+   <li>20.02.2006<br />
+   I hope nobody minds the little line I added at the bottom of each RSS box... Of course, it's not totally altruistic, but probably some people will find it informative. However, if you want to prevent if from being displayed simply add <code>.rssBoxPromo {display: none;}</code> to your stylesheet.<p></p></li>
+   <li>11.01.2006<br />
+   New server, new troubles: I moved the viewer to a newly setup Ubuntu machine. Of course, I forgot to set some permission flags and owners, thus, preventing the script from working. However, I think everyhings's fixed and working again.<p></p></li>
+   <li>16.11.2005<br />
+   Just testing Google's AdSense for a while. Since this page generates most of my traffic I wanted to see myself what a banner can do here. Hope you dont't mind.<p></p></li>
    <li>16.12.2004<br />
    Bugfix: Sometimes the logfile which is used to generate the list of sites using this script gets corrupted. This affected the whole setup page to return an error and thus, it needed to be caught. (You will see a "currently out of order" message then.)<p></p></li>
    <li>26.04.2004<br />
