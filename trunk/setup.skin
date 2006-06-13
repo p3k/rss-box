@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
 <head>
-<title>JavaScript RSS Box Viewer 1.0RC</title>
+<title>JavaScript RSS Box Viewer 1.0.5</title>
 <meta http-equiv="Content-Type" content="text/html" />
 <meta name="MSSmartTagsPreventParsing" content="TRUE" />
 <script type="text/javascript">
@@ -157,6 +157,12 @@ google_color_text = "6F6F6F";
 
    <p><strong>Recent changes:</strong></p>
    <ul>
+   <li>13.06.2006<br />
+   Did some minor bug fixing again (amongst others replacing single quotes with &amp;apos; and not &amp;quot; entities). Furthermore (and finally), I removed the "RC" (as in "Release Candidate") from the document title...<p></p></li>
+   <li>12.06.2006<br />
+   Gary informed me that longer feed URLs cause trouble and the feed box will not be displayed. That's in fact a bug, but unfortunately one that cannot be fixed so easily. My suggestion is to shorten such URLs at one of the websites around that provide such a service, e.g. <a href="http://tinyurl.com">tinyurl.com</a>.<p></p></li>
+   <li>23.04.2006<br />
+   Switched the <a href="http://p3k.org/viewcvs/rss-box/trunk/">source repository</a> from CVS to Subversion (SVN).<p></p></li>
    <li>20.04.2006<br />
    Andrew Pam brought up a serious issue that probably might have affected some more people already: the viewer does not support UTF-8 (or Unicode, resp.) Unfortunately, this is "built-in" into the underlying scripting language (aka Rebol). I'm sorry to cancel those tickets... :(<p></p></li>
    <li>13.04.2006<br />
