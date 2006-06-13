@@ -9,13 +9,13 @@ REBOL [
    Date:    19-Mar-2001
    Name:    copy Title  ; For window title bar
 
-   Version: 1.0.1
+   Version: 1.0.5
    File:    %index.r
    Home:    http://p3k.org/rss
 
    Author:  "Tobi Schaefer"
    Owner:   "p3k organisation"
-   Rights:  "Copyright (C) p3k organisation 2004"
+   Rights:  "Copyright (C) p3k organisation 2006"
 
    Needs:   [
       %xml-lib.r
@@ -55,6 +55,9 @@ REBOL [
       1.0.0 [28-Jan-2004 {Added output of "error" box if something goes wrong. Labeled as release candidate} "ts"]
       1.0.1 [26-Apr-2004 {Fixed some minor bugs, mainly in the rendering framework. Added list of sites using this script.} "ts"]
       1.0.2 [16-Dec-2004 {Bugfix: catch error when displaying sitelist and logfile is corrupted.} "ts"]
+      1.0.3 [20-Feb-2006 {Added "RSS box by p3k.org" boilerplate linking to the viewer URL.} "ts"]
+      1.0.4 [13-Apr-2006 {Fixed feeds with the <guid> element to use these in their item links.} "ts"]
+      1.0.5 [13-Jun-2006 {Bugfix: transform single quotes into &apos; (not &quot;) entities.} "ts"]
    ]
 
    Language: 'English
@@ -530,7 +533,7 @@ rss-box-viewer: make object! [
 
    js-print: func [str [string!]][
       lines: parse/all str "^/"
-      pairs: ["^-" "" "^/" "" "^'" "&quot;"]
+      pairs: ["^-" "" "^/" "" "^'" "&apos;"]
       foreach line lines [
          foreach [needle newstr] pairs [
             replace/all line needle newstr
