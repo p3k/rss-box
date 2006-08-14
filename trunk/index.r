@@ -9,7 +9,7 @@ REBOL [
    Date:    19-Mar-2001
    Name:    copy Title  ; For window title bar
 
-   Version: 1.0.5
+   Version: 1.0.6
    File:    %index.r
    Home:    http://p3k.org/rss
 
@@ -58,6 +58,7 @@ REBOL [
       1.0.3 [20-Feb-2006 {Added "RSS box by p3k.org" boilerplate linking to the viewer URL.} "ts"]
       1.0.4 [13-Apr-2006 {Fixed feeds with the <guid> element to use these in their item links.} "ts"]
       1.0.5 [13-Jun-2006 {Bugfix: transform single quotes into &apos; (not &quot;) entities.} "ts"]
+      1.0.6 [14-Aug-2006 {Replaced old-fashioned XML button with fresh and good-looking RSS icon.} "ts"]
    ]
 
    Language: 'English

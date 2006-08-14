@@ -1,10 +1,10 @@
-JavaScript RSS Box Viewer 1.0RC
-===============================
+JavaScript RSS Box Viewer 1.0
+=============================
 
 The JavaScript RSS Box Viewer was coded in Rebol by Tobi Schaefer 
 between 2001 and 2004.
 
-He cannot be held responsible for any uncomfortable situation caused
+Tobi cannot be held responsible for any uncomfortable situation caused
 by the code. This means: sorry, no warranty for anything. It's just
 code but I like it. If you do not that's your problem.
 
@@ -26,18 +26,18 @@ the script on your own server:
     set-up, only acceptable as a quick start.)
 
 3) Get the JavaScript RSS Box Viewer script and everything else 
-   necessary via CVS. There are many CVS clients out there, some even 
+   necessary via SVN. There are many SVN clients out there, some even 
    have a pretty graphical interface. However, for the command line 
    approach you might want to use only something like this:
 
-   cvs -d :pserver:anonymous@cvs.p3k.org:/home/cvs ex -r HEAD rss-box
+   svn co http://p3k.org/svn/rss-box/trunk rss-box
 
 4) If you are on a *nix box check the permission settings of the script 
    and its environment. The web server needs to execute the script as 
    well as to write to the installation directory. Something like the 
    following should do the job:
 
-   chown -R httpd.httpd rss-box
+   chown -R httpd:httpd rss-box
    chmod ug+wx rss-box/index.r
 
    If you use a different system you should rather ask your system 
