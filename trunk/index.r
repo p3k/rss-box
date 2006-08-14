@@ -420,7 +420,7 @@ rss-box-viewer: make object! [
             xmlButton: render-template %image.skin make object! [
                link: settings/url
                source: join baseuri "rss.png" border: "0"
-               width: "36" height: "14" align: "right" valign: "top" 
+               width: "16" height: "16" align: "right" valign: "top" 
                title: "Click here to see the XML version of this channel."
             ]
          ]
