@@ -151,9 +151,10 @@ google_color_text = "6F6F6F";
 <tr>
    <td colspan="2"><p><small><em>"JavaScript RSS Viewer puts little or long customizable RSS boxes anywhere you put HTML; build your own slashbox hell or heaven, it's feedarific!" &#8211; <a href="http://www.ourpla.net/cgi-bin/pikie.cgi?AbbeNormal">Abbe Normal</a></em></small></p>
    <p><strong>About JavaScript RSS box viewer:</strong></p>
-   <p>This <a href="http://www.salon.com/tech/col/rose/2003/12/04/rss/index.html">RSS</a> box viewer can display the formats <a href="?setup=true&amp;url=http%3A//www.macslash.com/macslash.rdf">RSS 0.91</a>, <a href="?setup=true&amp;url=http://www.iawiki.net/rss092.xml">RSS 0.92</a>, <a href="?setup=true&amp;url=http%3A//blog.p3k.org/rss">RSS 1.0</a> (w/o modules), <a href="?setup=true&amp;url=http%3A//www.alistapart.com/rss.xml">RSS 2.0</a>  and <strike title="Sam Ruby changed his feed format; and I don't know any other scriptingNews feed..."><a href="?setup=true&amp;url=http%3A//www.intertwingly.net/blog/index.sn2">Scripting News 2</a></strike>. <em>(Sorry, no <a href="http://www.atompub.org">Atom</a>.)</em> It provides a simple way to embed such RSS boxes in any HTML document via a generated JavaScript tag.</p>
+   <p>This <a href="http://www.salon.com/tech/col/rose/2003/12/04/rss/index.html">RSS</a> box viewer can display RSS feed versions <a href="?setup=true&amp;url=http%3A//w3future.com/weblog/rss.xml">0.91</a>, <a href="?setup=true&amp;url=http://www.iawiki.net/rss092.xml">0.92</a>, <a href="?setup=true&amp;url=http%3A//blog.p3k.org/rss">1.0</a> (w/o modules) and <a href="?setup=true&amp;url=http%3A//www.alistapart.com/rss.xml">2.0</a> as well as even   the good old legacy format <span title="Sam Ruby changed his feed format; and I don't know any other scriptingNews feed..."><!-- a href="?setup=true&amp;url=http%3A//www.intertwingly.net/blog/index.sn2" -->Scripting News 2<!-- /a --></span>. <em>(Sorry, no <a href="http://www.atompub.org">Atom</a>.)</em></p>
+   <p>It provides a simple way to embed such RSS boxes in any HTML document via a generated JavaScript tag.</p>
    <p>Simply enter the URL of any compatible RSS feed, modify the layout settings as you like and push the submit button. When finished, copy the HTML code into your HTML document and voil&agrave;!</p>
-   <p>The script running behind this is written in <a href="http://www.rebol.com">Rebol</a>, a cool internet messaging language. You can get the source code together with all the other necessary files (except the Rebol runtime) from the <a href="http://p3k.org/viewcvs/rss-box/trunk/">svn repository</a>.</p>
+   <p>The script running behind this is written in <a href="http://www.rebol.com">Rebol</a>, a cool internet messaging language. You can get the source code together with all the other necessary files (except the Rebol runtime) from the <a href="http://p3k.org/viewcvs/rss-box/trunk/">SVN repository</a>.</p>
 
    <p><strong>Recent changes:</strong></p>
    <ul>
@@ -219,9 +220,9 @@ google_color_text = "6F6F6F";
    <li><strike>Support for PICS rating and day resp. hour skipping.</strike> <em>(no option since this is not a customizable harvester).</em></li></ul>
 
    <p><strong>Future development:</strong></p>
-   I will discontinue developing this viewer with Rebol, soon (but it will be available here as is). I am already testing a new prototype using <a href="http://helma.org/">Helma Object Publisher</a>. I intend to implement future ideas (like user and FTP management) in there.<br />
+   I have ceased developing this viewer with Rebol but it will be available here as is. I am already testing a new prototype using <a href="http://helma.org/">Helma Object Publisher</a>.<br />
 
-   <p>For questions and comments feel free to mail to <a href="mailto:&#105;&#110;&#116;&#101;&#114;&#102;&#97;&#99;&#101;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103; ">&#105;&#110;&#116;&#101;&#114;&#102;&#97;&#99;&#101;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103; </a>.</p
+   <p>For questions and comments feel free to mail to <a href="mailto:&#105;&#110;&#116;&#101;&#114;&#102;&#97;&#99;&#101;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103; ">&#105;&#110;&#116;&#101;&#114;&#102;&#97;&#99;&#101;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103;</a>, although I cannot promise to reply.</p
 >
    <p><em>Thank you, <a href="http://p3k.org/">p3k organisation</a>!</em></p></td>
 </tr>
