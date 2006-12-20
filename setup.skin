@@ -139,12 +139,11 @@ google_color_text = "6F6F6F";
    (recent 50)</small></td>
    <td valign="baseline"><% param.sitelist %></td>
 </tr>
-<tr>
+<!--tr>
    <td align="right" valign="baseline"><small>Blocked&nbsp;requests:<br />
    (high traffic)</small></td>
-   <td valign="baseline">boredom.com<br />
-   bakermedia.com</td>
-</tr>
+   <td valign="baseline"></td>
+</tr-->
 </table>
 
 <table width="250" cellspacing="0" cellpadding="5" border="0">
@@ -158,6 +157,11 @@ google_color_text = "6F6F6F";
 
    <p><strong>Recent changes:</strong></p>
    <ul>
+   <li>20.12.2006<br />
+   I am very glad that my old little script is gaining even more attention after all these years... <em>Thank you very much indeed!</em> Since there are coming in more and more of the same requests and I am really not able to handle them (apologies!), here is some advice for everyone:<br />
+   1. <a href="http://en.wikipedia.org/wiki/Cascading_Style_Sheets">Use cascading style sheets</a> (CSS) to change font sizes (and to generally define your layout).<br/>
+   2. <a href="http://www.sitepoint.com/article/beware-opening-links-new-window">Beware of opening links in a new window.</a> It's offensive to your readers.<br />
+   <em>A happy end for 2006!</em><p></p></li>
    <li>13.06.2006<br />
    Did some minor bug fixing again (amongst others replacing single quotes with &amp;apos; and not &amp;quot; entities). Furthermore (and finally), I removed the "RC" (as in "Release Candidate") from the document title...<p></p></li>
    <li>12.06.2006<br />
