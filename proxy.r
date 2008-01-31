@@ -4,6 +4,30 @@ REBOL []
 
 ;print "Content-type: text/plain^/"
 
+to-json: func [source /local result key] [
+   switch type?/word source [
+      object! [
+         keys: first source
+         result: "({"
+         for i 2 length? keys 1 [
+            key: pick keys i
+            result: rejoin [result {'} key {':} to-json get in source key {,}]
+         ] 
+         result: join result "})"
+         print result
+      ]
+      
+      string! [
+         replace/all source lf "\n"
+         replace/all source {"} {\"}
+         result: rejoin [{(String("} source {"))}]
+      ]
+      
+      integer! [result: source]
+   ]
+   return result
+]
+
 cgi: system/options/cgi
 query-string: cgi/query-string
 
@@ -14,7 +38,16 @@ source: copy connection
 mime: connection/locals/headers/Content-Type
 close connection
 
-print rejoin ["Content-type: " either none? mime ["text/plain"] [mime] crlf]
+data: make object! [
+   box: read %box.tmpl
+   image: read %image.tmpl
+   input: read %input.tmpl
+   item: read %item.tmpl
+   date: read %date.tmpl
+]
+
+print rejoin ["X-RssBox-Data: " to-json data]
+print rejoin ["Content-type: " any [mime "text/plain"] crlf]
 print source
 
 quit
