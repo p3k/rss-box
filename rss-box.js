@@ -21,7 +21,7 @@ new function() {
       titleBarTextColor: "black",
       boxFillColor: "white",
       textColor: "black",
-      showXmlButton: 1
+      //showXmlButton: 1
    };
 
    var query, url;
@@ -104,10 +104,13 @@ new function() {
    }
    
    var render = function(template, param) {
-      for (var i in param) {
-         template = template.replace(new RegExp("\\$\\{" + i + "\\}", "g"), 
-               param[i] || "");
+      if (!template || !param) {
+         return template;
       }
+      template = template.replace(/\$\{([^}]+)\}/g, function() {
+         var key = arguments[1];
+         return param[key] || "";
+      });
       return template;
    }
    
@@ -147,10 +150,7 @@ new function() {
             title: enclosure.type,
             link: enclosure.link,
             width: 16,
-            height: 16,
-            align: "",
-            hspace: "",
-            vspace: ""
+            height: 16
          });
       }
       if (source && source.link) {
@@ -159,10 +159,7 @@ new function() {
             title: source.title,
             link: source.link,
             width: 15,
-            height: 15,
-            align: "",
-            hspace: "",
-            vspace: ""
+            height: 15
          });
       }
       return result;         
@@ -172,9 +169,9 @@ new function() {
    var rss = org.p3k.rss = {items: []};
    
    var http = getUrl(param.url);
-   var xml = http.responseXML;
    var layout = eval(http.getResponseHeader("X-RssBox-Data"));
-      
+   var xml = http.responseXML;
+
    if (xml) {
       xml.normalize();
    
@@ -285,8 +282,12 @@ new function() {
       for (var i in rss.items) {
          item = rss.items[i];
          items += render(layout.item, {
-            link: item.link,
-            title: item.title,
+            title: (!param.compact ? "<strong>" : "") + (item.link ? 
+                  render(layout.link, {
+               link: item.link,
+               text: item.title,
+               'class': "rssBoxItemTitle"
+            }) : item.title) + (!param.compact ? "</strong>" : ""),
             'break': item.title && item.description ? "<br />" : "",
             description: (!param.compact || !item.title) && item.description,
             buttons: renderButtons(item.enclosure, item.source)
@@ -294,8 +295,13 @@ new function() {
       }
       
       var box = render(layout.box, {
-         title: rss.title,
-         link: rss.link,
+         error: http.getResponseHeader("X-RssBox-Error"),
+         title: rss.link ? render(layout.link, {
+            link: rss.link,
+            text: rss.title,
+            'class': "rssBoxTitle",
+            style: "color: " + param.titleBarTextColor
+         }) : rss.title,
          description: rss.description,
          items: items,
 
@@ -303,11 +309,7 @@ new function() {
             link: param.url,
             source: "http://p3k.org/rss/rss.png",
             title: rss.format + " " + rss.version,
-            align: "right",
-            width: "",
-            height: "",
-            hspace: "",
-            vspace: ""
+            align: "right"
          }),
          
          image: !param.compact && rss.image && render(layout.image, {

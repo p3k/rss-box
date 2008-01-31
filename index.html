@@ -147,6 +147,26 @@ $(document).ready(function() {
       $("#futureToggle").html(symbol === "+" ? "–" : "+");
    }).click();
    
+   $("#descriptionToggle").click(function() {
+      $("#description").toggle();
+      return false;
+   }).click();
+   
+   $("#referrers").hide();
+   
+   $("#referrersToggle").click(function() {
+      $.getJSON("referrers.r", function(data) {
+         var result = "";
+         $.each(data.referrers, function(i, item) {
+            var host = item.split("/")[2];
+            result += '<a href="' + item + '">' + host + "</a><br />";
+         });
+         $("#referrers").html(result).show();
+         $("#referrersToggle").hide()
+      });
+      return false;
+   });
+   
    $("#code textarea").click(function() {
       $(this).select();
    }).val(renderCode());
@@ -169,7 +189,8 @@ $(document).ready(function() {
 </tr>
 <tr>
    <td><small>Description</small></td>
-   <td id="description"></td>
+   <td><a href="." id="descriptionToggle">...</a>
+   <span id="description"></span></td>
 </tr>
 <tr>
    <td><small>Last build</small></td>
@@ -244,9 +265,9 @@ $(document).ready(function() {
    <td> </td>
 </tr>
 <tr>
-   <td><a name="referrers"></a><small>Referrers:<br />
-      (recent 50)</small></td>
-   <td><% param.sitelist %></td>
+   <td><a name="referrers"></a><small>Referrers:<br /> (recent 50)</small></td>
+   <td><a href="." id="referrersToggle">...</a>
+   <span id="referrers"></span></td>
 </tr>
 </table>
 
