@@ -11,7 +11,7 @@
       line-height: 1.1em;
    }
    
-   small, label {
+   small, label, #referrers li {
       color: gray;
       font-size: 0.85em;
    }
@@ -67,11 +67,21 @@
       font-weight: bold;
       cursor: default;
     }
+    
+    ol#referrers, #referrers li {
+       padding: 0;
+       margin: 0;
+       margin-left: 15px;
+    }
    </style>
 </head>
 <body>
-   
-<script type="text/javascript" src="./rss-box.js"></script>
+
+<script type="text/javascript">
+document.write('<', 'scr', 'ipt type="text/javascript" src="./proxy.r');
+document.write(location.search || "?url=http://blog.p3k.org/rss");
+document.write('"><', '/scr', 'ipt>');
+</script>
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -89,10 +99,10 @@ $(document).ready(function() {
    
    var renderCode = function() {
       var result = '<scr' + 'ipt type="text/javascript" src="';
-      result += "http://localhost/~tobi/rss-box/rss-box.js?url=";
-      result += encodeURIComponent(param.url);
+      result += "http://localhost/~tobi/rss-box/proxy.r?";
+      //result += encodeURIComponent(param.url);
       for (var i in param) {
-         result += "&amp;" + i + "=" + encodeURIComponent(param[i]);
+         result += i + "=" + encodeURIComponent(param[i]) + "&amp;";
       }
       result += '"><' + '/scr' + 'ipt>';
       return result;
@@ -132,19 +142,19 @@ $(document).ready(function() {
    $("#changesToggle").click(function() {
       $("#changes").toggle();
       var symbol = $("#changesToggle").html();
-      $("#changesToggle").html(symbol === "+" ? "–" : "+");
+      $("#changesToggle").html(symbol === "+" ? "&#150;" : "+");
    }).click();
 
    $("#missingToggle").click(function() {
       $("#missing").toggle();
       var symbol = $("#missingToggle").html();
-      $("#missingToggle").html(symbol === "+" ? "–" : "+");
+      $("#missingToggle").html(symbol === "+" ? "&#150;" : "+");
    }).click();
 
    $("#futureToggle").click(function() {
       $("#future").toggle();
       var symbol = $("#futureToggle").html();
-      $("#futureToggle").html(symbol === "+" ? "–" : "+");
+      $("#futureToggle").html(symbol === "+" ? "&#150;" : "+");
    }).click();
    
    $("#descriptionToggle").click(function() {
@@ -159,7 +169,7 @@ $(document).ready(function() {
          var result = "";
          $.each(data.referrers, function(i, item) {
             var host = item.split("/")[2];
-            result += '<a href="' + item + '">' + host + "</a><br />";
+            result += '<li><a href="' + item + '">' + host + "</a></li>";
          });
          $("#referrers").html(result).show();
          $("#referrersToggle").hide()
@@ -267,7 +277,7 @@ $(document).ready(function() {
 <tr>
    <td><a name="referrers"></a><small>Referrers:<br /> (recent 50)</small></td>
    <td><a href="." id="referrersToggle">...</a>
-   <span id="referrers"></span></td>
+   <ol id="referrers"></ol></td>
 </tr>
 </table>
 
@@ -303,7 +313,7 @@ $(document).ready(function() {
    (except the Rebol runtime) from the 
    <a href="http://p3k.org/source/rss-box/trunk/">SVN repository</a>.</p>
 
-   <p><span id="changesToggle" class="toggle">–</span> 
+   <p><span id="changesToggle" class="toggle"></span> 
    <strong>Change log</strong></p>
    <ul id="changes">
    <li><small>2006-12-20</small>
@@ -473,10 +483,10 @@ $(document).ready(function() {
    &#102;&#114;&#101;&#100;&#105;&#64;&#101;&#109;&#97;&#105;&#108;&#46;&#101;&#101; 
    that caused diacritic characters to be displayed as entity codes.</li></ul>
 
-   <p><span id="missingToggle" class="toggle">–</span> 
+   <p><span id="missingToggle" class="toggle"></span> 
    <strong>Missing features</strong></p>
    <ul id="missing">
-   <li><strike>UTF-8 support.</strike> <small>done.</small></li>
+   <li>UTF-8 support.</li>
    <li><strike>Option for limiting RSS items display.</strike> <small>done.</small></li>
    <li><strike>Support for text input.</strike> <small>done.</small></li>
    <li><strike>User-friendly error detection.</strike> <small>done.</small></li>
@@ -485,7 +495,7 @@ $(document).ready(function() {
    <small>no option due to missing scheduler.</small></li>
    </ul>
 
-   <p><span id="futureToggle" class="toggle">–</span> 
+   <p><span id="futureToggle" class="toggle"></span> 
    <strong>Future development</strong></p>
    <div id="future">I have ceased developing this viewer with Rebol but it will 
    be available here as is. I am already testing a new prototype using 
