@@ -59,4 +59,4 @@ data: make object! [
 
 print "Content-Type: text/javascript^/"
 print rejoin ["org = {p3k: " to-json data "};^/"]
-print read %rss-box.js
+print read %main.js
