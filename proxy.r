@@ -21,7 +21,7 @@ if not none? referrer [
    log: join cache "access.log"
    referrers: either exists? log [ load log ] [ make block! 50 ]
    insert referrers referrer 
-   save log copy/part referrers 2
+   save log copy/part referrers 50
 ]
 
 either all [cache-mode exists? file (difference now modified? file) < 00:05] [
