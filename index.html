@@ -152,6 +152,7 @@ $(document).ready(function() {
    $("#referrersToggle").click(function() {
       $.getJSON("referrers.r", function(data) {
          var result = "", filter = {};
+         filter[location.href] = true;
          $.each(data.referrers, function(i, item) {
             if (filter[item]) {
                return;
