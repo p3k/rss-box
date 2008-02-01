@@ -4,7 +4,7 @@ function debug(str) {
 }
 
 new function() {
-   var baseUri = "http://localhost/~tobi/rss-box/";
+   var baseUri = "http://p3k.org/rss2/";
    var data, ref;
 
    data = org.p3k;
