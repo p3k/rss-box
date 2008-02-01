@@ -25,12 +25,11 @@ if not none? referrer [
 ]
 
 either all [cache-mode exists? file (difference now modified? file) < 00:05] [
-   mime: "application/rss+xml"
    source: read file
 ] [
 	if error? result: try [
 	   connection: open to-url params/url
-	   mime: connection/locals/headers/Content-Type
+	   ;mime: connection/locals/headers/Content-Type
 	   source: copy connection
 	   if any [none? source find source "<error>"] [
 	      make error! "I am afraid, Dave."
@@ -38,7 +37,6 @@ either all [cache-mode exists? file (difference now modified? file) < 00:05] [
 	   close connection
 	   true
 	] [
-	   mime: "application/rss+xml"
 	   source: read %error.tmpl
 	   replace source "${home}" "?"
 	   replace/all source "${url}" params/url
@@ -59,6 +57,6 @@ data: make object! [
    modified: to-idate (modified? file) 
 ]
 
-print "Content-Type: text/javascript; UTF-8^/"
-print rejoin ["var org = {p3k: " to-json data "};" crlf]
+print "Content-Type: text/javascript^/"
+print rejoin ["org = {p3k: " to-json data "};^/"]
 print read %rss-box.js

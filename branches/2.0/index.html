@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html" />
 	<title>JavaScript RSS Box Viewer 2.0a</title>
    <script type="text/javascript" src="../jquery/jquery-1.2.2.min.js"></script>
    <style type="text/css">
@@ -17,6 +17,7 @@
    }
    
    button[type=submit] {
+      margin-left: 5px;
       font-weight: bold;
       color: green;
    }
@@ -57,22 +58,11 @@
       overflow: hidden;
    }
    
-   .toggle {
-      margin-right: 2px;
-      padding: 0 3px;
-      vertical-align: bottom;
-      border: 1px solid gray;
-      color: gray;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: default;
-    }
-    
-    ol#referrers, #referrers li {
+   ol#referrers, #referrers li {
        padding: 0;
        margin: 0;
        margin-left: 15px;
-    }
+   }
    </style>
 </head>
 <body>
@@ -82,7 +72,7 @@ document.write('<', 'scr', 'ipt type="text/javascript" src="./proxy.r');
 document.write(location.search || "?url=http://blog.p3k.org/rss");
 document.write('"><', '/scr', 'ipt>');
 </script>
-
+   
 <script type="text/javascript">
 $(document).ready(function() {
    var param = org.p3k.param;
@@ -138,25 +128,12 @@ $(document).ready(function() {
       return false;
    });
    
-   $("#changesToggle").click(function() {
-      $("#changes").toggle();
-      var symbol = $("#changesToggle").html();
-      $("#changesToggle").html(symbol === "+" ? "&#150;" : "+");
+   $(".toggler a").click(function() {
+      $(this).parents(".toggler").next(".togglee").toggle();
+      return false;
    }).click();
 
-   $("#missingToggle").click(function() {
-      $("#missing").toggle();
-      var symbol = $("#missingToggle").html();
-      $("#missingToggle").html(symbol === "+" ? "&#150;" : "+");
-   }).click();
-
-   $("#futureToggle").click(function() {
-      $("#future").toggle();
-      var symbol = $("#futureToggle").html();
-      $("#futureToggle").html(symbol === "+" ? "&#150;" : "+");
-   }).click();
-   
-   $("#descriptionToggle").click(function() {
+   $("#descriptionToggler").click(function() {
       $("#description").toggle();
       return false;
    }).click();
@@ -199,7 +176,7 @@ $(document).ready(function() {
 </tr>
 <tr>
    <td><small>Description</small></td>
-   <td><a href="." id="descriptionToggle">...</a>
+   <td><a href="." id="descriptionToggler">...</a>
    <span id="description"></span></td>
 </tr>
 <tr>
@@ -313,9 +290,8 @@ $(document).ready(function() {
    (except the Rebol runtime) from the 
    <a href="http://p3k.org/source/rss-box/trunk/">SVN repository</a>.</p>
 
-   <p><span id="changesToggle" class="toggle"></span> 
-   <strong>Change log</strong></p>
-   <ul id="changes">
+   <p class="toggler"><strong><a href=".">Change log</a></strong></p>
+   <ul class="togglee">
    <li><small>2006-12-20</small>
    I am very glad that my old little script is gaining even more attention 
    after all these years... <em>Thank you very much indeed!</em> Since there 
@@ -483,9 +459,8 @@ $(document).ready(function() {
    &#102;&#114;&#101;&#100;&#105;&#64;&#101;&#109;&#97;&#105;&#108;&#46;&#101;&#101; 
    that caused diacritic characters to be displayed as entity codes.</li></ul>
 
-   <p><span id="missingToggle" class="toggle"></span> 
-   <strong>Missing features</strong></p>
-   <ul id="missing">
+   <p class="toggler"><strong><a href=".">Missing features</a></strong></p>
+   <ul class="togglee">
    <li>UTF-8 support.</li>
    <li><strike>Option for limiting RSS items display.</strike> <small>done.</small></li>
    <li><strike>Support for text input.</strike> <small>done.</small></li>
@@ -495,10 +470,9 @@ $(document).ready(function() {
    <small>no option due to missing scheduler.</small></li>
    </ul>
 
-   <p><span id="futureToggle" class="toggle"></span> 
-   <strong>Future development</strong></p>
-   <div id="future">I have ceased developing this viewer with Rebol but it will 
-   be available here as is. I am already testing a new prototype using 
+   <p class="toggler"><strong><a href=".">Future development</a></strong></p>
+   <div class="togglee">I have ceased developing this viewer with Rebol but 
+   it will be available here as is. I am already testing a new prototype using 
    <a href="http://helma.org">Helma Object Publisher</a>.</div>
 
    <p>For questions and comments feel free to mail to 
