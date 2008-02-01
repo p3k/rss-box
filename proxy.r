@@ -6,32 +6,42 @@ REBOL []
 
 do %json.r
 
+cache-mode: true
+
 cgi: system/options/cgi
 query-string: cgi/query-string
-url: to-url dehex query-string
+params: make object! decode-cgi query-string
 
 cache: %/tmp/rss-box/
 make-dir cache
-file: join cache enbase url
+file: join cache enbase params/url
 
-either all [exists? file (difference now modified? file) < 00:01] [
-   source: read file 
+referrer: select cgi/other-headers "HTTP_REFERER"
+if not none? referrer [
+   log: join cache "access.log"
+   referrers: either exists? log [ load log ] [ make block! 50 ]
+   insert referrers referrer 
+   save log copy/part referrers 2
+]
+
+either all [cache-mode exists? file (difference now modified? file) < 00:05] [
    mime: "application/rss+xml"
+   source: read file
 ] [
 	if error? result: try [
-	   connection: open url
+	   connection: open to-url params/url
+	   mime: connection/locals/headers/Content-Type
 	   source: copy connection
 	   if any [none? source find source "<error>"] [
 	      make error! "I am afraid, Dave."
 	   ]
-	   mime: connection/locals/headers/Content-Type
 	   close connection
 	   true
 	] [
 	   mime: "application/rss+xml"
 	   source: read %error.tmpl
 	   replace source "${home}" "?"
-	   replace/all source "${url}" url
+	   replace/all source "${url}" params/url
 	   replace source "${message}" get in disarm result 'arg1
 	]
 	write file source
@@ -44,13 +54,11 @@ data: make object! [
    item: read %item.tmpl
    date: read %date.tmpl
    link: read %link.tmpl
+   param: params
+   xml: source
+   modified: to-idate (modified? file) 
 ]
 
-print rejoin ["X-RssBox-Data: " to-json data]
-print rejoin ["Content-type: " any [mime "text/plain"] crlf]
-print source
-
-quit
-
-probe connection/locals/headers
-probe mime
+print "Content-Type: text/javascript; UTF-8^/"
+print rejoin ["var org = {p3k: " to-json data "};" crlf]
+print read %rss-box.js

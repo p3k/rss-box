@@ -1,17 +1,14 @@
 function debug(str) {
-   return document.write('<p><span style="background-color: yellow;">', str, '</span><p>');
-}
-
-if (typeof org === "undefined") {
-   var org = {};
+   return document.write('<p><span style="background-color: yellow;">', 
+         str, '</span><p>');
 }
 
 new function() {
    var baseUri = "http://localhost/~tobi/rss-box/";
-   var ref;
+   var data, ref;
 
-   ref = org.p3k = {};
-   ref.param = {
+   data = org.p3k;
+   data.defaults = {
       url: "http://blog.p3k.org/rss",
       maxItems: 7,
       width: 200,
@@ -23,32 +20,15 @@ new function() {
       textColor: "black",
       //showXmlButton: 1
    };
-
-   var query, url;
-
-   if (location.search) {
-      query = location.search.substr(1);
-   } else {
-      var scripts = document.getElementsByTagName("script");
-      for (var i=0; i<scripts.length; i+=1) {
-         url = scripts[i].src;
-         if (url.indexOf(baseUri) === 0) {
-            query = url.split("?")[1];
-            break;
-         }
-      }
+   
+   var value;
+   for (var i in data.defaults) {
+      value = data.param[i];
+      if (!value || value.length === 0) {
+         data.param[i] = data.defaults[i];
+      } 
    }
-      
-   if (query) {
-      var pairs = query.split("&");
-      var parts, value;
-      for (var i in pairs) {
-         parts = pairs[i].split("=");
-         value = decodeURIComponent(parts[1]);
-         value && (ref.param[decodeURIComponent(parts[0])] = value);
-      }
-   }
-      
+   
    var NAMESPACES = {
       dc: "http://purl.org/dc/elements/1.1/",
       rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -78,6 +58,17 @@ new function() {
          }
       }
       return request;
+   }
+   
+   var getDocument = function(source) {
+      if (document.implementation.createDocument) {
+         var parser = new DOMParser();
+         return parser.parseFromString(source, "text/xml");
+      } else if (window.ActiveXObject) {
+         var doc = new ActiveXObject("Microsoft.XMLDOM");
+         doc.async = "false";
+         return doc.loadXML(source);
+      }
    }
    
    var getNode = function(parent, name, namespace) {
@@ -131,7 +122,7 @@ new function() {
       } else {
          date = new Date;
       }
-      return render(layout.date, {
+      return render(data.date, {
          year: date.getFullYear(),
          month: padZero(date.getMonth() + 1),
          day: padZero(date.getDate()),
@@ -145,7 +136,7 @@ new function() {
    var renderButtons = function(enclosure, source) {
       var result = "";
       if (enclosure && enclosure.link) {
-         result += render(layout.image, {
+         result += render(data.image, {
             source: baseUri + "enclosure.gif",
             title: enclosure.type,
             link: enclosure.link,
@@ -154,7 +145,7 @@ new function() {
          });
       }
       if (source && source.link) {
-         result += render(layout.image, {
+         result += render(data.image, {
             source: baseUri + "source.gif",
             title: source.title,
             link: source.link,
@@ -165,13 +156,10 @@ new function() {
       return result;         
    }
       
-   var param = org.p3k.param;
-   var rss = org.p3k.rss = {items: []};
+   var param = data.param;
+   var rss = data.rss = {items: []};
+   var xml = getDocument(data.xml);
    
-   var http = getUrl(param.url);
-   var layout = eval(http.getResponseHeader("X-RssBox-Data"));
-   var xml = http.responseXML;
-
    if (xml) {
       xml.normalize();
    
@@ -227,7 +215,7 @@ new function() {
             ref.title = getText(getNode(input, "title"));
          }
       } else {
-         rss.date = renderDate(getText(getNode(channel, "pubDate")));
+         rss.date = renderDate(getText(getNode(channel, "pubDate")) || data.modified);
          rss.rights = getText(getNode(channel, "copyright"));
       }
       
@@ -238,7 +226,7 @@ new function() {
          item = items[i];
    
          if (type === "scriptingNews") {
-            ref = {};
+            ref = {title: ""};
             ref.description = getText(getNode(item, "text")).replace(/\n/g, " ");
             ref.link = getText(getNode(item, "link"));
             if (text = trim(getText(getNode(item, "linetext")).replace(/\n/g, " "))) {
@@ -281,22 +269,29 @@ new function() {
       var item, items = "";
       for (var i in rss.items) {
          item = rss.items[i];
-         items += render(layout.item, {
-            title: (!param.compact ? "<strong>" : "") + (item.link ? 
-                  render(layout.link, {
-               link: item.link,
-               text: item.title,
-               'class': "rssBoxItemTitle"
-            }) : item.title) + (!param.compact ? "</strong>" : ""),
+         items += render(data.item, {
+            title: new function() {
+               var title = (!param.compact ? "<strong>" : "");
+               if (item.link) {
+                  title += render(data.link, {
+                     link: item.link,
+                     text: item.title,
+                     'class': "rssBoxItemTitle"
+                  });
+               } else {
+                  title += item.title;
+               }
+               !param.contact && (title += "</strong>");
+               return new String(title); // FIXME: Funny, title alone will be rendered as [object]
+            }(),
             'break': item.title && item.description ? "<br />" : "",
             description: (!param.compact || !item.title) && item.description,
             buttons: renderButtons(item.enclosure, item.source)
          });
       }
       
-      var box = render(layout.box, {
-         error: http.getResponseHeader("X-RssBox-Error"),
-         title: rss.link ? render(layout.link, {
+      var box = render(data.box, {
+         title: rss.link ? render(data.link, {
             link: rss.link,
             text: rss.title,
             'class': "rssBoxTitle",
@@ -305,14 +300,14 @@ new function() {
          description: rss.description,
          items: items,
 
-         xmlButton: param.showXmlButton && render(layout.image, {
+         xmlButton: param.showXmlButton && render(data.image, {
             link: param.url,
             source: "http://p3k.org/rss/rss.png",
             title: rss.format + " " + rss.version,
             align: "right"
          }),
          
-         image: !param.compact && rss.image && render(layout.image, {
+         image: !param.compact && rss.image && render(data.image, {
             link: rss.image.link,
             source: rss.image.source,
             width: rss.image.width,
@@ -324,7 +319,7 @@ new function() {
             vspace: 5
          }),
          
-         input: !param.compact && rss.input && render(layout.input, {
+         input: !param.compact && rss.input && render(data.input, {
             link: rss.input.link,
             description: rss.input.description,
             name: rss.input.name,

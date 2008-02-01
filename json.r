@@ -1,6 +1,6 @@
 REBOL []
 
-to-json: func [source /local result key] [
+to-json: func [source /local result keys key] [
    switch type?/word source [
       object! [
          keys: first source
@@ -16,7 +16,7 @@ to-json: func [source /local result key] [
       block! [
          result: "(["
          foreach [item] source [
-            result: rejoin [result to-json item {,}]
+            result: rejoin [ result to-json item {,} ]
          ]
          remove back tail result
          result: join result "])"
@@ -25,11 +25,15 @@ to-json: func [source /local result key] [
       string! [
          replace/all source lf "\n"
          replace/all source {"} {\"}
-         result: rejoin [{(new String("} source {"))}]
+         result: rejoin [ {(new String("} source {"))} ]
       ]
       
       integer! [
-         result: rejoin ["(new Number(" source "))"]
+         result: rejoin [ "(new Number(" source "))" ]
+      ]
+      
+      date! [
+         result: rejoin [ "(new Date(" source "))" ]
       ]
    ]
    return result
