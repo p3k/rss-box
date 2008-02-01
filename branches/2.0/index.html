@@ -148,7 +148,8 @@ $(document).ready(function() {
    $("#referrersToggle").click(function() {
       $.getJSON("referrers.r", function(data) {
          var result = "", filter = {};
-         filter[location.href] = true;
+         filter[location.protocol + "//" + location.host + 
+               location.pathname] = true;
          $.each(data.referrers, function(i, item) {
             if (filter[item]) {
                return;
