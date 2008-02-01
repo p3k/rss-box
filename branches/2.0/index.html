@@ -72,7 +72,7 @@
 </head>
 <body>
 
-<script type="text/javascript">
+<script id="box" type="text/javascript">
 document.write('<', 'scr', 'ipt type="text/javascript" src="./proxy.r');
 document.write(location.search || "?url=http://blog.p3k.org/rss");
 document.write('"><', '/scr', 'ipt>');
@@ -102,6 +102,7 @@ $(document).ready(function() {
       return result;
    }
    
+   $("table:first").attr("align", "left");
    $("#url").val(param.url);
    $("#link").attr("href", param.url).text(rss.format + " " + rss.version);
    $("#title").text(rss.title);
@@ -121,15 +122,10 @@ $(document).ready(function() {
    $("#textColor").val(param.textColor);
    $("#fontFace").val(param.fontFace);
    
-   $("button#submit").click(function() {
-      $("#box script").attr("src", "./rss-box.js?url=http://antville.org/rss");
-   });
-   
    $("button#reset").click(function() {
       $("input:text").val("");
       $("input:checkbox").attr("checked", false);
       $("#url").val(param.url);
-      //document.location = "./";
       return false;
    });
    
@@ -197,10 +193,6 @@ $(document).ready(function() {
    <td><small>Source</small></td>
    <td><a id="link"></a></td>
 </tr>
-<!-- tr>
-   <td><small>Contact</small></td>
-   <td id="contact"></td>
-</tr -->
 <tr>
    <td><label for="maxItems">Max. items</label></td>
    <td><input id="maxItems" name="maxItems" /></td>
@@ -212,6 +204,7 @@ $(document).ready(function() {
 <tr>
    <td><label for="align">Align</label></td>
    <td><select id="align" name="align">
+      <option value="">default</option>
       <option>left</option>
       <option>center</option>
       <option>right</option>
@@ -268,7 +261,7 @@ $(document).ready(function() {
 </tr>
 </table>
 
-<table width="350" cellspacing="0" cellpadding="5" border="0">
+<table id="about" width="350" cellspacing="0" cellpadding="5" border="0">
 <tr>
    <td colspan="2"><small><em>"JavaScript RSS Viewer puts little or long 
    customizable RSS boxes anywhere you put HTML; build your own slashbox hell 
