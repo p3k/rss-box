@@ -12,7 +12,7 @@ new function() {
       url: "http://blog.p3k.org/rss",
       maxItems: 7,
       width: 200,
-      align: "left",
+      align: "",
       frameColor: "black",
       titleBarColor: "lightblue",
       titleBarTextColor: "black",
