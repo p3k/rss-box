@@ -99,8 +99,7 @@ $(document).ready(function() {
    
    var renderCode = function() {
       var result = '<scr' + 'ipt type="text/javascript" src="';
-      result += "http://localhost/~tobi/rss-box/proxy.r?";
-      //result += encodeURIComponent(param.url);
+      result += "http://p3k.org/rss2/proxy.r?";
       for (var i in param) {
          result += i + "=" + encodeURIComponent(param[i]) + "&amp;";
       }
@@ -169,7 +168,8 @@ $(document).ready(function() {
          var result = "";
          $.each(data.referrers, function(i, item) {
             var host = item.split("/")[2];
-            result += '<li><a href="' + item + '">' + host + "</a></li>";
+            result += '<li><a href="' + item + '">' + 
+                  host + "<" + "/a><" + "/li>";
          });
          $("#referrers").html(result).show();
          $("#referrersToggle").hide()
@@ -275,7 +275,7 @@ $(document).ready(function() {
    <td> </td>
 </tr>
 <tr>
-   <td><a name="referrers"></a><small>Referrers:<br /> (recent 50)</small></td>
+   <td><small>Referrers:<br /> (recent 50)</small></td>
    <td><a href="." id="referrersToggle">...</a>
    <ol id="referrers"></ol></td>
 </tr>
