@@ -22,8 +22,13 @@
       color: green;
    }
    
+   ol {
+      padding-top: 0;
+      margin: -10px 0 5px 0;
+   }
+   
    li {
-      padding: 5px 0;
+      padding: 3px 0;
    }
    
    #setup {
@@ -100,7 +105,7 @@ $(document).ready(function() {
    $("#url").val(param.url);
    $("#link").attr("href", param.url).text(rss.format + " " + rss.version);
    $("#title").text(rss.title);
-   $("#description").text(rss.description);
+   $("#description").text(rss.description).hide();
    $("#date").text(rss.date);
    $("#format").text(rss.format + " " + rss.version);
    $("#contact").html(rss.rights);
@@ -128,22 +133,30 @@ $(document).ready(function() {
       return false;
    });
    
+   $("#code textarea").click(function() {
+      $(this).select();
+   }).val(renderCode());
+
    $(".toggler a").click(function() {
       $(this).parents(".toggler").next(".togglee").toggle();
       return false;
    }).click();
 
    $("#descriptionToggler").click(function() {
-      $("#description").toggle();
+      $(this).hide();
+      $("#description").show();
       return false;
-   }).click();
-   
+   });
+      
    $("#referrers").hide();
-   
    $("#referrersToggle").click(function() {
       $.getJSON("referrers.r", function(data) {
-         var result = "";
+         var result = "", filter = {};
          $.each(data.referrers, function(i, item) {
+            if (filter[item]) {
+               return;
+            }
+            filter[item] = true;
             var host = item.split("/")[2];
             result += '<li><a href="' + item + '">' + 
                   host + "<" + "/a><" + "/li>";
@@ -153,10 +166,6 @@ $(document).ready(function() {
       });
       return false;
    });
-   
-   $("#code textarea").click(function() {
-      $(this).select();
-   }).val(renderCode());
 });
 </script>
 
@@ -291,75 +300,85 @@ $(document).ready(function() {
    <a href="http://p3k.org/source/rss-box/trunk/">SVN repository</a>.</p>
 
    <p class="toggler"><strong><a href=".">Change log</a></strong></p>
-   <ul class="togglee">
-   <li><small>2006-12-20</small>
+   <div class="togglee">
+
+   <p><small>2008-02-01</small>
+   Completely revised server- and client-side code. XML rendering is now done
+   in the browser which speeds up things and decreases the load on the server.
+   Furthermore, the list of referrers is now loaded on demand via AJAX and 
+   thus not rendered with every request. Finally, I retouched the setup form
+   interface and cleaned up both HTML and CSS.</p>
+
+   <p><small>2006-12-20</small>
    I am very glad that my old little script is gaining even more attention 
    after all these years... <em>Thank you very much indeed!</em> Since there 
    are coming in more and more of the same requests and I am really not able 
-   to handle them (apologies!), here is some advice for everyone:<ol>
+   to handle them (apologies!), here is some advice for everyone:</p>
+   <ol>
    <li><a href="http://en.wikipedia.org/wiki/Cascading_Style_Sheets">Use 
    cascading style sheets</a> (CSS) to change font sizes (and to generally 
    define your layout).</li>
    <li><a href="http://www.sitepoint.com/article/beware-opening-links-new-window">Beware 
-   of opening links in a new window.</a> It's offensive to your readers.</li></ol>
-   <em>A happy end for 2006!</em></li>
+   of opening links in a new window.</a> It's offensive to your readers.</li>
+   </ol>
+   <p><em>A happy end for 2006!</em></p>
 
-   <li><small>2006-06-13</small>
+   <p><small>2006-06-13</small>
    Did some minor bug fixing again (amongst others replacing single quotes with 
    &amp;apos; and not &amp;quot; entities). Furthermore (and finally), I 
-   removed the "RC" (as in "Release Candidate") from the document title...</li>
+   removed the "RC" (as in "Release Candidate") from the document title...</p>
 
-   <li><small>2006-06-12</small>
+   <p><small>2006-06-12</small>
    Gary informed me that longer feed URLs cause trouble and the feed box will 
    not be displayed. That's in fact a bug, but unfortunately one that cannot 
    be fixed so easily. My suggestion is to shorten such URLs at one of the 
    websites around that provide such a service, e.g. 
-   <a href="http://tinyurl.com">tinyurl.com</a>.</li>
+   <a href="http://tinyurl.com">tinyurl.com</a>.</p>
 
-   <li><small>2006-04-23</small>
+   <p><small>2006-04-23</small>
    Switched the <a href="http://p3k.org/source/rss-box/trunk/">source 
-   repository</a> from CVS to Subversion (SVN).</li>
+   repository</a> from CVS to Subversion (SVN).</p>
 
-   <li><small>2006-04-20</small>
+   <p><small>2006-04-20</small>
    Andrew Pam brought up a serious issue that probably might have affected 
    some more people already: the viewer does not support UTF-8 (or Unicode, 
    resp.) Unfortunately, this is "built-in" into the underlying scripting 
-   language (aka Rebol). I'm sorry to cancel those tickets... :(</li>
+   language (aka Rebol). I'm sorry to cancel those tickets... :(</p>
 
-   <li><small>2006-04-13</small>
+   <p><small>2006-04-13</small>
    Fixed a bug reported by Mando Gomez that caused feeds using the &lt;guid&gt; 
    element being displayed without item links... Don't forget to check out 
-   Mando's excellent website <a href="http://www.mandolux.com/">mandolux</a>!</li>
+   Mando's excellent website <a href="http://www.mandolux.com/">mandolux</a>!</p>
 
-   <li><small>2006-04-12</small>
+   <p><small>2006-04-12</small>
    Obviously Sam Ruby changed his feed format from scriptingNews to Atom; which 
    renders my example link above pretty useless... So far I don't know about 
-   any other scriptingNews feed, do you?</li>
+   any other scriptingNews feed, do you?</p>
 
-   <li><small>2006-02-20</small>
+   <p><small>2006-02-20</small>
    I hope nobody minds the little line I added at the bottom of each RSS box... 
    Of course, it's not totally altruistic, but probably some people will find 
    it informative. However, if you want to prevent if from being displayed 
-   simply add <code>.rssBoxPromo {display: none;}</code> to your stylesheet.</li>
+   simply add <code>.rssBoxPromo {display: none;}</code> to your stylesheet.</p>
 
-   <li><small>2006-01-11</small>
+   <p><small>2006-01-11</small>
    New server, new troubles: I moved the viewer to a newly setup Ubuntu machine. 
    Of course, I forgot to set some permission flags and owners, thus, preventing 
    the script from working. However, I think everyhings's fixed and working 
-   again.</li>
+   again.</p>
 
-   <li><small>2005-11-16</small>
+   <p><small>2005-11-16</small>
    Just testing Google's AdSense for a while. Since this page generates most of 
    my traffic I wanted to see myself what a banner can do here. Hope you dont't 
-   mind.</li>
+   mind.</p>
 
-   <li><small>2004-12-16</small>
+   <p><small>2004-12-16</small>
    Bugfix: Sometimes the logfile which is used to generate the list of sites 
    using this script gets corrupted. This affected the whole setup page to 
    return an error and thus, it needed to be caught. (You will see a "currently 
-   out of order" message then.)</li>
+   out of order" message then.)</p>
 
-   <li><small>2004-04-26</small>
+   <p><small>2004-04-26</small>
    Last efforts to officially release the 
    <a href="http://p3k.org/source/rss-box">code</a> to the open source 
    community. There have been some bugs in the (image) rendering framework which 
@@ -368,96 +387,97 @@ $(document).ready(function() {
    (me included). Finally, there's a 
    <a href="http://p3k.org/source/rss-box/trunk/README">README</a> 
    file with a short installation guide to make the script run on your own 
-   server.</li>
+   server.</p>
 
-   <li><small>2004-01-28</small>
+   <p><small>2004-01-28</small>
    When something goes wrong (most of the time this might be a wrong URL, ie. 
    a 404 as result) an <a href="./?url=error">"error" box</a> will 
    be displayed to signal the failure. Increased version up to 1.0 and labeled 
-   it as release candidate (RC).</li>
+   it as release candidate (RC).</p>
 
-   <li><small>2004-01-26</small>
+   <p><small>2004-01-26</small>
    Retouched the code in a very last effort to make the script running 
    stand-alone (with Rebol but <em>without</em> PHP, that is). Everything 
    needed is now in CVS so everybody can download from there. Potentially, a 
    few minor bug fixes might follow short-term. Uh, and the HTML code is 
    <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fp3k.org%2Frss2%2F">valid 
-   XHTML 1.0</a> now.</li>
+   XHTML 1.0</a> now.</p>
 
-   <li><small>2003-12-12</small>
+   <p><small>2003-12-12</small>
    The mirror at <a href="http://publish.curry.com/rss/">curry.com</a> is not 
    working for quite a long time. I tried to contact Adam Curry but so far 
-   without success.</li>
+   without success.</p>
 
-   <li><small>2003-03-30</small>
-   Moved to new server with new domain forever.p3k.org.</li>
+   <p><small>2003-03-30</small>
+   Moved to new server with new domain forever.p3k.org.</p>
 
-   <li><small>2003-03-25</small>
+   <p><small>2003-03-25</small>
    Updated Rebol to <a href="http://www.rebol.com/news3310.html">version 2.5.5</a>. 
-   End of Rebol's "DNS zombies" in the process list. <em>Finally.</em></li>
+   End of Rebol's "DNS zombies" in the process list. <em>Finally.</em></p>
 
-   <li><small>2002-02-19</small>
+   <p><small>2002-02-19</small>
    Added a very nice quote from 
    <a href="http://www.ourpla.net/cgi-bin/pikie.cgi?AbbeNormal">Abbe Normal</a> 
-   on top right of this document</li>
+   on top right of this document</p>
 
-   <li><small>2001-11-17</small>
+   <p><small>2001-11-17</small>
    If you want a more compact view of the RSS box you can get it now  using the 
    corresponding checkbox. If it is enabled the descriptions of each item will 
    not be displayed &#8211; given that the item title is defined (otherwise 
    there would not be much to see). Additionally, the channel image (if defined) 
    will not be displayed. Thanks 
    &#106;&#115;&#121;&#101;&#111;&#64;&#99;&#111;&#109;&#112;&#117;&#115;&#101;&#114;&#118;&#101;&#46;&#99;&#111;&#109; 
-   for the suggestions!</li>
+   for the suggestions!</p>
 
-   <li><small>2001-09-21</small>
+   <p><small>2001-09-21</small>
    Since today the <tt>textinput</tt> tag is supported. It creates an 
    appropriate form at the end of the box. Moreover, two bugs were fixed: one 
    caused unnecessary information in the query string of the generated 
    JavaScript tag. The other affected the display of the date's time zone. 
    Time zones now are generally displayed in GMT except where another time 
-   zone acronym is defined.</li>
+   zone acronym is defined.</p>
 
-   <li><small>2001-09-04</small>
+   <p><small>2001-09-04</small>
    Added icons for enclosure and source; added XML button checkbox to enable 
    output of the quasi-standard orange button linking to the XML source (idea 
-   by &#97;&#100;&#97;&#109;&#64;&#99;&#117;&#114;&#114;&#121;&#46;&#99;&#111;&#109;).</li>
+   by &#97;&#100;&#97;&#109;&#64;&#99;&#117;&#114;&#114;&#121;&#46;&#99;&#111;&#109;).</p>
 
-   <li><small>2001-09-03</small>
+   <p><small>2001-09-03</small>
    It's now possible to refine the style of the whole box using the newly 
    implemented css classes <tt>rssBoxTitle</tt>, <tt>rssBoxContent</tt>, 
    <tt>rssBoxItemTitle</tt> and <tt>rssBoxItemContent</tt> (idea by 
-   &#114;&#100;&#97;&#118;&#105;&#101;&#115;&#64;&#111;&#114;&#105;&#101;&#110;&#116;&#112;&#97;&#99;&#105;&#102;&#105;&#99;&#46;&#99;&#111;&#109;).</li>
+   &#114;&#100;&#97;&#118;&#105;&#101;&#115;&#64;&#111;&#114;&#105;&#101;&#110;&#116;&#112;&#97;&#99;&#105;&#102;&#105;&#99;&#46;&#99;&#111;&#109;).</p>
 
-   <li><small>2001-08-24</small>
+   <p><small>2001-08-24</small>
    Added a form input for limiting the item display. The number determines how 
    many items will be shown in the box (seven is the default value). Good for 
-   often updated channels.</li>
+   often updated channels.</p>
 
-   <li><small>2001-08-15</small>
+   <p><small>2001-08-15</small>
    Detected a strange bug that prevented the viewer at 
    <a href="http://publish.curry.com/rss/">curry.com</a> loading 
    http://p3k.org/rss.xml while http://www.p3k.org/rss.xml was no problem at 
    all. Upgrading the Rebol installation to the current version solved the 
-   problem, however the cause remains unclear...</li>
+   problem, however the cause remains unclear...</p>
 
-   <li><small>2001-08-08</small>
+   <p><small>2001-08-08</small>
    Fixed a small bug that corrupted channel URLs containing a query (as 
    reported by &#107;&#105;&#107;&#97;&#64;&#115;&#108;&#111;&#108;&#101;&#104;&#116;&#46;&#101;&#101;). 
-   <strike>Configured server redirect from piefke.helma.at/rss</strike>.</li>
+   <strike>Configured server redirect from piefke.helma.at/rss</strike>.</p>
 
-   <li><small>2001-08-05</small>
+   <p><small>2001-08-05</small>
    Thanks to <a href="http://www.curry.com/2001/07/31#coolRssService">Adam Curry</a>, 
    the viewer is now mirrored at 
-   <a href="http://publish.curry.com/rss">http://publish.curry.com/rss</a>.</li>
+   <a href="http://publish.curry.com/rss">http://publish.curry.com/rss</a>.</p>
 
-   <li><small>2001-07-30</small>
-   Added link to source code; added example links for all supported formats.</li>
+   <p><small>2001-07-30</small>
+   Added link to source code; added example links for all supported formats.</p>
 
-   <li><small>2001-05-30</small>
+   <p><small>2001-05-30</small>
    Fixed a little bug reported by 
    &#102;&#114;&#101;&#100;&#105;&#64;&#101;&#109;&#97;&#105;&#108;&#46;&#101;&#101; 
-   that caused diacritic characters to be displayed as entity codes.</li></ul>
+   that caused diacritic characters to be displayed as entity codes.</p>
+   </div>
 
    <p class="toggler"><strong><a href=".">Missing features</a></strong></p>
    <ul class="togglee">
