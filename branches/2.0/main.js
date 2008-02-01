@@ -18,7 +18,8 @@ new function() {
       titleBarTextColor: "black",
       boxFillColor: "white",
       textColor: "black",
-      showXmlButton: ""
+      showXmlButton: "",
+      compact: ""
    };
    
    var value;
