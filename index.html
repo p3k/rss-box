@@ -146,7 +146,7 @@ $(document).ready(function() {
       
    $("#referrers").hide();
    $("#referrersToggle").click(function() {
-      $.getJSON("referrers.r", function(data) {
+      $.getJSON("./referrers.r", function(data) {
          var result = "", filter = {};
          filter[location.protocol + "//" + location.host + 
                location.pathname] = true;
@@ -273,12 +273,12 @@ $(document).ready(function() {
    <p><strong>JavaScript RSS Box Viewer</strong></p>
    <p>This <a href="http://www.salon.com/tech/col/rose/2003/12/04/rss/index.html">RSS</a> 
    box viewer can display RSS feed versions 
-   <a href="./?url=http%3A//cyber.law.harvard.edu/rss/examples/sampleRss091.xml">0.91</a>, 
-   <a href="./?url=http%3A//cyber.law.harvard.edu/rss/examples/sampleRss092.xml">0.92</a>, 
-   <a href="./?url=http%3A//blog.p3k.org/rss">1.0</a> and 
-   <a href="./?url=http%3A//cyber.law.harvard.edu/rss/examples/rss2sample.xml">2.0</a> 
+   <a href="./?url=http://cyber.law.harvard.edu/rss/examples/sampleRss091.xml">0.91</a>, 
+   <a href="./?url=http://cyber.law.harvard.edu/rss/examples/sampleRss092.xml">0.92</a>, 
+   <a href="./?url=http://blog.p3k.org/rss">1.0</a> and 
+   <a href="./?url=http://cyber.law.harvard.edu/rss/examples/rss2sample.xml">2.0</a> 
    as well as even the good old legacy format 
-   <a href="./?url=http%3A//essaysfromexodus.scripting.com/xml/scriptingnews2.xml">Scripting 
+   <a href="./?url=http://essaysfromexodus.scripting.com/xml/scriptingnews2.xml">Scripting 
    News 2</a>. <em>(Sorry, no <a href="http://www.atompub.org">Atom</a>.)</em></p>
    
    <p>It provides a simple way to embed such RSS boxes in any HTML document via 
