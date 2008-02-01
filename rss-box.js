@@ -5,9 +5,9 @@ function debug(str) {
 
 new function() {
    var baseUri = "http://p3k.org/rss2/";
-   var data, ref;
+   var ref;
 
-   data = org.p3k;
+   var data = org.p3k;
    data.defaults = {
       url: "http://blog.p3k.org/rss",
       maxItems: 7,
@@ -18,7 +18,7 @@ new function() {
       titleBarTextColor: "black",
       boxFillColor: "white",
       textColor: "black",
-      //showXmlButton: 1
+      showXmlButton: ""
    };
    
    var value;
@@ -67,7 +67,8 @@ new function() {
       } else if (window.ActiveXObject) {
          var doc = new ActiveXObject("Microsoft.XMLDOM");
          doc.async = "false";
-         return doc.loadXML(source);
+         doc.loadXML(source);
+         return doc;
       }
    }
    
@@ -84,8 +85,8 @@ new function() {
    }
    
    var getText = function(node) {
-      if (node) {
-         return node.textContent;
+      if (node && node.childNodes && node.childNodes.length > 0) {
+         return node.childNodes[0].nodeValue;
       }
       return "";
    }
@@ -128,8 +129,8 @@ new function() {
          day: padZero(date.getDate()),
          hours: padZero(date.getHours()),
          minutes: padZero(date.getMinutes()),
-         seconds: padZero(date.getSeconds())
-         //timeZone: date.getTimeZone()
+         seconds: padZero(date.getSeconds()),
+         timeZone: "" //date.getTimeZone()
       });
    }
    
@@ -161,11 +162,9 @@ new function() {
    var xml = getDocument(data.xml);
    
    if (xml) {
-      xml.normalize();
-   
       var root = xml.documentElement;
-      var type = root.localName;
-   
+      var type = root.nodeName;
+
       if (type === "scriptingNews") {
          var channel = getNode(xml, "header");
          rss.format = "Scripting News";
@@ -184,7 +183,8 @@ new function() {
       } else {
          var channel = getNode(xml, "channel");
          rss.format = "RSS";
-         rss.version = (type === "RDF") ? "1.0" : root.getAttribute("version");
+         rss.version = (type === "rdf:RDF") ? "1.0" : 
+               root.getAttribute("version");
          rss.title = getText(getNode(channel, "title"));
          rss.description = getText(getNode(channel, "description"));
          rss.link = getText(getNode(channel, "link"));
@@ -334,7 +334,7 @@ new function() {
          titleBarColor: param.titleBarColor,
          titleBarTextColor: param.titleBarTextColor,
          boxFillColor: param.boxFillColor,
-         textColor: param.textColor,
+         textColor: param.textColor
       });
       
       document.write(box);
