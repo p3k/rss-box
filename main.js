@@ -303,7 +303,7 @@ new function() {
 
          xmlButton: param.showXmlButton && render(data.image, {
             link: param.url,
-            source: "http://p3k.org/rss/rss.png",
+            source: baseUri + "rss.png",
             title: rss.format + " " + rss.version,
             align: "right"
          }),
