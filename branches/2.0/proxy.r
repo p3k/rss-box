@@ -38,13 +38,14 @@ either all [cache-mode exists? file (difference now modified? file) < 00:05] [
       mime: connection/locals/headers/Content-Type
       source: copy connection
       close connection
-      if none? find mime any [ "/xml" "/rss+xml" ] [
+      if none? find/any mime "/*xml" [
          make error! join "Wrong document format: " mime
       ]
       if any [none? source find source "<error>"] [
          make error! "I am afraid, Dave."
       ]
       true
+   ] [
   	   source: read %error.tmpl
 	   replace source "${home}" "?"
 	   replace/all source "${url}" params/url
