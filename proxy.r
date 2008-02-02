@@ -38,10 +38,10 @@ either all [cache-mode exists? file (difference now modified? file) < 00:05] [
       mime: connection/locals/headers/Content-Type
       source: copy connection
       close connection
-      if none? find/any mime "/*xml" [
-         make error! join "Wrong document format: " mime
+      if none? any [ find source "<channel" find source "<header" ] [
+         make error! "Incompatible document format." 
       ]
-      if any [none? source find source "<error>"] [
+      if any [ none? source find source "<error>" ] [
          make error! "I am afraid, Dave."
       ]
       true
