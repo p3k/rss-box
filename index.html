@@ -163,8 +163,8 @@ $(document).ready(function() {
             }
             filter[item] = true;
             var host = item.split("/")[2];
-            result += '<li><a href="' + item + '">' + 
-                  host + "<" + "/a><" + "/li>";
+            result += '<a href="' + item + '">' + 
+                  host + "<" + "/a><br />";
          });
          $("#referrers").html(result).show();
          $("#referrersToggle").hide()
@@ -266,7 +266,7 @@ $(document).ready(function() {
 <tr>
    <td><small>Referrers:<br /> (recent 50)</small></td>
    <td><a href="." id="referrersToggle">...</a>
-   <ol id="referrers"><li /></ol></td>
+   <small id="referrers" /></small>
 </tr>
 </table>
 
