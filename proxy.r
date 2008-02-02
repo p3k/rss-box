@@ -6,7 +6,7 @@ REBOL []
 
 do %json.r
 
-cache-mode: not true
+cache-mode: true
 
 cgi: system/options/cgi
 query-string: cgi/query-string
@@ -45,8 +45,7 @@ either all [cache-mode exists? file (difference now modified? file) < 00:05] [
          make error! "I am afraid, Dave."
       ]
       true
-	] [
-	   source: read %error.tmpl
+  	   source: read %error.tmpl
 	   replace source "${home}" "?"
 	   replace/all source "${url}" params/url
 	   replace source "${message}" replace/all get in disarm result 'arg1 "&" "&amp;"
