@@ -64,7 +64,8 @@ new function() {
    var getDocument = function(source) {
       if (document.implementation.createDocument) {
          var parser = new DOMParser();
-         return parser.parseFromString(source, "text/xml");
+         var doc = parser.parseFromString(source, "text/xml");
+         return doc;
       } else if (window.ActiveXObject) {
          var doc = new ActiveXObject("Microsoft.XMLDOM");
          doc.async = "false";

@@ -34,22 +34,22 @@ either all [cache-mode exists? file (difference now modified? file) < 00:05] [
    ]
 ] [
 	if error? result: try [
-	   connection: open to-url params/url
-	   mime: connection/locals/headers/Content-Type
-	   if none? find mime any [ "/xml" "/rss+xml" ] [
-	      make error! join "Wrong document format: " mime
-	   ]
-	   source: copy connection
-	   if any [none? source find source "<error>"] [
-	      make error! "I am afraid, Dave."
-	   ]
-	   close connection
-	   true
+      connection: open to-url params/url
+      mime: connection/locals/headers/Content-Type
+      source: copy connection
+      close connection
+      if none? find mime any [ "/xml" "/rss+xml" ] [
+         make error! join "Wrong document format: " mime
+      ]
+      if any [none? source find source "<error>"] [
+         make error! "I am afraid, Dave."
+      ]
+      true
 	] [
 	   source: read %error.tmpl
 	   replace source "${home}" "?"
 	   replace/all source "${url}" params/url
-	   replace source "${message}" get in disarm result 'arg1
+	   replace source "${message}" replace/all get in disarm result 'arg1 "&" "&amp;"
 	]
 	write file source
 ]
