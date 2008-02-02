@@ -29,6 +29,10 @@ new function() {
          data.param[i] = data.defaults[i];
       } 
    }
+
+   // FIXME: Ugly work-around for many boxes using too small width 
+   // values because the former version did not show the exact output.
+   if (data.param.javascript && data.param.width < 200) data.param.width = 200;
    
    var NAMESPACES = {
       dc: "http://purl.org/dc/elements/1.1/",
