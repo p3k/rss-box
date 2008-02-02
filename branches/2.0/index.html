@@ -157,6 +157,7 @@ $(document).ready(function() {
          filter[location.protocol + "//" + location.host + 
                location.pathname] = true;
          $.each(data.referrers, function(i, item) {
+            item = item.replace(/^([^.]*)www\./, "$1");
             if (filter[item]) {
                return;
             }
