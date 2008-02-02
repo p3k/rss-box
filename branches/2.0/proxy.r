@@ -26,6 +26,12 @@ if not none? referrer [
 
 either all [cache-mode exists? file (difference now modified? file) < 00:05] [
    source: read file
+   comment [ FIXME: Conditional GET would be nice but it does not work this way:
+      print "Status: 304 Not Modified"
+      print join "Date: " to-idate (modified? file)
+      print newline
+      quit
+   ]
 ] [
 	if error? result: try [
 	   connection: open to-url params/url
@@ -58,5 +64,5 @@ data: make object! [
 ]
 
 print "Content-Type: text/javascript^/"
-print rejoin ["org = {p3k: " to-json data "};^/"]
+print rejoin ["var org = {p3k: " to-json data "};^/"]
 print read %main.js
