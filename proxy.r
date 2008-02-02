@@ -6,7 +6,7 @@ REBOL []
 
 do %json.r
 
-cache-mode: true
+cache-mode: not true
 
 cgi: system/options/cgi
 query-string: cgi/query-string
@@ -14,7 +14,7 @@ params: make object! decode-cgi query-string
 
 cache: %/tmp/rss-box/
 make-dir cache
-file: join cache enbase params/url
+file: join cache enbase/base to-string checksum params/url 16
 
 referrer: select cgi/other-headers "HTTP_REFERER"
 if not none? referrer [
@@ -35,7 +35,10 @@ either all [cache-mode exists? file (difference now modified? file) < 00:05] [
 ] [
 	if error? result: try [
 	   connection: open to-url params/url
-	   ;mime: connection/locals/headers/Content-Type
+	   mime: connection/locals/headers/Content-Type
+	   if none? find mime any [ "/xml" "/rss+xml" ] [
+	      make error! join "Wrong document format: " mime
+	   ]
 	   source: copy connection
 	   if any [none? source find source "<error>"] [
 	      make error! "I am afraid, Dave."
