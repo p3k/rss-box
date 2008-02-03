@@ -4,7 +4,7 @@ function debug(str) {
 }
 
 new function() {
-   var baseUri = "http://p3k.org/rss2/";
+   var baseUri = "http://p3k.org/rss/";
    var ref;
 
    var data = org.p3k;
@@ -44,7 +44,9 @@ new function() {
    if (data.param.javascript && data.param.width < 200) {
       data.param.width = 200;
    }
-   
+   delete data.param.javascript;
+   data.query = data.query.replace("javascript=true", "");   
+
    var NAMESPACES = {
       dc: "http://purl.org/dc/elements/1.1/",
       rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
