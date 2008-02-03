@@ -44,6 +44,7 @@ new function() {
    if (data.param.javascript && data.param.width < 200) {
       data.param.width = 200;
    }
+   // Remove the obsolete parameter from param and query
    delete data.param.javascript;
    data.query = data.query.replace("javascript=true", "");   
 
@@ -353,7 +354,10 @@ new function() {
          link: param.url,
          source: baseUri + "rss.png",
          title: rss.format + " " + rss.version,
-         align: "right"
+         width: 16,
+         height: 16,
+         align: "right",
+         hspace: 3
       }),
       
       image: !param.compact && rss.image && render(data.image, {
