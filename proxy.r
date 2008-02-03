@@ -79,11 +79,12 @@ either all [cache-mode exists? file (difference now modified? file) < 00:05] [
       ;; FOR DEBUGGING:
       ;replace source {<channel} {<chaxnel}
       set in data 'xml source
-    	write file source
       true
    ] [
+      source: null
       set in data 'message get in disarm result 'arg1
 	]
+ 	write file source
 ]
 
 print rejoin ["var org = {p3k: " to-json data "};^/"]
