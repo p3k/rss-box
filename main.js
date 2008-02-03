@@ -21,13 +21,22 @@ new function() {
       showXmlButton: "",
       compact: ""
    };
+    
+   var getColor = function(str) {
+      if (str.length === 6 && parseInt(str, 16) && str.indexOf("#") !== 0) {
+         str = "#" + str;
+      }
+      return str.toLowerCase();
+   }
    
    var value;
    for (var i in data.defaults) {
       value = data.param[i];
       if (!value || value.length === 0) {
          data.param[i] = data.defaults[i];
-      } 
+      } else if (i.indexOf("Color") > 0) {
+         data.param[i] = getColor(value);
+      }
    }
 
    // FIXME: Ugly work-around for many boxes using too small width 
