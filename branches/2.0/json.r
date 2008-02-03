@@ -1,7 +1,7 @@
 REBOL []
 
 to-json: func [source /local result keys key] [
-   switch type?/word source [
+   switch/default type?/word source [
       object! [
          keys: first source
          result: "({"
@@ -23,8 +23,10 @@ to-json: func [source /local result keys key] [
       ]
       
       string! [
+         replace/all source cr "\r"
          replace/all source lf "\n"
          replace/all source {"} {\"}
+         replace/all source tab "\t"
          result: rejoin [ {(new String("} source {"))} ]
       ]
       
@@ -35,6 +37,8 @@ to-json: func [source /local result keys key] [
       date! [
          result: rejoin [ "(new Date(" source "))" ]
       ]
+   ] [
+      result: to-json to-string source
    ]
    return result
 ]

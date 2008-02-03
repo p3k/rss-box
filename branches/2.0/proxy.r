@@ -2,7 +2,7 @@
 
 REBOL []
 
-;print "Content-type: text/plain^/"
+print "Content-Type: text/javascript^/"
 
 do %json.r
 
@@ -47,8 +47,24 @@ if lock [
 	unlock
 ]
 
+data: make object! [
+   xml: null
+   query: query-string
+   param: params
+   message: null
+   modified: null
+   box: read %box.tmpl
+   image: read %image.tmpl
+   input: read %input.tmpl
+   item: read %item.tmpl
+   date: read %date.tmpl
+   link: read %link.tmpl
+   error: read %error.tmpl
+]
+
 either all [cache-mode exists? file (difference now modified? file) < 00:05] [
    source: read file
+   set in data 'modified to-idate (modified? file) 
    comment [ FIXME: Conditional GET would be nice but it does not work this way:
       print "Status: 304 Not Modified"
       print join "Date: " to-idate (modified? file)
@@ -58,37 +74,18 @@ either all [cache-mode exists? file (difference now modified? file) < 00:05] [
 ] [
 	if error? result: try [
       connection: open to-url params/url
-      mime: connection/locals/headers/Content-Type
       source: copy connection
+      ;mime: connection/locals/headers/Content-Type
       close connection
-      if none? any [ find source "<channel" find source "<header" ] [
-         make error! "Incompatible document format." 
-      ]
-      if any [ none? source find source "<error>" ] [
-         make error! "I am afraid, Dave."
-      ]
+      ;; FOR DEBUGGING:
+      ;replace source {<channel} {<chaxnel}
+      set in data 'xml source
+    	write file source
       true
    ] [
-  	   source: read %error.tmpl
-	   replace source "${home}" "?"
-	   replace/all source "${url}" params/url
-	   replace source "${message}" replace/all get in disarm result 'arg1 "&" "&amp;"
+      set in data 'message get in disarm result 'arg1
 	]
-	write file source
 ]
 
-data: make object! [
-   box: read %box.tmpl
-   image: read %image.tmpl
-   input: read %input.tmpl
-   item: read %item.tmpl
-   date: read %date.tmpl
-   link: read %link.tmpl
-   param: params
-   xml: source
-   modified: to-idate (modified? file) 
-]
-
-print "Content-Type: text/javascript^/"
 print rejoin ["var org = {p3k: " to-json data "};^/"]
 print read %main.js
