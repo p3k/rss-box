@@ -63,7 +63,7 @@ data: make object! [
 ]
 
 either all [cache-mode exists? file (difference now modified? file) < 00:05] [
-   source: read file
+   set in data 'xml read file
    set in data 'modified to-idate (modified? file) 
    comment [ FIXME: Conditional GET would be nice but it does not work this way:
       print "Status: 304 Not Modified"
@@ -75,7 +75,6 @@ either all [cache-mode exists? file (difference now modified? file) < 00:05] [
 	if error? result: try [
       connection: open to-url params/url
       source: copy connection
-      ;mime: connection/locals/headers/Content-Type
       close connection
       ;; FOR DEBUGGING:
       ;replace source {<channel} {<chaxnel}

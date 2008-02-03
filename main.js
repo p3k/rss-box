@@ -88,8 +88,8 @@ new function() {
          msg = xml.parseError.reason;
       } else if (xml.documentElement.nodeName === "parsererror") {
          msg = xml.documentElement.textContent;
-      } else if (!/rss|rdf|scriptingNews/i.test(xml.documentElement.nodeName)) {
-         msg = "Incompatible data format. Are you sure this is an RSS feed?";
+      //} else if (!/rss|rdf|scriptingNews/i.test(xml.documentElement.nodeName)) {
+      //   msg = "Incompatible data format. Are you sure this is an RSS feed?";
       } else {
          return null;
       }
