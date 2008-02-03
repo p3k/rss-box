@@ -1,0 +1,1 @@
+<a href="<% param.link %>"><img src="<% param.source %>" <% param.width prefix='width="' suffix='"' %> <% param.height prefix='height="' suffix='"' %> alt="<% param.title %>" title="<% param.title %>" <% param.align prefix='align="' suffix='"' %> valign="<% param.valign %>" hspace="<% param.hspace %>" vspace="<% param.vspace %>" border="0" /></a>

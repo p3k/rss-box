@@ -1,0 +1,13 @@
+<table width="<% param.width %>" bgcolor="<% param.frameColor %>" style="font-family: <% param.fontFace %>;" align="<% param.align %>" cellspacing="1" cellpadding="7" border="0">
+<tr bgcolor="<% param.titleBarColor %>">
+<td height="20"><% param.xmlButton %>
+<strong><a class="rssBoxTitle" href="<% param.link %>" title="<% param.description %>" style="color: <% param.titleBarTextColor %>;"><% param.boxTitle %></a></strong><div>
+<small style="color: <% param.titleBarTextColor %>;"><% param.lastBuildDate suffix=' GMT' %></div></td>
+</tr>
+<tr bgcolor="<% param.boxFillColor %>">
+<td class="rssBoxContent" style="color: <% param.textColor %>;"><% param.image %><% param.content %>
+<% param.textInput %>
+<div class="rssBoxPromo" style="margin-top: 0px; text-align: left; font: 9px verdana, sans-serif">RSS box by <a href="http://p3k.org/rss">p3k.org</a>.</div>
+</td>
+</tr>
+</table>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+
+<rdf:RDF 
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns="http://purl.org/rss/1.0/"
+> 
+
+  <channel rdf:about="<% param.url %>">
+    <title>Error Report</title>
+    <link><% param.url %></link>
+    <description>This file was automatically generated to report an error occurring during a request to the JavaScript RSS Box Viewer.</description>
+    <dc:publisher>weblogs.at</dc:publisher>
+    <dc:creator>p3k (mailto:&amp;#105;&amp;#110;&amp;#116;&amp;#101;&amp;#114;&amp;#102;&amp;#97;&amp;#99;&amp;#101;&amp;#64;&amp;#112;&amp;#51;&amp;#107;&amp;#46;&amp;#111;&amp;#114;&amp;#103;)</dc:creator>
+    <dc:date><% param.date %></dc:date>
+    <dc:language>en</dc:language>
+    <items>
+      <rdf:Seq>
+        <rdf:li rdf:resource="<% param.url %>" />
+      </rdf:Seq>
+    </items>
+  </channel>
+
+  <item rdf:about="<% param.url %>">
+    <title>Oops, something went wrong...</title> 
+    <link><% param.url %></link>
+    <description>Due to an unspecified circumstance an error occurred processing the last request to the JavaScript RSS Box Viewer. Most likely, this might have happened because of a non-existent URL. Please check and possibly correct your input, then try again.</description>
+    <dc:publisher>weblogs.at</dc:publisher>
+    <dc:creator>p3k</dc:creator>
+    <dc:date><% param.date %></dc:date>
+  </item>
+
+</rdf:RDF>
