@@ -206,6 +206,7 @@ new function() {
          message: error
       }));
       param.compact = 0;
+      param.showXmlButton = 1;
    }
 
    var root = xml.documentElement;
