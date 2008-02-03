@@ -125,7 +125,7 @@ $(document).ready(function() {
    $("#showXmlButton").attr("checked", !!param.showXmlButton);
    $("#maxItems").val(param.maxItems);
    $("#width").val(param.width);
-   $("#align").val(param.align);
+   $("#align").val(param.align || "default");
    $("#frameColor").val(param.frameColor);
    $("#titleBarColor").val(param.titleBarColor);
    $("#titleBarTextColor").val(param.titleBarTextColor);
