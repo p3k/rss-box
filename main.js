@@ -129,6 +129,7 @@ new function() {
       } else {
          date = new Date;
       }
+
       return render(data.date, {
          year: date.getFullYear(),
          month: padZero(date.getMonth() + 1),
@@ -136,7 +137,7 @@ new function() {
          hours: padZero(date.getHours()),
          minutes: padZero(date.getMinutes()),
          seconds: padZero(date.getSeconds()),
-         timeZone: "" //date.getTimeZone()
+         timeZone: "" // date.getTimezoneOffset()
       });
    }
    
