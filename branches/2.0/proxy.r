@@ -15,13 +15,36 @@ params: make object! decode-cgi query-string
 cache: %/tmp/rss-box/
 make-dir cache
 file: join cache enbase/base to-string checksum params/url 16
+lock-file: join cache %locked
 
-referrer: select cgi/other-headers "HTTP_REFERER"
-if not none? referrer [
-   log: join cache "access.log"
-   referrers: either exists? log [ load log ] [ make block! 50 ]
-   insert referrers referrer 
-   save log copy/part referrers 50
+lock: func [] [
+   loop 10 [
+      if not exists? lock-file [
+         save lock-file null
+         return true
+      ]
+      wait (random 10) / 100
+   ]
+   return false
+]
+
+unlock: func [] [
+   if exists? lock-file [
+      delete lock-file
+      return true
+   ]
+   return false
+]
+
+if lock [
+	referrer: select cgi/other-headers "HTTP_REFERER"
+	if not none? referrer [
+	   log: join cache "access.log"
+	   referrers: either exists? log [ load log ] [ make block! 50 ]
+	   insert referrers referrer 
+	   save log copy/part referrers 50
+	]
+	unlock
 ]
 
 either all [cache-mode exists? file (difference now modified? file) < 00:05] [
