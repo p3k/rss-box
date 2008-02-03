@@ -182,7 +182,7 @@ new function() {
             source: baseUri + "enclosure.gif",
             title: enclosure.type,
             link: enclosure.link,
-            width: 16,
+            width: 13,
             height: 16
          });
       }
