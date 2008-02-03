@@ -196,6 +196,7 @@ new function() {
          link: baseUri + "?" + encodeXml(data.query),
          message: error
       }));
+      param.compact = 0;
    }
 
    var root = xml.documentElement;
