@@ -317,7 +317,7 @@ new function() {
    }
    
    var item, items = "";
-   for (var i in rss.items) {
+   for (var i=0; i<rss.items.length; i+=1) {
       item = rss.items[i];
       items += render(data.item, {
          title: new function() {
