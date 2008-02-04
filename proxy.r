@@ -2,11 +2,12 @@
 
 REBOL []
 
+base-uri: "http://p3k.org/rss/"
+cache-mode: true
+
 print "Content-Type: text/javascript^/"
 
 do %json.r
-
-cache-mode: true
 
 cgi: system/options/cgi
 query-string: cgi/query-string
@@ -48,6 +49,7 @@ if lock [
 ]
 
 data: make object! [
+   baseUri: base-uri
    xml: null
    query: query-string
    param: params
