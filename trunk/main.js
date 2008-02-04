@@ -4,7 +4,6 @@ function debug(str) {
 }
 
 new function() {
-   var baseUri = "http://p3k.org/rss/";
    var ref;
 
    var data = org.p3k;
@@ -21,6 +20,8 @@ new function() {
       showXmlButton: "",
       compact: ""
    };
+   
+   var baseUri = data.baseUri;
     
    var getColor = function(str) {
       if (str.length === 6 && parseInt(str, 16) && str.indexOf("#") !== 0) {
