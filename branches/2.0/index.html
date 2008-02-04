@@ -105,7 +105,7 @@ $(document).ready(function() {
    
    var renderCode = function() {
       var result = '<scr' + 'ipt type="text/javascript" src="';
-      result += "http://p3k.org/rss/proxy.r?";
+      result += org.p3k.baseUri + "proxy.r?";
       for (var i in param) {
          result += i + "=" + encodeURIComponent(param[i]) + "&amp;";
       }
