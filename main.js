@@ -1,11 +1,7 @@
-function debug(str) {
-   return document.write('<p><span style="background-color: yellow;">', 
-         str, '</span><p>');
-}
-
-new function() {
+org.p3k.RssBox = function() {
    var ref;
-
+   var ISOPATTERN = /([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9:]+).*$/;
+   
    var data = org.p3k;
    data.defaults = {
       url: "http://blog.p3k.org/rss",
@@ -29,7 +25,7 @@ new function() {
       }
       return str.toLowerCase();
    }
-   
+
    var value;
    for (var i in data.defaults) {
       value = data.param[i];
@@ -45,7 +41,7 @@ new function() {
    if (data.param.javascript && data.param.width < 200) {
       data.param.width = 200;
    }
-   // Remove the obsolete parameter from param and query
+   // Remove obsolete parameters from param and query
    delete data.param.javascript;
    data.query = data.query.replace("javascript=true", "");   
 
@@ -81,37 +77,48 @@ new function() {
    }
    
    var getDocument = function(source) {
-      if (document.implementation.createDocument) {
-         var parser = new DOMParser();
-         var doc = parser.parseFromString(source, "text/xml");
-         return doc;
-      } else if (window.ActiveXObject) {
-         var doc = new ActiveXObject("Microsoft.XMLDOM");
-         doc.async = "false";
-         doc.loadXML(source);
-         return doc;
+      if (source) {
+         if (document.implementation.createDocument) {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(source, "text/xml");
+            return doc;
+         } else if (window.ActiveXObject) {
+            var doc = new ActiveXObject("Microsoft.XMLDOM");
+            doc.async = "false";
+            doc.loadXML(source);
+            return doc;
+         }
       }
+      return null;
    }
    
    var getError = function() {
-      var msg;
-      if (!xml || data.message.length > 0) {
+      var msg = null, root;
+      if (!xml || data.message) {
          msg = data.message || "Unknown error.";
       } else if (xml.parseError && xml.parseError.errorCode) {
-         msg = xml.parseError.reason;
-      } else if (xml.documentElement.nodeName === "parsererror") {
-         msg = xml.documentElement.textContent;
-      } else if (!/rss|rdf|scriptingNews/i.test(xml.documentElement.nodeName)) {
-         msg = "Incompatible data format. Are you sure this is an RSS feed?";
-      } else {
-         return null;
+         msg = xml.parseError.reason; // IExplore
+      } else if (root = xml.documentElement) {
+         var errorNode;
+         if (root.nodeName === "parsererror") {
+            msg = xml.documentElement.textContent; // Mozilla
+         } else if ((errorNode = root.childNodes[0]) && 
+               errorNode.nodeName === "parsererror") {
+            msg = errorNode.textContent; // Safari
+         } else if (!/rss|rdf|scriptingNews/i.test(xml.documentElement.nodeName)) {
+            msg = "Incompatible data format. Are you sure this is an RSS feed?";
+         }
       }
-      return encodeXml(msg);
+      return msg;
    }
    
    var getNode = function(parent, name, namespace) {
       if (namespace) {
-         var elements = parent.getElementsByTagNameNS(NAMESPACES[namespace], name);
+         if (typeof parent.getElementsByTagNameNS === "undefined") {
+            var elements = parent.getElementsByTagName(namespace + ":" + name);
+         } else {
+            var elements = parent.getElementsByTagNameNS(NAMESPACES[namespace], name);
+         }
       } else {
          var elements = parent.getElementsByTagName(name);
       }
@@ -123,16 +130,29 @@ new function() {
    
    var getText = function(node) {
       if (node && node.childNodes && node.childNodes.length > 0) {
-         return node.childNodes[0].nodeValue;
+         return node.childNodes[0].nodeValue || "";
       }
       return "";
    }
    
    var trim = function(str) {
-      return str.replace(/^\s*(\S*)\s*$/, "$1");
+      if (str) {
+         return str.replace(/^\s*(\S*)\s*$/, "$1");
+      }
+      return "";
    }
    
+   var padZero = function(n) {
+      if (n < 10) {
+         return "0" + n
+      }
+      return n;
+   }
+
    var encodeXml = function(str) {
+      if (!str) {
+         return "";
+      }
       return str.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp;");
    }
       
@@ -147,22 +167,15 @@ new function() {
       return template;
    }
    
-   var renderDate = function(str) {
-      var ISOPATTERN = /([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9:]+).*$/;
-
-      var padZero = function(n) {
-         if (n < 10) {
-            return "0" + n
+   var renderDate = function(date) {
+      if (date.constructor !== Date) {
+         var str = String(date);
+         var millis = Date.parse(str.replace(ISOPATTERN, "$1/$2/$3 $4"));
+         if (millis) {
+            date = new Date(millis);
+         } else {
+            date = new Date;
          }
-         return n;
-      }
-   
-      var date;
-      var millis = Date.parse(str.replace(ISOPATTERN, "$1/$2/$3 $4"));
-      if (millis) {
-         date = new Date(millis);
-      } else {
-         date = new Date;
       }
 
       return render(data.date, {
@@ -202,12 +215,12 @@ new function() {
    var param = data.param;
    var rss = data.rss = {items: []};
    var xml = getDocument(data.xml);
-   
-   var error = getError();
-   if (error !== null) {
+
+   rss.error = getError();
+   if (rss.error !== null) {
       xml = getDocument(render(data.error, {
          link: baseUri + "?" + encodeXml(data.query),
-         message: error
+         message: encodeXml(rss.error)
       }));
       param.compact = 0;
       param.showXmlButton = 1;
@@ -251,8 +264,8 @@ new function() {
       }
    }
    
-   if (type === "RDF") {
-      rss.date = renderDate(getText(getNode(channel, "date", "dc")));
+   if (type === "rdf:RDF") {
+      rss.date = renderDate(getText(getNode(channel, "date", "dc")) || data.modified);
       rss.rights = getText(getNode(channel, "creator", "dc"));
       var input = getNode(root, "textinput");
       if (input && !getNode(input, "link")) {
@@ -266,7 +279,7 @@ new function() {
          ref.title = getText(getNode(input, "title"));
       }
    } else {
-      rss.date = renderDate(getText(getNode(channel, "pubDate")) || data.modified);
+      rss.date = renderDate(getText(getNode(channel, "lastBuildDate") || getText(getNode(channel, "pubDate"))) || data.modified);
       rss.rights = getText(getNode(channel, "copyright"));
    }
    
@@ -332,7 +345,7 @@ new function() {
             } else {
                title += item.title;
             }
-            !param.contact && (title += "</strong>");
+            !param.compact && (title += "</strong>");
             return new String(title); // FIXME: Funny, title alone will be rendered as [object]
          }(),
          'break': item.title && item.description ? "<br />" : "",
@@ -391,6 +404,11 @@ new function() {
       textColor: param.textColor
    });
 
-   document.write(box);
+   if (!window.rssBoxSetup) {
+      document.write(box);
+   }
+   
+   return box;
+};
 
-}();
+org.p3k.RssBox();

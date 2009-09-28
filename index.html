@@ -5,8 +5,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html" />
-	<title>JavaScript RSS Box Viewer 2.0a</title>
+	<title>JavaScript RSS Box Viewer 2.1b</title>
    <script type="text/javascript" src="../jquery/jquery-1.2.2.min.js"></script>
+   <script type="text/javascript" src="../jquery/jquery.simpleColor.js"></script>
    <style type="text/css">
    body {
       margin: 10px;
@@ -14,13 +15,21 @@
       line-height: 1.1em;
    }
    
+   div#preview {
+      width: 200px;
+      float: left;
+   }
+   
    small, label, #referrers li {
       color: gray;
       font-size: 0.85em;
    }
    
-   button[type=submit] {
-      margin-left: 5px;
+   button#reset {
+      margin-right: 5px;
+   }
+
+   button#reload {
       font-weight: bold;
       color: green;
    }
@@ -28,6 +37,12 @@
    ol {
       padding-top: 0;
       margin: -10px 0 5px 0;
+   }
+   
+   ol#referrers, #referrers li {
+       padding: 0;
+       margin: 0;
+       margin-left: 15px;
    }
    
    li {
@@ -66,83 +81,178 @@
       overflow: hidden;
    }
    
-   ol#referrers, #referrers li {
-       padding: 0;
-       margin: 0;
-       margin-left: 15px;
-   }
-   
    #banner {
       height: 85px;
       vertical-align: top;
    }
+   
+   .simpleColorDisplay {
+      position: relative;
+      left: 109px;
+      top: -22px;
+      margin-top: 2px;
+      margin-bottom: -20px;
+	}
+	
    </style>
 </head>
 <body>
 
 <script type="text/javascript">
 /* <![CDATA[ */
-document.write('<', 'scr', 'ipt type="text/javascript" src="./proxy.r');
-document.write(location.search || "?url=http://blog.p3k.org/rss");
-document.write('"><', '/scr', 'ipt>');
-/* ]]> */
-</script>
-   
-<script type="text/javascript">
-/* <![CDATA[ */
-$(document).ready(function() {
-   var param = org.p3k.param;
-   var rss = org.p3k.rss;
 
-   var getFileName = function(str) {
-      var parts = str.split("/");
-      var result;
-      if (!(result = parts.pop())) {
-         result = parts.pop();
-      }
-      return result;
+window.rssBoxSetup = true;
+var currentUrl;   
+var debugCounter = 1;
+
+var getQuery = function(param) {
+   //console.log(debugCounter++ + ": getQuery()")
+   var query = "?";
+   for (var i in param) {
+      query += i + "=" + encodeURIComponent(param[i]) + "&";
    }
-   
-   var renderCode = function() {
-      var result = '<scr' + 'ipt type="text/javascript" src="';
-      result += org.p3k.baseUri + "proxy.r?";
-      for (var i in param) {
-         result += i + "=" + encodeURIComponent(param[i]) + "&amp;";
-      }
-      result += '"><' + '/scr' + 'ipt>';
-      return result;
+   return query;
+}
+
+var getFileName = function(str) {
+   var parts = str.split("/");
+   var result;
+   if (!(result = parts.pop())) {
+      result = parts.pop();
    }
-   
-   $("table:first").attr("align", "left");
-   $("#url").val(param.url);
-   $("#link").attr("href", param.url).text(rss.format + " " + rss.version);
-   $("#title").text(rss.title);
-   $("#description").text(rss.description).hide();
-   $("#date").text(rss.date);
-   $("#format").text(rss.format + " " + rss.version);
-   $("#contact").html(rss.rights);
-   $("#compact").attr("checked", !!param.compact);
-   $("#showXmlButton").attr("checked", !!param.showXmlButton);
-   $("#maxItems").val(param.maxItems);
-   $("#width").val(param.width);
-   $("#align").val(param.align || "default");
-   $("#frameColor").val(param.frameColor);
-   $("#titleBarColor").val(param.titleBarColor);
-   $("#titleBarTextColor").val(param.titleBarTextColor);
-   $("#boxFillColor").val(param.boxFillColor);
-   $("#textColor").val(param.textColor);
-   $("#fontFace").val(param.fontFace);
-   
-   $("button#reset").click(function() {
-      $("input:text").val("");
-      $("input:checkbox").attr("checked", false);
+   return result;
+}
+
+var update = function(query) {
+   $("#update").attr("disabled", true).css("color", "gray");
+   $("#source").text("Loading...").css("color", "green");
+
+   $.getScript("./proxy.r" + (query || ""), function(result, status) {
+      if (status !== "success") {
+         return;
+      }
+
+      //$("#preview").html(window.rssBox);
+
+      var param = org.p3k.param;
+      var rss = org.p3k.rss;
+
+      var renderCode = function() {
+         var result = '<scr' + 'ipt type="text/javascript" src="';
+         result += org.p3k.baseUri + "proxy.r" + 
+               getQuery(param).replace(/&/g, "&amp;");
+         result += '"><' + '/scr' + 'ipt>';
+         return result;
+      }
+
+      $("table:first").attr("align", "left");
       $("#url").val(param.url);
+      $("#source").html('<a href="' + param.url + '">' + 
+            rss.format + " " + rss.version + '</a>');
+      $("#title").text(rss.title);
+      $("#description").text(rss.description).hide();
+      $("#descriptionToggler").show();
+      $("#date").text(rss.date);
+      $("#format").text(rss.format + " " + rss.version);
+
+      $("#maxItems").val(param.maxItems);
+      $("#width").val(param.width);
+      $("#align").val(param.align || "default");
+      $("#compact").attr("checked", !!param.compact);
+      $("#showXmlButton").attr("checked", !!param.showXmlButton);
+      $("#frameColor").val(param.frameColor);
+      $("#titleBarColor").val(param.titleBarColor);
+      $("#titleBarTextColor").val(param.titleBarTextColor);
+      $("#boxFillColor").val(param.boxFillColor);
+      $("#textColor").val(param.textColor);
+      $("#fontFace").val(param.fontFace);
+
+      if (rss.error) {
+         $("#source a").css("color", "red");
+         $("#code textarea").attr("disabled", true);
+      } else {
+         $("#code textarea").attr("disabled", false);
+      }
+      
+      var updater = function() {
+         var currentUrl = String(param.url);
+         $("input:text").each(function(idx, item) {
+            param[$(item).attr("id")] = $(item).val();
+            $(item).siblings().find(".simpleColorDisplay:first")
+                  .css("background-color", $(item).val());
+         });
+         param.align = $("#align").val();
+         param.compact = $("#compact").attr("checked") || "";
+         param.showXmlButton = $("#showXmlButton").attr("checked") || "";
+         if (currentUrl !== param.url) {
+            update(getQuery(param));
+         } else {
+            $("#preview").html(org.p3k.RssBox());
+            $("#code textarea").val(renderCode());
+         }
+         return false;
+      };
+      
+      $("input:text").unbind("change").change(updater);
+      $("input:checkbox").unbind("click").click(function() {
+         updater();
+         return true;
+      });
+      
+      // FIXME: Call the onChange handler of at least one 
+      // input element to sync color boxes with input values.
+      $("#url").change();
+
+      // FIXME: The unbinding is necessary to prevent 
+      // chaining the same onClick handler on and on.
+      $("button#reload").unbind("click").click(function() {
+         delete param.url;
+         $("#url").change();
+         return false;
+      });
+      
+      $("button#reset").unbind("click").click(function() {
+         $("input:text").val("");
+         $("input:checkbox").attr("checked", false);
+         $("#url").val(param.url);
+         return false;
+      });
+   
+      $("#reload").css("color", "green").attr("disabled", false);
+      return;
+   });
+
+   return;
+};
+
+$(document).ready(function() {
+   update();
+
+   var showExample = function() {
+      $("#url").val($(this).attr("href"));
+      $("#url").change();
+      return false;
+   };
+   
+   $("a[href$=.xml]").click(showExample);
+   $("a[href$=/rss]").click(showExample);
+
+   $("form").submit(function() {
+      $("#url").change();
       return false;
    });
+
+   $("input:text[id$=Color]").css("width", "100px").simpleColor({
+      boxWidth: 15,
+      boxHeight: 15,
+		cellWidth: 9,
+		cellHeight: 9,
+      border: "1px solid gray"
+	});
    
    $("#code textarea").click(function() {
       $(this).select();
-   }).val(renderCode());
+   });
 
    $(".toggler a").click(function() {
       $(this).parents(".toggler").next(".togglee").toggle();
@@ -154,19 +264,16 @@ $(document).ready(function() {
       $("#description").show();
       return false;
    });
-      
+         
    $("#referrers").hide();
    $("#referrersToggle").click(function() {
       $.getJSON("./referrers.r", function(data) {
-         var result = "", filter = {};
-         filter[location.protocol + "//" + location.host + 
-               location.pathname] = true;
-         $.each(data.referrers, function(i, item) {
-            item = item.replace(/^([^.]*)www\./, "$1");
-            if (filter[item]) {
+         var result = "";
+         $.each(data, function(i, item) {
+            if (!item) {
                return;
             }
-            filter[item] = true;
+            item = item.replace(/^([^.]*)www\./, "$1");
             var host = item.split("/")[2];
             result += '<a href="' + item + '">' + 
                   host + "<" + "/a><br />";
@@ -177,14 +284,17 @@ $(document).ready(function() {
       return false;
    });
 });
+
 /* ]]> */
 </script>
 
-<form method="get" action="./">
+<div id="preview"></div>
+
+<form>
 <table id="setup" width="350" cellspacing="0" cellpadding="4" border="0" align="left">
 <colgroup span="3">
-   <col width="100" />
-   <col width="100" />
+   <col width="30%" />
+   <col width="70%" />
 </colgroup>
 <tr>
    <td><label for="url">Feed URL</label></td>
@@ -205,7 +315,7 @@ $(document).ready(function() {
 </tr>
 <tr>
    <td><small>Source</small></td>
-   <td><a id="link"></a></td>
+   <td id="source"></td>
 </tr>
 <tr>
    <td><label for="maxItems">Max. items</label></td>
@@ -257,8 +367,8 @@ $(document).ready(function() {
 <tr>
    <td></td>
    <td>
-      <button type="button" id="reset">Clear</button> 
-      <button type="submit" id="submit">Submit</button>
+      <!-- button type="button" id="reset">Clear</button --> 
+      <button type="button" id="reload">Reload</button>
    </td>
 </tr>
 <tr id="code">
@@ -299,19 +409,19 @@ $(document).ready(function() {
    <a href="http://www.ourpla.net/cgi-bin/pikie.cgi?AbbeNormal">Abbe Normal</a>
    </em></small>
    
-   <h3>JavaScript RSS Box Viewer</h3>
+   <h3>JavaScript RSS Box Viewer 2.1b</h3>
    <p>This <a href="http://www.salon.com/tech/col/rose/2003/12/04/rss/index.html">RSS</a> 
    box viewer can display RSS feed versions 
-   <a href="./?url=http://cyber.law.harvard.edu/rss/examples/sampleRss091.xml">0.91</a>, 
-   <a href="./?url=http://cyber.law.harvard.edu/rss/examples/sampleRss092.xml">0.92</a>, 
-   <a href="./?url=http://blog.p3k.org/rss">1.0</a> and 
-   <a href="./?url=http://cyber.law.harvard.edu/rss/examples/rss2sample.xml">2.0</a> 
+   <a href="http://cyber.law.harvard.edu/rss/examples/sampleRss091.xml">0.91</a>, 
+   <a href="http://cyber.law.harvard.edu/rss/examples/sampleRss092.xml">0.92</a>, 
+   <a href="http://blog.p3k.org/rss">1.0</a> and 
+   <a href="http://cyber.law.harvard.edu/rss/examples/rss2sample.xml">2.0</a> 
    as well as even the good old legacy format 
-   <a href="./?url=http://essaysfromexodus.scripting.com/xml/scriptingnews2.xml">Scripting 
+   <a href="http://essaysfromexodus.scripting.com/xml/scriptingnews2.xml">Scripting 
    News 2</a>. <em>(Sorry, no <a href="http://www.atompub.org">Atom</a>.)</em></p>
    
    <p>It provides a simple way to embed such RSS boxes in any HTML document via 
-   a generated JavaScript tag.</p>
+   an automagically generated JavaScript tag.</p>
    
    <p>Simply enter the URL of any compatible RSS feed, modify the layout 
    settings as you like and push the submit button. When finished, copy the 
@@ -321,10 +431,27 @@ $(document).ready(function() {
    <a href="http://www.rebol.com">Rebol</a>, a cool internet messaging language. 
    You can get the source code together with all the other necessary files 
    (except the Rebol runtime) from the 
-   <a href="http://p3k.org/source/rss-box/branches/2.0">SVN repository</a>.</p>
+   <a href="http://p3k.org/source/rss-box/branches/2.0/">SVN repository</a>.</p>
 
    <p class="toggler"><strong><a href=".">Change log</a></strong></p>
    <div class="togglee">
+
+   <p><small>2009-09-28</small>
+   Some minor changes after a while:<ul>
+   <li>Refactored date parsing to show actual build dates more reliably</li>
+   <li>Refactored caching routine (only in online version)</li>
+   <li>Updated version string to 2.1b, approaching another final version.</li></ul></p>
+
+   <p><small>2008-02-19</small>
+   Seems there were some changes in the air as I did not plan another update 
+   but here comes version 2.1 bringing to you:<ul>
+   <li>Full client-side processing (only the raw feed data is fetched from 
+   the server).</li>
+   <li>User-friendlier interface with color pickers, status and error display
+   as well as instant feedback on any change in setup.</li>
+   <li>And finally (drumroll!) Unicode support at least at this installation of
+   the viewer. (Ie. the downloaded version still will output ASCII
+   only.)</li></ul></p>
       
    <p><small>2008-02-03</small>
    Made some more improvements especially regarding the error handling and
@@ -367,8 +494,8 @@ $(document).ready(function() {
    <a href="http://tinyurl.com">tinyurl.com</a>.</p>
 
    <p><small>2006-04-23</small>
-   Switched the source repository from CVS to 
-   <a href="http://p3k.org/source/rss-box">Subversion</a> (SVN).</p>
+   Switched the <a href="http://p3k.org/source/rss-box/">source 
+   repository</a> from CVS to Subversion (SVN).</p>
 
    <p><small>2006-04-20</small>
    Andrew Pam brought up a serious issue that probably might have affected 
@@ -415,8 +542,10 @@ $(document).ready(function() {
    community. There have been some bugs in the (image) rendering framework which 
    I fixed so far. I now include a dynamically rendered list of sites using 
    (or pointing to) this script to give some examples for the curious at heart 
-   (me included). Finally, there's a README file with a short installation 
-   guide to make the script run on your own server.</p>
+   (me included). Finally, there's a 
+   <a href="http://p3k.org/source/rss-box/branches/2.0/README">README</a> 
+   file with a short installation guide to make the script run on your own 
+   server.</p>
 
    <p><small>2004-01-28</small>
    When something goes wrong (most of the time this might be a wrong URL, ie. 
@@ -510,8 +639,8 @@ $(document).ready(function() {
 
    <p class="toggler"><strong><a href=".">Missing features</a></strong></p>
    <ul class="togglee">
-   <li>UTF-8 support. 
-   <small><a href="http://www.rebol.net/r3blogs/0032.html">Coming soon?</a></small></li>
+   <li><a href="http://www.mail-archive.com/rebol-bounce@rebol.com/msg04272.html">64-bit support</a> for downloadable version.</li>
+   <li><a href="http://www.rebol.net/r3blogs/0032.html">UTF-8 support</a> for downloadable version. </li>
    <li><strike>Option for limiting RSS items display</strike> <small>done</small></li>
    <li><strike>Support for text input</strike> <small>done</small></li>
    <li><strike>User-friendly error detection</strike> <small>done</small></li>
