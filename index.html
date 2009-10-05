@@ -226,7 +226,7 @@ var update = function(query) {
 };
 
 $(document).ready(function() {
-   update();
+   update(location.search);
 
    var showExample = function() {
       $("#url").val($(this).attr("href"));
