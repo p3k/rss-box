@@ -22,12 +22,14 @@
    var templates;
 
    // Load libraries and call main() routine.
+/*
    var script = document.createElement('script');
    script.type = 'text/javascript';
    script.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js';
    script.onload = function() {
-      jQuery.noConflict();
-      //jQuery.getScript(BASE_URI + 'jquery.ba-bbq.min.js', function() {
+      jQuery.getScript(BASE_URI + 'jquery.ba-bbq.min.js', function() {
+*/
+         jQuery.noConflict();
          $ = jQuery; // This $ is a local variable!
          load(BASE_URI + 'templates.inc', function(data) {
             templates = jQuery(data.content);
@@ -36,7 +38,8 @@
                $.getJSON(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
             }
          });
-      //});
+/*
+      });
    }
    script.onreadystatechange = function() {
       if (script.readyState === 'loaded') {
@@ -44,6 +47,7 @@
       }
    }
    document.body.appendChild(script);
+*/
 
    function main() {
       // main() is called recursively, removing one script element at a time
