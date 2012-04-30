@@ -27,7 +27,7 @@
    script.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js';
    script.onload = function() {
       jQuery.noConflict();
-      jQuery.getScript(BASE_URI + 'jquery.ba-bbq.min.js', function() {
+      //jQuery.getScript(BASE_URI + 'jquery.ba-bbq.min.js', function() {
          $ = jQuery; // This $ is a local variable!
          load(BASE_URI + 'templates.inc', function(data) {
             templates = jQuery(data.content);
@@ -36,7 +36,7 @@
                $.getJSON(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
             }
          });
-      });
+      //});
    }
    script.onreadystatechange = function() {
       if (script.readyState === 'loaded') {
