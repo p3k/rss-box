@@ -1,18 +1,8 @@
 (function() {
 
-   // IE, what else…
-   if (!Date.now) {
-      Date.now = function() {
-         return (new Date).valueOf();
-      }
-   }
-   
    var BASE_URI = 'http://p3k.org/rss/';
    var ROXY_URI = 'http://3.p3k-001.appspot.com/roxy';
    var FERRIS_URI = 'http://3.p3k-001.appspot.com/ferris?callback=?&group=rssbox'
-
-   var $; // Provide local $ variable for jQuery to keep global namespace clean.
-   var templates;
 
    // Check if a RSS Box script was already loaded to prevent redundant loading of libraries.
    if (window._rss_box_framework_has_loaded) {
@@ -21,6 +11,16 @@
       window._rss_box_framework_has_loaded = true;
    }
    
+   // IE, what else…
+   if (!Date.now) {
+      Date.now = function() {
+         return (new Date).valueOf();
+      }
+   }
+   
+   var $; // Provide local $ variable for jQuery to keep global namespace clean.
+   var templates;
+
    // Load libraries and call main() routine.
    var script = document.createElement('script');
    script.type = 'text/javascript';
@@ -32,7 +32,9 @@
          load(BASE_URI + 'templates.inc', function(data) {
             templates = jQuery(data.content);
             main();
-            $.getJSON(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
+            if (location.href.indexOf(BASE_URI) < 0) {
+               $.getJSON(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
+            }
          });
       });
    }
