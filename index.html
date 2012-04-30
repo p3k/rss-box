@@ -2,132 +2,24 @@
 
 <html>
 <head>
-   <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-   <title>JavaScript RSS Box Viewer 2.1</title>
-   <style type='text/css'>
-   body {
-      margin: 10px;
-      padding: 10px;
-      line-height: 1.1em;
-   }
-   
-   div#preview {
-      width: 200px;
-      float: left;
-   }
-   
-   table#setup {
-      width: 350px;
-      margin-bottom: 0;
-      border: 1px;
-      border-spacing: 0 0;
-      float: left;
-   }
-   
-   table#setup td {
-      padding: 4px;
-   }
-   
-   small, label, #referrers li {
-      color: gray;
-      font-size: 0.85em;
-   }
-   
-   button#reset {
-      margin-right: 5px;
-   }
-
-   button#reload {
-      font-weight: bold;
-      color: green;
-   }
-   
-   ol {
-      padding-top: 0;
-      margin: -10px 0 5px 0;
-   }
-   
-   ol#referrers, #referrers li {
-       padding: 0;
-       margin: 0;
-       margin-left: 15px;
-   }
-   
-   li {
-      padding: 3px 0;
-   }
-   
-   #setup {
-      padding-left: 20px;
-      padding-right: 50px;
-   }
-   
-   #setup td {
-      vertical-align: baseline;
-   }
-   
-   #setup td:first-child {
-      text-align: right;
-      white-space: nowrap;
-   }
-   
-   #compact {
-      margin-right: 30px;
-   }
-   
-   #maxItems, #width {
-      width: 50px;
-   }
-   
-   #code td {
-      padding-top: 30px;
-      vertical-align: top;
-   }
-
-   #code textarea {
-      width: 165px;
-      overflow: hidden;
-   }
-   
-   #banner {
-      height: 85px;
-      vertical-align: top;
-   }
-   
-   #about {
-      position: absolute;
-      left: 550px;
-      width: 470px;
-      margin-right: 10px;
-   }
-   
-   #about p + div, #about ul, #about ol {
-      margin-top: -10px;
-   }
-   
-   .simpleColorDisplay {
-      position: relative;
-      left: 109px;
-      top: -22px;
-      margin-top: 2px;
-      margin-bottom: -20px;
-	}
-	
-   </style>
+   <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+   <link rel='stylesheet' type='text/css' href='main.css'>
+   <link rel='stylesheet' type='text/css' href='jquery.miniColors.css'>
+   <title>JavaScript RSS Box Viewer 3&alpha;</title>
 </head>
 <body>
-
+   
 <div id='preview'></div>
 
 <form>
 <table id='setup'>
 <colgroup>
-   <col style='width: 30%;' />
-   <col style='width: 70%;' />
+   <col style='width: 30%;'>
+   <col style='width: 70%;'>
 </colgroup>
 <tr>
    <td><label for='url'>Feed URL</label></td>
-   <td><input id='url' name='url' /></td>
+   <td><input id='url' name='url'></td>
 </tr>
 <tr>
    <td><small>Title</small></td>
@@ -148,60 +40,60 @@
 </tr>
 <tr>
    <td><label for='maxItems'>Max. items</label></td>
-   <td><input id='maxItems' name='maxItems' /></td>
+   <td><input id='maxItems' maxlength=2></td>
 </tr>
 <tr>
    <td><label for='width'>Width</label></td>
-   <td><input id='width' name='width' /></td>
+   <td><input id='width' maxlength=4> <small>pixels</small></td>
 </tr>
 <tr>
-   <td><label for='align'>Align</label></td>
-   <td><select id='align' name='align'>
-      <option value=''>default</option>
-      <option>left</option>
-      <option>center</option>
-      <option>right</option>
-   </select></td>
+   <td><label for='radius'>Corner radius</label></td>
+   <td><input id='radius' maxlength=3> <small>pixels</small></td>
 </tr>
 <tr>
-   <td><label for='compact'>Compact view</label></td>
-   <td><input type='checkbox' id='compact' name='compact' value='1' />
-   <label for='showXmlButton'>XML button</label>
-   <input type='checkbox' id='showXmlButton' name='showXmlButton' value='1' /></td>
+   <td><label for='showXmlButton'>XML button</label></td>
+   <td>
+      <input type='checkbox' id='showXmlButton' name='showXmlButton' value='1'>
+      <label for='compact'>Compact view</label>
+      <input type='checkbox' id='compact' name='compact' value='1'>
+   </td>
 </tr>
 <tr>
    <td><label for='frameColor'>Frame color</label></td>
-   <td><input id='frameColor' name='frameColor' /></td>
+   <td><input id='frameColor' size=6 maxlength=7 class='color'></td>
 </tr>
 <tr>
    <td><label for='titleBarColor'>Titlebar color</label></td>
-   <td><input id='titleBarColor' name='titleBarColor' /></td>
+   <td><input id='titleBarColor' size=6 maxlength=7 name='titleBarColor' class='color'></td>
 </tr>
 <tr>
    <td><label for='titleBarTextColor'>Title color</label></td>
-   <td><input id='titleBarTextColor' name='titleBarTextColor' /></td>
+   <td><input id='titleBarTextColor' size=6 maxlength=7 name='titleBarTextColor' class='color'></td>
 </tr>
 <tr>
    <td><label for='boxFillColor'>Box color</label></td>
-   <td><input id='boxFillColor' name='boxFillColor' /></td>
+   <td><input id='boxFillColor' size=6 maxlength=7 name='boxFillColor' class='color'></td>
 </tr>
 <tr>
    <td><label for='textColor'>Text color</label></td>
-   <td><input id='textColor' name='textColor' /></td>
+   <td><input id='textColor' size=6 maxlength=7 name='textColor' class='color'></td>
+</tr>
+<tr>
+   <td><label for='linkColor'>Link color</label></td>
+   <td><input id='linkColor' size=6 maxlength=7 name='linkColor' class='color'></td>
 </tr>
 <tr>
    <td><label for='fontFace'>Font face</label></td>
-   <td><input id='fontFace' name='fontFace' /></td>
+   <td><input id='fontFace' name='fontFace'></td>
 </tr>
 <tr>
    <td></td>
    <td>
-      <!-- button type='button' id='reset'>Clear</button --> 
-      <button type='button' id='reload'>Reload</button>
+      <button type='submit' id='reload'>Reload</button>
    </td>
 </tr>
 <tr id='code'>
-   <td><small>HTML code<br />(copy&amp;paste)</small></td>
+   <td><small>HTML code<br>(copy&amp;paste)</small></td>
    <td><textarea cols='10' rows='3' readonly='readonly'></textarea></td>
 </tr>
 <tr>
@@ -209,7 +101,7 @@
    <td></td>
 </tr>
 <tr>
-   <td><small>Referrers:<br /> (recent 50)</small></td>
+   <td><small>Referrers:<br> (recent 50)</small></td>
    <td><a href='.' id='referrersToggle'>...</a>
    <small id='referrers'></small></td>
 </tr>
@@ -226,24 +118,22 @@
    google_ad_height = 60;
    /* ]]> */
    </script>
-   <script type='text/javascript'
-   src='http://pagead2.googlesyndication.com/pagead/show_ads.js'>
-   </script>
+   <script type='text/javascript' src='http://pagead2.googlesyndication.com/pagead/show_ads.js'></script>
    </div>
 
    <small><em>“JavaScript RSS Viewer puts little or long 
    customizable RSS boxes anywhere you put HTML; build your own slashbox hell 
-   or heaven, it’s feedarific!” — 
-   <a href='http://www.ourpla.net/cgi-bin/pikie.cgi?AbbeNormal'>Abbe Normal</a>
+   or heaven, it’s feedarific!” <br>
+   — <a href='http://ourpla.net/cgi/pikie'>Abbe Normal</a>
    </em></small>
    
-   <h3>JavaScript RSS Box Viewer 2.1</h3>
-   <p>This <a href='http://www.salon.com/tech/col/rose/2003/12/04/rss/index.html'>RSS</a> 
+   <h3>JavaScript RSS Box Viewer 3&alpha;</h3>
+   <p>This <a href='http://en.wikipedia.org/wiki/RSS'>RSS</a> 
    box viewer can display RSS feed versions 
    <a href='http://cyber.law.harvard.edu/rss/examples/sampleRss091.xml'>0.91</a>, 
    <a href='http://cyber.law.harvard.edu/rss/examples/sampleRss092.xml'>0.92</a>, 
    <a href='http://rss.orf.at/fm4.xml'>1.0</a> and 
-   <a href='http://blog.p3k.org/rss'>2.0</a> 
+   <a href='http://blog.p3k.org/rss.xml'>2.0</a> 
    as well as even the good old legacy format 
    <a href='http://essaysfromexodus.scripting.com/xml/scriptingnews2.xml'>Scripting 
    News 2</a>. <em>(Sorry, no <a href='http://en.wikipedia.org/wiki/Atom_%28standard%29'>Atom</a>.)</em></p>
@@ -255,17 +145,26 @@
    settings as you like and push the Reload button. When finished, copy the 
    HTML code into your own web page – and voilà!</p>
    
-   <p>The script running behind this is written in 
-   <a href='http://www.rebol.com'>Rebol</a>, a cool internet messaging language. 
-   You can get the source code together with all the other necessary files 
-   (except the Rebol runtime) from the 
-   <a href='http://p3k.org/source/rss-box/branches/2.0/'>SVN repository</a>.</p>
+   <p>The script behind this is written in JavaScript and runs completely in your browser. 
+   You can get the source code together with all the other necessary files from the 
+   <a href='http://p3k.org/source/rss-box/branches/3.0/'>SVN repository</a>.</p>
 
    <p class='toggler'><strong><a href='.'>Change log</a></strong></p>
    <div class='togglee'>
 
+   <p><small>2012-04-26</small>
+   Amazing! A new version! After more than two years hiatus I completely rewrote the codebase and framework:</p><ul>
+   <li>Removed dependency to Rebol using a small JSONP proxy at Google’s AppEngine.</li>
+   <li>Rewrote XML parsing, replacing native methods with jQuery ones.</li>
+   <li>Cleaned up HTML output for the RSS Box, replacing tables with divs. <em>Note: You might need to add <code>!important</code> to your custom RSS Box stylesheet definitions.</em></li>
+   <li>Replaced fugly colorpicker in configurator with MiniColors jQuery plugin.</li>
+   <li>Added link color setting and style attributes for correctly applying color settings.</li>
+   <li>Added corner radius setting. <em>Note: does not work in IE8 and earlier versions.)</em></li>
+   <li>Added font size to the font face setting.</li>
+   <li>Removed align setting from configurator (still works in script tags generated with earlier versions).</ul>
+
    <p><small>2009-12-13</small>
-   Switchted output of this page to HTML5 and made some adaptations in the HTML code and CSS stylesheet. Updated version string to 2.1, finally!</p>
+   Switched output of this page to HTML5 and made some adaptations in the HTML code and CSS stylesheet. Updated version string to 2.1, finally!</p>
 
    <p><small>2009-09-28</small>
    Some minor changes after a while:</p><ul>
@@ -470,19 +369,28 @@
 
    <p class='toggler'><strong><a href='.'>Missing features</a></strong></p>
    <ul class='togglee'>
-   <li><a href='http://www.mail-archive.com/rebol-bounce@rebol.com/msg04272.html'>64-bit support</a> for downloadable version.</li>
-   <li><a href='http://www.rebol.net/r3blogs/0032.html'>UTF-8 support</a> for downloadable version. </li>
-   <li><del>Option for limiting RSS items display</del> <small>done</small></li>
-   <li><del>Support for text input</del> <small>done</small></li>
-   <li><del>User-friendly error detection</del> <small>done</small></li>
+   <li>
+      <del><a href='http://www.mail-archive.com/rebol-bounce@rebol.com/msg04272.html'>64-bit support</a> for downloadable version</del><br>
+      <small>Fixed: removed dependency from Rebol.</small>
+   </li>
+   <li>
+      <del><a href='http://www.rebol.net/r3blogs/0032.html'>UTF-8 support</a> for downloadable version</del><br>
+      <small>Fixed: removed dependency from Rebol.</small>
+   </li>
+   <li><del>Option for limiting RSS items display</del> <small>Fixed.</small></li>
+   <li><del>Support for text input</del> <small>Fixed.</small></li>
+   <li><del>User-friendlier error detection</del> <small>Fixed.</small></li>
    <li>Support for PICS rating</li>
-   <li><del>Support for day resp. hour skipping</del> 
-   <small>no option due to missing scheduler</small></li>
+   <li>
+      <del>Support for day resp. hour skipping</del><br>
+      <small>Wontfix: no option due to missing scheduler.</small>
+   </li>
    <li>Multiple enclosures (RSS 0.93)</li>
+   <li>Atom support</li>
    </ul>
 
    <p><strong>Future development</strong></p>
-   <div>I have ceased developing this viewer with Rebol but it will be available here as is.</div>
+   <div>I have ceased actively developing this viewer but sometimes I get enthusiastic and fiddle around with the code. Of course it will be available here as is.</div>
 
    <p>For questions and comments feel free to mail to 
    <a href='mailto:&#105;&#110;&#116;&#101;&#114;&#102;&#97;&#99;&#101;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103;'>&#105;&#110;&#116;&#101;&#114;&#102;&#97;&#99;&#101;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103;</a>, 
@@ -491,194 +399,9 @@
 </div>
 </form>
 
-<script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.2/jquery.min.js'></script>
-<script type='text/javascript' src='../jquery/jquery.simpleColor.js'></script>
-
-<script type='text/javascript'>
-window.rssBoxSetup = true;
-var currentUrl;   
-var debugCounter = 1;
-
-var getQuery = function(param) {
-   //console.log(debugCounter++ + ': getQuery()')
-   var query = '?';
-   for (var i in param) {
-      query += i + '=' + encodeURIComponent(param[i]) + '&';
-   }
-   return query;
-}
-
-var getFileName = function(str) {
-   var parts = str.split('/');
-   var result;
-   if (!(result = parts.pop())) {
-      result = parts.pop();
-   }
-   return result;
-}
-
-var update = function(query) {
-   $('#update').attr('disabled', true).css('color', 'gray');
-   $('#source').text('Loading...').css('color', 'green');
-
-   $.getScript('./proxy.r' + (query || ''), function(result, status) {
-      if (status !== 'success') {
-         return;
-      }
-
-      //$('#preview').html(window.rssBox);
-
-      var param = org.p3k.param;
-      var rss = org.p3k.rss;
-
-      var renderCode = function() {
-         var result = '<scr' + 'ipt type="text/javascript" src="';
-         result += org.p3k.baseUri + 'proxy.r' + 
-               getQuery(param).replace(/&/g, '&amp;');
-         result += '"><' + '/scr' + 'ipt>';
-         return result;
-      }
-
-      $('table:first').attr('align', 'left');
-      $('#url').val(param.url);
-      $('#source').html('<a href="' + param.url + '">' + 
-            rss.format + ' ' + rss.version + '</a>');
-      $('#title').text(rss.title);
-      $('#description').text(rss.description).hide();
-      $('#descriptionToggler').show();
-      $('#date').text(rss.date);
-      $('#format').text(rss.format + ' ' + rss.version);
-
-      $('#maxItems').val(param.maxItems);
-      $('#width').val(param.width);
-      $('#align').val(param.align || 'default');
-      $('#compact').attr('checked', !!param.compact);
-      $('#showXmlButton').attr('checked', !!param.showXmlButton);
-      $('#frameColor').val(param.frameColor);
-      $('#titleBarColor').val(param.titleBarColor);
-      $('#titleBarTextColor').val(param.titleBarTextColor);
-      $('#boxFillColor').val(param.boxFillColor);
-      $('#textColor').val(param.textColor);
-      $('#fontFace').val(param.fontFace);
-
-      if (rss.error) {
-         $('#source a').css('color', 'red');
-         $('#code textarea').attr('disabled', true);
-      } else {
-         $('#code textarea').attr('disabled', false);
-      }
-      
-      var updater = function() {
-         var currentUrl = String(param.url);
-         $('input:text').each(function(idx, item) {
-            param[$(item).attr('id')] = $(item).val();
-            $(item).siblings().find('.simpleColorDisplay:first')
-                  .css('background-color', $(item).val());
-         });
-         param.align = $('#align').val();
-         param.compact = $('#compact').attr('checked') || '';
-         param.showXmlButton = $('#showXmlButton').attr('checked') || '';
-         if (currentUrl !== param.url) {
-            update(getQuery(param));
-         } else {
-            $('#preview').html(org.p3k.RssBox());
-            $('#code textarea').val(renderCode());
-         }
-         return false;
-      };
-      
-      $('input:text').unbind('change').change(updater);
-      $('input:checkbox').unbind('click').click(function() {
-         updater();
-         return true;
-      });
-      
-      // FIXME: Call the onChange handler of at least one 
-      // input element to sync color boxes with input values.
-      $('#url').change();
-
-      // FIXME: The unbinding is necessary to prevent 
-      // chaining the same onClick handler on and on.
-      $('button#reload').unbind('click').click(function() {
-         delete param.url;
-         $('#url').change();
-         return false;
-      });
-      
-      $('button#reset').unbind('click').click(function() {
-         $('input:text').val('');
-         $('input:checkbox').attr('checked', false);
-         $('#url').val(param.url);
-         return false;
-      });
-   
-      $('#reload').css('color', 'green').attr('disabled', false);
-      return;
-   });
-
-   return;
-};
-
-$(document).ready(function() {
-   update(location.search);
-
-   var showExample = function() {
-      $('#url').val($(this).attr('href'));
-      $('#url').change();
-      return false;
-   };
-   
-   $('a[href$=.xml]').click(showExample);
-   $('a[href$=/rss]').click(showExample);
-
-   $('form').submit(function() {
-      $('#url').change();
-      return false;
-   });
-
-   $('input:text[id$=Color]').css('width', '100px').simpleColor({
-      boxWidth: 15,
-      boxHeight: 15,
-		cellWidth: 9,
-		cellHeight: 9,
-      border: '1px solid gray'
-	});
-   
-   $('#code textarea').click(function() {
-      $(this).select();
-   });
-
-   $('.toggler a').click(function() {
-      $(this).parents('.toggler').next('.togglee').toggle();
-      return false;
-   }).click();
-
-   $('#descriptionToggler').click(function() {
-      $(this).hide();
-      $('#description').show();
-      return false;
-   });
-         
-   $('#referrers').hide();
-   $('#referrersToggle').click(function() {
-      $.getJSON('./referrers.r', function(data) {
-         var result = '';
-         $.each(data, function(i, item) {
-            if (!item) {
-               return;
-            }
-            item = item.replace(/^([^.]*)www\./, '$1');
-            var host = item.split('/')[2];
-            result += '<a href="' + item + '">' + 
-                  host + '<' + '/a><br />';
-         });
-         $('#referrers').html(result).show();
-         $('#referrersToggle').hide()
-      });
-      return false;
-   });
-});
-</script>
+<script src='http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js' type='text/javascript'></script>
+<script src='jquery.miniColors.min.js' type='text/javascript'></script>
+<script src='main.js' type='text/javascript'></script>
 
 </body>
 </html>

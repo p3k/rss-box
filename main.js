@@ -1,414 +1,193 @@
-org.p3k.RssBox = function() {
-   var ref;
-   var ISOPATTERN = /([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9:]+).*$/;
+$(function() {
    
-   var data = org.p3k;
-   data.defaults = {
-      url: "http://blog.p3k.org/rss",
+   BASE_URI = 'http://p3k.org/rss/';
+   FERRIS_URI = 'http://3.p3k-001.appspot.com/ferris?callback=?&group=rssbox&limit=100';
+
+   load({ // Load a first RSS Box with default settings.
+      url: 'http://blog.p3k.org/rss.xml',
       maxItems: 7,
       width: 200,
-      align: "",
-      frameColor: "black",
-      titleBarColor: "lightblue",
-      titleBarTextColor: "black",
-      boxFillColor: "white",
-      textColor: "black",
-      showXmlButton: "",
-      compact: ""
-   };
-   
-   var baseUri = data.baseUri;
-    
-   var getColor = function(str) {
-      if (str.length === 6 && parseInt(str, 16) && str.indexOf("#") !== 0) {
-         str = "#" + str;
-      }
-      return str.toLowerCase();
-   }
-
-   var value;
-   for (var i in data.defaults) {
-      value = data.param[i];
-      if (!value || value.length === 0) {
-         data.param[i] = data.defaults[i];
-      } else if (i.indexOf("Color") > 0) {
-         data.param[i] = getColor(value);
-      }
-   }
-
-   // FIXME: Ugly work-around for many boxes using too small width 
-   // values because the former version did not show the exact output.
-   if (data.param.javascript && data.param.width < 200) {
-      data.param.width = 200;
-   }
-   // Remove obsolete parameters from param and query
-   delete data.param.javascript;
-   data.query = data.query.replace("javascript=true", "");   
-
-   var NAMESPACES = {
-      dc: "http://purl.org/dc/elements/1.1/",
-      rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   };
-
-   var getUrl = function(url) {
-      url = baseUri + "proxy.r?" + encodeURIComponent(url);
-   
-      var HttpRequest = function() {
-         return (typeof XMLHttpRequest !== "undefined") ?
-            new XMLHttpRequest() : new ActiveXObject("Msxml2.XMLHTTP");
-      }
-   
-      var request = new HttpRequest();
-      request.open("GET", url, false);
-      request.send(null);   
-      if (!request.getResponseHeader("Date")) {
-         var cached = request;
-         var ifModifiedSince = cached.getResponseHeader("Last-Modified") || 
-               new Date(0); // January 1, 1970
-         request = new HttpRequest();
-         request.open("GET", url, false);
-         request.setRequestHeader("If-Modified-Since", ifModifiedSince);
-         request.send("");
-         if (request.status === 304) {
-            request = cached; 
-         }
-      }
-      return request;
-   }
-   
-   var getDocument = function(source) {
-      if (source) {
-         if (document.implementation.createDocument) {
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(source, "text/xml");
-            return doc;
-         } else if (window.ActiveXObject) {
-            var doc = new ActiveXObject("Microsoft.XMLDOM");
-            doc.async = "false";
-            doc.loadXML(source);
-            return doc;
-         }
-      }
-      return null;
-   }
-   
-   var getError = function() {
-      var msg = null, root;
-      if (!xml || data.message) {
-         msg = data.message || "Unknown error.";
-      } else if (xml.parseError && xml.parseError.errorCode) {
-         msg = xml.parseError.reason; // IExplore
-      } else if (root = xml.documentElement) {
-         var errorNode;
-         if (root.nodeName === "parsererror") {
-            msg = xml.documentElement.textContent; // Mozilla
-         } else if ((errorNode = root.childNodes[0]) && 
-               errorNode.nodeName === "parsererror") {
-            msg = errorNode.textContent; // Safari
-         } else if (!/rss|rdf|scriptingNews/i.test(xml.documentElement.nodeName)) {
-            msg = "Incompatible data format. Are you sure this is an RSS feed?";
-         }
-      }
-      return msg;
-   }
-   
-   var getNode = function(parent, name, namespace) {
-      if (namespace) {
-         if (typeof parent.getElementsByTagNameNS === "undefined") {
-            var elements = parent.getElementsByTagName(namespace + ":" + name);
-         } else {
-            var elements = parent.getElementsByTagNameNS(NAMESPACES[namespace], name);
-         }
-      } else {
-         var elements = parent.getElementsByTagName(name);
-      }
-      if (elements && elements[0]) {
-         return elements[0];
-      }
-      return null;
-   }
-   
-   var getText = function(node) {
-      if (node && node.childNodes && node.childNodes.length > 0) {
-         return node.childNodes[0].nodeValue || "";
-      }
-      return "";
-   }
-   
-   var trim = function(str) {
-      if (str) {
-         return str.replace(/^\s*(\S*)\s*$/, "$1");
-      }
-      return "";
-   }
-   
-   var padZero = function(n) {
-      if (n < 10) {
-         return "0" + n
-      }
-      return n;
-   }
-
-   var encodeXml = function(str) {
-      if (!str) {
-         return "";
-      }
-      return str.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/&/g, "&amp;");
-   }
-      
-   var render = function(template, param) {
-      if (!template || !param) {
-         return template;
-      }
-      template = template.replace(/\$\{([^}]+)\}/g, function() {
-         var key = arguments[1];
-         return param[key] || "";
-      });
-      return template;
-   }
-   
-   var renderDate = function(date) {
-      if (date.constructor !== Date) {
-         var str = String(date);
-         var millis = Date.parse(str.replace(ISOPATTERN, "$1/$2/$3 $4"));
-         if (millis) {
-            date = new Date(millis);
-         } else {
-            date = new Date;
-         }
-      }
-
-      return render(data.date, {
-         year: date.getFullYear(),
-         month: padZero(date.getMonth() + 1),
-         day: padZero(date.getDate()),
-         hours: padZero(date.getHours()),
-         minutes: padZero(date.getMinutes()),
-         seconds: padZero(date.getSeconds()),
-         timeZone: "" // date.getTimezoneOffset()
-      });
-   }
-   
-   var renderButtons = function(enclosure, source) {
-      var result = "";
-      if (enclosure && enclosure.link) {
-         result += render(data.image, {
-            source: baseUri + "enclosure.gif",
-            title: enclosure.type,
-            link: enclosure.link,
-            width: 13,
-            height: 16
-         });
-      }
-      if (source && source.link) {
-         result += render(data.image, {
-            source: baseUri + "source.gif",
-            title: source.title,
-            link: source.link,
-            width: 15,
-            height: 15
-         });
-      }
-      return result;         
-   }
-   
-   var param = data.param;
-   var rss = data.rss = {items: []};
-   var xml = getDocument(data.xml);
-
-   rss.error = getError();
-   if (rss.error !== null) {
-      xml = getDocument(render(data.error, {
-         link: baseUri + "?" + encodeXml(data.query),
-         message: encodeXml(rss.error)
-      }));
-      param.compact = 0;
-      param.showXmlButton = 1;
-   }
-
-   var root = xml.documentElement;
-   var type = root.nodeName;
-
-   if (type === "scriptingNews") {
-      var channel = getNode(xml, "header");
-      rss.format = "Scripting News";
-      rss.version = getText(getNode(channel, "scriptingNewsVersion"));
-      rss.title = getText(getNode(channel, "channelTitle"));
-      rss.description = getText(getNode(channel, "channelDescription"));
-      rss.link = getText(getNode(channel, "channelLink"));
-      if (ref = getText(getNode(channel, "imageUrl"))) {
-         ref = rss.image = {source: ref};
-         ref.title = getText(getNode(channel, "imageTitle"));
-         ref.link = getText(getNode(channel, "imageLink"));
-         ref.width = getText(getNode(channel, "imageWidth"));
-         ref.height = getText(getNode(channel, "imageHeight"));
-         ref.description = getText(getNode(channel, "imageCaption"));
-      }
-   } else {
-      var channel = getNode(xml, "channel");
-      rss.format = "RSS";
-      rss.version = (type === "rdf:RDF") ? "1.0" : 
-            root.getAttribute("version");
-      rss.title = getText(getNode(channel, "title"));
-      rss.description = getText(getNode(channel, "description"));
-      rss.link = getText(getNode(channel, "link"));
-      var image = getNode(xml, "image");
-      if (image) {
-         ref = rss.image = {};
-         ref.source = getText(getNode(image, "url"));
-         ref.title = getText(getNode(image, "title"));
-         ref.link = getText(getNode(image, "link"));
-         ref.width = getText(getNode(image, "width"));
-         ref.height = getText(getNode(image, "height"));
-         ref.description = getText(getNode(image, "description"));
-      }
-   }
-   
-   if (type === "rdf:RDF") {
-      rss.date = renderDate(getText(getNode(channel, "date", "dc")) || data.modified);
-      rss.rights = getText(getNode(channel, "creator", "dc"));
-      var input = getNode(root, "textinput");
-      if (input && !getNode(input, "link")) {
-         input = root.getElementsByTagName("textinput")[1];
-      }
-      if (input) {
-         ref = rss.input = {};
-         ref.link = getText(getNode(input, "link"));
-         ref.description = getText(getNode(input, "description"));
-         ref.name = getText(getNode(input, "name"));
-         ref.title = getText(getNode(input, "title"));
-      }
-   } else {
-      rss.date = renderDate(getText(getNode(channel, "lastBuildDate") || getText(getNode(channel, "pubDate"))) || data.modified);
-      rss.rights = getText(getNode(channel, "copyright"));
-   }
-   
-   var item, text, node;
-   var items = xml.getElementsByTagName("item");
-
-   for (var i=0; i<Math.min(items.length, param.maxItems); i+=1) {
-      item = items[i];
-
-      if (type === "scriptingNews") {
-         ref = {title: ""};
-         ref.description = getText(getNode(item, "text")).replace(/\n/g, " ");
-         ref.link = getText(getNode(item, "link"));
-         if (text = trim(getText(getNode(item, "linetext")).replace(/\n/g, " "))) {
-            ref.description = ref.description.replace(new RegExp(text), 
-                  '<a href="' + getText(getNode(item, "url")) + '">' + text + '</a>');
-         }
-      } else {
-         ref = {
-            title: getText(getNode(item, "title")),
-            description: getText(getNode(item, "description")),
-            link: getText(getNode(item, "link") || getNode(item, "guid"))
-         };
-     }
-
-     if (node = getNode(item, "source")) {
-        ref.source = {
-           link: node.getAttribute("url"),
-           title: getText(node)
-        }
-     }
-     
-     if (node = getNode(item, "enclosure")) {
-        ref.enclosure = {
-           link: node.getAttribute("url"),
-           length: node.getAttribute("length"),
-           type: node.getAttribute("type")
-        }
-     }
-     
-     if (node = getNode(item, "category")) {
-        ref.category = {
-           domain: node.getAttribute("domain") || "",
-           content: getText(node)
-        }
-     }
-     
-     rss.items.push(ref);
-   }
-   
-   var item, items = "";
-   for (var i=0; i<rss.items.length; i+=1) {
-      item = rss.items[i];
-      items += render(data.item, {
-         title: new function() {
-            var title = (!param.compact ? "<strong>" : "");
-            if (item.link) {
-               title += render(data.link, {
-                  link: item.link,
-                  text: item.title,
-                  'class': "rssBoxItemTitle"
-               });
-            } else {
-               title += item.title;
-            }
-            !param.compact && (title += "</strong>");
-            return new String(title); // FIXME: Funny, title alone will be rendered as [object]
-         }(),
-         'break': item.title && item.description ? "<br />" : "",
-         description: (!param.compact || !item.title) && item.description,
-         buttons: renderButtons(item.enclosure, item.source)
-      });
-   }
-   
-   var box = render(data.box, {
-      title: rss.link ? render(data.link, {
-         link: rss.link,
-         text: rss.title,
-         'class': "rssBoxTitle",
-         style: "color: " + param.titleBarTextColor
-      }) : rss.title,
-      description: rss.description,
-      items: items,
-
-      xmlButton: param.showXmlButton && render(data.image, {
-         link: param.url,
-         source: baseUri + "rss.png",
-         title: rss.format + " " + rss.version,
-         width: 16,
-         height: 16,
-         align: "right",
-         hspace: 3
-      }),
-      
-      image: !param.compact && rss.image && render(data.image, {
-         link: rss.image.link,
-         source: rss.image.source,
-         width: rss.image.width,
-         height: rss.image.height,
-         title: rss.image.title,
-         align: "right",
-         valign: "baseline",
-         hspace: 5,
-         vspace: 5
-      }),
-      
-      input: !param.compact && rss.input && render(data.input, {
-         link: rss.input.link,
-         description: rss.input.description,
-         name: rss.input.name,
-         title: rss.input.title
-      }),
-      
-      date: rss.date,
-      width: param.width,
-      frameColor: param.frameColor,
-      fontFace: param.fontFace,
-      align: param.align,
-      titleBarColor: param.titleBarColor,
-      titleBarTextColor: param.titleBarTextColor,
-      boxFillColor: param.boxFillColor,
-      textColor: param.textColor
+      radius: 5,
+      align: null,
+      frameColor: '#B3A28E',
+      titleBarColor: '#90A8B3',
+      titleBarTextColor: '#FFEAD2',
+      boxFillColor: '#FFEAD2',
+      textColor: '#95412B',
+      linkColor: '#2C7395',
+      showXmlButton: true,
+      compact: false,
+      fontFace: '10pt sans-serif'
    });
 
-   if (!window.rssBoxSetup) {
-      document.write(box);
+   // Set up handlers of interface elements.
+   
+   $('input:text').change(updater);
+   $('input:checkbox').click(updater);
+
+   $('form').submit(function(event) {
+      event.preventDefault();
+      updater();
+   });
+   
+   $('#code textarea').click(function() {
+      $(this).select();
+   });
+
+   $('.toggler a').click(function() {
+      $(this).parents('.toggler').next('.togglee').toggle();
+      return false;
+   }).click();
+
+   $('#descriptionToggler').click(function() {
+      $(this).hide();
+      $('#description').show();
+      return false;
+   });
+   
+   $('.color').miniColors({
+      //letterCase: 'lowercase',
+      change: function(hex, rgb) {
+         // FIXME: Call updater() less often.
+         updater();
+      }
+   });
+   
+   // Set up referrers.
+   $('#referrers').hide();
+   $('#referrersToggle').click(function() {
+      $.getJSON(FERRIS_URI, function(data) {
+         var cache = {};
+         var result = '';
+         $.each(data, function(index, item) {
+            if (this.url.indexOf(BASE_URI) > -1) {
+               return;
+            }
+            var item = this.url.replace(/^([^.]*)www\./, '$1');
+            if (cache[item]) {
+               return;
+            }
+            cache[item] = true;
+            var host = item.split('/')[2];
+            result += '<a href="' + item + '">' + 
+                  host + '<' + '/a><br />';
+         });
+         $('#referrers').html(result).show();
+         $('#referrersToggle').hide()
+      });
+      return false;
+   });
+   
+   // Capture clicks on links to XML files and display these as RSS box.
+   $('a[href$="\\\.xml"]').click(function(event) {
+      event.preventDefault();
+      $('#url').val($(this).attr('href'));
+      updater();
+   });
+
+   function updater(event) {
+      var config = getConfig();
+      if (config.url !== window.rss.config.url) {
+         load(config);
+         return;
+      }
+      window.rss.renderBox(window.rss.data, config, function(box) {
+         $('#preview').html(box);
+         update(window.rss.data, config);  
+      });
+   }
+
+   function load(config) {
+      var query = getQuery(config);
+      $('#reload').attr('disabled', true).css('color', 'gray');
+      $('#source').text('Loading...').css('color', 'green');
+ 
+      window.rss = null;
+      window._rss_box_framework_has_loaded = null; // FIXME: This is only a hack.
+
+      var script = document.createElement('script');
+      script.src = BASE_URI + 'index.js?setup=true&' + query;
+      script.type = 'text/javascript';
+      script.onreadystatechange = script.onload = function() {
+         /* ... */
+      }
+      $('#preview').empty().get(0).appendChild(script);
+
+      var scheduler = setInterval(function() {
+         if (typeof jQuery !== 'undefined') {
+            if (window.rss) {
+               clearTimeout(scheduler);
+               update(window.rss.data, window.rss.config);
+               if (window.rss.data.error) {
+                  $('#source a').css('color', 'red');
+                  $('#code textarea').attr('disabled', true);
+               } else {
+                  $('#code textarea').attr('disabled', false);
+               }
+               $('#reload').css('color', 'green').attr('disabled', false);
+            }
+         }
+      }, 10);
+
    }
    
-   return box;
-};
+   function update(rss, config) {
+      $('#url').val(config.url);
+      $('#source').html('<a href="' + config.url + '">' + 
+            rss.format + ' ' + rss.version + '</a>');
+      $('#title').text(rss.title);
+      $('#description').text(rss.description).hide();
+      $('#descriptionToggler').show();
+      $('#date').text($('.rssbox-date').text());
+      $('#format').text(rss.format + ' ' + rss.version);
 
-org.p3k.RssBox();
+      $('#maxItems').val(config.maxItems);
+      $('#width').val(config.width);
+      $('#preview').css('width', config.width);
+      $('#radius').val(config.radius);
+      $('#align').val(config.align || 'default');
+      $('#compact').prop('checked', !!config.compact);
+      $('#showXmlButton').prop('checked', !!config.showXmlButton);
+      $('#fontFace').val(config.fontFace);
+
+      $('#frameColor').miniColors('value', config.frameColor);
+      $('#titleBarColor').miniColors('value', config.titleBarColor);
+      $('#titleBarTextColor').miniColors('value', config.titleBarTextColor);
+      $('#boxFillColor').miniColors('value', config.boxFillColor);
+      $('#textColor').miniColors('value', config.textColor);
+      $('#linkColor').miniColors('value', config.linkColor);
+
+      $('#code textarea').val('<script type="text/javascript" src="' +
+            BASE_URI + 'index.js?' + getQuery(config).replace(/&/g, '&amp;') + '"></script>');
+      return;
+   }
+
+   function getConfig() {
+      var config = {};
+      var keys = ['url', 'maxItems', 'width', 'radius', 'align', 'frameColor', 'titleBarColor', 
+            'titleBarTextColor', 'boxFillColor', 'textColor', 'linkColor', 'fontFace'];
+      for (var i=0; i<keys.length; i+=1) {
+         var key = keys[i];
+         config[key] = $('#' + key).val();
+      }
+      config.compact = $('#compact').prop('checked') && true;
+      config.showXmlButton = $('#showXmlButton').prop('checked') && true;
+      return config;
+   }
+   
+   function getQuery(config) {
+      if (!config) {
+         return '';
+      }
+      var query = [];
+      for (var key in config) {
+         var value = config[key];
+         if (key === 'setup' || !value) {
+            continue;
+         }
+         query.push(key + '=' + encodeURIComponent(value));
+      }
+      return query.join('&');
+   } 
+
+});
