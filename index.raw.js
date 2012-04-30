@@ -29,7 +29,7 @@
       jQuery.getScript(BASE_URI + 'jquery.ba-bbq.min.js', function() {*/
          jQuery.noConflict();
          $ = jQuery; // This $ is a local variable!
-         load(BASE_URI + 'templates.inc', function(data) {
+         load(BASE_URI + 'templates.txt', function(data) {
             templates = jQuery(data.content);
             main();
             if (location.href.indexOf(BASE_URI) < 0) {
