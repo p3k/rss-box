@@ -90,9 +90,8 @@ button#reload {
 }
 
 #about {
-   position: absolute;
-   left: 550px;
-   width: 470px;
+   float: left;
+   width: 468px;
    margin-right: 10px;
 }
 
