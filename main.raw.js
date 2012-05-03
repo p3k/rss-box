@@ -60,7 +60,7 @@ $(function() {
          var cache = {};
          var result = '';
          $.each(data, function(index, item) {
-            if (this.url.indexOf(BASE_URI) > -1) {
+            if (this.url && this.url.indexOf(BASE_URI) > -1) {
                return;
             }
             var item = this.url.replace(/^([^.]*)www\./, '$1');
