@@ -32,7 +32,7 @@
          load(BASE_URI + 'templates.txt', function(data) {
             templates = jQuery(data.content);
             main();
-            if (location.href && location.href.indexOf(BASE_URI) < 0) {
+            if (location.href.indexOf(BASE_URI) < 0) {
                $.getJSON(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
             }
          });
