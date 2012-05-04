@@ -111,7 +111,7 @@
       window._rss_box_framework_has_loaded = null; // FIXME: This is only a hack.
 
       var script = document.createElement('script');
-      script.src = 'index.js?setup=true&' + query;
+      script.src = BASE_URI + 'index.js?setup=true&' + query;
       script.type = 'text/javascript';
       script.onreadystatechange = script.onload = function() {
          /* ... */
