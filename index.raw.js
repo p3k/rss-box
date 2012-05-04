@@ -145,7 +145,7 @@
    }
    
    function polish(rss, config) {
-      if (rss.image.source && (!rss.image.width || !rss.image.height)) {
+      if (rss.image && rss.image.source && (!rss.image.width || !rss.image.height)) {
          var image = new Image;
          image.src = rss.image.source;
          $(image).load(function() {
