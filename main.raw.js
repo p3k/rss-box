@@ -1,10 +1,15 @@
-$(function() {
+ $(function() {
    
    BASE_URI = 'http://p3k.org/rss/';
    FERRIS_URI = 'http://3.p3k-001.appspot.com/ferris?callback=?&group=rssbox&limit=100';
 
+   if (typeof DEBUG !== 'undefined' && DEBUG === true) {
+      BASE_URI = 'http://macke.local/~tobi/rss-box/';
+      FERRIS_URI = 'http://macke.local:8081/ferris?callback=?&group=rssbox&limit=100';
+   }
+
    load({ // Load a first RSS Box with default settings.
-      url: 'http://blog.p3k.org/rss.xml',
+      url: 'http://blog.p3k.org/stories.xml',
       maxItems: 7,
       width: 200,
       radius: 5,
@@ -106,7 +111,7 @@ $(function() {
       window._rss_box_framework_has_loaded = null; // FIXME: This is only a hack.
 
       var script = document.createElement('script');
-      script.src = BASE_URI + 'index.js?setup=true&' + query;
+      script.src = 'index.js?setup=true&' + query;
       script.type = 'text/javascript';
       script.onreadystatechange = script.onload = function() {
          /* ... */
