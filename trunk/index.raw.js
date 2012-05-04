@@ -2,7 +2,13 @@
 
    var BASE_URI = 'http://p3k.org/rss/';
    var ROXY_URI = 'http://3.p3k-001.appspot.com/roxy';
-   var FERRIS_URI = 'http://3.p3k-001.appspot.com/ferris?callback=?&group=rssbox'
+   var FERRIS_URI = 'http://3.p3k-001.appspot.com/ferris?callback=?&group=rssbox';
+
+   if (typeof DEBUG !== 'undefined' && DEBUG === true) {
+      var BASE_URI = 'http://macke.local/~tobi/rss-box/';
+      var ROXY_URI = 'http://macke.local:8081/roxy';
+      var FERRIS_URI = 'http://macke.local:8081/ferris?callback=?&group=rssbox';
+   }
 
    // Check if a RSS Box script was already loaded to prevent redundant loading of libraries.
    if (window._rss_box_framework_has_loaded) {
@@ -21,12 +27,14 @@
    var $; // Provide local $ variable for jQuery to keep global namespace clean.
    var templates;
 
-   /*// Load libraries and call main() routine.
+   /* 
+   // Load libraries and call main() routine.
    var script = document.createElement('script');
    script.type = 'text/javascript';
    script.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js';
    script.onload = function() {
-      jQuery.getScript(BASE_URI + 'jquery.ba-bbq.min.js', function() {*/
+      jQuery.getScript('jquery.ba-bbq.min.js', function() {
+   */
          jQuery.noConflict();
          $ = jQuery; // This $ is a local variable!
          load(BASE_URI + 'templates.txt', function(data) {
@@ -36,14 +44,16 @@
                $.getJSON(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
             }
          });
-   /*});
+   /*
+   });
    }
    script.onreadystatechange = function() {
       if (script.readyState === 'loaded') {
          script.onload();
       }
    }
-   document.body.appendChild(script);*/
+   document.body.appendChild(script);
+   */
 
    function main() {
       // main() is called recursively, removing one script element at a time
@@ -60,7 +70,7 @@
       
       // Define default settings.
       var config = {
-         url: 'http://blog.p3k.org/rss.xml',
+         url: 'http://blog.p3k.org/stories.xml',
          maxItems: 7,
          width: 200,
          radius: 0,
