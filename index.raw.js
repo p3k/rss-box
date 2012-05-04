@@ -141,7 +141,7 @@
    }
    
    function load(url, callback) {
-      $.getJSON(ROXY_URI + '?callback=?&url=' + url, callback);
+      $.getJSON(ROXY_URI + '?callback=?&url=' + encodeURIComponent(url), callback);
    }
    
    function polish(rss, config) {
