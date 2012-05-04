@@ -35,7 +35,7 @@
       updater();
    });
    
-   $('#code textarea').click(function() {
+   $('.autoselect').click(function() {
       $(this).select();
    });
 
