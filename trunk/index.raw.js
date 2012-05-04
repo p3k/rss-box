@@ -5,9 +5,9 @@
    var FERRIS_URI = 'http://3.p3k-001.appspot.com/ferris?callback=?&group=rssbox';
 
    if (typeof DEBUG !== 'undefined' && DEBUG === true) {
-      var BASE_URI = 'http://macke.local/~tobi/rss-box/';
-      var ROXY_URI = 'http://macke.local:8081/roxy';
-      var FERRIS_URI = 'http://macke.local:8081/ferris?callback=?&group=rssbox';
+      BASE_URI = 'http://macke.local/~tobi/rss-box/';
+      ROXY_URI = 'http://macke.local:8081/roxy';
+      FERRIS_URI = 'http://3.p3k-001.appspot.com/ferris?callback=?&group=rssbox';
    }
 
    // Check if a RSS Box script was already loaded to prevent redundant loading of libraries.

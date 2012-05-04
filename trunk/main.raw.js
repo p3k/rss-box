@@ -1,7 +1,7 @@
  $(function() {
    
-   BASE_URI = 'http://p3k.org/rss/';
-   FERRIS_URI = 'http://3.p3k-001.appspot.com/ferris?callback=?&group=rssbox&limit=100';
+   var BASE_URI = 'http://p3k.org/rss/';
+   var FERRIS_URI = 'http://3.p3k-001.appspot.com/ferris?callback=?&group=rssbox&limit=100';
 
    if (typeof DEBUG !== 'undefined' && DEBUG === true) {
       BASE_URI = 'http://macke.local/~tobi/rss-box/';
@@ -68,13 +68,13 @@
             if (this.url.indexOf('http') !== 0 || this.url.indexOf(BASE_URI) === 0) {
                return;
             }
-            var item = this.url.replace(/^([^.]*)www\./, '$1');
-            if (cache[item]) {
+            var href = this.url.replace(/^([^.]*)www\./, '$1');
+            var host = href.split('/')[2];
+            if (cache[host]) {
                return;
             }
-            cache[item] = true;
-            var host = item.split('/')[2];
-            result += '<a href="' + item + '">' + 
+            cache[host] = true;
+            result += '<a href="' + href + '">' + 
                   host + '<' + '/a><br />';
          });
          $('#referrers').html(result).show();
