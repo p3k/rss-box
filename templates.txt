@@ -19,7 +19,6 @@
       padding: 5px 3px 5px 10px;
       color: ${titleBarTextColor};
       background-color: ${titleBarColor};
-      overflow: hidden;
    }
    #${id} .rssbox-titlebar a {
       color: ${titleBarTextColor};
