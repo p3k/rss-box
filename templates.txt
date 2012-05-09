@@ -4,6 +4,7 @@
       border: 1px solid ${frameColor};
       font: ${fontFace};
       float: ${align};
+      overflow: hidden;
       border-radius: ${radius}px;
       -moz-border-radius: ${radius}px;
    }
@@ -31,7 +32,6 @@
    #${id} .rssbox-item-content {
       margin-bottom: 0.8em; 
       color: ${textColor};
-      overflow: hidden;
    }
    #${id} form {
       margin-bottom: 0.8em;
