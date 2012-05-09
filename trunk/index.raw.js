@@ -74,7 +74,7 @@
          maxItems: 7,
          width: 200,
          radius: 0,
-         align: null,
+         align: 'none',
          frameColor: '#000',
          titleBarColor: '#add8e6',
          titleBarTextColor: '#000',
