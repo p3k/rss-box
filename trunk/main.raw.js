@@ -1,11 +1,11 @@
  $(function() {
    
    var BASE_URI = 'http://p3k.org/rss/';
-   var FERRIS_URI = 'http://3.p3k-001.appspot.com/ferris?callback=?&group=rssbox&limit=100';
+   var FERRIS_URI = 'http://3.p3k-001.appspot.com/ferris?callback=?&group=rssbox&days=7';
 
    if (typeof DEBUG !== 'undefined' && DEBUG === true) {
       BASE_URI = 'http://macke.local/~tobi/rss-box/';
-      FERRIS_URI = 'http://macke.local:8081/ferris?callback=?&group=rssbox&limit=100';
+      FERRIS_URI = 'http://macke.local:8081/ferris?callback=?&group=rssbox&days=7';
    }
 
    load({ // Load a first RSS Box with default settings.
