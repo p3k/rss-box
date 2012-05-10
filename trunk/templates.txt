@@ -27,6 +27,7 @@
       padding: 5px 10px;
       background-color: ${boxFillColor};
       border-top: 1px solid ${frameColor};
+      clear: both;
    }
    #${id} .rssbox-item-content {
       margin-bottom: 0.8em; 
