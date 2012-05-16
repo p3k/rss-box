@@ -1,7 +1,7 @@
 body {
    margin: 10px;
    padding: 10px;
-   line-height: 1.2em;
+   font-family: 'Droid Serif', serif;
 }
 
 a {
@@ -12,6 +12,13 @@ a:hover {
    text-decoration: underline;
 }
 
+h3 {
+   margin: 10px 0 0 0;
+   font-size: 30px;
+   font-weight: normal;
+   line-height: 1.7em;
+}
+
 code {
    font-size: 0.9em;
 }
@@ -20,14 +27,15 @@ div#preview {
    float: left; 
    width: 200px;
    min-height: 1em;
+   margin-bottom: 1em;
 }
 
 table#setup {
+   float: left;
    width: 350px;
    margin-bottom: 0;
    border: 1px;
-   border-spacing: 0 0;
-   float: left;
+   border-spacing: 0 0;   
 }
 
 table#setup td {
@@ -93,6 +101,7 @@ button#reload {
    float: left;
    width: 468px;
    margin-right: 10px;
+   line-height: 1.5em;
 }
 
 #about p + div, #about ul, #about ol {

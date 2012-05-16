@@ -1,13 +1,13 @@
 (function() {
 
    var BASE_URI = 'http://p3k.org/rss/';
-   var ROXY_URI = 'http://3.p3k-001.appspot.com/roxy';
-   var FERRIS_URI = 'http://3.p3k-001.appspot.com/ferris?callback=?&group=rssbox';
+   var ROXY_URI = 'http://4.p3k-001.appspot.com/roxy';
+   var FERRIS_URI = 'http://4.p3k-001.appspot.com/ferris?callback=?&group=rssbox';
 
    if (typeof DEBUG !== 'undefined' && DEBUG === true) {
       BASE_URI = 'http://macke.local/~tobi/rss-box/';
       ROXY_URI = 'http://macke.local:8081/roxy';
-      FERRIS_URI = 'http://3.p3k-001.appspot.com/ferris?callback=?&group=rssbox';
+      FERRIS_URI = 'http://macke.local:8081/ferris?callback=?&group=rssbox';
    }
 
    // Check if a RSS Box script was already loaded to prevent redundant loading of libraries.
@@ -24,37 +24,19 @@
       }
    }
    
-   var $; // Provide local $ variable for jQuery to keep global namespace clean.
+   jQuery.noConflict();
+
+   var $ = jQuery; // This $ is a local variable!
    var templates;
 
-   /* 
-   // Load libraries and call main() routine.
-   var script = document.createElement('script');
-   script.type = 'text/javascript';
-   script.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js';
-   script.onload = function() {
-      jQuery.getScript('jquery.ba-bbq.min.js', function() {
-   */
-         jQuery.noConflict();
-         $ = jQuery; // This $ is a local variable!
-         load(BASE_URI + 'templates.txt', function(data) {
-            templates = jQuery(data.content);
-            main();
-            if (location.href.indexOf(BASE_URI) < 0) {
-               $.getJSON(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
-            }
-         });
-   /*
-   });
-   }
-   script.onreadystatechange = function() {
-      if (script.readyState === 'loaded') {
-         script.onload();
+   load(BASE_URI + 'templates.txt', function(data) {
+      templates = jQuery(data.content);
+      main();
+      if (location.href.indexOf(BASE_URI) < 0) {
+         $.getJSON(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
       }
-   }
-   document.body.appendChild(script);
-   */
-
+   });
+   
    function main() {
       // main() is called recursively, removing one script element at a time
       // until no matching script element is available, anymore.
