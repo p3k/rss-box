@@ -19,12 +19,9 @@ h3 {
    line-height: 1.7em;
 }
 
-p, ul {
+p, ul, li {
+   margin: .66em 0;
    line-height: 1.4em;
-}
-
-li {
-   margin-top: 5px;
 }
 
 code {
@@ -116,7 +113,7 @@ button#reload {
    margin-right: 10px;
 }
 
-#about p + div, #about ul, #about ol {
+#about p + div {
    margin-top: -10px;
 }
 
