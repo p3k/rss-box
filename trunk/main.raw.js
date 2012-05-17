@@ -62,6 +62,14 @@
    $('#referrers').hide();
    $('#referrersToggle').click(function() {
       $.getJSON(FERRIS_URI, function(data) {
+         if (data.error) {
+            var error = $('<div>')
+                  .attr('title', 'Error ' + data.status + ': ' + data.error)
+                  .html('currently unavailable.');
+            $('#referrers').html(error).show();
+            $('#referrersToggle').hide();
+            return;
+         }
          var cache = {};
          var result = '';
          $.each(data, function(index, item) {
@@ -78,7 +86,7 @@
                   host + '<' + '/a><br />';
          });
          $('#referrers').html(result).show();
-         $('#referrersToggle').hide()
+         $('#referrersToggle').hide();
       });
       return false;
    });
