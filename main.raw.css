@@ -19,8 +19,16 @@ h3 {
    line-height: 1.7em;
 }
 
+p, ul {
+   line-height: 1.4em;
+}
+
+li {
+   margin-top: 5px;
+}
+
 code {
-   font-size: 0.9em;
+   font-size: .9em;
 }
 
 div#preview {
@@ -44,8 +52,13 @@ table#setup td {
 
 small, label, #referrers li {
    color: gray;
-   font-size: 0.8em;
+   font-size: .8em;
 }
+
+#title, #description, #date, #source {
+   font-size: .8em;
+}
+
 
 button#reset {
    margin-right: 5px;
@@ -101,7 +114,6 @@ button#reload {
    float: left;
    width: 468px;
    margin-right: 10px;
-   line-height: 1.5em;
 }
 
 #about p + div, #about ul, #about ol {

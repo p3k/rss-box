@@ -92,7 +92,7 @@
 
    function updater(event) {
       var config = getConfig();
-      if (config.url !== window.rss.config.url) {
+      if (!window.rss || config.url !== window.rss.config.url) {
          load(config);
          return;
       }
