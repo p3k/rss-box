@@ -27,15 +27,15 @@
    jQuery.noConflict();
 
    var $ = jQuery; // This $ is a local variable!
-   var templates;
+   var templates = $('script.template');
 
-   load(BASE_URI + 'templates.txt', function(data) {
-      templates = jQuery(data.content);
+   //load(BASE_URI + 'templates.txt', function(data) {
+      //templates = jQuery(data.content);
       main();
       if (location.href.indexOf(BASE_URI) < 0) {
          $.getJSON(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
       }
-   });
+   //});
    
    function main() {
       // main() is called recursively, removing one script element at a time
@@ -200,7 +200,8 @@
       function getError() {
          var msg = null, root;
          if (!doc || data.headers.error) {
-            msg = (data.headers.error === 404 ? 'File not found.' : data.headers.message || 'Unknown error.');
+            msg = (data.headers.error === 404 ? '404 File not found.' : 
+                  data.headers.message || 'Unknown error.');
          } else if (doc.parseError && doc.parseError.errorCode) {
             msg = doc.parseError.reason; // IExplore
          } else if (root = doc.documentElement) {
