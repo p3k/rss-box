@@ -1,8 +1,8 @@
 (function() {
 
    var BASE_URI = 'http://p3k.org/rss/';
-   var ROXY_URI = 'http://4.p3k-001.appspot.com/roxy';
-   var FERRIS_URI = 'http://4.p3k-001.appspot.com/ferris?callback=?&group=rssbox';
+   var ROXY_URI = 'http://p3k-001.appspot.com/roxy';
+   var FERRIS_URI = 'http://p3k-001.appspot.com/ferris?callback=?&group=rssbox';
 
    if (typeof DEBUG !== 'undefined' && DEBUG === true) {
       BASE_URI = 'http://macke.local/~tobi/rss-box/';
