@@ -4,8 +4,8 @@
    var FERRIS_URI = 'http://p3k-001.appspot.com/ferris?callback=?&group=rssbox';
 
    if (typeof DEBUG !== 'undefined' && DEBUG === true) {
-      BASE_URI = 'http://macke.local/~tobi/rss-box/';
-      FERRIS_URI = 'http://macke.local:8081/ferris?callback=?&group=rssbox';
+      BASE_URI = 'http://localhost/~tobi/rss-box/';
+      FERRIS_URI = 'http://localhost:8081/ferris?callback=?&group=rssbox';
    }
 
    load({ // Load a first RSS Box with default settings.
@@ -177,8 +177,8 @@
 
    function getConfig() {
       var config = {};
-      var keys = ['url', 'maxItems', 'width', 'radius', 'align', 'frameColor', 'titleBarColor', 
-            'titleBarTextColor', 'boxFillColor', 'textColor', 'linkColor', 'fontFace'];
+      var keys = new Array('url', 'maxItems', 'width', 'radius', 'align', 'frameColor', 'titleBarColor', 
+            'titleBarTextColor', 'boxFillColor', 'textColor', 'linkColor', 'fontFace');
       for (var i=0; i<keys.length; i+=1) {
          var key = keys[i];
          config[key] = $('#' + key).val();
@@ -192,7 +192,7 @@
       if (!config) {
          return '';
       }
-      var query = [];
+      var query = new Array;
       for (var key in config) {
          var value = config[key];
          if (key === 'setup' || !value) {
