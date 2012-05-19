@@ -113,10 +113,6 @@ button#reload {
    margin-right: 10px;
 }
 
-#about p + div {
-   margin-top: -10px;
-}
-
 .rssbox a {
    text-decoration: none;
 }
