@@ -5,9 +5,9 @@
    var FERRIS_URI = 'http://p3k-001.appspot.com/ferris?callback=?&group=rssbox';
 
    if (typeof DEBUG !== 'undefined' && DEBUG === true) {
-      BASE_URI = 'http://macke.local/~tobi/rss-box/';
-      ROXY_URI = 'http://macke.local:8081/roxy';
-      FERRIS_URI = 'http://macke.local:8081/ferris?callback=?&group=rssbox';
+      BASE_URI = 'http://localhost/~tobi/rss-box/';
+      ROXY_URI = 'http://localhost:8081/roxy';
+      FERRIS_URI = 'http://localhost:8081/ferris?callback=?&group=rssbox';
    }
 
    // Check if a RSS Box script was already loaded to prevent redundant loading of libraries.
@@ -27,15 +27,16 @@
    jQuery.noConflict();
 
    var $ = jQuery; // This $ is a local variable!
-   var templates = $('script.template');
+   var templates;
 
-   //load(BASE_URI + 'templates.txt', function(data) {
-      //templates = jQuery(data.content);
+   load(BASE_URI + 'templates.html', function(data) {
+      console.log(BASE_URI)
+      templates = $(data.content).filter('script');
       main();
       if (location.href.indexOf(BASE_URI) < 0) {
          $.getJSON(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
       }
-   //});
+   });
    
    function main() {
       // main() is called recursively, removing one script element at a time
