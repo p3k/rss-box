@@ -30,7 +30,6 @@
    var templates;
 
    load(BASE_URI + 'templates.html', function(data) {
-      console.log(BASE_URI)
       templates = $(data.content).filter('script');
       main();
       if (location.href.indexOf(BASE_URI) < 0) {
