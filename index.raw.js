@@ -94,7 +94,7 @@
       
       load(config.url, function(data, status, xhr) {
          var doc = getDocument(data.content || '');
-         var rss = getRss(doc, data);
+         var rss = getRss(doc, data, config);
          var box = renderBox(rss, config);
          script.replaceWith(box);
          polish(rss, config);
@@ -173,7 +173,7 @@
       return wrapper.innerHTML;
    }
 
-   function getRss(doc, data) {
+   function getRss(doc, data, config) {
 
       var ISO_DATE_PATTERN = /([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9:]+).*$/;
 
@@ -225,8 +225,10 @@
       }
 
       if (rss.error !== null) {
+      console.log(data)
          doc = getDocument(render('error', {
-            link: BASE_URI + "?" + encodeXml(data.query),
+            link: BASE_URI + "?" + encodeXml(config.url),
+            validatorUrl: 'http://validator.w3.org/appc/check.cgi?url=' + encodeXml(config.url),
             message: encodeXml(rss.error)
          }));
       }
@@ -304,7 +306,7 @@
                description: item.find('description').text(),
                link: item.find("link").text() || item.find("guid").text()
             }
-            var content = item.find('content\\:encoded').text();
+            var content = item.find('content\\:encoded').html();
             if (content) {
                ref.description = content;
             } else {
@@ -389,13 +391,10 @@
                } else {
                   title += item.title;
                }
-               return new String(title); // FIXME: Funny, title alone will be rendered as [object]
+               return title;
             })(),
-
-            'break': item.title && item.description ? "<br>" : "",
             description: (!config.compact || !item.title) ? item.description : '',
             buttons: renderButtons(item.enclosure, item.source),
-            textColor: config.textColor
          });
       }
       

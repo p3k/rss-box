@@ -15,6 +15,9 @@
 #${id} a:hover {
    text-decoration: underline;
 }
+#${id} br {
+   
+}
 #${id} .rssbox-titlebar {
    padding: 5px 3px 5px 10px;
    color: ${titleBarTextColor};
@@ -111,9 +114,9 @@ ${year}-${month}-${day}, ${hours}:${minutes}h
          <description>${message}</description>
       </item>
       <item>
-         <description>Most likely, this might have happened because of a 
-         non-existent or invalid RSS feed URL. <a href="${link}">Please check</a> and possibly correct 
-         your input, then try again.</description>
+         <content:encoded><![CDATA[Most likely, this might have happened because of a 
+         non-existent or invalid RSS feed URL. <a href="${validatorUrl}">Please check</a> and possibly correct 
+         your input, then try again.]]></content:encoded>
       </item>
    </channel>
 </rss>
