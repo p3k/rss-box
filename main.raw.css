@@ -52,11 +52,6 @@ small, label, #referrers li {
    font-size: .8em;
 }
 
-#title, #description, #date, #source {
-   font-size: .8em;
-}
-
-
 button#reset {
    margin-right: 5px;
 }
@@ -64,6 +59,18 @@ button#reset {
 button#reload {
    font-weight: bold;
    color: green;
+}
+
+#noscript {
+	position: fixed; 
+	z-index: 99;
+	top: 0; 
+	right: 0; 
+	bottom: 0; 
+	left: 0; 
+	padding: 1em; 
+	background: rgba(255,255,255,0.8); 
+	font-size: 6em;
 }
 
 #setup {
@@ -78,6 +85,10 @@ button#reload {
 #setup td:first-child {
    text-align: right;
    white-space: nowrap;
+}
+
+#title, #description, #date, #source {
+   font-size: .8em;
 }
 
 #url, #fontFace {

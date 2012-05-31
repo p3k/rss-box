@@ -141,12 +141,6 @@
             }
          });         
       }
-      return;
-      // Update the all link elements in the RSS Box.
-      $('.rssbox a').css({color: config.linkColor}).hover(function(event) {
-         $(this).css('text-decoration', event.type === 'mouseenter' ? 'underline' : 'none');
-      });
-      $('.rssbox-title').css({color: config.titleBarTextColor});
    }
    
    function getDocument(xml) {
