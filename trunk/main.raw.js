@@ -8,8 +8,16 @@
       FERRIS_URI = 'http://localhost:8081/ferris?callback=?&group=rssbox';
    }
 
+   var url, parts = location.href.split('?');
+   if (parts.length > 1) {
+	   parts = parts[1].split('=');
+	   if (parts[0] === 'url') {
+		   url = decodeURIComponent(parts[1]);
+	   }
+   }
+
    load({ // Load a first RSS Box with default settings.
-      url: 'http://blog.p3k.org/stories.xml',
+      url: url || 'http://blog.p3k.org/stories.xml',
       maxItems: 7,
       width: 200,
       radius: 5,
@@ -82,8 +90,7 @@
                return;
             }
             cache[host] = true;
-            result += '<a href="' + href + '">' + 
-                  host + '<' + '/a><br />';
+            result += '<a href="' + href + '">' + host + '<' + '/a><br />';
          });
          $('#referrers').html(result).show();
          $('#referrersToggle').hide();
