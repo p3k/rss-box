@@ -7,14 +7,14 @@
    <link rel='stylesheet' type='text/css' href='main.css'>
    <link rel='shortcut icon' href='images/rss.ico'>
    <title>JavaScript RSS Box Viewer 3.1&beta;</title>
-   <script type="text/javascript">
-    (function() {
-        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
-        s.type = 'text/javascript';
-        s.async = true;
-        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
-        t.parentNode.insertBefore(s, t);
-    })();
+   <script type='text/javascript'>
+   (function() {
+       var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+       s.type = 'text/javascript';
+       s.async = true;
+       s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+       t.parentNode.insertBefore(s, t);
+   })();
    </script>
 </head>
 <body>
@@ -32,7 +32,7 @@
 </colgroup>
 <tr>
    <td><label for='url'>Feed URL</label></td>
-   <td><input id='url' class='autoselect'></td>
+   <td><input type='url' id='url' class='autoselect' required></td>
 </tr>
 <tr>
    <td><small>Title</small></td>
@@ -53,15 +53,15 @@
 </tr>
 <tr>
    <td><label for='maxItems'>Max. items</label></td>
-   <td><input id='maxItems' maxlength=2 class='autoselect'></td>
+   <td><input type='number' min=1 max=99 id='maxItems' class='autoselect'></td>
 </tr>
 <tr>
    <td><label for='width'>Width</label></td>
-   <td><input id='width' maxlength=4 class='autoselect'> <small>pixels</small></td>
+   <td><input type='number' min=100 max=9999 id='width' class='autoselect'> <small>pixels</small></td>
 </tr>
 <tr>
    <td><label for='radius'>Corner radius</label></td>
-   <td><input id='radius' maxlength=3 class='autoselect'> <small>pixels</small></td>
+   <td><input type='number' min=0 max=999 id='radius' class='autoselect'> <small>pixels</small></td>
 </tr>
 <tr>
    <td><label for='showXmlButton'>XML button</label></td>
@@ -149,9 +149,9 @@
    </p>
    
    <p>
-      <a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="http://p3k.org/rss"></a>
-      <noscript><a href="http://flattr.com/thing/681881/JavaScript-RSS-Box-Viewer" target="_blank">
-      <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+      <a class='FlattrButton' style='display:none;' data-flattr-button='compact' href='http://p3k.org/rss'></a>
+      <noscript><a href='http://flattr.com/thing/681881/JavaScript-RSS-Box-Viewer' target='_blank'>
+      <img src='http://api.flattr.com/button/flattr-badge-large.png' alt='Flattr this' title='Flattr this' border='0' /></a></noscript>
    </p>
 
    <p class='toggler'><b><a href='.'>Change Log</a></b></p>
@@ -160,12 +160,12 @@
    <p>       
       <small>2012-05-31</small>
       Gone &beta;eta! – with three tiny additons:
-      <ul>
-         <li>Added <code>&lt;noscript&gt;</code> element for browsers providing no JavaScript engine.</li>
-         <li>Added option to call the configurator with a URL in the query string.</li>
-         <li>Added a link to the W3C feed validator to the contents of a box displaying an RSS error.</li>
-      </ul>
    </p>
+   <ul>
+      <li>Added <code>&lt;noscript&gt;</code> element for browsers providing no JavaScript engine.</li>
+      <li>Added option to call the configurator with a URL in the query string.</li>
+      <li>Added a link to the W3C feed validator to the contents of a box displaying an RSS error.</li>
+   </ul>
    <p>
       <small>2012-05-19</small>
       Apologies for the RSS Boxes not showing up on your pages during the last few days. I made a stupid mistake that caused only the setup page to render correctly – and I did not check any embedded script. <i>Bummer!</i> 
@@ -180,11 +180,13 @@
    </p>
    <p>
       <small>2012-05-09</small>
-      <ul>
-         <li>Added support for <code>&lt;content:encoded&gt;</code> element.</li>
-         <li>Implemented Memcache usage in AppEngine code.</li>
-         <li>Beautified this page by using the <a href='http://www.google.com/webfonts/specimen/Droid+Serif'>Google’s Droid Serif font</a>.</li>
-      </ul>
+   </p>
+   <ul>
+      <li>Added support for <code>&lt;content:encoded&gt;</code> element.</li>
+      <li>Implemented Memcache usage in AppEngine code.</li>
+      <li>Beautified this page by using the <a href='http://www.google.com/webfonts/specimen/Droid+Serif'>Google’s Droid Serif font</a>.</li>
+   </ul>
+   <p>
       <small>2012-04-26</small>
       Amazing! A new version! After more than two years hiatus I completely rewrote the codebase and framework:
    </p>
@@ -400,7 +402,7 @@
 
 </div>
 
-<script>//DEBUG = true;</script>
+<script>DEBUG = true;</script>
 <script src='main.js' type='text/javascript'></script>
 
 </body>

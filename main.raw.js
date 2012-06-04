@@ -35,8 +35,8 @@
 
    // Set up handlers of interface elements.
    
-   $('input:text').change(updater);
-   $('input:checkbox').click(updater);
+   $('input').change(updater);
+   //$('input:checkbox').click(updater);
 
    $('form').submit(function(event) {
       event.preventDefault();
