@@ -1,4 +1,4 @@
- $(function() {
+$(function() {
    
    var BASE_URI = 'http://p3k.org/rss/';
    var FERRIS_URI = 'http://p3k-001.appspot.com/ferris?callback=?&group=rssbox';
@@ -47,15 +47,15 @@
       $(this).select();
    });
 
-   $('.toggler a').click(function() {
+   $('.toggler a').click(function(event) {
+      event.preventDefault();
       $(this).parents('.toggler').next('.togglee').toggle();
-      return false;
    }).click();
 
-   $('#descriptionToggler').click(function() {
+   $('#descriptionToggler').click(function(event) {
+      event.preventDefault();
       $(this).hide();
       $('#description').show();
-      return false;
    });
    
    $('.color').miniColors({
@@ -106,6 +106,13 @@
    });
 
    function updater(event) {
+      var inputs = $('input');
+      for (var input, i = 0; i < inputs.length; i += 1) {
+         input = inputs.get(i);
+         if (input.validity && !input.validity.valid) {
+            return;
+         }
+      }
       var config = getConfig();
       if (!window.rss || config.url !== window.rss.config.url) {
          load(config);
