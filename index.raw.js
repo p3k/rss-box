@@ -238,7 +238,6 @@
       }
 
       if (rss.error !== null) {
-      console.log(data)
          doc = getDocument(render('error', {
             link: BASE_URI + '?url=' + encodeXml(config.url),
             validatorUrl: 'http://validator.w3.org/appc/check.cgi?url=' + encodeXml(config.url),
@@ -386,6 +385,7 @@
       if (rss.error) {
          config.compact = 0;
          config.showXmlButton = 1;
+         config.maxItems = 3;
       }
 
       var item, items = "";
