@@ -108,14 +108,6 @@
                renderBox: function(rss, config, callback) {
                   callback(renderBox(rss, config));
                   polish(rss, config);
-                  $('.rssbox img').each(function() {
-                     var img = $(this);
-                     var width = img.attr('width');
-                     if (config.width - width < 20) {
-                        img.attr({width: config.width - 20, height: 'auto'});
-                     }
-                     img.show();                     
-                  });
                }
             }
          }
@@ -149,6 +141,17 @@
             }
          });         
       }
+      $('.rssbox img').each(function() {
+         var img = $(this);
+         var width = img.width();
+         var margin = 20;
+         if (config.width - width < margin) {
+            var newWidth = config.width - margin;
+            var factor = newWidth / width;
+            img.width(newWidth).height(img.height() * factor);
+         }
+         img.show();                     
+      });
    }
    
    function getDocument(xml) {
@@ -235,7 +238,7 @@
       if (rss.error !== null) {
       console.log(data)
          doc = getDocument(render('error', {
-            link: BASE_URI + "?" + encodeXml(config.url),
+            link: BASE_URI + '?url=' + encodeXml(config.url),
             validatorUrl: 'http://validator.w3.org/appc/check.cgi?url=' + encodeXml(config.url),
             message: encodeXml(rss.error)
          }));
