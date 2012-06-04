@@ -144,11 +144,13 @@
       $('.rssbox img').each(function() {
          var img = $(this);
          var width = img.width();
+         if (width < 1) {
+             return;
+         }
          var margin = 20;
          if (config.width - width < margin) {
             var newWidth = config.width - margin;
-            var factor = newWidth / width;
-            img.width(newWidth).height(img.height() * factor);
+            img.width(newWidth).height(img.height() * newWidth / width);
          }
          img.show();                     
       });
