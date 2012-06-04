@@ -108,6 +108,14 @@
                renderBox: function(rss, config, callback) {
                   callback(renderBox(rss, config));
                   polish(rss, config);
+                  $('.rssbox img').each(function() {
+                     var img = $(this);
+                     var width = img.attr('width');
+                     if (config.width - width < 20) {
+                        img.attr({width: config.width - 20, height: 'auto'});
+                     }
+                     img.show();                     
+                  });
                }
             }
          }
