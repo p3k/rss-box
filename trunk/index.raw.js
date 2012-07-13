@@ -318,7 +318,7 @@
                description: item.find('description').text(),
                link: item.find("link").text() || item.find("guid").text()
             }
-            var content = item.find('content\\:encoded').html();
+            var content = item.find('content\\:encoded').text();
             if (content) {
                ref.description = content;
             } else {
