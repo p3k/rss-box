@@ -369,7 +369,7 @@
                source: BASE_URI + "images/attach.png",
                title: enclosure.type,
                link: encodeURI(enclosure.link),
-               padding: 16
+               padding: '16px'
             });
          }
          if (source && source.link) {
@@ -378,7 +378,7 @@
                source: BASE_URI + "images/globe.png",
                title: source.title,
                link: encodeURI(source.link),
-               padding: 15
+               padding: '15px'
             });
          }
          return result;         
@@ -436,11 +436,11 @@
                link: config.url,
                source: BASE_URI + "images/rss.png",
                title: rss.format + " " + rss.version,
-               width: 16,
-               height: 16,
+               width: '16px',
+               height: '16px',
                align: "right",
-               hspace: 3,
-               vspace: 0
+               hspace: '3px',
+               vspace: '0px'
             });
          })(),
 
@@ -458,8 +458,8 @@
                title: rss.image.title,
                align: "right",
                valign: "baseline",
-               hspace: 5,
-               vspace: 5
+               hspace: '5px',
+               vspace: '5px'
             });        
          })(),
 
@@ -538,7 +538,8 @@
       if (template && data) {
          return template.replace(/\$\{([^}]+)\}/g, function() {
             var key = arguments[1];
-            return data[key];
+            var value = data[key];
+            return value || '';
          });
       }
       return ''; 
