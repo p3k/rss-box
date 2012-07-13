@@ -318,14 +318,16 @@
                description: item.find('description').text(),
                link: item.find("link").text() || item.find("guid").text()
             }
-            var content = item.find('content\\:encoded').text();
-            if (content) {
-               ref.description = content;
-            } else {
-               content = item.find('encoded').text()
-               if (content) {
-                  ref.description = content;
-               }
+            if (!ref.description) {
+                var content = item.find('content\\:encoded').text();
+                if (content) {
+                   ref.description = content;
+                } else {
+                   content = item.find('encoded').text()
+                   if (content) {
+                      ref.description = content;
+                   }
+                }
             }
         }
 
