@@ -1,13 +1,13 @@
 $(function() {
-   
-   var BASE_URI = 'http://p3k.org/rss/';
-   var FERRIS_URI = 'http://p3k-001.appspot.com/ferris?callback=?&group=rssbox';
+ 
+   var BASE_URI = '//p3k.org/rss/'; // Protocol-less URL, usable with both, HTTP and HTTPS servers
+   var FERRIS_URI = location.protocol + '//p3k-001.appspot.com/ferris?callback=?&group=rssbox';
 
    if (typeof DEBUG !== 'undefined' && DEBUG === true) {
       BASE_URI = 'http://localhost/~tobi/rss-box/';
       FERRIS_URI = 'http://localhost:8081/ferris?callback=?&group=rssbox';
    }
-
+   
    var url, parts = location.href.split('?');
    if (parts.length > 1) {
 	   parts = parts[1].split('=');
