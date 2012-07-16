@@ -3,7 +3,7 @@
 <html>
 <head>
    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
-   <link href='http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+   <link href='//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
    <link rel='stylesheet' type='text/css' href='main.css'>
    <link rel='shortcut icon' href='images/rss.ico'>
    <title>JavaScript RSS Box Viewer 3.2</title>
@@ -12,7 +12,7 @@
        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
        s.type = 'text/javascript';
        s.async = true;
-       s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+       s.src = '//api.flattr.com/js/0.6/load.js?mode=auto';
        t.parentNode.insertBefore(s, t);
    })();
    </script>
@@ -129,34 +129,38 @@
       google_ad_width = 468;
       google_ad_height = 60;
       </script>
-      <script type='text/javascript' src='http://pagead2.googlesyndication.com/pagead/show_ads.js'></script>
+      <script type='text/javascript' src='//pagead2.googlesyndication.com/pagead/show_ads.js'></script>
    </div>
 
    <small><i>“JavaScript RSS Viewer puts little or long customizable RSS boxes anywhere you put HTML; build your own slashbox hell or heaven, it’s feedarific!”<br>
    — <a href='http://ourpla.net/cgi/pikie'>Abbe Normal</a></i></small>
    
    <h3>JavaScript RSS Box Viewer 3.2</h3>
-   <p>This viewer can display <a href='http://en.wikipedia.org/wiki/RSS'>RSS</a> feeds of version <a href='http://cyber.law.harvard.edu/rss/examples/sampleRss091.xml'>0.91</a>, <a href='http://cyber.law.harvard.edu/rss/examples/sampleRss092.xml'>0.92</a>, <a href='http://rss.orf.at/fm4.xml'>1.0</a> and <a href='http://blog.p3k.org/stories.xml'>2.0</a> as well as even the good old legacy format <a href='http://essaysfromexodus.scripting.com/xml/scriptingnews2.xml'>Scripting News 2</a>. <i>(Sorry, no <a href='http://en.wikipedia.org/wiki/Atom_%28standard%29'>Atom</a>.)</i></p>
+   <p>This viewer can display <a href='http://en.wikipedia.org/wiki/RSS'>RSS</a> feeds of version <a href='http://cyber.law.harvard.edu/rss/examples/sampleRss091.xml'>0.91</a>, <a href='http://cyber.law.harvard.edu/rss/examples/sampleRss092.xml'>0.92</a>, <a href='http://rss.orf.at/fm4.xml'>1.0</a> and <a href='//blog.p3k.org/stories.xml'>2.0</a> as well as even the good old legacy format <a href='http://essaysfromexodus.scripting.com/xml/scriptingnews2.xml'>Scripting News 2</a>. <i>(Sorry, no <a href='http://en.wikipedia.org/wiki/Atom_%28standard%29'>Atom</a>.)</i></p>
    
    <p>It provides a simple way to embed such RSS boxes in any <a href='http://validator.w3.org/'>valid HTML document</a> via an automagically generated JavaScript tag.</p>
    
    <p>Just enter the URL of any compatible RSS feed, modify the layout settings as you like and push the Reload button. When finished, copy the HTML code into your own web page – and voilà!</p>
    
-   <p>The code behind this is written in JavaScript and runs completely in your browser*. You can get the source code together with all the other necessary files from the <a href='http://p3k.org/source/rss-box/trunk'>SVN repository</a>.</p>
+   <p>The code behind this is written in JavaScript and runs completely in your browser*. You can get the source code together with all the other necessary files from the <a href='//p3k.org/source/rss-box/trunk'>SVN repository</a>.</p>
    
    <p>
       <small>* A proxy server is needed for cross-origin requests.</small>
    </p>
    
    <p>
-      <a class='FlattrButton' style='display:none;' data-flattr-button='compact' data-flattr-popout=0 href='http://p3k.org/rss'></a>
+      <a class='FlattrButton' style='display:none;' data-flattr-button='compact' data-flattr-popout=0 href='//p3k.org/rss'></a>
       <noscript><a href='http://flattr.com/thing/681881/JavaScript-RSS-Box-Viewer' target='_blank'>
-      <img src='http://api.flattr.com/button/flattr-badge-large.png' alt='Flattr this' title='Flattr this' border='0' /></a></noscript>
+      <img src='//api.flattr.com/button/flattr-badge-large.png' alt='Flattr this' title='Flattr this' border='0' /></a></noscript>
    </p>
 
    <p class='toggler'><b><a href='.'>Change Log</a></b></p>
    <div class='togglee'>
 
+   <p>
+      <small>2012-07-16</small>
+      Slightly modified output of the HTML code to be usable with both, unsecured and secured (HTTPS) web servers. You can update already embedded code easily by removing the <code>http:</code> part from the <code>src</code> attribute of the <code>&lt;script&gt;</code> element: <code>&lt;script src='http://p3k.org/rss…'&gt;</code> becomes <code>&lt;script src='//p3k.org/rss…'&gt;</code>.
+   </p>
    <p>
       <small>2012-07-13</small>
    </p>
@@ -272,7 +276,7 @@
 
    <p>
       <small>2006-04-23</small>
-      Switched the <a href='http://p3k.org/source/rss-box/'>source repository</a> from CVS to Subversion (SVN).
+      Switched the <a href='//p3k.org/source/rss-box/'>source repository</a> from CVS to Subversion (SVN).
    </p>
 
    <p>
@@ -312,7 +316,7 @@
 
    <p>
       <small>2004-04-26</small>
-      Last efforts to officially release the <a href='http://p3k.org/source/rss-box'>code</a> to the open source community. There have been some bugs in the (image) rendering framework which I fixed so far. I now include a dynamically rendered list of sites using (or pointing to) this script to give some examples for the curious at heart (me included). Finally, there’s a <a href='http://p3k.org/source/rss-box/branches/2.0/README'>README</a> file with a short installation guide to make the script run on your own server.
+      Last efforts to officially release the <a href='//p3k.org/source/rss-box'>code</a> to the open source community. There have been some bugs in the (image) rendering framework which I fixed so far. I now include a dynamically rendered list of sites using (or pointing to) this script to give some examples for the curious at heart (me included). Finally, there’s a <a href='//p3k.org/source/rss-box/branches/2.0/README'>README</a> file with a short installation guide to make the script run on your own server.
    </p>
 
    <p>
@@ -410,7 +414,7 @@
    <p>
       For questions and comments feel free to mail to <a href='mailto:&#109;&#97;&#105;&#108;&#43;&#114;&#115;&#115;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103;'>&#109;&#97;&#105;&#108;&#43;&#114;&#115;&#115;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103;</a>, although I cannot promise to reply.
    </p>
-   <p><i>Thank you, <a href='http://p3k.org/'>p3k organisation</a>!</i></p>
+   <p><i>Thank you, <a href='//p3k.org/'>p3k organisation</a>!</i></p>
 </div>
 </form>
 
