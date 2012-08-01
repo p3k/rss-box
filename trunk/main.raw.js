@@ -4,8 +4,8 @@ $(function() {
    var FERRIS_URI = location.protocol + '//services.tobischaefer.com/ferris?callback=?&group=rssbox';
 
    if (typeof DEBUG !== 'undefined' && DEBUG === true) {
-      BASE_URI = 'http://localhost/~tobi/rss-box/';
-      FERRIS_URI = 'http://localhost:8081/ferris?callback=?&group=rssbox';
+      BASE_URI = 'http://macke.local/~tobi/rss-box/';
+      FERRIS_URI = 'http://macke.local:8081/ferris?callback=?&group=rssbox';
    }
    
    var url, parts = location.href.split('?');
@@ -20,6 +20,7 @@ $(function() {
       url: url || 'http://blog.p3k.org/stories.xml',
       maxItems: 7,
       width: 200,
+      height: -1,
       radius: 5,
       align: null,
       frameColor: '#B3A28E',
@@ -30,13 +31,13 @@ $(function() {
       linkColor: '#2C7395',
       showXmlButton: true,
       compact: false,
+      headless: false,
       fontFace: '10pt sans-serif'
    });
 
    // Set up handlers of interface elements.
    
    $('input').change(updater);
-   //$('input:checkbox').click(updater);
 
    $('form').submit(function(event) {
       event.preventDefault();
@@ -159,6 +160,8 @@ $(function() {
    }
    
    function update(rss, config) {
+      $('#preview').css('width', config.width);
+
       $('#url').val(config.url);
       $('#source').html('<a href="' + config.url + '">' + 
             rss.format + ' ' + rss.version + '</a>');
@@ -170,11 +173,12 @@ $(function() {
 
       $('#maxItems').val(config.maxItems);
       $('#width').val(config.width);
-      $('#preview').css('width', config.width);
+      $('#height').val(config.height);
       $('#radius').val(config.radius);
       $('#align').val(config.align || 'default');
       $('#compact').prop('checked', !!config.compact);
       $('#showXmlButton').prop('checked', !!config.showXmlButton);
+      $('#headless').prop('checked', !!config.headless);
       $('#fontFace').val(config.fontFace);
 
       $('#frameColor').miniColors('value', config.frameColor);
@@ -186,19 +190,27 @@ $(function() {
 
       $('#code textarea').val('<script type="text/javascript" src="' +
             BASE_URI + 'index.js?' + getQuery(config).replace(/&/g, '&amp;') + '"></script>');
+        
+      // Dis-/enable controls depending on other settings    
+      $('#showXmlButton').attr({disabled: config.headless});
+      $('#frameColor').attr({disabled: config.headless});
+      $('#titleBarColor').attr({disabled: config.headless});
+      $('#titleBarTextColor').attr({disabled: config.headless});
+      $('#textColor').attr({disabled: config.compact});
       return;
    }
 
    function getConfig() {
       var config = {};
-      var keys = new Array('url', 'maxItems', 'width', 'radius', 'align', 'frameColor', 'titleBarColor', 
-            'titleBarTextColor', 'boxFillColor', 'textColor', 'linkColor', 'fontFace');
+      var keys = new Array('url', 'maxItems', 'width', 'height', 'radius', 'align', 'frameColor', 
+            'titleBarColor', 'titleBarTextColor', 'boxFillColor', 'textColor', 'linkColor', 'fontFace');
       for (var i=0; i<keys.length; i+=1) {
          var key = keys[i];
          config[key] = $('#' + key).val();
       }
       config.compact = $('#compact').prop('checked') && true;
       config.showXmlButton = $('#showXmlButton').prop('checked') && true;
+      config.headless = $('#headless').prop('checked') && true;
       return config;
    }
    

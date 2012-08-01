@@ -95,11 +95,11 @@ button#reload {
    width: 165px;
 }
 
-#showXmlButton {
+#headless {
    margin-right: 30px;
 }
 
-#maxItems, #width, #radius {
+#maxItems, #width, #height, #radius {
    width: 50px;
 }
 

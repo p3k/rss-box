@@ -5,9 +5,9 @@
    var FERRIS_URI = location.protocol + '//services.tobischaefer.com/ferris?callback=?&group=rssbox';
    
    if (typeof DEBUG !== 'undefined' && DEBUG === true) {
-      BASE_URI = 'http://localhost/~tobi/rss-box/';
-      ROXY_URI = 'http://localhost:8081/roxy';
-      FERRIS_URI = 'http://localhost:8081/ferris?callback=?&group=rssbox';
+      BASE_URI = 'http://macke.local/~tobi/rss-box/';
+      ROXY_URI = 'http://macke.local:8081/roxy';
+      FERRIS_URI = 'http://macke.local:8081/ferris?callback=?&group=rssbox';
    }
 
    // Check if a RSS Box script was already loaded to prevent redundant loading of libraries.
@@ -50,11 +50,12 @@
 
       script = $(script);
       
-      // Define default settings.
+      // Define default settings (different from main.js for b/w compatibility reasons.)
       var config = {
          url: 'http://blog.p3k.org/stories.xml',
          maxItems: 7,
          width: 200,
+         height: -1,
          radius: 0,
          align: 'none',
          frameColor: '#000',
@@ -65,6 +66,7 @@
          linkColor: '',
          showXmlButton: false,
          compact: false,
+         headless: false,
          fontFace: 'auto sans-serif'
       }
       
@@ -91,7 +93,8 @@
       // Fix boolean settings.
       config.compact === 'false' && (config.compact = false);
       config.showXmlButton === 'false' && (config.showXmlButton = false);
-      
+      config.headless === 'false' && (config.headless = false);
+
       load(config.url, function(data, status, xhr) {
          var doc = getDocument(data.content || '');
          var rss = getRss(doc, data, config);
@@ -127,6 +130,12 @@
    }
    
    function polish(rss, config) {
+      if (config.headless) { 
+         $('.rssbox-titlebar').hide();
+         $('.rssbox').css({border: 'none'});
+         $('.rssbox-content').css({'border-top': 'none'});
+      }
+
       if (rss.image && rss.image.source && (!rss.image.width || !rss.image.height)) {
          var image = new Image;
          image.src = rss.image.source;
@@ -141,6 +150,7 @@
             }
          });         
       }
+
       $('.rssbox img').each(function() {
          var img = $(this);
          var width = img.width();
@@ -477,6 +487,7 @@
 
          date: renderDate(rss.date),
          width: config.width,
+         height: config.height,
          frameColor: config.frameColor,
          fontFace: config.fontFace,
          align: config.align,
@@ -487,10 +498,11 @@
          radius: config.radius
       });
 
-      // FIXME: This belongs somewhere else…
+      // FIXME: This belongs somewhere else… (or does it?)
       var css = render('stylesheet', {
          id: id,
          width: config.width,
+         height: config.height < 0 ? 'auto' : config.height + 'px',
          frameColor: config.frameColor,
          fontFace: config.fontFace,
          align: config.align,
@@ -501,6 +513,7 @@
          textColor: config.textColor,
          linkColor: config.linkColor
       });
+
       var style = document.createElement('style');
       $('head').prepend(style);
       style.type = 'text/css';
@@ -511,7 +524,7 @@
       } else {
          $(style).text(css);
       }
-
+      
       return box;
    }
    

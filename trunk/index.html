@@ -6,7 +6,7 @@
    <link href='//fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
    <link rel='stylesheet' type='text/css' href='main.css'>
    <link rel='shortcut icon' href='images/rss.ico'>
-   <title>JavaScript RSS Box Viewer 3.2</title>
+   <title>JavaScript RSS Box Viewer 3.3</title>
    <script type='text/javascript'>
    (function() {
        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
@@ -56,8 +56,12 @@
    <td><input type='number' min=1 max=99 id='maxItems' class='autoselect'></td>
 </tr>
 <tr>
-   <td><label for='width'>Width</label></td>
-   <td><input type='number' min=100 max=9999 id='width' class='autoselect'> <small>pixels</small></td>
+   <td><label for='width'>Box width</label></td>
+   <td><input type='number' min=100 max=9999 step=10 id='width' class='autoselect'> <small>pixels</small></td>
+</tr>
+<tr>
+   <td><label for='height'>Content height</label></td>
+   <td><input type='number' min=-1 max=9999 step=10 id='height' class='autoselect'> <small>pixels</small></td>
 </tr>
 <tr>
    <td><label for='radius'>Corner radius</label></td>
@@ -67,10 +71,15 @@
    <td><label for='showXmlButton'>XML button</label></td>
    <td>
       <input type='checkbox' id='showXmlButton' value='1'>
+   </td>
+</tr>
+<tr>
+   <td><label for='headless'>Headless</label></td>
+   <td>
+      <input type='checkbox' id='headless' value='1'>
       <label for='compact'>Compact view</label>
       <input type='checkbox' id='compact' value='1'>
    </td>
-</tr>
 <tr>
    <td><label for='frameColor'>Frame color</label></td>
    <td><input id='frameColor' size=6 maxlength=7 class='color'></td>
@@ -135,7 +144,7 @@
    <small><i>“JavaScript RSS Viewer puts little or long customizable RSS boxes anywhere you put HTML; build your own slashbox hell or heaven, it’s feedarific!”<br>
    — <a href='http://ourpla.net/cgi/pikie'>Abbe Normal</a></i></small>
    
-   <h3>JavaScript RSS Box Viewer 3.2</h3>
+   <h3>JavaScript RSS Box Viewer 3.3</h3>
    <p>This viewer can display <a href='http://en.wikipedia.org/wiki/RSS'>RSS</a> feeds of version <a href='http://cyber.law.harvard.edu/rss/examples/sampleRss091.xml'>0.91</a>, <a href='http://cyber.law.harvard.edu/rss/examples/sampleRss092.xml'>0.92</a>, <a href='http://rss.orf.at/fm4.xml'>1.0</a> and <a href='//blog.p3k.org/stories.xml'>2.0</a> as well as even the good old legacy format <a href='http://essaysfromexodus.scripting.com/xml/scriptingnews2.xml'>Scripting News 2</a>. <i>(Sorry, no <a href='http://en.wikipedia.org/wiki/Atom_%28standard%29'>Atom</a>.)</i></p>
    
    <p>It provides a simple way to embed such RSS boxes in any <a href='http://validator.w3.org/'>valid HTML document</a> via an automagically generated JavaScript tag.</p>
@@ -157,6 +166,14 @@
    <p class='toggler'><b><a href='.'>Change Log</a></b></p>
    <div class='togglee'>
 
+   <p>
+      <small>2012-08-01</small>
+      Added two new, experimental features – and thus, increased version to 3.3:
+   </p>
+   <ul>
+      <li>The height of the inner box content can now be defined by a pixel value. If the height is less than the space needed by the desired amount of items you can vertically scroll the content. A value of <code>-1</code> enables the default behavior as it used to be.</li>
+      <li>The so-called “headless” mode removes the titlebar and the frame from the box. This way the box can be used more flexibly in special situations. However, this feature somehow undermines an RSS feed’s authority so I count on your fairness to give credit where credit is due!</li>
+   </ul>
    <p>
       <small>2012-07-16</small>
       Slightly modified output of the HTML code to be usable with both, unsecured and secured (HTTPS) web servers. You can update already embedded code easily by removing the <code>http:</code> part from the <code>src</code> attribute of the <code>&lt;script&gt;</code> element: <code>&lt;script src='http://p3k.org/rss…'&gt;</code> becomes <code>&lt;script src='//p3k.org/rss…'&gt;</code>.
@@ -409,10 +426,10 @@
    </ul>
 
    <p><b>Future Development</b></p>
-   <div>I have ceased actively developing this viewer but sometimes I get enthusiastic and fiddle around with the code. Of course it will be available here as is.</div>
+   <p>I have ceased actively developing this viewer but sometimes I get enthusiastic and fiddle around with the code. Of course it will be available here as is.</p>
 
    <p>
-      For questions and comments feel free to mail to <a href='mailto:&#109;&#97;&#105;&#108;&#43;&#114;&#115;&#115;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103;'>&#109;&#97;&#105;&#108;&#43;&#114;&#115;&#115;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103;</a>, although I cannot promise to reply.
+      For questions and comments feel free to contact me (Tobi) via e-mail: <a href='mailto:&#109;&#97;&#105;&#108;&#43;&#114;&#115;&#115;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103;'>&#109;&#97;&#105;&#108;&#43;&#114;&#115;&#115;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103;</a>.
    </p>
    <p><i>Thank you, <a href='//p3k.org/'>p3k organisation</a>!</i></p>
 </div>
@@ -420,7 +437,7 @@
 
 </div>
 
-<script>//DEBUG = true;</script>
+<script>DEBUG = true;</script>
 <script src='main.js' type='text/javascript'></script>
 
 </body>
