@@ -136,6 +136,7 @@
          $('.rssbox-content').css({'border-top': 'none'});
       }
 
+      // Update unspecified dimensions of RSS image with actual width and/or height.
       if (rss.image && rss.image.source && (!rss.image.width || !rss.image.height)) {
          var image = new Image;
          image.src = rss.image.source;
@@ -151,6 +152,7 @@
          });         
       }
 
+      // Update dimensions of image elements to fit in the box.
       $('.rssbox img').each(function() {
          var img = $(this);
          var width = img.width();
@@ -463,8 +465,8 @@
                display: 'inline-block',
                link: encodeURI(rss.image.link),
                source: rss.image.source,
-               width: rss.image.width,
-               height: rss.image.height,
+               width: rss.image.width + 'px',
+               height: rss.image.height + 'px',
                title: rss.image.title,
                align: "right",
                valign: "baseline",
