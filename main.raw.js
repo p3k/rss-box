@@ -197,6 +197,7 @@ $(function() {
       $('#titleBarColor').attr({disabled: config.headless});
       $('#titleBarTextColor').attr({disabled: config.headless});
       $('#textColor').attr({disabled: config.compact});
+      $('#radius').attr({disabled: !Modernizr.borderradius});
       return;
    }
 
