@@ -13,7 +13,7 @@ cp index.js main.js
 cat jquery.ba-bbq.min.js >> index.js
 $compress index.raw.js >> index.js
 
-cat jquery.miniColors.min.js >> main.js
+cat jquery.miniColors.min.js modernizr.js >> main.js
 $compress main.raw.js >> main.js
 
 $compress jquery.miniColors.css > main.css
