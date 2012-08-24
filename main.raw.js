@@ -1,7 +1,7 @@
 $(function() {
  
    var BASE_URI = '//p3k.org/rss/'; // Protocol-less URL, usable with both, HTTP and HTTPS servers
-   var FERRIS_URI = location.protocol + '//services.tobischaefer.com/ferris?callback=?&group=rssbox';
+   var FERRIS_URI = location.protocol + '//p3k-services.appspot.com/ferris?callback=?&group=rssbox';
 
    if (typeof DEBUG !== 'undefined' && DEBUG === true) {
       BASE_URI = 'http://macke.local/~tobi/rss-box/';

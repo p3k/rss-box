@@ -1,8 +1,8 @@
 (function() {
 
    var BASE_URI = location.protocol + '//p3k.org/rss/';
-   var ROXY_URI = location.protocol + '//services.tobischaefer.com/roxy';
-   var FERRIS_URI = location.protocol + '//services.tobischaefer.com/ferris?callback=?&group=rssbox';
+   var ROXY_URI = location.protocol + '//p3k-services.appspot.com/roxy';
+   var FERRIS_URI = location.protocol + '//p3k-services.appspot.com/ferris?callback=?&group=rssbox';
    
    if (typeof DEBUG !== 'undefined' && DEBUG === true) {
       BASE_URI = 'http://macke.local/~tobi/rss-box/';
