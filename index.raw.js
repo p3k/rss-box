@@ -166,6 +166,12 @@
          }
          img.show();                     
       });
+      
+      // Update dimensions of iframe, embed and object elements to fit in the box
+      var width = config.width - 20;
+      $('.rssbox iframe').attr({width: width, height: 'auto'});
+      $('.rssbox object').attr({width: width, height: 'auto'});
+      $('.rssbox embed').attr({width: width, height: 'auto'});      
    }
    
    function getDocument(xml) {
@@ -421,7 +427,7 @@
                return title;
             })(),
             description: (!config.compact || !item.title) ? item.description : '',
-            buttons: renderButtons(item.enclosure, item.source),
+            buttons: renderButtons(item.enclosure, item.source)
          });
       }
       
