@@ -48,8 +48,7 @@
 
 	  'use strict';
 
-	   var $ = window.jQuery = __webpack_require__(1).noConflict();
-	   //require('jquery-migrate');
+	   var $ = window.jQuery = window.jQuery || __webpack_require__(1).noConflict();
 	   __webpack_require__(2);
 
 	   var templates = $(__webpack_require__(3));
@@ -86,7 +85,8 @@
 	      // main() is called recursively, removing one script element at a time
 	      // until no matching script element is available, anymore.
 	      var script = $('script').filter(function() {
-	         return this.src.indexOf(BASE_URI + '/main.js') === 0;
+	         return this.src.indexOf(BASE_URI + '/main.js') === 0 ||
+	            this.src.indexOf(BASE_URI + '/index.js') === 0; // b/w compat
 	      }).get(0);
 
 	      if (!script) {
@@ -11854,7 +11854,7 @@
 /* 4 */
 /***/ function(module, exports) {
 
-	var TARGET = 'dev';
+	var TARGET = 'production';
 
 	var BASE_URI = location.protocol + '//p3k.org/rss';
 	var ROXY_URI = location.protocol + '//p3k-services.appspot.com/roxy';

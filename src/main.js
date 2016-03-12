@@ -2,8 +2,7 @@
 
   'use strict';
 
-   var $ = window.jQuery = require('jquery').noConflict();
-   //require('jquery-migrate');
+   var $ = window.jQuery = window.jQuery || require('jquery').noConflict();
    require('jquery-bbq');
 
    var templates = $(require('raw!./templates.html'));
@@ -40,7 +39,8 @@
       // main() is called recursively, removing one script element at a time
       // until no matching script element is available, anymore.
       var script = $('script').filter(function() {
-         return this.src.indexOf(BASE_URI + '/main.js') === 0;
+         return this.src.indexOf(BASE_URI + '/main.js') === 0 ||
+            this.src.indexOf(BASE_URI + '/index.js') === 0; // b/w compat
       }).get(0);
 
       if (!script) {

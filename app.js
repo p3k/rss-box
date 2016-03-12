@@ -11397,7 +11397,7 @@
 /* 11 */
 /***/ function(module, exports) {
 
-	var TARGET = 'dev';
+	var TARGET = 'production';
 
 	var BASE_URI = location.protocol + '//p3k.org/rss';
 	var ROXY_URI = location.protocol + '//p3k-services.appspot.com/roxy';
