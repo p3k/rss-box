@@ -180,10 +180,12 @@
 	   }
 
 	   function polish(rss, config) {
+	      var container = $('#' + config.id);
+
 	      if (config.headless) {
-	         $('.rssbox-titlebar').hide();
-	         $('.rssbox').css({border: 'none'});
-	         $('.rssbox-content').css({'border-top': 'none'});
+	         container.css({border: 'none'});
+	         container.find('.rssbox-titlebar').hide();
+	         container.find('.rssbox-content').css({'border-top': 'none'});
 	      }
 
 	      // Update unspecified dimensions of RSS image with actual width and/or height.
@@ -575,11 +577,11 @@
 
 	      if (!style.length) {
 	        var style = document.createElement('style');
-	        $('head').append(style);
+	        style.id = config.id + '-styles';
 	        style.type = 'text/css';
 	        style.rel = 'stylesheet';
 	        style.media = 'screen';
-	        style.id = config.id + '-styles';
+	        $('head').append(style);
 	      }
 
 	      if (style.styleSheet) {
