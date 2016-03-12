@@ -85,8 +85,11 @@
 	      // main() is called recursively, removing one script element at a time
 	      // until no matching script element is available, anymore.
 	      var script = $('script').filter(function() {
-	         return this.src.indexOf(BASE_URI + '/main.js') === 0 ||
-	            this.src.indexOf(BASE_URI + '/index.js') === 0; // b/w compat
+	         var src = $(this).attr('src');
+	         return src && (
+	            src.indexOf(BASE_URI + '/index.js') === 0 || // b/w compat
+	            src.indexOf(BASE_URI + '/main.js') === 0
+	         );
 	      }).get(0);
 
 	      if (!script) {
@@ -11856,7 +11859,7 @@
 
 	var TARGET = 'production';
 
-	var BASE_URI = location.protocol + '//p3k.org/rss';
+	var BASE_URI = '//p3k.org/rss';
 	var ROXY_URI = location.protocol + '//p3k-services.appspot.com/roxy';
 	var FERRIS_URI = location.protocol + '//p3k-services.appspot.com/ferris?callback=?&group=rssbox';
 

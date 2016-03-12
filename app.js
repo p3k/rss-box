@@ -11399,7 +11399,7 @@
 
 	var TARGET = 'production';
 
-	var BASE_URI = location.protocol + '//p3k.org/rss';
+	var BASE_URI = '//p3k.org/rss';
 	var ROXY_URI = location.protocol + '//p3k-services.appspot.com/roxy';
 	var FERRIS_URI = location.protocol + '//p3k-services.appspot.com/ferris?callback=?&group=rssbox';
 
