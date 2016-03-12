@@ -1,0 +1,141 @@
+body {
+   margin: 10px;
+   padding: 10px;
+   font-family: 'Droid Serif', serif;
+}
+
+a {
+   text-decoration: none;
+}
+
+a:hover {
+   text-decoration: underline;
+}
+
+h3 {
+   margin: 10px 0 0 0;
+   font-size: 30px;
+   font-weight: normal;
+   line-height: 1.7em;
+}
+
+p, ul, li {
+   margin: .66em 0;
+   line-height: 1.4em;
+}
+
+code {
+   font-size: .9em;
+}
+
+div#preview {
+   float: left;
+   width: 200px;
+   min-height: 1em;
+   margin-bottom: 1em;
+}
+
+table#setup {
+   float: left;
+   width: 350px;
+   margin-bottom: 0;
+   border: 1px;
+   border-spacing: 0 0;
+}
+
+table#setup td {
+   padding: 4px;
+}
+
+small, label, #referrers li {
+   color: gray;
+   font-size: .8em;
+}
+
+button#reset {
+   margin-right: 5px;
+}
+
+button#reload {
+   font-weight: bold;
+   color: green;
+}
+
+#noscript {
+	position: fixed;
+	z-index: 99;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	padding: 1em;
+	background: rgba(255,255,255,0.8);
+	font-size: 6em;
+}
+
+#setup {
+   padding-left: 20px;
+   padding-right: 50px;
+}
+
+#setup td {
+   vertical-align: baseline;
+}
+
+#setup td:first-child {
+   text-align: right;
+   white-space: nowrap;
+}
+
+#title, #description, #date, #source {
+   font-size: .8em;
+}
+
+#url, #fontFace {
+   width: 165px;
+}
+
+#headless {
+   margin-right: 30px;
+}
+
+#maxItems, #width, #height, #radius {
+   width: 50px;
+}
+
+#code td {
+   padding-top: 30px;
+   vertical-align: top;
+}
+
+#code textarea {
+   width: 165px;
+   overflow: hidden;
+}
+
+#banner {
+   height: 85px;
+   vertical-align: top;
+}
+
+#about {
+   float: left;
+   width: 468px;
+   margin-right: 10px;
+}
+
+.rssbox a {
+   text-decoration: none;
+}
+
+.minicolors-theme-default .minicolors-input {
+  height: 13px;
+  padding-left: 20px;
+}
+
+.minicolors-theme-default .minicolors-swatch {
+  top: 1px;
+  left: 0;
+  width: 17px;
+  height: 17px;
+}

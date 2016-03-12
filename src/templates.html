@@ -15,8 +15,16 @@
 #${id} a:hover {
    text-decoration: underline;
 }
+#${id} figure {
+   margin: 0;
+   padding: 0;
+}
+#${id} figcaption {
+   display: none;
+}
 #${id} img {
-   display: none;  
+   display: none;
+   max-height: ${width}px;
 }
 #${id} .rssbox-titlebar {
    padding: 5px 3px 5px 10px;
@@ -36,7 +44,7 @@
    clear: both;
 }
 #${id} .rssbox-item-content {
-   margin-bottom: 0.8em; 
+   margin-bottom: 0.8em;
    color: ${textColor};
 }
 #${id} form {
@@ -47,9 +55,9 @@
    font-size: 80%;
 }
 .rssbox-promo {
-   margin: 0 -5px -1px 0; 
-   text-align: right; 
-   font-size: 7pt; 
+   margin: 0 -5px -1px 0;
+   text-align: right;
+   font-size: 7pt;
    letter-spacing: 1px;
 }
 </script>
@@ -81,12 +89,12 @@
 </script>
 
 <script type='text/plain' class='image template'>
-<a href="${link}"><span title='${title}' class='${class}' style='display: ${display}; float: ${align}; height: ${height}; width: ${width}; margin: ${vspace} ${hspace}; padding-left: ${padding}; background-image: url(${source}); background-position: left center; background-repeat: no-repeat;'></span></a>  
+<a href="${link}"><span title='${title}' class='${class}' style='display: ${display}; float: ${align}; height: ${height}; width: ${width}; margin: ${vspace} ${hspace}; padding-left: ${padding}; background-image: url(${source}); background-position: left center; background-repeat: no-repeat;'></span></a>
 </script>
 
 <script type='text/plain' class='input template'>
 <form method="get" action="${link}">
-<input type="text" name="${name}" size="15" placeholder='${description}'> 
+<input type="text" name="${name}" size="15" placeholder='${description}'>
 <input type="submit" value="${title}">
 </form>
 </script>
@@ -105,11 +113,11 @@ ${year}-${month}-${day}, ${hours}:${minutes}h
    <channel>
       <title>RSS Box Error</title>
       <link>${link}</link>
-      <description>This output was automatically generated to report an error 
+      <description>This output was automatically generated to report an error
       that occurred during a request to the JavaScript RSS Box Viewer.</description>
       <item>
          <title>Oops, something went wrong...</title>
-         <description>An error occurred while processing the request to the 
+         <description>An error occurred while processing the request to the
          JavaScript RSS Box Viewer.</description>
       </item>
       <item>
@@ -117,8 +125,8 @@ ${year}-${month}-${day}, ${hours}:${minutes}h
          <description>${message}</description>
       </item>
       <item>
-         <content:encoded><![CDATA[Most likely, this might have happened because of a 
-         non-existent or invalid RSS feed URL. <a href="${validatorUrl}">Please check</a> and possibly correct 
+         <content:encoded><![CDATA[Most likely, this might have happened because of a
+         non-existent or invalid RSS feed URL. <a href="${validatorUrl}">Please check</a> and possibly correct
          your input, then try again.]]></content:encoded>
       </item>
    </channel>
