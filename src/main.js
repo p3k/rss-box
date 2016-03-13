@@ -1,14 +1,20 @@
 (function() {
 
-   var BASE_URI = location.protocol + '//p3k.org/rss/';
-   var ROXY_URI = location.protocol + '//p3k-services.appspot.com/roxy';
-   var FERRIS_URI = location.protocol + '//p3k-services.appspot.com/ferris?callback=?&group=rssbox';
-   
-   if (typeof DEBUG !== 'undefined' && DEBUG === true) {
-      BASE_URI = 'http://macke.local/~tobi/rss-box/';
-      ROXY_URI = 'http://macke.local:8081/roxy';
-      FERRIS_URI = 'http://macke.local:8081/ferris?callback=?&group=rssbox';
-   }
+  'use strict';
+
+   var $ = window.jQuery = window.jQuery || require('jquery').noConflict();
+   require('jquery-bbq');
+
+   var templates = $(require('raw!./templates.html'));
+
+   var settings = require('./settings');
+   var Modernizr = require('../.modernizrrc');
+
+   var BASE_URI = settings.baseUri;
+   var ROXY_URI = settings.roxyUri;
+   var FERRIS_URI = settings.ferrisUri;
+
+   var ref;
 
    // Check if a RSS Box script was already loaded to prevent redundant loading of libraries.
    if (window._rss_box_framework_has_loaded) {
@@ -16,42 +22,35 @@
    } else {
       window._rss_box_framework_has_loaded = true;
    }
-   
-   // IE, what else…
-   if (!Date.now) {
+
+   if (!Modernizr.es5date) {
       Date.now = function() {
          return (new Date).valueOf();
       }
    }
-   
-   jQuery.noConflict();
 
-   var $ = jQuery; // This $ is a local variable!
-   var templates;
+   main();
 
-   load(BASE_URI + 'templates.html', function(data) {
-      templates = $(data.content).filter('script');
-      main();
-      if (location.href.indexOf(BASE_URI) < 0) {
-         $.getJSON(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
-      }
-   });
-   
+   if (location.href.indexOf(BASE_URI) < 0) {
+      $.getJSON(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
+   }
+
    function main() {
       // main() is called recursively, removing one script element at a time
       // until no matching script element is available, anymore.
       var script = $('script').filter(function() {
-         return this.src.indexOf(BASE_URI + 'index.js') === 0;
-      }).get(0);
-      
-      if (!script) {
+         var src = $(this).attr('src');
+         var re = /^(?:https?:)?\/\/.+(?:main|index)\.js/;
+         return src && re.test(src);
+      }).eq(0);
+
+      if (!script.length) {
          return;
       }
 
-      script = $(script);
-      
       // Define default settings (different from main.js for b/w compatibility reasons.)
       var config = {
+         id: 'rssbox-' + Date.now() + ('' + Math.random()).substr(2),
          url: 'http://blog.p3k.org/stories.xml',
          maxItems: 7,
          width: 200,
@@ -69,9 +68,9 @@
          headless: false,
          fontFace: 'auto sans-serif'
       }
-      
+
       var url = script.attr('src');
-      // Remove src attribute to prevent multiple scripts from redundantly 
+      // Remove src attribute to prevent multiple scripts from redundantly
       // processing the same script element.
       script.attr('src', null);
       var index = url.indexOf('?');
@@ -87,13 +86,13 @@
             } else {
                config[i] = value;
             }
-         } 
+         }
       }
-      
+
       // Fix boolean settings.
-      config.compact === 'false' && (config.compact = false);
-      config.showXmlButton === 'false' && (config.showXmlButton = false);
-      config.headless === 'false' && (config.headless = false);
+      if (config.compact === 'false') config.compact = false;
+      if (config.showXmlButton === 'false') config.showXmlButton = false;
+      if (config.headless === 'false') config.headless = false;
 
       load(config.url, function(data, status, xhr) {
          var doc = getDocument(data.content || '');
@@ -114,6 +113,7 @@
                }
             }
          }
+
          return main(); // Recursion
 
          /*console.log('param:', param)
@@ -124,23 +124,25 @@
 
       return;
    }
-   
+
    function load(url, callback) {
       $.getJSON(ROXY_URI + '?callback=?&url=' + encodeURIComponent(url), callback);
    }
-   
+
    function polish(rss, config) {
-      if (config.headless) { 
-         $('.rssbox-titlebar').hide();
-         $('.rssbox').css({border: 'none'});
-         $('.rssbox-content').css({'border-top': 'none'});
+      var container = $('#' + config.id);
+
+      if (config.headless) {
+         container.css({border: 'none'});
+         container.find('.rssbox-titlebar').hide();
+         container.find('.rssbox-content').css({'border-top': 'none'});
       }
 
       // Update unspecified dimensions of RSS image with actual width and/or height.
       if (rss.image && rss.image.source && (!rss.image.width || !rss.image.height)) {
          var image = new Image;
          image.src = rss.image.source;
-         $(image).load(function() {
+         $(image).on('load', function() {
             if (!rss.image.width) {
                rss.image.width = this.width;
                $('.rssbox-image').css({width: this.width});
@@ -149,11 +151,11 @@
                rss.image.height = this.height;
                $('.rssbox-image').css({height: this.height});
             }
-         });         
+         });
       }
 
       // Update dimensions of image elements to fit in the box.
-      $('.rssbox img').each(function() {
+      $('.rssbox img').on('load', function() {
          var img = $(this);
          var width = img.width();
          if (width < 1) {
@@ -162,18 +164,19 @@
          var margin = 20;
          if (config.width - width < margin) {
             var newWidth = config.width - margin;
-            img.width(newWidth).height(img.height() * newWidth / width);
+            img.width(newWidth)
+               .height('auto');
          }
-         img.show();                     
+         img.show();
       });
-      
+
       // Update dimensions of iframe, embed and object elements to fit in the box
       var width = config.width - 20;
       $('.rssbox iframe').attr({width: width, height: 'auto'});
       $('.rssbox object').attr({width: width, height: 'auto'});
-      $('.rssbox embed').attr({width: width, height: 'auto'});      
+      $('.rssbox embed').attr({width: width, height: 'auto'});
    }
-   
+
    function getDocument(xml) {
       if (xml) {
          if (document.implementation.createDocument) {
@@ -197,7 +200,7 @@
       }
       return str.toLowerCase();
    }
-   
+
    function getOuterHtml(element) {
       var wrapper = document.createElement('div');
       wrapper.appendChild(element);
@@ -221,11 +224,11 @@
          }
          return new Date(millis);
       }
-      
+
       function getError() {
          var msg = null, root;
          if (!doc || data.headers.error) {
-            msg = (data.headers.error === 404 ? '404 File not found.' : 
+            msg = (data.headers.error === 404 ? '404 File not found.' :
                   data.headers.message || 'Unknown error.');
          } else if (doc.parseError && doc.parseError.errorCode) {
             msg = doc.parseError.reason; // IExplore
@@ -233,7 +236,7 @@
             var errorNode;
             if (root.nodeName === "parsererror") {
                msg = doc.documentElement.textContent; // Mozilla
-            } else if ((errorNode = root.childNodes[0]) && 
+            } else if ((errorNode = root.childNodes[0]) &&
                   errorNode.nodeName === "parsererror") {
                msg = errorNode.textContent; // Safari
             } else if (!/rss|rdf|scriptingNews/i.test(doc.documentElement.nodeName)) {
@@ -289,7 +292,7 @@
          rss.title = $root.find('channel > title').text();
          rss.description = $root.find('channel > description').text();
          rss.link = $root.find('channel > link').text();
-         
+
          var images = $root.find('image');
          ref = rss.image = {
             source: images.find('url').text() || images.attr('rdf:resource'),
@@ -313,7 +316,7 @@
             ref.title = input.find('title').text();
          }
       } else {
-         rss.date = getDate($(channel).find("lastBuildDate") || 
+         rss.date = getDate($(channel).find("lastBuildDate") ||
                channel.find('pubDate').text() || data.headers.date);
          rss.rights = channel.find('copyright').text();
       }
@@ -327,7 +330,7 @@
             ref.description = item.find('text').text().replace(/\n/g, " ");
             ref.link = item.find('link').text();
             if (text = $.trim(item.find("linetext").text().replace(/\n/g, " "))) {
-               ref.description = ref.description.replace(new RegExp(text), 
+               ref.description = ref.description.replace(new RegExp(text),
                      '<a href="' + item.find('url').text() + '">' + text + '</a>');
             }
          } else {
@@ -376,15 +379,15 @@
 
       return rss;
    }
-   
+
    function renderBox(rss, config) {
-      
+
       function renderButtons(enclosure, source) {
          var result = "";
          if (enclosure && enclosure.link) {
             result += render('image', {
                display: 'inline',
-               source: BASE_URI + "images/attach.png",
+               source: require("./img/attach.png"),
                title: enclosure.type,
                link: encodeURI(enclosure.link),
                padding: '16px'
@@ -393,13 +396,13 @@
          if (source && source.link) {
             result += render('image', {
                display: 'inline',
-               source: BASE_URI + "images/globe.png",
+               source: require("./img/globe.png"),
                title: source.title,
                link: encodeURI(source.link),
                padding: '15px'
             });
          }
-         return result;         
+         return result;
       }
 
       if (rss.error) {
@@ -430,11 +433,9 @@
             buttons: renderButtons(item.enclosure, item.source)
          });
       }
-      
-      var id = 'rssbox-' + Date.now();
-      
+
       var box = render('box', {
-         id: id,
+         id: config.id,
 
          title: rss.link ? render('link', {
             link: encodeURI(rss.link),
@@ -452,7 +453,7 @@
             return render('image', {
                display: 'inline-block',
                link: config.url,
-               source: BASE_URI + "images/rss.png",
+               source: require("./img/rss.png"),
                title: rss.format + " " + rss.version,
                width: '16px',
                height: '16px',
@@ -478,7 +479,7 @@
                valign: "baseline",
                hspace: '5px',
                vspace: '5px'
-            });        
+            });
          })(),
 
          input: (function() {
@@ -490,7 +491,7 @@
                description: rss.input.description,
                name: rss.input.name,
                title: rss.input.title
-            });            
+            });
          })(),
 
          date: renderDate(rss.date),
@@ -508,7 +509,7 @@
 
       // FIXME: This belongs somewhere else… (or does it?)
       var css = render('stylesheet', {
-         id: id,
+         id: config.id,
          width: config.width,
          height: config.height < 0 ? 'auto' : config.height + 'px',
          frameColor: config.frameColor,
@@ -522,20 +523,26 @@
          linkColor: config.linkColor
       });
 
-      var style = document.createElement('style');
-      $('head').prepend(style);
-      style.type = 'text/css';
-      style.rel = 'stylesheet';
-      style.media = 'screen';
+      var style = $('#' + config.id + '-styles');
+
+      if (!style.length) {
+        var style = document.createElement('style');
+        style.id = config.id + '-styles';
+        style.type = 'text/css';
+        style.rel = 'stylesheet';
+        style.media = 'screen';
+        $('head').append(style);
+      }
+
       if (style.styleSheet) {
          style.styleSheet.cssText = css;
       } else {
          $(style).text(css);
       }
-      
+
       return box;
    }
-   
+
    function renderDate(date) {
 
       function padZero(n) {
@@ -552,9 +559,8 @@
          timeZone: "" // date.getTimezoneOffset()
       });
    }
-   
+
    function render(name, data) {
-      //data || (data = {});
       var template = getTemplate(name);
       if (template && data) {
          return template.replace(/\$\{([^}]+)\}/g, function() {
@@ -563,13 +569,11 @@
             return value || '';
          });
       }
-      return ''; 
+      return '';
    }
-   
+
    function getTemplate(name) {
-      return $.trim(templates.filter(function() {
-         return $(this).hasClass('template') && $(this).hasClass(name);
-      }).html());
+      return $.trim(templates.filter('.' + name).html());
    }
 
 })();
