@@ -14,7 +14,7 @@ module.exports = {
         loader: 'modernizr'
       },
       {
-        test: /\.js-disabled$/,
+        test: /\.js$/,
         loader: 'uglify'
       }
     ]
