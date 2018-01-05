@@ -1,4 +1,4 @@
-import { URLS as DEV_URLS } from './dev';
+import { URLS as LOCAL_URLS } from './local';
 
 export const defaults = {
   boxFillColor: '#fff',
@@ -43,5 +43,5 @@ export const URLS = Object.assign(
     roxy: location.protocol + '//p3k-services.appspot.com/roxy',
     ferris: location.protocol + '//p3k-services.appspot.com/ferris?callback=?&group=rssbox'
   },
-  DEV_URLS
+  LOCAL_URLS
 );
