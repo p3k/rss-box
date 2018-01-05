@@ -60,7 +60,7 @@
     </tr>
     <tr>
       <td>
-        <label on:click='label(event)' title='Experimental feature'>⚠ Content height</label>
+        <label on:click='label(event)' title='Experimental feature'>Content height ⚠️</label>
       </td>
       <td>
         <input type='number' name='height' value='{{ $height }}' min=-1 max=9999 on:change='update(event)'>
@@ -217,14 +217,14 @@
   export default {
     methods: {
       update(event) {
-        let name = event.target.name;
-        let type = event.target.type;
-        let value = event.target[type === 'checkbox' ? 'checked' : 'value'];
+        const name = event.target.name;
+        const type = event.target.type;
+        const value = event.target[type === 'checkbox' ? 'checked' : 'value'];
         this.store.set({ [name]: value });
       },
 
       reload(event) {
-        let url = this.store.get('url');
+        const url = this.store.get('url');
         this.store.set({ url: null });
         this.store.set({ url });
       },
@@ -237,13 +237,13 @@
       },
 
       label(event) {
-        let sibling = event.target.parentNode.nextElementSibling;
+        const sibling = event.target.parentNode.nextElementSibling;
         let input = sibling.querySelector('input');
         if (!input) input = sibling.querySelector('summary');
         if (!input) input = sibling.querySelector('textarea');
         if (!input) return;
         if (input.click) input.click();
-        if (input.focus) input.focus();
+        if (input.select) input.select();
       }
     }
   }
