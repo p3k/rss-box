@@ -1,23 +1,47 @@
-var TARGET = 'production';
+import { URLS as DEV_URLS } from './dev';
 
-var BASE_URI = '//p3k.org/rss';
-var ROXY_URI = location.protocol + '//p3k-services.appspot.com/roxy';
-var FERRIS_URI = location.protocol + '//p3k-services.appspot.com/ferris?callback=?&group=rssbox';
-
-switch (TARGET) {
-  case 'mixed':
-  BASE_URI = 'http://localhost:8000';
-  break;
-
-  case 'dev':
-  BASE_URI = 'http://localhost:8000';
-  ROXY_URI = 'http://localhost:8001/roxy';
-  FERRIS_URI = 'http://localhost:8001/ferris?callback=?&group=rssbox';
-  break;
-}
-
-module.exports = {
-  baseUri: BASE_URI,
-  roxyUri: ROXY_URI,
-  ferrisUri: FERRIS_URI
+export const defaults = {
+  boxFillColor: '#fff',
+  compact: false,
+  fontFace: '10pt sans-serif',
+  frameColor: '#000',
+  headless: false,
+  height: -1,
+  linkColor: '',
+  maxItems: 7,
+  radius: 0,
+  showXmlButton: true,
+  textColor: '#000',
+  titleBarColor: '#add8e6',
+  titleBarTextColor: '#000',
+  url: 'https://blog.p3k.org/stories.xml',
+  width: 200
 };
+
+export const KEYS = [
+  'align',
+  'boxFillColor',
+  'compact',
+  'fontFace',
+  'frameColor',
+  'headless',
+  'height',
+  'linkColor',
+  'maxItems',
+  'radius',
+  'showXmlButton',
+  'textColor',
+  'titleBarColor',
+  'titleBarTextColor',
+  'url',
+  'width'
+];
+
+export const URLS = Object.assign(
+  {
+    base: '//p3k.org/rss',
+    roxy: location.protocol + '//p3k-services.appspot.com/roxy',
+    ferris: location.protocol + '//p3k-services.appspot.com/ferris?callback=?&group=rssbox'
+  },
+  DEV_URLS
+);

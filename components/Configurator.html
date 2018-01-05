@@ -1,0 +1,250 @@
+<form on:submit='event.preventDefault()'>
+  <table class='table'>
+    <colgroup>
+      <col width='*'>
+      <col width='90%'>
+    </colgroup>
+    <tr>
+      <td>
+        <label on:click='label(event)'>Feed URL</label>
+      </td>
+      <td>
+        <input type='url' name='url' value='{{ $url }}' required on:change='update(event)'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label>Title</label>
+      </td>
+      <td>{{ $title }}</td>
+    </tr>
+    <tr>
+      <td class='top'>
+        <label on:click='label(event)'>Description</label>
+      </td>
+      <td>
+        <details>
+          <summary></summary>
+          {{ $description }}
+        </details>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label>Last build</label>
+      </td>
+      <td>{{ $formattedDate }}</td>
+    </tr>
+    <tr>
+      <td>
+        <label>Source</label>
+      </td>
+      <td><a href='{{ $url }}'>{{ $format }} {{ $version }}</a></td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>Max. items</label>
+      </td>
+      <td>
+        <input type='number' name='maxItems' value='{{ $maxItems }}' min=1 max=99  required on:change='update(event)'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>Box width</label>
+      </td>
+      <td>
+        <input type='number' name='width' value='{{ $width }}' min=100 max=9999 on:change='update(event)'>
+        <small>px</small>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)' title='Experimental feature'>⚠ Content height</label>
+      </td>
+      <td>
+        <input type='number' name='height' value='{{ $height }}' min=-1 max=9999 on:change='update(event)'>
+        <small>px</small>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>Corner radius</label>
+      </td>
+      <td>
+        <input type='number' name='radius' value='{{ $radius }}' min=0 max=999 on:change='update(event)'>
+        <small>px</small>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>XML button</label>
+      </td>
+      <td>
+        <input type='checkbox' name='showXmlButton' value='1' checked='{{ $showXmlButton }}' on:change='update(event)'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>Headless</label>
+      </td>
+      <td>
+        <input type='checkbox' name='headless' value='1' checked='{{ $headless }}' on:change='update(event)'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>Compact view</label>
+      </td>
+      <td>
+        <input type='checkbox' name='compact' value='1' checked='{{ $compact }}' on:change='update(event)'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>Frame color</label>
+      </td>
+      <td>
+        <input type='color' name='frameColor' value='{{ $frameColor }}' size=6 maxlength=7 on:change='update(event)'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>Titlebar color</label>
+      </td>
+      <td>
+        <input type='color' name='titleBarColor' value='{{ $titleBarColor }}' size=6 maxlength=7 on:change='update(event)'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>Title color</label>
+      </td>
+      <td>
+        <input type='color' name='titleBarTextColor' value='{{ $titleBarTextColor }}' size=6 maxlength=7 on:change='update(event)'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>Box color</label>
+      </td>
+      <td>
+        <input type='color' name='boxFillColor' value='{{ $boxFillColor }}' size=6 maxlength=7 on:change='update(event)'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>Text color</label>
+      </td>
+      <td>
+        <input type='color' name='textColor' value='{{ $textColor }}' size=6 maxlength=7 on:change='update(event)'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>Link color</label>
+      </td>
+      <td>
+        <input type='color' name='linkColor' value='{{ $linkColor }}' size=6 maxlength=7 on:change='update(event)'>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>Font face</label>
+      </td>
+      <td>
+        <input name='fontFace' value='{{ $fontFace }}' on:change='update(event)'>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        <button class='btn btn-sm btn-b' on:click='reload(event)'>Reload</button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click='label(event)'>
+          HTML code<br>
+          (copy&amp;pasta)
+        </label>
+      </td>
+      <td>
+        <textarea name='code' cols='10' rows='3' readonly on:click='copy(event)'>{{ $code }}</textarea>
+      </td>
+    </tr>
+    <tr>
+      <td class='top'>
+        <label on:click='label(event)'>
+          Referrers<br>
+          (last 24 hours)
+        </label>
+      </td>
+      <td class='top'>
+        <details>
+          <summary></summary>
+        </details>
+      </td>
+    </tr>
+  </table>
+</form>
+
+<style>
+  tr td:first-child {
+    color: #999;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  summary {
+    outline: none;
+  }
+
+  .top {
+    vertical-align: top;
+  }
+
+  [name=url], [name=fontFace], [name=code] {
+    width: 90%;
+  }
+
+  [type=color], [type=number] {
+    width: 50px;
+  }
+</style>
+
+<script>
+  export default {
+    methods: {
+      update(event) {
+        let name = event.target.name;
+        let type = event.target.type;
+        let value = event.target[type === 'checkbox' ? 'checked' : 'value'];
+        this.store.set({ [name]: value });
+      },
+
+      reload(event) {
+        let url = this.store.get('url');
+        this.store.set({ url: null });
+        this.store.set({ url });
+      },
+
+      copy(event) {
+        try {
+          event.target.select();
+          document.execCommand('copy');
+        } catch (error) { }
+      },
+
+      label(event) {
+        let sibling = event.target.parentNode.nextElementSibling;
+        let input = sibling.querySelector('input');
+        if (!input) input = sibling.querySelector('summary');
+        if (!input) input = sibling.querySelector('textarea');
+        if (!input) return;
+        if (input.click) input.click();
+        if (input.focus) input.focus();
+      }
+    }
+  }
+</script>

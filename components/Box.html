@@ -1,0 +1,188 @@
+<div data-link-color='{{ $linkColor }}' class='rssbox rssBox' style='width: {{ $width }}px;
+    border-color: {{ $frameColor }};
+    border-radius: {{ $radius }}px;
+    font: {{ $fontFace }};'>
+  {{ #if !$headless }}
+    <div class='rssbox-titlebar' style='color: {{ $titleBarTextColor }};
+        background-color: {{ $titleBarColor }};
+        border-bottom-color: {{ $frameColor }};'>
+      {{ #if $showXmlButton }}
+        <div style='float: right;'>
+          <a href='{{ $url }}'>
+            <span class='rssbox-icon' title='{{ $format }} {{ $version }}'></span>
+          </a>
+        </div>
+      {{ /if }}
+      <div>
+        <a href='{{ $link }}' style='color: {{ $titleBarTextColor }};'>
+          {{ $title }}
+        </a>
+      </div>
+      <div class='rssbox-date'>
+        {{ $formattedDate }}
+      </div>
+    </div>
+  {{ /if }}
+  <div class='rssbox-content rssBoxContent' style='background-color: {{ $boxFillColor }};
+      height: {{ height }};'>
+    {{ #if $image }}
+      <a href='{{ $image.link }}' title='{{ $image.title }}'>
+        <span alt='{{ $image.description }}' class='rssbox-image'
+            style='background-image: url({{ $image.source }});
+            width: {{ $image.width }}px;
+            height: {{ $image.height }}px;'></span>
+      </a>
+    {{ /if }}
+    {{ #each $items as item, index }}
+      {{ #if index < $maxItems }}
+        <div class='rssbox-item-content rssBoxItemContent' style='color: {{ $textColor }}'>
+          <div style='font-weight: {{ $fontWeight }};'>
+            <a href='{{ item.link }}' style='color: {{ $textColor }}'>
+              {{ item.title }}
+            </a>
+          </div>
+          {{ #if !$compact }}
+            {{{ item.description }}}
+            {{ item.buttons }}
+          {{ /if }}
+        </div>
+      {{ /if }}
+    {{ /each }}
+    {{ #if $input }}
+      TODO
+    {{ /if }}
+    <div class='rssbox-promo rssBoxPromo'>
+      <a href='http://p3k.org/rss'>RSS Box by p3k.org</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .rssbox {
+    width: 200px;
+    border: 1px solid #000;
+    font: sans-serif;
+    float: left;
+    overflow: hidden;
+    border-radius: 0;
+    -moz-border-radius: 0;
+  }
+
+  .rssbox-icon, .rssbox-image {
+    display: inline-block;
+    float: right;
+    margin: 5px 0 5px 5px;
+    background-position: left center;
+    background-repeat: no-repeat;
+  }
+
+  .rssbox-icon {
+    height: 16px;
+    width: 16px;
+    margin: 1px 4px;
+    background-image: url(img/rss.png);
+    background-size: 16px 16px;
+  }
+
+  .rssbox-titlebar {
+    padding: 5px 3px 5px 10px;
+    color: #000;
+    background-color: #add8e6;
+    border-bottom: 1px solid #000;
+    font-weight: bold;
+  }
+
+  .rssbox-content {
+    height: auto;
+    padding: 5px 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #fff;
+    clear: both;
+  }
+
+  .rssbox-item form {
+    margin-bottom: 0.8em;
+  }
+
+  .rssbox-date {
+    margin-top: 1px;
+    font-size: 80%;
+  }
+
+  .rssbox-promo {
+    margin: 0 -5px -1px 0;
+    text-align: right;
+    font-size: 7pt;
+    letter-spacing: 0.5px;
+  }
+</style>
+
+<script>
+  export default {
+    oncreate() {
+      this.store.observe('compact', compact => {
+        this.store.set({ fontWeight: compact ?  'initial' : 'bold' });
+      });
+
+      let id = 'rssbox-dynamic-stylesheet';
+      let css = window[id];
+
+      if (!css) {
+        css = document.createElement('style');
+        css.id = id;
+        css.innerHTML = `
+          .rssbox * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+          }
+
+          .rssbox a {
+            text-decoration: none;
+          }
+
+          .rssbox a:hover {
+            text-decoration: underline;
+          }
+
+          .rssbox-titlebar a {
+            color: #000;
+          }
+
+          .rssbox-content p, .rssbox-content img {
+            margin-top: 0.5em;
+          }
+
+          .rssbox-content img {
+            width: 100% !important;
+            height: auto ;
+          }
+
+          .rssbox-content figcaption {
+            font-size: 0.8em;
+          }
+
+          .rssbox-item-content {
+            margin-bottom: 0.8em;
+          }`;
+        document.head.append(css);
+      }
+
+      this.store.observe('linkColor', color => {
+        if (!color) return;
+
+        let rule =
+          `.rssbox[data-link-color="${color}"] .rssbox-item-content a {
+            color: ${color};
+          }`;
+
+        if (css.innerHTML.indexOf(rule) < 0) css.innerHTML += rule;
+      });
+    },
+
+    computed: {
+      height: $height => $height > -1 ? $height + 'px' : '100%'
+    }
+  };
+</script>
