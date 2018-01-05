@@ -119,55 +119,33 @@
 </style>
 
 <script>
+  import { URLS } from '../src/settings';
+
   export default {
     oncreate() {
+      const staticId = 'rssbox-static-stylesheet';
+      const dynamicId = 'rssbox-dynamic-stylesheet';
+
+      let staticCss = window[staticId];
+      let dynamicCss = window[dynamicId];
+
+      if (!staticCss) {
+        staticCss = document.createElement('link');
+        staticCss.id = staticId;
+        staticCss.rel = 'stylesheet';
+        staticCss.href = URLS.base + '/box.css';
+        document.head.append(staticCss);
+      }
+
+      if (!dynamicCss) {
+        dynamicCss = document.createElement('style');
+        dynamicCss.id = dynamicId;
+        document.head.append(dynamicCss);
+      }
+
       this.store.observe('compact', compact => {
         this.store.set({ fontWeight: compact ?  'initial' : 'bold' });
       });
-
-      let id = 'rssbox-dynamic-stylesheet';
-      let css = window[id];
-
-      if (!css) {
-        css = document.createElement('style');
-        css.id = id;
-        css.innerHTML = `
-          .rssbox * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-          }
-
-          .rssbox a {
-            text-decoration: none;
-          }
-
-          .rssbox a:hover {
-            text-decoration: underline;
-          }
-
-          .rssbox-titlebar a {
-            color: #000;
-          }
-
-          .rssbox-content p, .rssbox-content img {
-            margin-top: 0.5em;
-          }
-
-          .rssbox-content img {
-            width: 100% !important;
-            height: auto ;
-          }
-
-          .rssbox-content figcaption {
-            font-size: 0.8em;
-          }
-
-          .rssbox-item-content {
-            margin-bottom: 0.8em;
-          }`;
-        document.head.append(css);
-      }
 
       this.store.observe('linkColor', color => {
         if (!color) return;
@@ -177,7 +155,7 @@
             color: ${color};
           }`;
 
-        if (css.innerHTML.indexOf(rule) < 0) css.innerHTML += rule;
+        if (dynamicCss.innerHTML.indexOf(rule) < 0) dynamicCss.innerHTML += rule;
       });
     },
 
