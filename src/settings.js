@@ -37,11 +37,15 @@ export const KEYS = [
   'width'
 ];
 
+const rootUrl = '//p3k.org';
+const serviceUrl = '//p3k-services.appspot.com';
+
 export const URLS = Object.assign(
   {
-    base: '//p3k.org/rss',
-    roxy: location.protocol + '//p3k-services.appspot.com/roxy',
-    ferris: location.protocol + '//p3k-services.appspot.com/ferris?group=rssbox'
+    base: rootUrl,
+    app: rootUrl + '/rss',
+    roxy: location.protocol + serviceUrl + '/roxy',
+    ferris: location.protocol + serviceUrl + '/ferris?group=rssbox'
   },
   LOCAL_URLS
 );
