@@ -62,7 +62,12 @@
       {{ /if }}
     {{ /each }}
     {{ #if $input }}
-      TODO
+      <form class='rssbox-form' method='get' action='{{ $input.link }}'>
+        <input type='text' name='{{ $input.name }}'
+            placeholder='Enter search &amp; hit return…'
+            data-placeholder='{{ $input.description }}'>
+        <!-- input type='submit' value='{{ $input.title }}' -->
+      </form>
     {{ /if }}
     <div class='rssbox-promo rssBoxPromo'>
       <a href='http://p3k.org/rss'>RSS Box by p3k.org</a>
@@ -124,6 +129,11 @@
 
   .rssbox-form {
     margin-bottom: 0.8em;
+  }
+
+  .rssbox-form input {
+    padding: 5px;
+    background-color: #fff;
   }
 
   .rssbox-date {
