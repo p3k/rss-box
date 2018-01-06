@@ -181,15 +181,17 @@
         </label>
       </td>
       <td class='top'>
-        <details>
-          <summary></summary>
-        </details>
+        <Referrers/>
       </td>
     </tr>
   </table>
 </form>
 
 <style>
+  table {
+    overflow: scroll;
+  }
+
   tr td:first-child {
     color: #999;
     text-align: right;
@@ -214,7 +216,13 @@
 </style>
 
 <script>
+  import Referrers from './Referrers.html';
+
   export default {
+    components: {
+      Referrers
+    },
+
     methods: {
       update(event) {
         const name = event.target.name;

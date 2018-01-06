@@ -41,7 +41,7 @@ export const URLS = Object.assign(
   {
     base: '//p3k.org/rss',
     roxy: location.protocol + '//p3k-services.appspot.com/roxy',
-    ferris: location.protocol + '//p3k-services.appspot.com/ferris?callback=?&group=rssbox'
+    ferris: location.protocol + '//p3k-services.appspot.com/ferris?group=rssbox'
   },
   LOCAL_URLS
 );
