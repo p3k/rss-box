@@ -1,7 +1,7 @@
 {
   "name": "rss-box",
   "version": "18.1.0",
-  "description": "JavaScript RSS Box Viewer",
+  "description": "RSS Box Viewer",
   "main": "main.js",
   "scripts": {
     "build": "yarn build-app & yarn build-box & yarn build-main",
