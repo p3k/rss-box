@@ -1,23 +1,25 @@
 import { Store } from 'svelte/store';
 import { RssParser } from './RssParser';
-import { URLS } from './settings';
+import { URLS, defaults } from './settings';
 import error from './error';
 
 export default class RssStore extends Store {
-  constructor(url) {
-    const defaults = {
-      date: new Date(),
-      description: '',
-      format: '',
-      image: '',
-      input: '',
-      items: [],
-      title: '',
-      url: url || '',
-      version: ''
-    };
+  constructor() {
+    const settings = Object.assign(
+      {
+        date: new Date(),
+        description: '',
+        format: '',
+        image: '',
+        input: '',
+        items: [],
+        title: '',
+        version: ''
+      },
+      defaults
+    );
 
-    super(defaults);
+    super(settings);
 
     this.compute('formattedDate', ['date'], date => {
       if (!date) return;

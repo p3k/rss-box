@@ -17,7 +17,7 @@ const getQuery = () => {
   return query.join('&');
 };
 
-const store = new RssStore('https://blog.p3k.org/stories.xml');
+const store = new RssStore();
 
 store.compute('code', KEYS, () => {
   const query = getQuery().replace(/&/g, '&amp;');

@@ -14,7 +14,7 @@ export const defaults = {
   textColor: '#000',
   titleBarColor: '#add8e6',
   titleBarTextColor: '#000',
-  url: 'https://blog.p3k.org/stories.xml',
+  url: LOCAL_URLS.default || 'https://blog.p3k.org/stories.xml',
   width: 200
 };
 
