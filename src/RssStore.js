@@ -1,6 +1,7 @@
 import { Store } from 'svelte/store';
 import { RssParser } from './RssParser';
 import { URLS } from './settings';
+import error from './error';
 
 export default class RssStore extends Store {
   constructor(url) {
@@ -43,13 +44,24 @@ export default class RssStore extends Store {
     const url = this.get('url');
     if (!url) return;
 
-    fetch(URLS.roxy + '?url=' + encodeURIComponent(url)).then(res => {
-      res.text().then(json => {
-        const parser = RssParser();
-        const xml = JSON.parse(json).content;
-        const data = parser.parse(xml);
-        this.set(data);
+    fetch(URLS.roxy + '?url=' + encodeURIComponent(url))
+      .then(res => {
+        if (!res.ok) throw Error(res);
+
+        res
+          .text()
+          .then(json => {
+            const parser = RssParser();
+            const xml = JSON.parse(json).content;
+            const data = parser.parse(xml);
+            this.set(data);
+          })
+          .catch(message => {
+            this.set(error(url, message));
+          });
+      })
+      .catch(message => {
+        this.set(error(url, message));
       });
-    });
   }
 }

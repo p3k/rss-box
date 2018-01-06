@@ -29,9 +29,13 @@ function RssParser() {
     return node.textContent;
   };
 
-  var parseRss = function(root, type) {
-    var rss = { items: [] };
-    var channel = root.querySelector('channel');
+  const error = Error('Malformed RSS syntax');
+
+  const parseRss = function(root, type) {
+    const rss = { items: [] };
+    const channel = root.querySelector('channel');
+
+    if (!channel) throw error;
 
     rss.format = 'RSS';
     rss.version = type === 'rdf:RDF' ? '1.0' : root.getAttribute('version');
@@ -103,9 +107,11 @@ function RssParser() {
     return rss;
   };
 
-  var parseScriptingNews = function(root) {
-    var rss = { items: [] };
-    var channel = root.querySelector('header');
+  const parseScriptingNews = function(root) {
+    const rss = { items: [] };
+    const channel = root.querySelector('header');
+
+    if (!channel) throw error;
 
     rss.format = 'Scripting News';
     rss.version = getText(channel.querySelector('scriptingNewsVersion'));
