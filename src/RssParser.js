@@ -6,13 +6,13 @@ function RssParser() {
   // IE does not know forEach on node lists
   const forEach = Array.prototype.forEach;
 
-  var getDocument = function(xml) {
+  const getDocument = function(xml) {
     if (!xml) return;
 
-    var doc;
+    let doc;
 
     if (document.implementation.createDocument) {
-      var parser = new DOMParser();
+      const parser = new DOMParser();
       doc = parser.parseFromString(xml, 'application/xml');
     } else if (window.ActiveXObject) {
       doc = new window.ActiveXObject('Microsoft.XMLDOM');
@@ -23,7 +23,7 @@ function RssParser() {
     return doc;
   };
 
-  var getText = function(node) {
+  const getText = function(node) {
     if (!node) return '';
     if (node.length) node = node[0];
     return node.textContent;
@@ -43,7 +43,7 @@ function RssParser() {
     rss.description = getText(root.querySelector('channel > description'));
     rss.link = getText(root.querySelector('channel > link'));
 
-    var image = root.querySelector('image');
+    const image = root.querySelector('image');
 
     rss.image = image
       ? {
@@ -57,11 +57,11 @@ function RssParser() {
       : '';
 
     if (type === 'rdf:RDF') {
-      var date = channel.getElementsByTagNameNS(DC_NAMESPACE, 'date');
+      const date = channel.getElementsByTagNameNS(DC_NAMESPACE, 'date');
       rss.date = getDate(getText(date) /* || data.headers.date*/); // TODO
       rss.rights = getText(channel.getElementsByTagNameNS(DC_NAMESPACE, 'creator'));
 
-      var textInput = root.querySelector('textinput');
+      const textInput = root.querySelector('textinput');
 
       rss.input = textInput
         ? {
@@ -82,14 +82,14 @@ function RssParser() {
 
     // IE does not know forEach on node lists
     forEach.call(root.querySelectorAll('item'), function(node) {
-      var item = {
+      const item = {
         title: getText(node.querySelector('title')),
         description: getText(node.querySelector('description')),
         link: getText(node.querySelector('link')) || getText(node.querySelector('guid'))
       };
 
       if (!item.description) {
-        var content = getText(node.querySelector('content\\:encoded'));
+        let content = getText(node.querySelector('content\\:encoded'));
         if (content) {
           item.description = content;
         } else {
@@ -121,7 +121,7 @@ function RssParser() {
 
     rss.date = getDate(getText(channel.querySelector('lastBuildDate')) || getText(channel.querySelector('pubDate')));
 
-    var imageUrl = channel.querySelector('imageUrl');
+    const imageUrl = channel.querySelector('imageUrl');
 
     if (imageUrl) {
       rss.image = {
@@ -136,14 +136,14 @@ function RssParser() {
 
     // IE does not know forEach on node lists
     forEach.call(root.querySelectorAll('item'), function(node) {
-      var item = { title: '' };
+      const item = { title: '' };
 
       item.description = getText(node.querySelector('text')).replace(/\n/g, ' ');
 
-      var link = node.querySelector('link');
+      const link = node.querySelector('link');
 
       if (link) {
-        var text = getText(link.querySelector('linetext'))
+        const text = getText(link.querySelector('linetext'))
           .replace(/\n/g, ' ')
           .trim();
         if (text) {
@@ -162,10 +162,10 @@ function RssParser() {
     return rss;
   };
 
-  var addItemExtensions = function(node, item) {
-    var source = node.querySelector('source');
-    var enclosure = node.querySelector('enclosure');
-    var category = node.querySelector('category');
+  const addItemExtensions = function(node, item) {
+    const source = node.querySelector('source');
+    const enclosure = node.querySelector('enclosure');
+    const category = node.querySelector('category');
 
     if (source) {
       item.source = {
@@ -195,8 +195,8 @@ function RssParser() {
     return item;
   };
 
-  var getDate = function(str) {
-    var millis = Date.parse(str);
+  const getDate = function(str) {
+    let millis = Date.parse(str);
 
     if (isNaN(millis)) {
       millis = Date.parse(String(str).replace(ISO_DATE_PATTERN, '$1/$2/$3 $4'));
@@ -208,9 +208,9 @@ function RssParser() {
 
   return {
     parse: function(xml) {
-      var doc = getDocument(xml);
-      var root = doc.documentElement;
-      var type = root.nodeName;
+      const doc = getDocument(xml);
+      const root = doc.documentElement;
+      const type = root.nodeName;
 
       return type === 'scriptingNews' ? parseScriptingNews(root) : parseRss(root, type);
     }
