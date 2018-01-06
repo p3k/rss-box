@@ -43,7 +43,20 @@
           </div>
           {{ #if !$compact }}
             {{{ item.description }}}
-            {{ item.buttons }}
+            {{ #if item.source }}
+              <a href='{{ item.source.url }}'
+                  title='{{ item.source.title }}'
+                  class='rssbox-source'>🌍</a>
+            {{ /if }}
+            {{ #if item.enclosures }}
+              <div>
+                {{ #each item.enclosures as enclosure }}
+                  <a href='{{ enclosure.url }}'
+                      title='{{ enclosure.length }} {{ enclosure.type }}'
+                      class='rssbox-enclosure'>📎</a>
+                {{ /each }}
+              </div>
+            {{ /if }}
           {{ /if }}
         </div>
       {{ /if }}
@@ -101,7 +114,15 @@
     clear: both;
   }
 
-  .rssbox-item form {
+  .rssbox-enclosure:hover, .rssbox-source:hover {
+    text-decoration: none;
+  }
+
+  .rssbox-source {
+    display: block;
+  }
+
+  .rssbox-form {
     margin-bottom: 0.8em;
   }
 
@@ -157,6 +178,12 @@
 
         if (dynamicCss.innerHTML.indexOf(rule) < 0) dynamicCss.innerHTML += rule;
       });
+    },
+
+    helpers: {
+      format(bytes) {
+        return bytes;
+      }
     },
 
     computed: {

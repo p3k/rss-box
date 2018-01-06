@@ -164,23 +164,25 @@ function RssParser() {
 
   const addItemExtensions = function(node, item) {
     const source = node.querySelector('source');
-    const enclosure = node.querySelector('enclosure');
+    const enclosures = node.querySelectorAll('enclosure');
     const category = node.querySelector('category');
 
     if (source) {
       item.source = {
-        link: source.getAttribute('url'),
+        url: source.getAttribute('url'),
         title: source.textContent
       };
     }
 
-    if (enclosure) {
-      item.enclosure = {
-        link: enclosure.getAttribute('url'),
+    let map = Array.prototype.map;
+
+    item.enclosures = map.call(enclosures, enclosure => {
+      return {
+        url: enclosure.getAttribute('url'),
         length: enclosure.getAttribute('length'),
         type: enclosure.getAttribute('type')
       };
-    }
+    });
 
     if (category) {
       item.category = {
@@ -188,9 +190,6 @@ function RssParser() {
         content: category.textContent
       };
     }
-
-    // TODO
-    item.buttons = [];
 
     return item;
   };
@@ -209,6 +208,7 @@ function RssParser() {
   return {
     parse: function(xml) {
       const doc = getDocument(xml);
+      console.log(doc);
       const root = doc.documentElement;
       const type = root.nodeName;
 
