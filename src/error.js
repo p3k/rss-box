@@ -1,10 +1,14 @@
 import { URLS } from './settings';
 
 const defaultError = {
+  compact: false,
+  headless: false,
+  maxItems: 3,
+  height: -1,
   link: URLS.base,
   title: 'RSS Box Error',
   description:
-    'This output was automatically generated to report an error that occurred during a request to the JavaScript RSS Box Viewer.',
+    'This output was automatically generated to report an error that occurred during a request to the  RSS Box Viewer.',
   items: [
     {
       title: 'Oops, something went wrong…',
