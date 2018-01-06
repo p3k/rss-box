@@ -39,6 +39,12 @@
   let loaded = false;
 
   export default {
+    oncreate() {
+      if ('open' in document.createElement('details') === false) {
+        this.load();
+      }
+    },
+
     data() {
       return {
         referrers: []
@@ -57,19 +63,24 @@
         if (event.target.open && !loaded) this.load();
       },
 
-      async load() {
-        const data = await fetch(URLS.ferris).then(res => res.json());
+      load() {
+        fetch(URLS.ferris).then(res => {
+          res.json().then(data => this.display(data));
+        });
+      },
 
+      display(data) {
         const hosts = data.reduce((accu, item) => {
           if (item.url.startsWith('http') && !item.url.startsWith(URLS.base)) {
             const url = item.url.replace(/^([^.]*)www\./, '$1');
             const host = url.split('/')[2];
 
-            let data = accu.get(host);
+            let data = accu[host];
 
             if (!data) {
               data = { host, url, hits: item.hits, total: 0 };
-              accu.set(host, data);
+              accu[host] = data;
+              accu.push(data);
             } else if (item.hits > data.hits) {
               data.url = item.url;
               data.hits = item.hits;
@@ -78,15 +89,13 @@
             data.total += item.hits;
             return accu;
           }
-        }, new Map());
+        }, []);
 
-        const values = hosts.values();
+        const total = hosts.reduce((accu, item) => accu += item.total, 0);
 
-        let referrers = Array.from(values);
-        const total = referrers.reduce((accu, item) => accu += item.total, 0);
+        hosts.sort((a, b) => b.hits - a.hits);
 
-        referrers.sort((a, b) => b.hits - a.hits);
-        referrers = referrers.map(item => {
+        const referrers = hosts.map(item => {
           item.percentage = item.total / total * 100;
           return item;
         });

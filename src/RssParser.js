@@ -1,7 +1,10 @@
 function RssParser() {
-  var DC_NAMESPACE = 'http://purl.org/dc/elements/1.1/';
-  var RDF_NAMESPACE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
-  var ISO_DATE_PATTERN = /([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9:]+).*$/;
+  const DC_NAMESPACE = 'http://purl.org/dc/elements/1.1/';
+  const RDF_NAMESPACE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+  const ISO_DATE_PATTERN = /([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9:]+).*$/;
+
+  // IE does not know forEach on node lists
+  const forEach = Array.prototype.forEach;
 
   var getDocument = function(xml) {
     if (!xml) return;
@@ -73,7 +76,8 @@ function RssParser() {
       rss.rights = getText(channel.querySelector('copyright'));
     }
 
-    root.querySelectorAll('item').forEach(function(node) {
+    // IE does not know forEach on node lists
+    forEach.call(root.querySelectorAll('item'), function(node) {
       var item = {
         title: getText(node.querySelector('title')),
         description: getText(node.querySelector('description')),
@@ -124,7 +128,8 @@ function RssParser() {
       };
     }
 
-    root.querySelectorAll('item').forEach(function(node) {
+    // IE does not know forEach on node lists
+    forEach.call(root.querySelectorAll('item'), function(node) {
       var item = { title: '' };
 
       item.description = getText(node.querySelector('text')).replace(/\n/g, ' ');

@@ -134,13 +134,13 @@
         staticCss.id = staticId;
         staticCss.rel = 'stylesheet';
         staticCss.href = URLS.base + '/box.css';
-        document.head.append(staticCss);
+        document.head.appendChild(staticCss);
       }
 
       if (!dynamicCss) {
         dynamicCss = document.createElement('style');
         dynamicCss.id = dynamicId;
-        document.head.append(dynamicCss);
+        document.head.appendChild(dynamicCss);
       }
 
       this.store.observe('compact', compact => {

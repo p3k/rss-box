@@ -1,3 +1,4 @@
+import '../src/shims';
 import RssStore from './RssStore';
 import { description, version } from '../package.json';
 
