@@ -153,7 +153,7 @@
   import { URLS } from '../src/settings';
 
   if (location.href.indexOf(URLS.base) < 0) {
-    fetch(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
+    fetch(URLS.ferris + '&url=' + encodeURIComponent(location.href));
   }
 
   export default {
