@@ -2,7 +2,7 @@ import ready from 'domready';
 
 import RssStore from '../src/RssStore';
 import Box from '../components/Box.html';
-import { defaults, KEYS } from '../src/settings';
+import { defaults, KEYS, URLS } from '../src/settings';
 
 const getNativeValue = value => {
   if (value === 'true') return true;
@@ -22,7 +22,7 @@ const parseQuery = query => {
 };
 
 ready(() => {
-  const re = /https?:\/\/[^/]+\/main\.js/;
+  const re = new RegExp(URLS.base);
   const filter = Array.prototype.filter;
   const scripts = filter.call(document.scripts, script => script.src && script.src.match(re));
 
