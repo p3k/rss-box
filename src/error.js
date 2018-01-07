@@ -1,6 +1,7 @@
 import { URLS } from './settings';
 
 const defaultError = {
+  loading: false,
   compact: false,
   headless: false,
   maxItems: 3,

@@ -46,17 +46,22 @@ export default class RssStore extends Store {
     const url = this.get('url');
     if (!url) return;
 
+    this.set({ loading: true });
+
     fetch(URLS.roxy + '?url=' + encodeURIComponent(url))
       .then(res => {
-        if (!res.ok) throw Error(res);
+        if (!res.ok) throw Error(res.statusText);
 
         res
           .text()
           .then(json => {
             const parser = RssParser();
-            const xml = JSON.parse(json).content;
-            const data = parser.parse(xml);
-            this.set(data);
+            const data = JSON.parse(json);
+            if (data.headers['X-Roxy-Status']) throw Error(data.headers['X-Roxy-Message']);
+            const rss = parser.parse(data.content);
+            if (!rss.date) rss.date = new Date(data.headers.date);
+            rss.loading = false;
+            this.set(rss);
           })
           .catch(message => {
             this.set(error(url, message));

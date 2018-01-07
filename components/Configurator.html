@@ -39,7 +39,13 @@
       <td>
         <label>Source</label>
       </td>
-      <td><a href='{{ $url }}'>{{ $format }} {{ $version }}</a></td>
+      <td>
+        {{ #if $loading }}
+          Loading...
+        {{ else }}
+          <a href='{{ $url }}'>{{ $format }} {{ $version }}</a>
+        {{ /if }}
+      </td>
     </tr>
     <tr>
       <td>
@@ -159,7 +165,11 @@
     <tr>
       <td></td>
       <td>
-        <button class='btn btn-sm btn-b' on:click='reload(event)'>Reload</button>
+        {{ #if $loading }}
+          <button class='btn btn-sm btn-c' disabled>Loading...</button>
+        {{ else }}
+          <button class='btn btn-sm btn-b' on:click='reload(event)'>Reload</button>
+        {{ /if }}
       </td>
     </tr>
     <tr>
