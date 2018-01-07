@@ -152,6 +152,10 @@
 <script>
   import { URLS } from '../src/settings';
 
+  if (location.href.indexOf(URLS.base) < 0) {
+    fetch(FERRIS_URI + '&url=' + encodeURIComponent(location.href));
+  }
+
   export default {
     oncreate() {
       const staticId = 'rssbox-static-stylesheet';

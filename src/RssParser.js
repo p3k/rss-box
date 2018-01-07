@@ -208,7 +208,6 @@ function RssParser() {
   return {
     parse: function(xml) {
       const doc = getDocument(xml);
-      console.log(doc);
       const root = doc.documentElement;
       const type = root.nodeName;
 
