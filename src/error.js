@@ -6,7 +6,8 @@ const defaultError = {
   headless: false,
   maxItems: 3,
   height: -1,
-  version: 'Error',
+  format: 'Error',
+  version: '❌',
   link: urls.base,
   title: 'RSS Box Error',
   description:
