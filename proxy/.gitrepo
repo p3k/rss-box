@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:p3k/json3k.git
+	branch = master
+	commit = d5e35aa9c386f27177d4736df10a89eb629d3a67
+	parent = 585c9ac59287b4d072ed900352bb7c56d2062227
+	cmdver = 0.3.1

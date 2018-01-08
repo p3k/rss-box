@@ -1,0 +1,17 @@
+application: p3k-services
+version: 6
+runtime: python27
+api_version: 1
+threadsafe: true
+
+builtins:
+- remote_api: on
+
+handlers:
+- url: /roxy
+  script: roxy.app
+- url: /ferris
+  script: ferris.app
+- url: /cron/.+
+  script: cron.app
+  login: admin
