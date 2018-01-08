@@ -3,12 +3,12 @@ import RssStore from './RssStore';
 import { description, version } from '../package.json';
 
 import App from '../components/App.html';
-import { KEYS, URLS } from './settings';
+import { keys, urls } from './settings';
 
 const getQuery = () => {
   const query = [];
 
-  KEYS.forEach(key => {
+  keys.forEach(key => {
     const value = store.get(key);
     if (!value) return;
     query.push(key + '=' + encodeURIComponent(value));
@@ -19,9 +19,9 @@ const getQuery = () => {
 
 const store = new RssStore();
 
-store.compute('code', KEYS, () => {
+store.compute('code', keys, () => {
   const query = getQuery().replace(/&/g, '&amp;');
-  return `<script src='${URLS.base}/main.js?${query}'></script>`;
+  return `<script src='${urls.base}/main.js?${query}'></script>`;
 });
 
 const app = new App({
@@ -45,7 +45,7 @@ store.set({
   textColor: '#95412b',
   titleBarColor: '#90a8b3',
   titleBarTextColor: '#ffead2',
-  url: URLS.default,
+  url: urls.default,
   width: 200
 });
 

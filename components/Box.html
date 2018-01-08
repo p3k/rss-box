@@ -150,10 +150,10 @@
 </style>
 
 <script>
-  import { URLS } from '../src/settings';
+  import { urls } from '../src/settings';
 
-  if (location.href.indexOf(URLS.base) < 0) {
-    fetch(URLS.ferris + '&url=' + encodeURIComponent(location.href));
+  if (location.href.indexOf(urls.base) < 0) {
+    fetch(urls.referrers + '&url=' + encodeURIComponent(location.href));
   }
 
   export default {
@@ -168,7 +168,7 @@
         staticCss = document.createElement('link');
         staticCss.id = staticId;
         staticCss.rel = 'stylesheet';
-        staticCss.href = URLS.base + '/box.css';
+        staticCss.href = urls.base + '/box.css';
         document.head.appendChild(staticCss);
       }
 
@@ -200,7 +200,7 @@
       },
 
       appUrl() {
-        return URLS.app;
+        return urls.app;
       }
     },
 

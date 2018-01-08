@@ -34,7 +34,7 @@
 </style>
 
 <script>
-  import { URLS } from '../src/settings';
+  import { urls } from '../src/settings';
 
   let loaded = false;
 
@@ -64,14 +64,14 @@
       },
 
       load() {
-        fetch(URLS.ferris).then(res => {
+        fetch(urls.referrers).then(res => {
           res.json().then(data => this.display(data));
         });
       },
 
       display(data) {
         const hosts = data.reduce((accu, item) => {
-          if (item.url.startsWith('http') && !item.url.startsWith(URLS.base)) {
+          if (item.url.startsWith('http') && !item.url.startsWith(urls.base)) {
             const url = item.url.replace(/^([^.]*)www\./, '$1');
             const host = url.split('/')[2];
             let data = accu[host];

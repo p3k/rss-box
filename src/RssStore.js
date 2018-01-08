@@ -1,6 +1,6 @@
 import { Store } from 'svelte/store';
 import { RssParser } from './RssParser';
-import { URLS, defaults } from './settings';
+import { urls, defaults } from './settings';
 import error from './error';
 
 export default class RssStore extends Store {
@@ -45,7 +45,7 @@ export default class RssStore extends Store {
 
     this.set({ loading: true });
 
-    fetch(URLS.roxy + '?url=' + encodeURIComponent(url))
+    fetch(urls.proxy + '?url=' + encodeURIComponent(url))
       .then(res => {
         if (!res.ok) throw Error(res.statusText);
 
@@ -54,7 +54,7 @@ export default class RssStore extends Store {
           .then(json => {
             const parser = RssParser();
             const data = JSON.parse(json);
-            if (data.headers['X-Roxy-Status']) throw Error(data.headers['X-Roxy-Message']);
+            if (data.headers['X-Roxy-Error']) throw Error(data.headers['X-Roxy-Error']);
             const rss = parser.parse(data.content);
             if (!rss.date) rss.date = new Date(data.headers.date);
             rss.loading = false;

@@ -1,4 +1,4 @@
-import { URLS as LOCAL_URLS } from './local';
+import { urls as localUrls } from './local';
 
 export const defaults = {
   boxFillColor: '#fff',
@@ -17,7 +17,7 @@ export const defaults = {
   width: 200
 };
 
-export const KEYS = [
+export const keys = [
   'align',
   'boxFillColor',
   'compact',
@@ -39,13 +39,13 @@ export const KEYS = [
 const rootUrl = '//p3k.org';
 const serviceUrl = '//p3k-services.appspot.com';
 
-export const URLS = Object.assign(
+export const urls = Object.assign(
   {
     base: rootUrl,
     app: rootUrl + '/rss',
-    roxy: location.protocol + serviceUrl + '/roxy',
-    ferris: location.protocol + serviceUrl + '/ferris?group=rssbox',
+    proxy: location.protocol + serviceUrl + '/roxy',
+    referrers: location.protocol + serviceUrl + '/ferris?group=rssbox',
     default: 'https://blog.p3k.org/stories.xml'
   },
-  LOCAL_URLS
+  localUrls
 );
