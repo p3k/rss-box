@@ -30,9 +30,10 @@ ready(() => {
     const query = script.src.split(re)[1].substr(1);
     let data = parseQuery(query);
 
+    if (!data.url) data.url = URLS.default;
     data = Object.assign({}, defaults, data);
 
-    const store = new RssStore(data.url);
+    const store = new RssStore();
     store.set(data);
 
     const parent = script.parentNode;

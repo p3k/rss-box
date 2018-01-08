@@ -45,6 +45,7 @@ store.set({
   textColor: '#95412b',
   titleBarColor: '#90a8b3',
   titleBarTextColor: '#ffead2',
+  url: URLS.default,
   width: 200
 });
 

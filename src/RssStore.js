@@ -5,19 +5,16 @@ import error from './error';
 
 export default class RssStore extends Store {
   constructor() {
-    const settings = Object.assign(
-      {
-        date: new Date(),
-        description: '',
-        format: '',
-        image: '',
-        input: '',
-        items: [],
-        title: '',
-        version: ''
-      },
-      defaults
-    );
+    const settings = {
+      date: new Date(),
+      description: '',
+      format: '',
+      image: '',
+      input: '',
+      items: [],
+      title: '',
+      version: ''
+    };
 
     super(settings);
 
@@ -39,7 +36,7 @@ export default class RssStore extends Store {
       return `${date.getFullYear()}-${month}-${day}, ${hours}:${minutes}h`;
     });
 
-    this.observe('url', this.fetch);
+    this.observe('url', this.fetch, { init: false });
   }
 
   fetch() {

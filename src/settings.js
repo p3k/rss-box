@@ -14,7 +14,6 @@ export const defaults = {
   textColor: '#000',
   titleBarColor: '#add8e6',
   titleBarTextColor: '#000',
-  url: LOCAL_URLS.default || 'https://blog.p3k.org/stories.xml',
   width: 200
 };
 
@@ -45,7 +44,8 @@ export const URLS = Object.assign(
     base: rootUrl,
     app: rootUrl + '/rss',
     roxy: location.protocol + serviceUrl + '/roxy',
-    ferris: location.protocol + serviceUrl + '/ferris?group=rssbox'
+    ferris: location.protocol + serviceUrl + '/ferris?group=rssbox',
+    default: 'https://blog.p3k.org/stories.xml'
   },
   LOCAL_URLS
 );
