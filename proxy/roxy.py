@@ -117,10 +117,10 @@ class MainHandler(webapp2.RequestHandler):
          except Exception, ex:
             if type(ex) == HttpError:
               headers['X-Roxy-Status'] = ex.response.status_code
-              headers['X-Roxy-Message'] = responses[ex.response.status_code]
+              headers['X-Roxy-Error'] = responses[ex.response.status_code]
             else:
               headers['X-Roxy-Status'] = 500
-              headers['X-Roxy-Message'] = ex.__str__()
+              headers['X-Roxy-Error'] = ex.__str__()
 
             resource = Resource()
             resource.headers = json.dumps(headers)
