@@ -74,7 +74,6 @@
           if (item.url.startsWith('http') && !item.url.startsWith(URLS.base)) {
             const url = item.url.replace(/^([^.]*)www\./, '$1');
             const host = url.split('/')[2];
-
             let data = accu[host];
 
             if (!data) {
@@ -87,8 +86,8 @@
             }
 
             data.total += item.hits;
-            return accu;
           }
+          return accu;
         }, []);
 
         const total = hosts.reduce((accu, item) => accu += item.total, 0);
