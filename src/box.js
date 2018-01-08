@@ -22,7 +22,7 @@ const parseQuery = query => {
 };
 
 ready(() => {
-  const re = new RegExp(URLS.base);
+  const re = new RegExp(URLS.base + '/main.js');
   const filter = Array.prototype.filter;
   const scripts = filter.call(document.scripts, script => script.src && script.src.match(re));
 
