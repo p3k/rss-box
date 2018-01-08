@@ -70,7 +70,7 @@
       </form>
     {{ /if }}
     <div class='rssbox-promo rssBoxPromo'>
-      <a href='https://p3k.org/rss'>RSS Box by p3k.org</a>
+      <a href='{{ appUrl() }}'>RSS Box by p3k.org</a>
     </div>
   </div>
 </div>
@@ -197,6 +197,10 @@
     helpers: {
       format(bytes) {
         return bytes;
+      },
+
+      appUrl() {
+        return URLS.app;
       }
     },
 
