@@ -10,7 +10,9 @@
     "build-main": "rollup -c -i src/main.js -o dist/main.js -n main",
     "dev": "serve dist & rollup -c -w",
     "dev-box": "yarn build-main & serve dist & rollup -c -w -i src/box.js -o dist/box.js -n box",
-    "start": "serve dist"
+    "start": "serve dist",
+    "dev-proxy": "dev_appserver.py --skip_sdk_update_check=yes --port=8081 --admin_port=8082 --host=0.0.0.0 --enable_host_checking=False proxy",
+    "deploy-proxy": "appcfg.py -A p3k-services -V 6 update proxy"
   },
   "repository": {
     "type": "git",
