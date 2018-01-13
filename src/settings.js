@@ -14,7 +14,7 @@ export const defaults = {
   textColor: '#000',
   titleBarColor: '#add8e6',
   titleBarTextColor: '#000',
-  width: 200
+  width: 1000
 };
 
 export const keys = [

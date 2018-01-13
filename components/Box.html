@@ -1,4 +1,4 @@
-<div data-link-color='{{ $linkColor }}' class='rssbox rssBox' style='width: {{ $width }}px;
+<div data-link-color='{{ $linkColor }}' class='rssbox rssBox' style='max-width: {{ $width }}px;
     border-color: {{ $frameColor }};
     border-radius: {{ $radius }}px;
     font: {{ $fontFace }};'>
@@ -77,9 +77,10 @@
 
 <style>
   .rssbox {
-    width: 200px;
+    box-sizing: border-box;
+    width: 100%;
     border: 1px solid #000;
-    font: sans-serif;
+    font-family: sans-serif;
     float: left;
     overflow: hidden;
     border-radius: 0;

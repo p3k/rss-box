@@ -3,7 +3,7 @@ import RssStore from './RssStore';
 import { description, version } from '../package.json';
 
 import App from '../components/App.html';
-import { keys, urls } from './settings';
+import { defaults, keys, urls } from './settings';
 
 const getQuery = () => {
   const query = [];
@@ -46,7 +46,7 @@ store.set({
   titleBarColor: '#90a8b3',
   titleBarTextColor: '#ffead2',
   url: urls.default,
-  width: 200
+  width: defaults.width
 });
 
 // For debugging
