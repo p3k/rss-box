@@ -3,8 +3,9 @@ function RssParser() {
   const RDF_NAMESPACE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
   const ISO_DATE_PATTERN = /([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9:]+).*$/;
 
-  // IE does not know forEach on node lists
+  // IE does not know forEach or map on node lists
   const forEach = Array.prototype.forEach;
+  const map = Array.prototype.map;
 
   const getDocument = function(xml) {
     if (!xml) return;
@@ -23,6 +24,13 @@ function RssParser() {
     return doc;
   };
 
+  const getChildElement = function(name, parent, namespace) {
+    if (!name || !parent) return null;
+    let method = 'getElementsByTagName';
+    if (namespace) method += 'NS';
+    return parent[method](name)[0];
+  };
+
   const getText = function(node) {
     if (!node) return '';
     if (node.length) node = node[0];
@@ -33,26 +41,26 @@ function RssParser() {
 
   const parseRss = function(root, type) {
     const rss = { items: [] };
-    const channel = root.querySelector('channel');
+    const channel = getChildElement('channel', root);
 
     if (!channel) throw error;
 
     rss.format = 'RSS';
     rss.version = type === 'rdf:RDF' ? '1.0' : root.getAttribute('version');
-    rss.title = getText(root.querySelector('channel > title'));
-    rss.description = getText(root.querySelector('channel > description'));
-    rss.link = getText(root.querySelector('channel > link'));
+    rss.title = getText(getChildElement('title', channel));
+    rss.description = getText(getChildElement('description', channel));
+    rss.link = getText(getChildElement('link', channel));
 
-    const image = root.querySelector('image');
+    const image = getChildElement('image', root);
 
     rss.image = image
       ? {
-          source: getText(image.querySelector('url')) || image.getAttributeNS(RDF_NAMESPACE, 'resource'),
-          title: getText(image.querySelector('title')),
-          link: getText(image.querySelector('link')),
-          width: getText(image.querySelector('width')),
-          height: getText(image.querySelector('height')),
-          description: getText(image.querySelector('description'))
+          source: getText(getChildElement('url', image)) || image.getAttributeNS(RDF_NAMESPACE, 'resource'),
+          title: getText(getChildElement('title', image)),
+          link: getText(getChildElement('link', image)),
+          width: getText(getChildElement('width', image)),
+          height: getText(getChildElement('height', image)),
+          description: getText(getChildElement('description', image))
         }
       : '';
 
@@ -61,35 +69,36 @@ function RssParser() {
       rss.date = getDate(getText(date));
       rss.rights = getText(channel.getElementsByTagNameNS(DC_NAMESPACE, 'creator'));
 
-      const textInput = root.querySelector('textinput');
+      const textInput = getChildElement('textinput', root);
 
       rss.input = textInput
         ? {
-            link: getText(textInput.querySelector('link')),
-            description: getText(textInput.querySelector('description')),
-            name: getText(textInput.querySelector('name')),
-            title: getText(textInput.querySelector('title'))
+            link: getText(getChildElement('link', textInput)),
+            description: getText(getChildElement('description', textInput)),
+            name: getText(getChildElement('name', textInput)),
+            title: getText(getChildElement('title', textInput))
           }
         : '';
     } else {
-      rss.date = getDate(getText(channel.querySelector('lastBuildDate')) || getText(channel.querySelector('pubDate')));
-      rss.rights = getText(channel.querySelector('copyright'));
+      rss.date = getDate(
+        getText(getChildElement('lastBuildDate', channel)) || getText(getChildElement('pubDate', channel))
+      );
+      rss.rights = getText(getChildElement('copyright', channel));
     }
 
-    // IE does not know forEach on node lists
-    forEach.call(root.querySelectorAll('item'), function(node) {
+    forEach.call(root.getElementsByTagName('item'), function(node) {
       const item = {
-        title: getText(node.querySelector('title')),
-        description: getText(node.querySelector('description')),
-        link: getText(node.querySelector('link')) || getText(node.querySelector('guid'))
+        title: getText(getChildElement('title', node)),
+        description: getText(getChildElement('description', node)),
+        link: getText(getChildElement('link', node)) || getText(getChildElement('guid', node))
       };
 
       if (!item.description) {
-        let content = getText(node.querySelector('content\\:encoded'));
+        let content = getText(getChildElement('encoded', node, 'content'));
         if (content) {
           item.description = content;
         } else {
-          content = getText(node.querySelector('encoded'));
+          content = getText(getChildElement('encoded', node));
           if (content) {
             item.description = content;
           }
@@ -108,22 +117,22 @@ function RssParser() {
 
     rss.format = 'Atom';
     rss.version = '1.0';
-    rss.title = getText(root.querySelector('title'));
-    rss.description = getText(root.querySelector('subtitle'));
+    rss.title = getText(getChildElement('title', root));
+    rss.description = getText(getChildElement('subtitle', root));
     rss.image = '';
 
-    const link = root.querySelector('link:not([self])');
+    const link = getChildElement('link:not([self])', root);
     if (link) rss.link = link.getAttribute('href');
 
-    rss.date = getDate(root.querySelector('updated'));
+    rss.date = getDate(getChildElement('updated', root));
 
-    forEach.call(root.querySelectorAll('entry'), function(node) {
+    forEach.call(root.getElementsByTagName('entry'), function(node) {
       const item = {
-        title: getText(node.querySelector('title')),
-        description: getText(node.querySelector('summary'))
+        title: getText(getChildElement('title', node)),
+        description: getText(getChildElement('summary', node))
       };
 
-      const link = node.querySelector('link');
+      const link = getChildElement('link', node);
       if (link) item.link = link.getAttribute('href');
 
       rss.items.push(item);
@@ -134,50 +143,51 @@ function RssParser() {
 
   const parseScriptingNews = function(root) {
     const rss = { items: [] };
-    const channel = root.querySelector('header');
+    const channel = getChildElement('header', root);
 
     if (!channel) throw error;
 
     rss.format = 'Scripting News';
-    rss.version = getText(channel.querySelector('scriptingNewsVersion'));
-    rss.title = getText(channel.querySelector('channelTitle'));
-    rss.description = getText(channel.querySelector('channelDescription'));
-    rss.link = getText(channel.querySelector('channelLink'));
+    rss.version = getText(getChildElement('scriptingNewsVersion', channel));
+    rss.title = getText(getChildElement('channelTitle', channel));
+    rss.description = getText(getChildElement('channelDescription', channel));
+    rss.link = getText(getChildElement('channelLink', channel));
 
-    rss.date = getDate(getText(channel.querySelector('lastBuildDate')) || getText(channel.querySelector('pubDate')));
+    rss.date = getDate(
+      getText(getChildElement('lastBuildDate', channel)) || getText(getChildElement('pubDate', channel))
+    );
 
-    const imageUrl = channel.querySelector('imageUrl');
+    const imageUrl = getChildElement('imageUrl', channel);
 
     if (imageUrl) {
       rss.image = {
         source: getText(imageUrl),
-        title: getText(channel.querySelector('imageTitle')),
-        link: getText(channel.querySelector('imageLink')),
-        width: getText(channel.querySelector('imageWidth')),
-        height: getText(channel.querySelector('imageHeight')),
-        description: getText(channel.querySelector('imageCaption'))
+        title: getText(getChildElement('imageTitle', channel)),
+        link: getText(getChildElement('imageLink', channel)),
+        width: getText(getChildElement('imageWidth', channel)),
+        height: getText(getChildElement('imageHeight', channel)),
+        description: getText(getChildElement('imageCaption', channel))
       };
     }
 
-    // IE does not know forEach on node lists
-    forEach.call(root.querySelectorAll('item'), function(node) {
+    forEach.call(root.getElementsByTagName('item'), function(node) {
       const item = { title: '' };
 
-      item.description = getText(node.querySelector('text')).replace(/\n/g, ' ');
+      item.description = getText(getChildElement('text', node)).replace(/\n/g, ' ');
 
-      const link = node.querySelector('link');
+      const link = getChildElement('link', node);
 
       if (link) {
-        const text = getText(link.querySelector('linetext'))
+        const text = getText(getChildElement('linetext', link))
           .replace(/\n/g, ' ')
           .trim();
         if (text) {
           item.description = item.description.replace(
             new RegExp(text),
-            '<a href="' + getText(node.querySelector('url')) + '">' + text + '</a>'
+            '<a href="' + getText(getChildElement('url', node)) + '">' + text + '</a>'
           );
         }
-        item.link = getText(link.querySelector('url'));
+        item.link = getText(getChildElement('url', link));
       }
 
       addItemExtensions(node, item);
@@ -188,9 +198,9 @@ function RssParser() {
   };
 
   const addItemExtensions = function(node, item) {
-    const source = node.querySelector('source');
-    const enclosures = node.querySelectorAll('enclosure');
-    const category = node.querySelector('category');
+    const source = getChildElement('source', node);
+    const enclosures = node.getElementsByTagName('enclosure');
+    const category = getChildElement('category', node);
 
     if (source) {
       item.source = {
@@ -198,8 +208,6 @@ function RssParser() {
         title: source.textContent
       };
     }
-
-    let map = Array.prototype.map;
 
     item.enclosures = map.call(enclosures, enclosure => {
       return {
