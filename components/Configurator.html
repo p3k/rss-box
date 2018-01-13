@@ -1,4 +1,4 @@
-<form on:submit='event.preventDefault()'>
+<form on:submit='reload(event)'>
   <table class='table'>
     <colgroup>
       <col width='*'>
@@ -168,7 +168,7 @@
         {{ #if $loading }}
           <button class='btn btn-sm btn-c' disabled>Loading...</button>
         {{ else }}
-          <button class='btn btn-sm btn-b' on:click='reload(event)'>Reload</button>
+          <button class='btn btn-sm btn-b' type='submit'>Reload</button>
         {{ /if }}
       </td>
     </tr>
@@ -246,6 +246,7 @@
       },
 
       reload(event) {
+        event.preventDefault();
         const url = this.store.get('url');
         this.store.set({ url: null });
         this.store.set({ url });
