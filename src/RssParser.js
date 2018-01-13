@@ -58,7 +58,7 @@ function RssParser() {
 
     if (type === 'rdf:RDF') {
       const date = channel.getElementsByTagNameNS(DC_NAMESPACE, 'date');
-      rss.date = getDate(getText(date) /* || data.headers.date*/); // TODO
+      rss.date = getDate(getText(date));
       rss.rights = getText(channel.getElementsByTagNameNS(DC_NAMESPACE, 'creator'));
 
       const textInput = root.querySelector('textinput');
@@ -72,11 +72,7 @@ function RssParser() {
           }
         : '';
     } else {
-      rss.date = getDate(
-        getText(channel.querySelector('lastBuildDate')) ||
-          getText(channel.querySelector('pubDate')) /*||
-        data.headers.date*/ // TODO
-      );
+      rss.date = getDate(getText(channel.querySelector('lastBuildDate')) || getText(channel.querySelector('pubDate')));
       rss.rights = getText(channel.querySelector('copyright'));
     }
 
@@ -101,6 +97,35 @@ function RssParser() {
       }
 
       addItemExtensions(node, item);
+      rss.items.push(item);
+    });
+
+    return rss;
+  };
+
+  const parseAtom = function(root) {
+    const rss = { items: [] };
+
+    rss.format = 'Atom';
+    rss.version = '1.0';
+    rss.title = getText(root.querySelector('title'));
+    rss.description = getText(root.querySelector('subtitle'));
+    rss.image = '';
+
+    const link = root.querySelector('link:not([self])');
+    if (link) rss.link = link.getAttribute('href');
+
+    rss.date = getDate(root.querySelector('updated'));
+
+    forEach.call(root.querySelectorAll('entry'), function(node) {
+      const item = {
+        title: getText(node.querySelector('title')),
+        description: getText(node.querySelector('summary'))
+      };
+
+      const link = node.querySelector('link');
+      if (link) item.link = link.getAttribute('href');
+
       rss.items.push(item);
     });
 
@@ -211,7 +236,16 @@ function RssParser() {
       const root = doc.documentElement;
       const type = root.nodeName;
 
-      return type === 'scriptingNews' ? parseScriptingNews(root) : parseRss(root, type);
+      switch (type) {
+        case 'feed':
+          return parseAtom(root);
+
+        case 'scriptingNews':
+          return parseScriptingNews(root);
+
+        default:
+          return parseRss(root, type);
+      }
     }
   };
 }

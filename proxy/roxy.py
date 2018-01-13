@@ -90,7 +90,8 @@ class MainHandler(webapp2.RequestHandler):
                   if content_type.startswith('text/') or \
                         content_type.startswith('application/xml') or \
                         content_type.startswith('application/rss+xml') or \
-                        content_type.startswith('application/x-rss+xml'):
+                        content_type.startswith('application/x-rss+xml') or \
+                        content_type.startswith('application/atom+xml'):
 
                      try:
                         content = content.decode('utf-8-sig')
