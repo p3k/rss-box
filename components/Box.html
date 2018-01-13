@@ -7,9 +7,9 @@
         background-color: {{ $titleBarColor }};
         border-bottom-color: {{ $frameColor }};'>
       {{ #if $showXmlButton }}
-        <div style='float: right;'>
+        <div class='rssbox-icon'>
           <a href='{{ $url }}'>
-            <span class='rssbox-icon' title='{{ $format }} {{ $version }}'></span>
+            <span title='{{ $format }} {{ $version }}'></span>
           </a>
         </div>
       {{ /if }}
@@ -91,11 +91,11 @@
   }
 
   .rssbox-icon, .rssbox-image {
-    display: inline-block;
     float: right;
     margin: 5px 0 5px 5px;
     background-position: left center;
     background-repeat: no-repeat;
+    background-size: contain;
   }
 
   .rssbox-icon {
