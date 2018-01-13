@@ -1,5 +1,6 @@
 import { urls as localUrls } from './local';
 
+// These are backwards-compatible settings
 export const defaults = {
   boxFillColor: '#fff',
   compact: false,
@@ -14,7 +15,7 @@ export const defaults = {
   textColor: '#000',
   titleBarColor: '#add8e6',
   titleBarTextColor: '#000',
-  width: 1000
+  width: 200
 };
 
 export const keys = [
