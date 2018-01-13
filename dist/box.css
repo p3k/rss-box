@@ -38,7 +38,7 @@
   font-size: 0.8em;
 }
 
-.rssbox-item-content img,
+.rssbox-item-content img:not([height='1']),
 .rssbox-item-content iframe,
 .rssbox-item-content object,
 .rssbox-item-content embed {
