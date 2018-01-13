@@ -29,6 +29,14 @@ const app = new App({
   store
 });
 
+const query = location.search;
+let url;
+
+if (query && query.startsWith('?url=')) {
+  const parts = query.substr(5).split('&');
+  url = parts[0];
+}
+
 store.set({
   appDescription: description,
   appVersion: version,
@@ -45,7 +53,7 @@ store.set({
   textColor: '#95412b',
   titleBarColor: '#90a8b3',
   titleBarTextColor: '#ffead2',
-  url: urls.default,
+  url: url || urls.default,
   width: defaults.width
 });
 
