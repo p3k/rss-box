@@ -10,7 +10,7 @@ export const defaults = {
   linkColor: '',
   maxItems: 7,
   radius: 0,
-  showXmlButton: true,
+  showXmlButton: false,
   textColor: '#000',
   titleBarColor: '#add8e6',
   titleBarTextColor: '#000',
