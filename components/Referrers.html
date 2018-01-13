@@ -92,12 +92,12 @@
 
         const total = hosts.reduce((accu, item) => accu += item.total, 0);
 
-        hosts.sort((a, b) => b.hits - a.hits);
-
         const referrers = hosts.map(item => {
           item.percentage = item.total / total * 100;
           return item;
         });
+
+        referrers.sort((a, b) => b.percentage - a.percentage);
 
         this.set({ referrers });
         loaded = true;
