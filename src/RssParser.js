@@ -51,7 +51,7 @@ function RssParser() {
     rss.description = getText(getChildElement('description', channel));
     rss.link = getText(getChildElement('link', channel));
 
-    const image = getChildElement('image', root);
+    const image = getChildElement('image', channel);
 
     rss.image = image
       ? {

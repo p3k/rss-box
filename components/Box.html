@@ -25,13 +25,14 @@
   {{ /if }}
   <div class='rssbox-content rssBoxContent' style='background-color: {{ $boxFillColor }};
       height: {{ height }};'>
-    {{ #if $image }}
+    {{ #if $image && !$compact }}
+      {{ #await load($image, $width) }}
+      {{ then image }}
       <a href='{{ $image.link }}' title='{{ $image.title }}'>
-        <span alt='{{ $image.description }}' class='rssbox-image'
-            style='background-image: url({{ $image.source }});
-            width: {{ $image.width }}px;
-            height: {{ $image.height }}px;'></span>
+          <div alt='{{ $image.description }}' class='rssbox-image'
+              style='background-image: url({{ $image.source }}); width: {{ image.width }}; height: {{ image.height }};'></div>
       </a>
+      {{ /await }}
     {{ /if }}
     {{ #each $items as item, index }}
       {{ #if index < $maxItems }}
@@ -213,11 +214,29 @@
 
       appUrl() {
         return urls.app;
+      },
+
+      load(data, width) {
+        return new Promise(fulfill => {
+          const image = new Image();
+
+          image.onload = () => {
+            const maxWidth = Math.min(100, width / 2);
+            const factor = image.width > maxWidth ? maxWidth / image.width : 1;
+
+            fulfill({
+              width: (image.width * factor) + 'px',
+              height: (image.height * factor) + 'px'
+            });
+          }
+
+          image.src = data.source;
+        });
       }
     },
 
     computed: {
-      height: $height => $height > -1 ? $height + 'px' : '100%'
+      height: $height => $height && $height > -1 ? $height + 'px' : '100%'
     }
   };
 </script>
