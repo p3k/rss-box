@@ -28,7 +28,7 @@ function RssParser() {
     if (!name || !parent) return null;
     let method = 'getElementsByTagName';
     if (namespace) method += 'NS';
-    return parent[method](name)[0];
+    return parent[method](name, namespace)[0];
   };
 
   const getText = function(node) {
