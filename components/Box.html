@@ -36,27 +36,29 @@
     {{ #each $items as item, index }}
       {{ #if index < $maxItems }}
         <div class='rssbox-item-content rssBoxItemContent' style='color: {{ $textColor }}'>
-          <div style='font-weight: {{ $fontWeight }};'>
-            <a href='{{ item.link }}'>
-              {{{ item.title }}}
-            </a>
-          </div>
+          {{ #if item.title }}
+            <div style='font-weight: {{ $fontWeight }};'>
+              <a href='{{ item.link }}'>
+                {{{ item.title }}}
+              </a>
+            </div>
+          {{ /if }}
           {{ #if !$compact }}
-            {{{ item.description }}}
-            {{ #if item.source }}
-              <a href='{{ item.source.url }}'
-                  title='{{ item.source.title }}'
-                  class='rssbox-source'>🌍</a>
-            {{ /if }}
-            {{ #if item.enclosures }}
-              <div>
+            <aside>
+              {{ #if item.source }}
+                <a href='{{ item.source.url }}'
+                    title='{{ item.source.title }}'
+                    class='rssbox-source'>🌍</a>
+              {{ /if }}
+              {{ #if item.enclosures }}
                 {{ #each item.enclosures as enclosure }}
                   <a href='{{ enclosure.url }}'
                       title='{{ enclosure.length }} {{ enclosure.type }}'
                       class='rssbox-enclosure'>📎</a>
                 {{ /each }}
-              </div>
-            {{ /if }}
+              {{ /if }}
+            </aside>
+            {{{ item.description }}}
           {{ /if }}
         </div>
       {{ /if }}
@@ -118,6 +120,15 @@
     overflow-y: auto;
     background-color: #fff;
     clear: both;
+  }
+
+  .rssbox-content aside {
+    float: right;
+  }
+
+  .rssbox-content aside a {
+    display: block;
+    margin-left: 0.5em;
   }
 
   .rssbox-enclosure:hover, .rssbox-source:hover {
