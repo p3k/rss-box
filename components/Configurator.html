@@ -1,4 +1,4 @@
-<form on:submit='reload(event)'>
+<form on:submit='update(event)'>
   <table class='table'>
     <colgroup>
       <col width='*'>
@@ -52,7 +52,7 @@
         <label on:click='label(event)'>Max. items</label>
       </td>
       <td>
-        <input type='number' name='maxItems' value='{{ $maxItems }}' min=1 max=99  required on:change='update(event)'>
+        <input type='number' name='maxItems' value='{{ $maxItems }}' min=1 max=99 required on:change='update(event)'>
       </td>
     </tr>
     <tr>
@@ -60,7 +60,7 @@
         <label on:click='label(event)'>Max. width</label>
       </td>
       <td>
-        <input type='number' name='width' value='{{ $width }}' min=100 max=9999 on:change='update(event)'>
+        <input type='number' name='width' value='{{ $width }}' min=100 max=9999 required on:change='update(event)'>
         <small>px</small>
       </td>
     </tr>
@@ -69,7 +69,7 @@
         <label on:click='label(event)'>Content height</label>
       </td>
       <td>
-        <input type='number' name='height' value='{{ $height }}' min=-1 max=9999 on:change='update(event)'>
+        <input type='number' name='height' value='{{ $height }}' min=10 max=9999 on:change='update(event)'>
         <small>px</small>
       </td>
     </tr>
@@ -78,7 +78,7 @@
         <label on:click='label(event)'>Corner radius</label>
       </td>
       <td>
-        <input type='number' name='radius' value='{{ $radius }}' min=0 max=999 on:change='update(event)'>
+        <input type='number' name='radius' value='{{ $radius }}' min=0 max=999 required on:change='update(event)'>
         <small>px</small>
       </td>
     </tr>
@@ -168,7 +168,7 @@
         {{ #if $loading }}
           <button class='btn btn-sm btn-c' disabled>Loading...</button>
         {{ else }}
-          <button class='btn btn-sm btn-b' type='submit'>Reload</button>
+          <button class='btn btn-sm btn-b' type='button' on:click='reload(event)'>Reload</button>
         {{ /if }}
       </td>
     </tr>
@@ -239,6 +239,8 @@
 
     methods: {
       update(event) {
+        event.preventDefault();
+        if (!event.target.checkValidity()) return;
         const name = event.target.name;
         const type = event.target.type;
         const value = event.target[type === 'checkbox' ? 'checked' : 'value'];
