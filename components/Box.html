@@ -28,10 +28,10 @@
     {{ #if $image && !$compact }}
       {{ #await load($image, $width) }}
       {{ then image }}
-      <a href='{{ $image.link }}' title='{{ $image.title }}'>
+        <a href='{{ $image.link }}' title='{{ $image.title }}'>
           <div alt='{{ $image.description }}' class='rssbox-image'
               style='background-image: url({{ $image.source }}); width: {{ image.width }}; height: {{ image.height }};'></div>
-      </a>
+        </a>
       {{ /await }}
     {{ /if }}
     {{ #each $items as item, index }}
@@ -124,6 +124,7 @@
   }
 
   .rssbox-content aside {
+    clear: both;
     float: right;
   }
 
