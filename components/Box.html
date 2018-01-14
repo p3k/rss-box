@@ -26,7 +26,7 @@
   <div class='rssbox-content rssBoxContent' style='background-color: {{ $boxFillColor }};
       height: {{ height }};'>
     {{ #if $image && !$compact }}
-      {{ #await load($image, $width) }}
+      {{ #await load($image) }}
       {{ then image }}
         <a href='{{ $image.link }}' title='{{ $image.title }}'>
           <div alt='{{ $image.description }}' class='rssbox-image'
@@ -227,19 +227,19 @@
         return urls.app;
       },
 
-      load(data, width) {
+      load(data) {
         return new Promise(fulfill => {
           const image = new Image();
 
           image.onload = () => {
-            const maxWidth = Math.min(100, width / 2);
+            const maxWidth = Math.min(100, image.width);
             const factor = image.width > maxWidth ? maxWidth / image.width : 1;
 
             fulfill({
               width: (image.width * factor) + 'px',
               height: (image.height * factor) + 'px'
             });
-          }
+          };
 
           image.src = data.source;
         });
