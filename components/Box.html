@@ -1,11 +1,6 @@
-<div data-link-color='{{ $linkColor }}' class='rssbox rssBox' style='max-width: {{ $width }}px;
-    border-color: {{ $frameColor }};
-    border-radius: {{ $radius }}px;
-    font: {{ $fontFace }};'>
+<div data-link-color='{{ $linkColor }}' class='rssbox rssBox' style='max-width: {{ $width }}px; border-color: {{ $frameColor }}; border-radius: {{ $radius }}px; font: {{ $fontFace }};'>
   {{ #if !$headless }}
-    <div class='rssbox-titlebar' style='color: {{ $titleBarTextColor }};
-        background-color: {{ $titleBarColor }};
-        border-bottom-color: {{ $frameColor }};'>
+    <div class='rssbox-titlebar' style='color: {{ $titleBarTextColor }}; background-color: {{ $titleBarColor }}; border-bottom-color: {{ $frameColor }};'>
       {{ #if $showXmlButton }}
         <div class='rssbox-icon'>
           <a href='{{ $url }}' title='{{ $format }} {{ $version }}' style='color: {{ $titleBarTextColor }}'>
@@ -23,17 +18,17 @@
       </div>
     </div>
   {{ /if }}
-  <div class='rssbox-content rssBoxContent' style='background-color: {{ $boxFillColor }};
-      height: {{ height }};'>
+
+  <div class='rssbox-content rssBoxContent' style='background-color: {{ $boxFillColor }}; height: {{ height }};'>
     {{ #if $image && !$compact }}
       {{ #await load($image) }}
       {{ then image }}
         <a href='{{ $image.link }}' title='{{ $image.title }}'>
-          <div alt='{{ $image.description }}' class='rssbox-image'
-              style='background-image: url({{ $image.source }}); width: {{ image.width }}; height: {{ image.height }};'></div>
+          <div alt='{{ $image.description }}' class='rssbox-image' style='background-image: url({{ $image.source }}); width: {{ image.width }}; height: {{ image.height }};'></div>
         </a>
       {{ /await }}
     {{ /if }}
+
     {{ #each $items as item, index }}
       {{ #if index < $maxItems }}
         <div class='rssbox-item-content rssBoxItemContent' style='color: {{ $textColor }}'>
@@ -53,7 +48,7 @@
                     <RssIcon/>
                   {{ else }}
                     <LinkIcon/>
-              {{ /if }}
+                  {{ /if }}
                 </a>
               {{ /if }}
 
@@ -70,16 +65,15 @@
         </div>
       {{ /if }}
     {{ /each }}
+
     {{ #if $input }}
       <form class='rssbox-form' method='get' action='{{ $input.link }}'>
-        <input type='text' name='{{ $input.name }}'
-            placeholder='Enter search &amp; hit return…'
-            data-placeholder='{{ $input.description }}'>
+        <input type='text' name='{{ $input.name }}' placeholder='Enter search &amp; hit return…' data-placeholder='{{ $input.description }}'>
         <!-- input type='submit' value='{{ $input.title }}' -->
       </form>
     {{ /if }}
     <div class='rssbox-promo rssBoxPromo'>
-      <a href='{{ appUrl() }}'>RSS Box by p3k.org</a>
+      <a href='{{ appUrl() }}' style='color: {{ $textColor }}'>RSS Box by p3k.org</a>
     </div>
   </div>
 </div>
