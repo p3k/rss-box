@@ -159,7 +159,7 @@
         <label on:click='label(event)'>Font face</label>
       </td>
       <td>
-        <input name='fontFace' value='{{ $fontFace }}' on:change='update(event)'>
+        <input name='fontFace' value='{{ $fontFace }}' on:change='update(event)' pattern='[\d.]+(?:pt|px|em|%)+\s+[\s\w\-,]+' placeholder='e.g. 10pt Helvetica, sans-serif'>
       </td>
     </tr>
     <tr>
@@ -240,7 +240,7 @@
     methods: {
       update(event) {
         event.preventDefault();
-        if (!event.target.checkValidity()) return;
+        if (!event.target.checkValidity()) return event.target.reportValidity();
         const name = event.target.name;
         const type = event.target.type;
         const value = event.target[type === 'checkbox' ? 'checked' : 'value'];
