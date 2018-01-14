@@ -60,7 +60,7 @@
         <label on:click='label(event)'>Max. width</label>
       </td>
       <td>
-        <input type='number' name='width' value='{{ $width }}' min=100 max=9999 required on:change='update(event)'>
+        <input type='number' name='width' value='{{ $width }}' min=100 max=9999 on:change='update(event)' placeholder='spare'>
         <small>px</small>
       </td>
     </tr>
@@ -69,7 +69,7 @@
         <label on:click='label(event)'>Content height</label>
       </td>
       <td>
-        <input type='number' name='height' value='{{ $height }}' min=10 max=9999 on:change='update(event)'>
+        <input type='number' name='height' value='{{ $height }}' min=100 max=9999 on:change='update(event)' placeholder='spare'>
         <small>px</small>
       </td>
     </tr>
