@@ -219,8 +219,8 @@
     },
 
     helpers: {
-      format(bytes) {
-        return bytes;
+      kb(bytes) {
+        return (bytes / 1000).toFixed(2) + 'kB';
       },
 
       appUrl() {
