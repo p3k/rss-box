@@ -8,8 +8,8 @@
         border-bottom-color: {{ $frameColor }};'>
       {{ #if $showXmlButton }}
         <div class='rssbox-icon'>
-          <a href='{{ $url }}'>
-            <span title='{{ $format }} {{ $version }}'></span>
+          <a href='{{ $url }}' title='{{ $format }} {{ $version }}' style='color: {{ $titleBarTextColor }}'>
+            <RssIcon/>
           </a>
         </div>
       {{ /if }}
@@ -44,18 +44,24 @@
               </a>
             </div>
           {{ /if }}
+
           {{ #if !$compact }}
             <aside>
               {{ #if item.source }}
-                <a href='{{ item.source.url }}'
-                    title='{{ item.source.title }}'
-                    class='rssbox-source'>🌍</a>
+                <a href='{{ item.source.url }}' title='{{ item.source.title }}' class='rssbox-source'>
+                  {{ #if item.source.url.endsWith('.xml') }}
+                    <RssIcon/>
+                  {{ else }}
+                    <LinkIcon/>
               {{ /if }}
+                </a>
+              {{ /if }}
+
               {{ #if item.enclosures }}
                 {{ #each item.enclosures as enclosure }}
-                  <a href='{{ enclosure.url }}'
-                      title='{{ enclosure.length }} {{ enclosure.type }}'
-                      class='rssbox-enclosure'>📎</a>
+                  <a href='{{ enclosure.url }}' title='{{ kb(enclosure.length) }} {{ enclosure.type }}' class='rssbox-enclosure'>
+                    <PaperclipIcon/>
+                  </a>
                 {{ /each }}
               {{ /if }}
             </aside>
@@ -90,20 +96,10 @@
     -moz-border-radius: 0;
   }
 
-  .rssbox-icon, .rssbox-image {
-    float: right;
-    margin: 5px 0 5px 5px;
-    background-position: left center;
-    background-repeat: no-repeat;
-    background-size: contain;
-  }
-
   .rssbox-icon {
-    height: 16px;
-    width: 16px;
-    margin: 1px 4px;
-    background-image: url(https://p3k.org/rss/18.1.0/img/rss.png);
-    background-size: 16px 16px;
+    float: right;
+    width: 1em;
+    margin-left: 0.5em;
   }
 
   .rssbox-titlebar {
@@ -133,12 +129,17 @@
     margin-left: 0.5em;
   }
 
-  .rssbox-enclosure:hover, .rssbox-source:hover {
-    text-decoration: none;
+  .rssbox-image {
+    float: right;
+    margin: 0 0 0.5em 0.5em;
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: contain;
   }
 
-  .rssbox-source {
+  .rssbox-enclosure, .rssbox-source {
     display: block;
+    width: 1em;
   }
 
   .rssbox-form {
@@ -166,12 +167,20 @@
 
 <script>
   import { urls } from '../src/settings';
+  import LinkIcon from './LinkIcon.html';
+  import RssIcon from './RssIcon.html';
+  import PaperclipIcon from './PaperclipIcon.html';
 
   if (location.href.indexOf(urls.base) < 0) {
     fetch(urls.referrers + '&url=' + encodeURIComponent(location.href));
   }
 
   export default {
+    components: {
+      LinkIcon,
+      PaperclipIcon,
+      RssIcon
+    },
     oncreate() {
       const staticId = 'rssbox-static-stylesheet';
       const dynamicId = 'rssbox-dynamic-stylesheet';
