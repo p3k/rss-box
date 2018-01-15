@@ -21,7 +21,7 @@ const store = new RssStore();
 
 store.compute('code', keys, () => {
   const query = getQuery().replace(/&/g, '&amp;');
-  return `<script src='${urls.base}/main.js?${query}'></script>`;
+  return `<script async defer src='${urls.base}/main.js?${query}'></script>`;
 });
 
 const app = new App({

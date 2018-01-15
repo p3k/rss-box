@@ -8,7 +8,8 @@ const LOADER = '__rssbox_viewer_framework__';
 if (!window[LOADER]) {
   window[LOADER] = true;
 
-  let script = document.createElement('script');
+  const script = document.createElement('script');
+  script.async = true;
   script.src = urls.base + '/box.js';
   document.head.appendChild(script);
 }
