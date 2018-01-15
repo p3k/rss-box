@@ -5,7 +5,7 @@ const defaultError = {
   compact: false,
   headless: false,
   maxItems: 3,
-  height: -1,
+  height: '',
   format: 'Error',
   version: '❌',
   link: urls.base,

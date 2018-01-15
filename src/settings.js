@@ -8,7 +8,7 @@ export const defaults = {
   fontFace: '10pt sans-serif',
   frameColor: '#000',
   headless: false,
-  height: -1,
+  height: '',
   linkColor: '',
   maxItems: 7,
   radius: 0,
