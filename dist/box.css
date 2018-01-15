@@ -1,7 +1,12 @@
+/* Minimal reset */
 .rssbox * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  background: initial;
+  border: initial;
+  line-height: inherit;
+  font-size: inherit;
 }
 
 .rssbox h1, .rssbox h2, .rssbox h3, .rssbox h4, .rssbox h5, .rssbox h6 {
