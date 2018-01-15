@@ -2,6 +2,7 @@ import { urls as localUrls } from './local';
 
 // These are backwards-compatible settings
 export const defaults = {
+  align: 'initial',
   boxFillColor: '#fff',
   compact: false,
   fontFace: '10pt sans-serif',

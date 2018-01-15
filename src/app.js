@@ -38,6 +38,7 @@ if (query && query.startsWith('?url=')) {
 }
 
 store.set({
+  align: 'initial',
   appDescription: description,
   appVersion: version,
   boxFillColor: '#ffead2',

@@ -1,4 +1,4 @@
-<div data-link-color='{{ $linkColor }}' class='rssbox rssBox' style='max-width: {{ $width }}px; border-color: {{ $frameColor }}; border-radius: {{ $radius }}px; font: {{ $fontFace }};'>
+<div data-link-color='{{ $linkColor }}' class='rssbox rssBox' style='max-width: {{ $width }}px; border-color: {{ $frameColor }}; border-radius: {{ $radius }}px; font: {{ $fontFace }}; float: {{ $align }};'>
   {{ #if !$headless }}
     <div class='rssbox-titlebar' style='color: {{ $titleBarTextColor }}; background-color: {{ $titleBarColor }}; border-bottom-color: {{ $frameColor }};'>
       {{ #if $showXmlButton }}
@@ -80,7 +80,6 @@
 
 <style>
   .rssbox {
-    float: left;
     box-sizing: border-box;
     width: 100%;
     border: 1px solid #000;
