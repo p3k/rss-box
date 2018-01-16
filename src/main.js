@@ -2,14 +2,12 @@
 // All it does is to once load the framework which does the actual work
 
 import { urls } from './settings';
+import id from './version';
 
-const LOADER = '__rssbox_viewer_framework__';
-
-if (!window[LOADER]) {
-  window[LOADER] = true;
-
+if (!window[id]) {
+  window[id] = true;
   const script = document.createElement('script');
-  script.async = true;
+  script.defer = script.async = true;
   script.src = urls.base + '/box.js';
-  document.head.appendChild(script);
+  document.body.appendChild(script);
 }

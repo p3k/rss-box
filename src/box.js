@@ -1,27 +1,29 @@
 import ready from 'domready';
 
-import RssStore from '../src/RssStore';
+import id from './version';
+import RssStore from './RssStore';
 import Box from '../components/Box.html';
-import { defaults, keys, urls } from '../src/settings';
+import { defaults, keys, urls } from './settings';
+import polyfills from './polyfills.io';
 
-const getNativeValue = value => {
-  if (value === 'true') return true;
-  if (value === 'false') return false;
-  return value;
-};
+window[id] = () => {
+  const getNativeValue = value => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    return value;
+  };
 
-const parseQuery = query => {
-  const parts = query.split('&');
-  return parts.reduce((data, pair) => {
-    const [key, value] = pair.split('=');
-    if (keys.indexOf(key) > -1) {
-      data[key] = getNativeValue(decodeURIComponent(value));
-    }
-    return data;
-  }, {});
-};
+  const parseQuery = query => {
+    const parts = query.split('&');
+    return parts.reduce((data, pair) => {
+      const [key, value] = pair.split('=');
+      if (keys.indexOf(key) > -1) {
+        data[key] = getNativeValue(decodeURIComponent(value));
+      }
+      return data;
+    }, {});
+  };
 
-ready(() => {
   const re = new RegExp(urls.base + '/main.js');
   const filter = Array.prototype.filter;
   const scripts = filter.call(document.scripts, script => script.src && script.src.match(re));
@@ -47,4 +49,6 @@ ready(() => {
 
     script.remove();
   });
-});
+};
+
+ready(polyfills);
