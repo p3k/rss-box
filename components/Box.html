@@ -1,4 +1,4 @@
-<div data-link-color='{{ $linkColor }}' class='rssbox rssBox' style='max-width: {{ $width }}px; border-color: {{ $frameColor }}; border-radius: {{ $radius }}px; font: {{ $fontFace }}; float: {{ $align }};'>
+<div data-link-color='{{ $linkColor }}' class='rssbox rssBox' style='max-width: {{ width }}; border-color: {{ $frameColor }}; border-radius: {{ $radius }}px; font: {{ $fontFace }}; float: {{ $align }};'>
   {{ #if !$headless }}
     <div class='rssbox-titlebar' style='color: {{ $titleBarTextColor }}; background-color: {{ $titleBarColor }}; border-bottom-color: {{ $frameColor }};'>
       {{ #if $showXmlButton }}
@@ -240,7 +240,8 @@
     },
 
     computed: {
-      height: $height => $height && $height > -1 ? $height + 'px' : '100%'
+      height: $height => $height && $height > -1 ? $height + 'px' : '100%',
+      width: $width => $width ? $width + 'px' : '100%'
     }
   };
 </script>
