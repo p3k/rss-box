@@ -1,12 +1,11 @@
 import RssStore from './RssStore';
 import { description, version } from '../package.json';
 
-import id from './version';
 import App from '../components/App.html';
 import { keys, urls } from './settings';
-import polyfills from './polyfills.io';
+import polyfill from './polyfill.io';
 
-window[id] = () => {
+polyfill(() => {
   const getQuery = () => {
     const query = [];
 
@@ -62,6 +61,4 @@ window[id] = () => {
 
   // For debugging
   //window.store = store;
-};
-
-polyfills();
+});

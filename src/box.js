@@ -1,53 +1,54 @@
 import ready from 'domready';
 
-import id from './version';
 import RssStore from './RssStore';
 import Box from '../components/Box.html';
 import { defaults, keys, urls } from './settings';
-import polyfills from './polyfills.io';
+import polyfill from './polyfill.io';
 
-window[id] = () => {
-  const getNativeValue = value => {
-    if (value === 'true') return true;
-    if (value === 'false') return false;
-    return value;
-  };
+console.log(123);
 
-  const parseQuery = query => {
-    const parts = query.split('&');
-    return parts.reduce((data, pair) => {
-      const [key, value] = pair.split('=');
-      if (keys.indexOf(key) > -1) {
-        data[key] = getNativeValue(decodeURIComponent(value));
-      }
-      return data;
-    }, {});
-  };
+ready(
+  polyfill(() => {
+    const getNativeValue = value => {
+      if (value === 'true') return true;
+      if (value === 'false') return false;
+      return value;
+    };
 
-  const search = urls.base + '/main.js';
-  const scripts = document.querySelectorAll('script[src^="' + search + '"]');
+    const parseQuery = query => {
+      const parts = query.split('&');
+      return parts.reduce((data, pair) => {
+        const [key, value] = pair.split('=');
+        if (keys.indexOf(key) > -1) {
+          data[key] = getNativeValue(decodeURIComponent(value));
+        }
+        return data;
+      }, {});
+    };
 
-  Array.prototype.forEach.call(scripts, script => {
-    const query = script.src.split(search)[1].substr(1);
-    let data = parseQuery(query);
+    const search = urls.base + '/main.js';
+    const scripts = document.querySelectorAll('script[src^="' + search + '"]');
 
-    if (!data.url) data.url = urls.default;
-    data = Object.assign({}, defaults, data);
+    Array.prototype.forEach.call(scripts, script => {
+      const query = script.src.split(search)[1].substr(1);
+      let data = parseQuery(query);
 
-    const store = new RssStore();
-    store.set(data);
+      if (!data.url) data.url = urls.default;
+      data = Object.assign({}, defaults, data);
 
-    const parent = script.parentNode;
-    const container = document.createElement('div');
-    parent.insertBefore(container, script);
+      const store = new RssStore();
+      store.set(data);
 
-    void new Box({
-      target: container,
-      store
+      const parent = script.parentNode;
+      const container = document.createElement('div');
+      parent.insertBefore(container, script);
+
+      void new Box({
+        target: container,
+        store
+      });
+
+      script.remove();
     });
-
-    script.remove();
-  });
-};
-
-ready(polyfills);
+  })
+);

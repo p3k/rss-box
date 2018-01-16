@@ -2,7 +2,9 @@
 // All it does is to once load the framework which does the actual work
 
 import { urls } from './settings';
-import id from './version';
+import { version } from '../package.json';
+
+const id = '__rssbox_viewer_' + version.replace(/\D/g, '_') + '_init__';
 
 if (!window[id]) {
   window[id] = true;
