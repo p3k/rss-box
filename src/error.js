@@ -3,9 +3,7 @@ import { urls } from './settings';
 const defaultError = {
   loading: false,
   compact: false,
-  headless: false,
   maxItems: 3,
-  height: '',
   format: 'Error',
   version: '❌',
   link: urls.base,
