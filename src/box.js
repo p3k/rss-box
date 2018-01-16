@@ -24,12 +24,11 @@ window[id] = () => {
     }, {});
   };
 
-  const re = new RegExp(urls.base + '/main.js');
-  const filter = Array.prototype.filter;
-  const scripts = filter.call(document.scripts, script => script.src && script.src.match(re));
+  const search = urls.base + '/main.js';
+  const scripts = document.querySelectorAll('script[src^="' + search + '"]');
 
-  scripts.forEach(script => {
-    const query = script.src.split(re)[1].substr(1);
+  Array.prototype.forEach.call(scripts, script => {
+    const query = script.src.split(search)[1].substr(1);
     let data = parseQuery(query);
 
     if (!data.url) data.url = urls.default;
