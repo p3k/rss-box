@@ -5,8 +5,6 @@ import Box from '../components/Box.html';
 import { defaults, keys, urls } from './settings';
 import polyfill from './polyfill.io';
 
-console.log(123);
-
 ready(
   polyfill(() => {
     const getNativeValue = value => {
@@ -48,7 +46,8 @@ ready(
         store
       });
 
-      script.remove();
+      // Only for IE11
+      script.parentNode.removeChild(script);
     });
   })
 );

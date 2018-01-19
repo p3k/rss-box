@@ -38,16 +38,18 @@ export const keys = [
   'width'
 ];
 
-const rootUrl = '//p3k.org';
+const baseUrl = '//p3k.org';
 const serviceUrl = '//p3k-services.appspot.com';
 
-export const urls = Object.assign(
-  {
-    base: rootUrl,
-    app: rootUrl + '/rss',
-    proxy: location.protocol + serviceUrl + '/roxy',
-    referrers: location.protocol + serviceUrl + '/ferris?group=rssbox',
-    default: 'https://blog.p3k.org/stories.xml'
-  },
-  localUrls
-);
+const urls = {
+  app: baseUrl + '/rss',
+  proxy: location.protocol + serviceUrl + '/roxy',
+  referrers: location.protocol + serviceUrl + '/ferris?group=rssbox',
+  default: 'https://blog.p3k.org/stories.xml'
+};
+
+for (let key in urls) {
+  if (key in localUrls) urls[key] = localUrls[key];
+}
+
+export { urls };

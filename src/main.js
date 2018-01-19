@@ -10,6 +10,6 @@ if (!window[id]) {
   window[id] = true;
   const script = document.createElement('script');
   script.defer = script.async = true;
-  script.src = urls.base + '/box.js';
-  document.body.appendChild(script);
+  script.src = urls.app + '/box.js';
+  document.head.appendChild(script);
 }
