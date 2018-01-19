@@ -33,7 +33,7 @@
       {{ #if index < $maxItems }}
         <div class='rssbox-item-content rssBoxItemContent' style='color: {{ $textColor }}'>
           {{ #if item.title }}
-            <div style='font-weight: {{ $fontWeight }};'>
+            <div class='rssbox-item-title {{ itemTitleClass }}'>
               <a href='{{ item.link }}'>
                 {{{ item.title }}}
               </a>
@@ -131,6 +131,10 @@
     background-size: contain;
   }
 
+  .rssbox-item-title.bold {
+    font-weight: bold;
+  }
+
   .rssbox-enclosure, .rssbox-source {
     display: block;
     width: 1em;
@@ -196,10 +200,6 @@
         document.head.appendChild(dynamicCss);
       }
 
-      this.store.observe('compact', compact => {
-        this.store.set({ fontWeight: compact ?  'initial' : 'bold' });
-      });
-
       this.store.observe('linkColor', color => {
         if (!color) return;
 
@@ -242,7 +242,8 @@
 
     computed: {
       height: $height => $height && $height > -1 ? $height + 'px' : '100%',
-      width: $width => $width ? $width + 'px' : '100%'
+      width: $width => $width ? $width + 'px' : '100%',
+      itemTitleClass: $compact => !$compact ? 'bold' : ''
     }
   };
 </script>
