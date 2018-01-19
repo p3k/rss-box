@@ -30,8 +30,6 @@ export default {
       store: true
     }),
 
-    json(),
-
     // If you have external dependencies installed from
     // npm, you'll most likely need these plugins. In
     // some cases you'll need additional configuration —
@@ -39,6 +37,8 @@ export default {
     // https://github.com/rollup/rollup-plugin-commonjs
     resolve(),
     commonjs(),
+
+    json(),
 
     // If we're building for production (npm run build
     // instead of npm run dev), transpile and minify
