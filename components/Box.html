@@ -34,9 +34,13 @@
         <div class='rssbox-item-content rssBoxItemContent' style='color: {{ $textColor }}'>
           {{ #if item.title }}
             <div class='rssbox-item-title {{ itemTitleClass }}'>
+              {{ #if item.link }}
               <a href='{{ item.link }}'>
                 {{{ item.title }}}
               </a>
+              {{ else }}
+                {{{ item.title }}}
+              {{ /if }}
             </div>
           {{ /if }}
 
