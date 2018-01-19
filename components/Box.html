@@ -1,0 +1,251 @@
+<div data-link-color='{{ $linkColor }}' class='rssbox rssBox' style='max-width: {{ width }}; border-color: {{ $frameColor }}; border-radius: {{ $radius }}px; font: {{ $fontFace }}; float: {{ $align }};'>
+  {{ #if !$headless }}
+    <div class='rssbox-titlebar' style='color: {{ $titleBarTextColor }}; background-color: {{ $titleBarColor }}; border-bottom-color: {{ $frameColor }};'>
+      {{ #if $showXmlButton }}
+        <div class='rssbox-icon'>
+          <a href='{{ $url }}' title='{{ $format }} {{ $version }}' style='color: {{ $titleBarTextColor }}'>
+            <RssIcon/>
+          </a>
+        </div>
+      {{ /if }}
+      <div>
+        <a href='{{ $link }}' style='color: {{ $titleBarTextColor }};'>
+          {{ $title }}
+        </a>
+      </div>
+      <div class='rssbox-date'>
+        {{ $formattedDate }}
+      </div>
+    </div>
+  {{ /if }}
+
+  <div class='rssbox-content rssBoxContent' style='background-color: {{ $boxFillColor }}; height: {{ height }};'>
+    {{ #if $image && !$compact }}
+      {{ #await load($image) }}
+      {{ then image }}
+        <a href='{{ $image.link }}' title='{{ $image.title }}'>
+          <div alt='{{ $image.description }}' class='rssbox-image' style='background-image: url({{ $image.source }}); width: {{ image.width }}; height: {{ image.height }};'></div>
+        </a>
+      {{ /await }}
+    {{ /if }}
+
+    {{ #each $items as item, index }}
+      {{ #if index < $maxItems }}
+        <div class='rssbox-item-content rssBoxItemContent' style='color: {{ $textColor }}'>
+          {{ #if item.title }}
+            <div class='rssbox-item-title {{ itemTitleClass }}'>
+              {{ #if item.link }}
+                <a href='{{ item.link }}'>
+                  {{{ item.title }}}
+                </a>
+              {{ else }}
+                {{{ item.title }}}
+              {{ /if }}
+            </div>
+          {{ /if }}
+
+          {{ #if !$compact }}
+            <aside>
+              {{ #if item.source }}
+                <a href='{{ item.source.url }}' title='{{ item.source.title }}' class='rssbox-source'>
+                  {{ #if item.source.url.endsWith('.xml') }}
+                    <RssIcon/>
+                  {{ else }}
+                    <LinkIcon/>
+                  {{ /if }}
+                </a>
+              {{ /if }}
+
+              {{ #if item.enclosures }}
+                {{ #each item.enclosures as enclosure }}
+                  <a href='{{ enclosure.url }}' title='{{ kb(enclosure.length) }} {{ enclosure.type }}' class='rssbox-enclosure'>
+                    <PaperclipIcon/>
+                  </a>
+                {{ /each }}
+              {{ /if }}
+            </aside>
+            {{{ item.description }}}
+          {{ /if }}
+        </div>
+      {{ /if }}
+    {{ /each }}
+
+    {{ #if $input }}
+      <form class='rssbox-form' method='get' action='{{ $input.link }}'>
+        <input type='text' name='{{ $input.name }}' placeholder='Enter search &amp; hit return…' data-placeholder='{{ $input.description }}'>
+        <!-- input type='submit' value='{{ $input.title }}' -->
+      </form>
+    {{ /if }}
+    <div class='rssbox-promo rssBoxPromo'>
+      <a href='{{ appUrl() }}' style='color: {{ $textColor }}'>RSS Box by p3k.org</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .rssbox {
+    box-sizing: border-box;
+    width: 100%;
+    border: 1px solid #000;
+    font-family: sans-serif;
+    overflow: hidden;
+    border-radius: 0;
+    -moz-border-radius: 0;
+  }
+
+  .rssbox-icon {
+    float: right;
+    width: 1em;
+    margin-left: 0.5em;
+  }
+
+  .rssbox-titlebar {
+    padding: 0.5em;
+    color: #000;
+    background-color: #add8e6;
+    border-bottom: 1px solid #000;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+  }
+
+  .rssbox-date {
+    margin-top: 0.2em;
+    font-size: 0.8em;
+    font-weight: normal;
+  }
+
+  .rssbox-content {
+    height: auto;
+    padding: 0.5em;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #fff;
+    clear: both;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
+  .rssbox-content aside {
+    clear: both;
+    float: right;
+  }
+
+  .rssbox-content aside a {
+    display: block;
+    margin-left: 0.5em;
+  }
+
+  .rssbox-image {
+    float: right;
+    margin: 0 0 0.5em 0.5em;
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  .rssbox-item-title.bold {
+    font-weight: bold;
+  }
+
+  .rssbox-enclosure, .rssbox-source {
+    display: block;
+    width: 1em;
+  }
+
+  .rssbox-form {
+    margin-bottom: 0.8em;
+  }
+
+  .rssbox-form input {
+    padding: 0.5em;
+    background-color: #fff;
+  }
+
+  .rssbox-promo {
+    text-align: right;
+    font-size: 0.7em;
+    letter-spacing: 0.01em;
+  }
+</style>
+
+<script>
+  import { urls } from '../src/settings';
+  import LinkIcon from './LinkIcon.html';
+  import RssIcon from './RssIcon.html';
+  import PaperclipIcon from './PaperclipIcon.html';
+
+  export default {
+    components: {
+      LinkIcon,
+      PaperclipIcon,
+      RssIcon
+    },
+
+    oncreate() {
+      const staticId = 'rssbox-static-stylesheet';
+      const dynamicId = 'rssbox-dynamic-stylesheet';
+
+      let staticCss = window[staticId];
+      let dynamicCss = window[dynamicId];
+
+      if (!staticCss) {
+        staticCss = document.createElement('link');
+        staticCss.id = staticId;
+        staticCss.rel = 'stylesheet';
+        staticCss.href = urls.app + '/box.css';
+        document.head.appendChild(staticCss);
+      }
+
+      if (!dynamicCss) {
+        dynamicCss = document.createElement('style');
+        dynamicCss.id = dynamicId;
+        document.head.appendChild(dynamicCss);
+      }
+
+      this.store.observe('linkColor', color => {
+        if (!color) return;
+
+        let rule =
+          `.rssbox[data-link-color="${color}"] a {
+            color: ${color};
+          }`;
+
+        if (dynamicCss.innerHTML.indexOf(rule) < 0) dynamicCss.innerHTML += rule;
+      });
+    },
+
+    helpers: {
+      kb(bytes) {
+        return (bytes / 1000).toFixed(2) + '\u200akB';
+      },
+
+      // Without the dummy argument Svelte complains about this not being a pure function
+      appUrl(dummy = null) {
+        return urls.app;
+      },
+
+      load(data) {
+        return new Promise(fulfill => {
+          const image = new Image();
+
+          image.onload = () => {
+            const maxWidth = Math.min(100, image.width);
+            const factor = image.width > maxWidth ? maxWidth / image.width : 1;
+
+            fulfill({
+              width: (image.width * factor) + 'px',
+              height: (image.height * factor) + 'px'
+            });
+          };
+
+          image.src = data.source;
+        });
+      }
+    },
+
+    computed: {
+      height: $height => $height && $height > -1 ? $height + 'px' : '100%',
+      width: $width => $width ? $width + 'px' : '100%',
+      itemTitleClass: $compact => !$compact ? 'bold' : ''
+    }
+  };
+</script>
