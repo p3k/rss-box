@@ -1,8 +1,0 @@
-{
-  "minify": true,
-  "options": ["setClasses"],
-  "feature-detects": [
-    "css/borderradius",
-    "es5/date"
-  ]
-}

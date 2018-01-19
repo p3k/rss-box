@@ -1,23 +1,55 @@
-var TARGET = 'production';
+import { urls as localUrls } from './local';
 
-var BASE_URI = '//p3k.org/rss';
-var ROXY_URI = location.protocol + '//p3k-services.appspot.com/roxy';
-var FERRIS_URI = location.protocol + '//p3k-services.appspot.com/ferris?callback=?&group=rssbox';
+// These are backwards-compatible settings
+export const defaults = {
+  align: 'initial',
+  boxFillColor: '#fff',
+  compact: false,
+  fontFace: 'inherit',
+  frameColor: '#000',
+  headless: false,
+  height: '',
+  linkColor: '',
+  maxItems: 7,
+  radius: 0,
+  showXmlButton: false,
+  textColor: '#000',
+  titleBarColor: '#add8e6',
+  titleBarTextColor: '#000',
+  width: 200
+};
 
-switch (TARGET) {
-  case 'mixed':
-  BASE_URI = 'http://localhost:8000';
-  break;
+export const keys = [
+  'align',
+  'boxFillColor',
+  'compact',
+  'fontFace',
+  'frameColor',
+  'headless',
+  'height',
+  'linkColor',
+  'maxItems',
+  'radius',
+  'showXmlButton',
+  'textColor',
+  'titleBarColor',
+  'titleBarTextColor',
+  'url',
+  'width'
+];
 
-  case 'dev':
-  BASE_URI = 'http://localhost:8000';
-  ROXY_URI = 'http://localhost:8001/roxy';
-  FERRIS_URI = 'http://localhost:8001/ferris?callback=?&group=rssbox';
-  break;
+const baseUrl = '//p3k.org';
+const serviceUrl = '//p3k-services.appspot.com';
+
+const urls = {
+  app: baseUrl + '/rss',
+  proxy: location.protocol + serviceUrl + '/roxy',
+  referrers: location.protocol + serviceUrl + '/ferris?group=rssbox',
+  default: 'https://blog.p3k.org/stories.xml'
+};
+
+for (let key in urls) {
+  if (key in localUrls) urls[key] = localUrls[key];
 }
 
-module.exports = {
-  baseUri: BASE_URI,
-  roxyUri: ROXY_URI,
-  ferrisUri: FERRIS_URI
-};
+export { urls };

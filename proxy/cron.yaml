@@ -1,0 +1,5 @@
+cron:
+- description: Daily removal of outdated referrers
+  url: /cron/referrers
+  schedule: every 24 hours
+  
