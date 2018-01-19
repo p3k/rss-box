@@ -71,7 +71,7 @@
 
       display(data) {
         const hosts = data.reduce((accu, item) => {
-          if (item.url.startsWith('http') && !item.url.startsWith(urls.base)) {
+          if (item.url.startsWith('http') && !item.url.startsWith(urls.app)) {
             const url = item.url.replace(/^([^.]*)www\./, '$1');
             const host = url.split('/')[2];
             let data = accu[host];

@@ -6,7 +6,7 @@ const defaultError = {
   maxItems: 3,
   format: 'Error',
   version: '❌',
-  link: urls.base,
+  link: urls.app,
   title: 'RSS Box Error',
   description:
     'This output was automatically generated to report an error that occurred during a request to the  RSS Box Viewer.',

@@ -22,7 +22,7 @@ polyfill(() => {
 
   store.compute('code', keys, () => {
     const query = getQuery().replace(/&/g, '&amp;');
-    return `<script async defer src='${urls.base}/main.js?${query}'></script>`;
+    return `<script async defer src='${urls.app}/main.js?${query}'></script>`;
   });
 
   const app = new App({
