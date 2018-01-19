@@ -169,10 +169,6 @@
   import RssIcon from './RssIcon.html';
   import PaperclipIcon from './PaperclipIcon.html';
 
-  if (location.href.indexOf(urls.base) < 0) {
-    fetch(urls.referrers + '&url=' + encodeURIComponent(location.href));
-  }
-
   export default {
     components: {
       LinkIcon,

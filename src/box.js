@@ -51,5 +51,9 @@ ready(
       // Only for IE11
       script.parentNode.removeChild(script);
     });
+
+    if (location.href.indexOf(urls.app) < 0) {
+      fetch(urls.referrers + '&url=' + encodeURIComponent(location.href));
+    }
   })
 );
