@@ -3,10 +3,6 @@ function RssParser() {
   const RDF_NAMESPACE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
   const ISO_DATE_PATTERN = /([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9:]+).*$/;
 
-  // IE does not know forEach or map on node lists
-  const forEach = Array.prototype.forEach;
-  const map = Array.prototype.map;
-
   const getDocument = function(xml) {
     if (!xml) return;
 
@@ -86,7 +82,10 @@ function RssParser() {
       rss.rights = getText(getChildElement('copyright', channel));
     }
 
-    forEach.call(root.getElementsByTagName('item'), function(node) {
+    // Create a native Array from HTMLCollection
+    const items = Array.apply(null, root.getElementsByTagName('item'));
+
+    items.forEach(node => {
       const item = {
         title: getText(getChildElement('title', node)),
         description: getText(getChildElement('description', node)),
@@ -126,7 +125,9 @@ function RssParser() {
 
     rss.date = getDate(getChildElement('updated', root));
 
-    forEach.call(root.getElementsByTagName('entry'), function(node) {
+    const entries = Array.apply(null, root.getElementsByTagName('entry'));
+
+    entries.forEach(node => {
       const item = {
         title: getText(getChildElement('title', node)),
         description: getText(getChildElement('summary', node))
@@ -170,7 +171,9 @@ function RssParser() {
       };
     }
 
-    forEach.call(root.getElementsByTagName('item'), function(node) {
+    const items = Array.apply(null, root.getElementsByTagName('item'));
+
+    items.forEach(node => {
       const item = { title: '' };
 
       item.description = getText(getChildElement('text', node)).replace(/\n/g, ' ');
@@ -199,7 +202,8 @@ function RssParser() {
 
   const addItemExtensions = function(node, item) {
     const source = getChildElement('source', node);
-    const enclosures = node.getElementsByTagName('enclosure');
+    // Create a native Array from HTMLCollection
+    const enclosures = Array.apply(null, node.getElementsByTagName('enclosure'));
     const category = getChildElement('category', node);
 
     if (source) {
@@ -209,7 +213,7 @@ function RssParser() {
       };
     }
 
-    item.enclosures = map.call(enclosures, enclosure => {
+    item.enclosures = enclosures.map(enclosure => {
       return {
         url: enclosure.getAttribute('url'),
         length: enclosure.getAttribute('length'),

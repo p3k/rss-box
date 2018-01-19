@@ -24,11 +24,13 @@ ready(
       }, {});
     };
 
-    const search = urls.base + '/main.js';
-    const scripts = document.querySelectorAll('script[src^="' + search + '"]');
+    const search = urls.app;
+    const scripts = Array.apply(null, document.querySelectorAll('script[src*="' + search + '"]'));
 
-    Array.prototype.forEach.call(scripts, script => {
-      const query = script.src.split(search)[1].substr(1);
+    scripts.forEach(script => {
+      const query = script.src.split('?')[1];
+      if (!query) return;
+
       let data = parseQuery(query);
 
       if (!data.url) data.url = urls.default;
