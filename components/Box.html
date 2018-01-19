@@ -35,9 +35,9 @@
           {{ #if item.title }}
             <div class='rssbox-item-title {{ itemTitleClass }}'>
               {{ #if item.link }}
-              <a href='{{ item.link }}'>
-                {{{ item.title }}}
-              </a>
+                <a href='{{ item.link }}'>
+                  {{{ item.title }}}
+                </a>
               {{ else }}
                 {{{ item.title }}}
               {{ /if }}
@@ -218,7 +218,8 @@
         return (bytes / 1000).toFixed(2) + '\u200akB';
       },
 
-      appUrl() {
+      // Without the dummy argument Svelte complains about this not being a pure function
+      appUrl(dummy = null) {
         return urls.app;
       },
 
