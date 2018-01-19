@@ -5,7 +5,7 @@ export const defaults = {
   align: 'initial',
   boxFillColor: '#fff',
   compact: false,
-  fontFace: '10pt sans-serif',
+  fontFace: 'inherit',
   frameColor: '#000',
   headless: false,
   height: '',
