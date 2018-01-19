@@ -62,10 +62,12 @@ export default class RssStore extends Store {
           })
           .catch(message => {
             this.set(error(url, message));
+            console.error(message);
           });
       })
       .catch(message => {
         this.set(error(url, message));
+        console.error(message);
       });
   }
 }
