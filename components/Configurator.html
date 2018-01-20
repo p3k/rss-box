@@ -172,7 +172,7 @@
         {{ /if }}
       </td>
     </tr>
-    <tr>
+    <tr style='vertical-align: top'>
       <td>
         <label on:click='label(event)'>
           HTML code<br>
@@ -212,6 +212,12 @@
     outline: none;
   }
 
+  textarea, input:not([type='checkbox']) {
+    box-sizing: border-box;
+    height: 34px;
+    padding: 5px
+  }
+
   .top {
     vertical-align: top;
   }
@@ -225,11 +231,14 @@
   }
 
   [type=color], [type=number] {
-    width: 50px;
+    width: 7em;
   }
 
   [name=code] {
     color: #bbb;
+    height: 10em;
+    overflow: hidden;
+    resize: vertical;
   }
 </style>
 
