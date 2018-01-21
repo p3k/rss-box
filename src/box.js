@@ -4,9 +4,12 @@ import RssStore from './RssStore';
 import Box from '../components/Box.html';
 import { defaults, keys, urls } from './settings';
 import polyfill from './polyfill.io';
+import getNativeObject from './native.js';
 
 ready(
   polyfill(() => {
+    const reduce = getNativeObject('Array').prototype.reduce;
+
     const getNativeValue = value => {
       if (value === 'true') return true;
       if (value === 'false') return false;
@@ -15,7 +18,7 @@ ready(
 
     const parseQuery = query => {
       const parts = query.split('&');
-      return parts.reduce((data, pair) => {
+      return reduce.call(parts, (data, pair) => {
         const [key, value] = pair.split('=');
         if (keys.indexOf(key) > -1) {
           data[key] = getNativeValue(decodeURIComponent(value));
