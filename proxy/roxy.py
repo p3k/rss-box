@@ -31,7 +31,6 @@ class Resource(ndb.Model):
    content = ndb.TextProperty()
 
 class HttpError(Exception):
-
    def __init__(self, response):
       self.response = response
 
@@ -39,7 +38,6 @@ class HttpError(Exception):
       return repr(self.response.status_code)
 
 class MainHandler(webapp2.RequestHandler):
-
    def get(self):
       TTL = 60
 
