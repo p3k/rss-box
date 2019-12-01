@@ -11,7 +11,7 @@
     "dev": "serve dist & rollup -c -w",
     "dev-box": "yarn build-main & serve dist & rollup -c -w -i src/box.js -o dist/box.js -n box",
     "proxy": "dev_appserver.py --skip_sdk_update_check=yes --port=8081 --admin_port=8082 --host=0.0.0.0 --enable_host_checking=False proxy",
-    "proxy-deploy": "appcfg.py -A p3k-services -V 6 update proxy",
+    "proxy-deploy": "appcfg.py -A p3k-services -V 9 update proxy",
     "start": "serve dist"
   },
   "repository": {
