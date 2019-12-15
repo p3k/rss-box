@@ -1,5 +1,0 @@
-blacklist:
-- subnet: 212.45.46.32
-  description: Heavy hitter
-- subnet: 79.100.247.54
-  description: Heavy hitter
