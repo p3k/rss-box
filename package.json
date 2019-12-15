@@ -1,18 +1,25 @@
 {
   "name": "rss-box",
-  "version": "18.1.19",
+  "version": "19.12.10",
   "description": "RSS Box Viewer",
   "main": "src/app.js",
   "scripts": {
-    "build": "yarn build-app & yarn build-box & yarn build-main",
-    "build-app": "rollup -c",
-    "build-box": "rollup -c -i src/box.js -o dist/box.js -n box",
-    "build-main": "rollup -c -i src/main.js -o dist/main.js -n main",
-    "dev": "serve dist & rollup -c -w",
-    "dev-box": "yarn build-main & serve dist & rollup -c -w -i src/box.js -o dist/box.js -n box",
-    "proxy": "dev_appserver.py --skip_sdk_update_check=yes --port=8081 --admin_port=8082 --host=0.0.0.0 --enable_host_checking=False proxy",
-    "proxy-deploy": "appcfg.py -A p3k-services -V 9 update proxy",
-    "start": "serve dist"
+    "build": "yarn build:app & yarn build:box & yarn build:main",
+    "build:app": "rollup -c",
+    "build:box": "rollup -c -i src/box.js -o dist/box.js -n box",
+    "build:main": "rollup -c -i src/main.js -o dist/main.js -n main",
+
+    "client": "yarn build & serve dist",
+    "client:box": "yarn build:main & serve dist & rollup -c -w -i src/box.js -o dist/box.js -n box",
+    "client:deploy": "rsync -avz --delete dist/ p3k:/var/www/rss-box/",
+    "client:stage": "rsync -avz --delete dist/ p3k:/var/www/rss-stage/",
+    "client:watch": "yarn build & serve dist & rollup -c -w",
+
+    "server": "(cd services; python main.py)",
+    "server:datastore": "export DATASTORE_EMULATOR_HOST=localhost:8081; export DATASTORE_PROJECT_ID=p3k-services; gcloud beta emulators datastore start",
+    "server:deploy": "(cd services; gcloud app deploy --no-promote)",
+    "server:index": "(cd services; gcloud datastore indexes create index.yaml)",
+    "server:install": "(cd services; pip install -r requirements.txt)"
   },
   "repository": {
     "type": "git",
