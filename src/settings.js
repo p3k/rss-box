@@ -38,13 +38,12 @@ export const keys = [
   'width'
 ];
 
-const baseUrl = '//p3k.org';
-const serviceUrl = '//p3k-services.appspot.com';
+const baseUrl = 'http://localhost';
 
 const urls = {
-  app: baseUrl + '/rss',
-  proxy: location.protocol + serviceUrl + '/roxy',
-  referrers: location.protocol + serviceUrl + '/ferris?group=rssbox',
+  app: baseUrl + ':5000',
+  proxy: baseUrl + ':8080/roxy',
+  referrers: baseUrl + ':8080/ferris?group=rssbox',
   default: 'https://blog.p3k.org/stories.xml'
 };
 
