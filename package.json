@@ -11,8 +11,8 @@
 
     "client": "yarn build & serve dist",
     "client:box": "yarn build:main & serve dist & rollup -c -w -i src/box.js -o dist/box.js -n box",
-    "client:deploy": "rsync -avz --delete dist/ p3k:/var/www/rss-box/",
-    "client:stage": "rsync -avz --delete dist/ p3k:/var/www/rss-stage/",
+    "client:deploy": "rsync -avz --delete dist/ p3k:/var/www/p3k.org/rss/",
+    "client:stage": "rsync -avz --delete dist/ p3k:/var/www/p3k.org/rss-stage/",
     "client:watch": "yarn build & serve dist & rollup -c -w",
 
     "server": "(cd services; python main.py)",
