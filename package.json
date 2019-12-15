@@ -19,7 +19,8 @@
     "server:datastore": "export DATASTORE_EMULATOR_HOST=localhost:8081; export DATASTORE_PROJECT_ID=p3k-services; gcloud beta emulators datastore start",
     "server:deploy": "(cd services; gcloud app deploy --no-promote)",
     "server:index": "(cd services; gcloud datastore indexes create index.yaml)",
-    "server:install": "(cd services; pip install -r requirements.txt)"
+    "server:install": "(cd services; pip install -r requirements.txt)",
+    "server:tasks": "(cd services; gcloud app deploy cron.yaml")
   },
   "repository": {
     "type": "git",
