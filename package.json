@@ -20,7 +20,8 @@
     "server:deploy": "(cd services; gcloud app deploy --no-promote)",
     "server:index": "(cd services; gcloud datastore indexes create index.yaml)",
     "server:install": "(cd services; pip install -r requirements.txt)",
-    "server:tasks": "(cd services; gcloud app deploy cron.yaml")
+    "server:tasks": "(cd services; gcloud app deploy cron.yaml)",
+    "server:update": "git submodule update --remote --merge"
   },
   "repository": {
     "type": "git",
