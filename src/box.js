@@ -18,13 +18,17 @@ ready(
 
     const parseQuery = query => {
       const parts = query.split('&');
-      return reduce.call(parts, (data, pair) => {
-        const [key, value] = pair.split('=');
-        if (keys.indexOf(key) > -1) {
-          data[key] = getNativeValue(decodeURIComponent(value));
-        }
-        return data;
-      }, {});
+      return reduce.call(
+        parts,
+        (data, pair) => {
+          const [key, value] = pair.split('=');
+          if (keys.indexOf(key) > -1) {
+            data[key] = getNativeValue(decodeURIComponent(value));
+          }
+          return data;
+        },
+        {}
+      );
     };
 
     const search = urls.app;

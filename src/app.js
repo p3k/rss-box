@@ -25,7 +25,7 @@ polyfill(() => {
     return `<script async defer src='${urls.app}/main.js?${query}'></script>`;
   });
 
-  const app = new App({
+  new App({
     target: document.querySelector('main'),
     store
   });

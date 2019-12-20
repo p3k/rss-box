@@ -1,6 +1,6 @@
 import { Store } from 'svelte/store';
 import { RssParser } from './RssParser';
-import { urls, defaults } from './settings';
+import { urls } from './settings';
 import error from './error';
 
 export default class RssStore extends Store {
