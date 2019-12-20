@@ -8,13 +8,11 @@
     "build:app": "rollup -c",
     "build:box": "rollup -c -i src/box.js -o dist/box.js -n box",
     "build:main": "rollup -c -i src/main.js -o dist/main.js -n main",
-
     "client": "yarn build & serve dist",
     "client:box": "yarn build:main & serve dist & rollup -c -w -i src/box.js -o dist/box.js -n box",
     "client:deploy": "rsync -avz --delete dist/ p3k:/var/www/p3k.org/rss/",
     "client:stage": "rsync -avz --delete dist/ p3k:/var/www/p3k.org/rss-stage/",
     "client:watch": "yarn build & serve dist & rollup -c -w",
-
     "server": "(cd services; python main.py)",
     "server:datastore": "export DATASTORE_EMULATOR_HOST=localhost:8081; export DATASTORE_PROJECT_ID=p3k-services; gcloud beta emulators datastore start",
     "server:deploy": "(cd services; gcloud app deploy --no-promote)",
@@ -35,6 +33,10 @@
   "homepage": "https://github.com/p3k/rss-box#readme",
   "devDependencies": {
     "domready": "^1.0.8",
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.19.1",
     "rollup": "^0.52.0",
     "rollup-plugin-buble": "^0.18.0",
     "rollup-plugin-commonjs": "^8.2.6",
