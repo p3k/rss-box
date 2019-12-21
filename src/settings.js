@@ -41,7 +41,7 @@ export const keys = [
 const baseUrl = 'http://localhost';
 
 const urls = {
-  app: baseUrl + ':5000',
+  app: baseUrl + ':8000',
   proxy: baseUrl + ':8080/roxy',
   referrers: baseUrl + ':8080/ferris?group=rssbox',
   default: 'https://blog.p3k.org/stories.xml'
