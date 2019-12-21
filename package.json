@@ -5,11 +5,11 @@
   "main": "src/app.js",
   "scripts": {
     "app": "(trap 'kill 0' INT; yarn client & yarn server)",
-    "build": "yarn build:app & yarn build:box & yarn build:main",
+    "build": "yarn build:app; yarn build:box; yarn build:main",
     "build:app": "rollup -c",
     "build:box": "rollup -c -i src/box.js -o dist/box.js -n box",
     "build:main": "rollup -c -i src/main.js -o dist/main.js -n main",
-    "client": "yarn build & serve -l 8000 dist",
+    "client": "yarn build; serve -l 8000 dist",
     "client:box": "yarn build:main & serve -l 8000 dist & rollup -c -w -i src/box.js -o dist/box.js -n box",
     "client:deploy": "rsync -avz --delete dist/ p3k:/var/www/p3k.org/rss/",
     "client:install": "if [ ! -e src/local.js ]; then echo 'export const urls = {};' > src/local.js; fi",
