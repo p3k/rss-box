@@ -4,7 +4,7 @@
   "description": "RSS Box Viewer",
   "main": "src/app.js",
   "scripts": {
-    "app": "(trap 'kill 0' SIGINT; yarn client & yarn server)",
+    "app": "(trap 'kill 0' INT; yarn client & yarn server)",
     "build": "yarn build:app & yarn build:box & yarn build:main",
     "build:app": "rollup -c",
     "build:box": "rollup -c -i src/box.js -o dist/box.js -n box",
