@@ -1,2 +1,4492 @@
-!function(){"use strict";function e(){}function t(e){for(var t,n,o=1,i=arguments.length;o<i;o++){n=arguments[o];for(t in n)e[t]=n[t]}return e}function n(e,t){t.appendChild(e)}function o(e,t,n){t.insertBefore(e,n)}function i(e){e.parentNode.removeChild(e)}function r(e,t){for(;e.nextSibling&&e.nextSibling!==t;)e.parentNode.removeChild(e.nextSibling)}function s(e){for(var t=0;t<e.length;t+=1)e[t]&&e[t].d()}function l(e){return document.createElement(e)}function a(e){return document.createElementNS("http://www.w3.org/2000/svg",e)}function c(e){return document.createTextNode(e)}function u(){return document.createComment("")}function d(e,t,n){e.addEventListener(t,n,!1)}function h(e,t,n){e.removeEventListener(t,n,!1)}function m(e,t,n){e.setAttribute(t,n)}function p(e,t,n){e.style.setProperty(t,n)}function f(){return Object.create(null)}function g(t){this.destroy=e,this.fire("destroy"),this.set=this.get=e,!1!==t&&this._fragment.u(),this._fragment.d(),this._fragment=this._state=null}function v(e,t){return e!==t||e&&"object"==typeof e||"function"==typeof e}function b(e,t,n,o,i){for(var r in t)if(n[r]){var s=o[r],l=i[r],a=t[r];if(a)for(var c=0;c<a.length;c+=1){var u=a[c];u.__calling||(u.__calling=!0,u.call(e,s,l),u.__calling=!1)}}}function y(e){return e?this._state[e]:this._state}function w(e,t){e._observers={pre:f(),post:f()},e._handlers=f(),e._bind=t._bind,e.options=t,e.root=t.root||e,e.store=e.root.store||t.store}function x(e,t,n){var o=n&&n.defer?this._observers.post:this._observers.pre;return(o[e]||(o[e]=[])).push(t),n&&!1===n.init||(t.__calling=!0,t.call(this,this._state[e]),t.__calling=!1),{cancel:function(){var n=o[e].indexOf(t);~n&&o[e].splice(n,1)}}}function k(e){for(;e&&e.length;)e.pop()()}function _(){this.store._remove(this)}var C={destroy:g,get:y,fire:function(e,t){var n=e in this._handlers&&this._handlers[e].slice();if(n)for(var o=0;o<n.length;o+=1)n[o].call(this,t)},observe:x,on:function(e,t){if("teardown"===e)return this.on("destroy",t);var n=this._handlers[e]||(this._handlers[e]=[]);return n.push(t),{cancel:function(){var e=n.indexOf(t);~e&&n.splice(e,1)}}},set:function(e){this._set(t({},e)),this.root._lock||(this.root._lock=!0,k(this.root._beforecreate),k(this.root._oncreate),k(this.root._aftercreate),this.root._lock=!1)},teardown:g,_recompute:e,_set:function(e){var n=this._state,o={},i=!1;for(var r in e)v(e[r],n[r])&&(o[r]=i=!0);i&&(this._state=t({},n,e),this._recompute(o,this._state),this._bind&&this._bind(o,this._state),this._fragment&&(b(this,this._observers.pre,o,this._state,n),this._fragment.p(o,this._state),b(this,this._observers.post,o,this._state,n)))},_mount:function(e,t){this._fragment.m(e,t)},_unmount:function(){this._fragment&&this._fragment.u()}};function $(e){this._observers={pre:f(),post:f()},this._changeHandlers=[],this._dependents=[],this._computed=f(),this._sortedComputedProperties=[],this._state=t({},e)}t($.prototype,{_add:function(e,t){this._dependents.push({component:e,props:t})},_init:function(e){for(var t={},n=0;n<e.length;n+=1){var o=e[n];t["$"+o]=this._state[o]}return t},_remove:function(e){for(var t=this._dependents.length;t--;)if(this._dependents[t].component===e)return void this._dependents.splice(t,1)},_sortComputedProperties:function(){var e,t=this._computed,n=this._sortedComputedProperties=[],o=f();function i(r){if(e[r])throw new Error("Cyclical dependency detected");if(!o[r]){o[r]=!0;var s=t[r];s&&(e[r]=!0,s.deps.forEach(i),n.push(s))}}for(var r in this._computed)e=f(),i(r)},compute:function(e,t,n){var o,i={deps:t,update:function(i,r,s){var l=t.map(function(e){return e in r&&(s=!0),i[e]});if(s){var a=n.apply(null,l);v(a,o)&&(o=a,r[e]=!0,i[e]=o)}}};i.update(this._state,{},!0),this._computed[e]=i,this._sortComputedProperties()},get:y,observe:x,onchange:function(e){return this._changeHandlers.push(e),{cancel:function(){var t=this._changeHandlers.indexOf(e);~t&&this._changeHandlers.splice(t,1)}}},set:function(e){var n=this._state,o=this._changed={},i=!1;for(var r in e){if(this._computed[r])throw new Error("'"+r+"' is a read-only property");v(e[r],n[r])&&(o[r]=i=!0)}if(i){this._state=t({},n,e);for(var s=0;s<this._sortedComputedProperties.length;s+=1)this._sortedComputedProperties[s].update(this._state,o);for(s=0;s<this._changeHandlers.length;s+=1)this._changeHandlers[s](this._state,o);b(this,this._observers.pre,o,this._state,n);var l=this._dependents.slice();for(s=0;s<l.length;s+=1){var a=l[s],c={};i=!1;for(var u=0;u<a.props.length;u+=1){var d=a.props[u];d in o&&(c["$"+d]=this._state[d],i=!0)}i&&a.component.set(c)}b(this,this._observers.post,o,this._state,n)}}});function S(){var e="http://purl.org/dc/elements/1.1/",t=/([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9:]+).*$/,n=function(e,t,n){if(!e||!t)return null;var o="getElementsByTagName";return n&&(o+="NS"),t[o](e,n)[0]},o=function(e){return e?(e.length&&(e=e[0]),e.textContent):""},i=Error("Malformed RSS syntax"),r=function(e,t){var o=n("source",e),i=Array.apply(null,e.getElementsByTagName("enclosure")),r=n("category",e);return o&&(t.source={url:o.getAttribute("url"),title:o.textContent}),t.enclosures=i.map(function(e){return{url:e.getAttribute("url"),length:e.getAttribute("length"),type:e.getAttribute("type")}}),r&&(t.category={domain:r.getAttribute("domain")||"",content:r.textContent}),t},s=function(e){var n=Date.parse(e);return isNaN(n)&&(n=Date.parse(String(e).replace(t,"$1/$2/$3 $4")),isNaN(n)&&(n=Date.now())),new Date(n)};return{parse:function(t){var l=function(e){if(e){var t;return document.implementation.createDocument?t=(new DOMParser).parseFromString(e,"application/xml"):window.ActiveXObject&&((t=new window.ActiveXObject("Microsoft.XMLDOM")).async="false",t.loadXML(e)),t}}(t).documentElement,a=l.nodeName;switch(a){case"feed":return function(e){var t={items:[]};t.format="Atom",t.version="1.0",t.title=o(n("title",e)),t.description=o(n("subtitle",e)),t.image="";var i=n("link:not([self])",e);i&&(t.link=i.getAttribute("href")),t.date=s(n("updated",e));return Array.apply(null,e.getElementsByTagName("entry")).forEach(function(e){var i={title:o(n("title",e)),description:o(n("summary",e))},r=n("link",e);r&&(i.link=r.getAttribute("href")),t.items.push(i)}),t}(l);case"scriptingNews":return function(e){var t={items:[]},l=n("header",e);if(!l)throw i;t.format="Scripting News",t.version=o(n("scriptingNewsVersion",l)),t.title=o(n("channelTitle",l)),t.description=o(n("channelDescription",l)),t.link=o(n("channelLink",l)),t.date=s(o(n("lastBuildDate",l))||o(n("pubDate",l)));var a=n("imageUrl",l);a&&(t.image={source:o(a),title:o(n("imageTitle",l)),link:o(n("imageLink",l)),width:o(n("imageWidth",l)),height:o(n("imageHeight",l)),description:o(n("imageCaption",l))});return Array.apply(null,e.getElementsByTagName("item")).forEach(function(e){var i={title:""};i.description=o(n("text",e)).replace(/\n/g," ");var s=n("link",e);if(s){var l=o(n("linetext",s)).replace(/\n/g," ").trim();l&&(i.description=i.description.replace(new RegExp(l),'<a href="'+o(n("url",e))+'">'+l+"</a>")),i.link=o(n("url",s))}r(e,i),t.items.push(i)}),t}(l);default:return function(t,l){var a={items:[]},c=n("channel",t);if(!c)throw i;a.format="RSS",a.version="rdf:RDF"===l?"1.0":t.getAttribute("version"),a.title=o(n("title",c)),a.description=o(n("description",c)),a.link=o(n("link",c));var u=n("image",c);if(a.image=u?{source:o(n("url",u))||u.getAttributeNS("http://www.w3.org/1999/02/22-rdf-syntax-ns#","resource"),title:o(n("title",u)),link:o(n("link",u)),width:o(n("width",u)),height:o(n("height",u)),description:o(n("description",u))}:"","rdf:RDF"===l){var d=c.getElementsByTagNameNS(e,"date");a.date=s(o(d)),a.rights=o(c.getElementsByTagNameNS(e,"creator"));var h=n("textinput",t);a.input=h?{link:o(n("link",h)),description:o(n("description",h)),name:o(n("name",h)),title:o(n("title",h))}:""}else a.date=s(o(n("lastBuildDate",c))||o(n("pubDate",c))),a.rights=o(n("copyright",c));return Array.apply(null,t.getElementsByTagName("item")).forEach(function(e){var t={title:o(n("title",e)),description:o(n("description",e)),link:o(n("link",e))||o(n("guid",e))};if(!t.description){var i=o(n("encoded",e,"content"));i?t.description=i:(i=o(n("encoded",e)))&&(t.description=i)}r(e,t),a.items.push(t)}),a}(l,a)}}}}var T={app:"https://p3k.org/rss",proxy:"https://p3k-services.appspot.com/roxy",referrers:"https://p3k-services.appspot.com/ferris?group=rssbox",default:"https://blog.p3k.org/stories.xml"}||{},B=["align","boxFillColor","compact","fontFace","frameColor","headless","height","linkColor","maxItems","radius","showXmlButton","textColor","titleBarColor","titleBarTextColor","url","width"],A="http://localhost",R={app:A+":8000",proxy:A+":8080/roxy",referrers:A+":8080/ferris?group=rssbox",default:"https://blog.p3k.org/stories.xml"};for(var M in R)M in T&&(R[M]=T[M]);var I={loading:!1,compact:!1,maxItems:3,format:"Error",version:"❌",title:"RSS Box Error",description:"This output was automatically generated to report an error that occurred during a request to the  RSS Box Viewer.",items:[{title:"Oops, something went wrong…",description:"An error occurred while processing the request to the RSS Box Viewer."},{title:"The following error message was returned:",description:"Unknown error"},{title:""}]};function L(e,t){var n=Object.assign({},I);return n.link=R.app+"?url="+e,n.items[1].description=t,n.items[2].description='Most likely, this might have happened because of a non-existent or invalid RSS feed URL. <a href="https://validator.w3.org/feed/check.cgi?url='+e+'">Please check</a> and possibly correct your input, then try again.',n}var N=function(e){function t(){var t={date:new Date,description:"",format:"",image:"",input:"",items:[],title:"",version:""};e.call(this,t),this.compute("formattedDate",["date"],function(e){if(e){var t=(e.getMonth()+1).toString().padStart(2,"0"),n=e.getDate().toString().padStart(2,"0"),o=e.getHours().toString().padStart(2,"0"),i=e.getMinutes().toString().padStart(2,"0");return e.getFullYear()+"-"+t+"-"+n+", "+o+":"+i+"h"}}),this.observe("url",this.fetch,{init:!1})}return e&&(t.__proto__=e),t.prototype=Object.create(e&&e.prototype),t.prototype.constructor=t,t.prototype.fetch=function(){var e=this,t=this.get("url");t&&(this.set({loading:!0}),fetch(R.proxy+"?url="+encodeURIComponent(t)).then(function(n){if(!n.ok)throw Error(n.statusText);n.text().then(function(t){var n=S(),o=JSON.parse(t);if(o.headers["X-Roxy-Error"])throw Error(o.headers["X-Roxy-Error"]);var i=n.parse(o.content);i.date||(i.date=new Date(o.headers.date)),i.loading=!1,e.set(i)}).catch(function(n){e.set(L(t,n)),console.error(n)})}).catch(function(n){e.set(L(t,n)),console.error(n)}))},t}($);function H(t,n){var r;return{c:function(){(r=l("details")).innerHTML='<summary svelte-2837112113><h3 svelte-2837112113>Change Log</h3></summary>\n\n  <p svelte-2837112113><small svelte-2837112113>2019-12-15</small>\n    Upgraded the JSONP proxy to Python 3.7 and slightly retouched the configuration form. A merry ending for 2019 and a happy new year 🎉 <em svelte-2837112113>It’s hindsight!<em svelte-2837112113></em></em></p>\n\n  <p svelte-2837112113><small svelte-2837112113>2018-01-19</small>\n    More than 15 years (and still counting…) after its inception this little service is still live and kicking! The best part of this hobby project’s long-running trait: this year brings a complete rewrite and overhaul with an extensive list of updates – and only small changes in functionality:</p>\n  <ul svelte-2837112113><li svelte-2837112113>Added basic support for Atom 1.0 feeds 🔥</li>\n    <li svelte-2837112113>Added support for multiple enclosures (RSS 0.93)</li>\n    <li svelte-2837112113>Replaced value of -1 for automatic content height with “empty” value</li>\n    <li svelte-2837112113>Added support for “empty” value to box width (now called ”max. width”)</li>\n    <li svelte-2837112113>Reduced total size of embedded download by more than 60% ⚡</li>\n    <li svelte-2837112113>Increased performance of loading and rendering boxes</li>\n    <li svelte-2837112113>Implemented responsive CSS for both, boxes and configuration app</li>\n    <li svelte-2837112113>Replaced bitmap icons with scalable vector graphics</li>\n    <li svelte-2837112113>Completely rewrote the app code using <a svelte-2837112113 href="https://svelte.technology">Svelte</a> and <a svelte-2837112113 href="https://mincss.com/">min.css</a></li>\n    <li svelte-2837112113>Replaced remaining jQuery code with vanilla JavaScript</li>\n    <li svelte-2837112113>Migrated build scripts to Rollup and Yarn</li>\n    <li svelte-2837112113>Added support for missing browser features via <a svelte-2837112113 href="https://polyfills.io">polyfills.io</a></li>\n    <li svelte-2837112113>Discontinued support for older browsers (MSIE < 11)</li>\n    <li svelte-2837112113>Bumped major version to 18 (aka the year), getting rid of semantic versioning due to lack of semantics 🐱</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2016-03-12</small>\n    Completely rewrote build environment using WebPack. Switched the <a svelte-2837112113 href="https://github.com/p3k/rss-box">source repository</a> from SVN to Git, hosted at Github. This deserves a new major version number!</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-12-30</small>\n    Added simple code to modify the width attribute of iframe, object and embed elements to make them fit in the box. Also: bumped version. <i svelte-2837112113>A happy new year 2013, everbody!</i></p>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-10-26</small>\n    Added section about Creative Commons License, below. In other words: you can now legally run my code on your own server. (You even could remove the tiny reference to this page in the footer of the box.) However, I would like to ask you for two things if you want to do so:</p>\n  <ul svelte-2837112113><li svelte-2837112113>Use your own <a svelte-2837112113 href="//github.com/p3k/json3k">JSONP proxy</a> – especially, when you expect a high load on your server.</li>\n    <li svelte-2837112113>Please support the service with a <a svelte-2837112113 href="http://flattr.com/thing/681881/JavaScript-RSS-Box-Viewer">donation</a>.</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-08-01</small>\n    Added two new, experimental features – and thus, increased version to 3.3:</p>\n  <ul svelte-2837112113><li svelte-2837112113>The height of the inner box content can now be defined by a pixel value. If the height is less than the space needed by the desired amount of items you can vertically scroll the content. A value of <code svelte-2837112113>-1</code> enables the default behavior and automatically sets the height according to the displaying items.</li>\n    <li svelte-2837112113>The so-called “headless” mode removes the titlebar and the frame from the box. This way the box can be used more flexibly in special situations. However, this feature somehow undermines an RSS feed’s authority so I count on your fairness to give credit where credit is due!</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-07-16</small>\n    Slightly modified output of the HTML code to be usable with both, unsecured and secured (HTTPS) web servers. You can update already embedded code easily by removing the <code svelte-2837112113>http:</code> part from the <code svelte-2837112113>src</code> attribute of the <code svelte-2837112113>&lt;script&gt;</code> element: <code svelte-2837112113>&lt;script src=\'http://p3k.org/rss…\'&gt;</code> becomes <code svelte-2837112113>&lt;script src=\'//p3k.org/rss…\'&gt;</code>.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-07-13</small></p>\n  <ul svelte-2837112113><li svelte-2837112113>Fixed IE bug (“innerHTML is null or not an object”) caused by using jQuery’s html() method instead of text() when parsing a <code svelte-2837112113>&lt;content:encoded&gt;</code> element.</li>\n    <li svelte-2837112113>Changed priority of elements: only check for <code svelte-2837112113>&lt;content:encoded&gt;</code> if     <code svelte-2837112113>&lt;description&gt;</code> is not available.</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-06-04</small></p>\n  <ul svelte-2837112113><li svelte-2837112113>Implemented small routine to resize images contained in the feed content to fit in the box.</li>\n    <li svelte-2837112113>Added support for new HTML5 form input types and their validation.</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-05-31</small>\n    Gone βeta! – with three tiny additons:</p>\n  <ul svelte-2837112113><li svelte-2837112113>Added <code svelte-2837112113>&lt;noscript&gt;</code> element for browsers providing no JavaScript engine.</li>\n    <li svelte-2837112113>Added option to call the configurator with a URL in the query string.</li>\n    <li svelte-2837112113>Added a link to the W3C feed validator to the contents of a box displaying an RSS error.</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-05-19</small>\n    Apologies for the RSS Boxes not showing up on your pages during the last few days. I made a stupid mistake that caused only the setup page to render correctly – and I did not check any embedded script. <i svelte-2837112113>Bummer!</i></p>\n  <p svelte-2837112113>At least now everything should be back to normal. (I hope this incident did not sabotage the Flattr button I added in the meantime… <i svelte-2837112113>wink, wink!</i>)</p>\n  <p svelte-2837112113>Anyway, thanks for your understanding.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-05-16</small>\n    I think I did not mention, yet, that the current incarnation of the code is totally disconnected from the version as of 2009. Each is using their own codebase, the legacy code was not modified at all and thus, it is not affected by any recent changes. You can check which version you are using by looking at the script URL. If it contains the string “proxy.r” you get the “classic” RSS Box rendering. The modernized version calls “index.js”. Nevertheless, you cannot setup boxes with the old URL anymore.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-05-09</small></p>\n  <ul svelte-2837112113><li svelte-2837112113>Added support for <code svelte-2837112113>&lt;content:encoded&gt;</code> element.</li>\n    <li svelte-2837112113>Implemented Memcache usage in AppEngine code.</li>\n    <li svelte-2837112113>Beautified this page by using the <a svelte-2837112113 href="http://www.google.com/webfonts/specimen/Droid+Serif">Google’s Droid Serif font</a>.</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-04-26</small>\n    Amazing! A new version! After more than two years hiatus I completely rewrote the codebase and framework:</p>\n  <ul svelte-2837112113><li svelte-2837112113>Removed dependency to Rebol using a small JSONP proxy at Google’s AppEngine.</li>\n    <li svelte-2837112113>Rewrote XML parsing, replacing native methods with jQuery ones.</li>\n    <li svelte-2837112113>Cleaned up HTML output for the RSS Box, replacing tables with divs. <i svelte-2837112113>Note: You might need to add <code svelte-2837112113><a svelte-2837112113 href="http://coding.smashingmagazine.com/2010/11/02/the-important-css-declaration-how-and-when-to-use-it/">!important</a></code> to your custom RSS Box stylesheet definitions.</i></li>\n    <li svelte-2837112113>Replaced fugly colorpicker in configurator with the <a svelte-2837112113 href="https://github.com/claviska/jquery-miniColors/">MiniColors jQuery plugin</a>.</li>\n    <li svelte-2837112113>Added link color setting and style attributes for correctly applying color settings.</li>\n    <li svelte-2837112113>Added corner radius setting. <i svelte-2837112113>Note: does not work in IE8 and earlier versions.</i></li>\n    <li svelte-2837112113>Added font size to the font face setting.</li>\n    <li svelte-2837112113>Removed align setting from configurator (still works in script tags generated with earlier versions).</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2009-12-13</small>\n    Switched output of this page to HTML5 and made some adaptations in the HTML code and CSS stylesheet. Updated version string to 2.1, finally!</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2009-09-28</small>\n    Some minor changes after a while:</p>\n  <ul svelte-2837112113><li svelte-2837112113>Refactored date parsing to show actual build dates more reliably</li>\n    <li svelte-2837112113>Refactored caching routine (only in online version)</li>\n    <li svelte-2837112113>Updated version string to 2.1b, approaching another final version.</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2008-02-19</small>\n    Seems there were some changes in the air as I did not plan another update but here comes version 2.1 bringing to you:</p>\n  <ul svelte-2837112113><li svelte-2837112113>Full client-side processing (only the raw feed data is fetched from the server).</li>\n    <li svelte-2837112113>User-friendlier interface with color pickers, status and error display as well as instant feedback on any change in setup.</li>\n    <li svelte-2837112113>And finally (drumroll!) Unicode support at least at this installation of the viewer. (Ie. the downloaded version still will output ASCII only.)</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2008-02-03</small>\n    Made some more improvements especially regarding the error handling and output. From now on it should be much clearer what’s wrong with a very RSS Box. Since there’s now a lot more of client-side JavaScript code involved I tested the script in four major browsers that are available to me: Internet Explorer 7, Firefox 2.0, Opera 9.25 and Safari 3.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2008-02-01</small>\n    Completely revised server- and client-side code. XML rendering is now done in the browser which speeds up things and decreases the load on the server. Furthermore, the list of referrers is now loaded on demand via AJAX and thus not rendered with every request. Finally, I retouched the setup form interface and cleaned up both HTML and CSS.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-12-20</small>\n    I am very glad that my old little script is gaining even more attention after all these years…    <i svelte-2837112113>Thank you very much indeed!</i> Since there are coming in more and more of the same requests and I am really not able to handle them (apologies!), here is some advice for everyone:</p>\n  <ol svelte-2837112113><li svelte-2837112113><a svelte-2837112113 href="http://en.wikipedia.org/wiki/Cascading_Style_Sheets">Use cascading style sheets</a> (CSS) to change font sizes (and to generally define your layout).</li>\n    <li svelte-2837112113><a svelte-2837112113 href="http://www.sitepoint.com/article/beware-opening-links-new-window">Beware of opening links in a new window.</a> It’s offensive to your readers.</li>\n  </ol>\n  <p svelte-2837112113><i svelte-2837112113>A happy end for 2006!</i></p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-06-13</small>\n    Did some minor bug fixing again (amongst others replacing single quotes with &apos; and not &quot; entities). Furthermore (and finally), I removed the “RC” (as in “Release Candidate”) from the document title…</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-06-12</small>\n    Gary informed me that longer feed URLs cause trouble and the feed box will not be displayed. That’s in fact a bug, but unfortunately one that cannot be fixed so easily. My suggestion is to shorten such URLs at one of the websites around that provide such a service, e.g. <a svelte-2837112113 href="http://tinyurl.com">tinyurl.com</a>.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-04-23</small>\n    Switched the <a svelte-2837112113 href="//p3k.org/source/rss-box/">source repository</a> from CVS to Subversion (SVN).</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-04-20</small>\n    Andrew Pam brought up a serious issue that probably might have affected some more people already: the viewer does not support UTF-8 (or Unicode, resp.) Unfortunately, this is “built-in” into the underlying scripting language (aka Rebol). I’m sorry to cancel those tickets… :(</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-04-13</small>\n    Fixed a bug reported by Mando Gomez that caused feeds using the &lt;guid&gt; element being displayed without item links… Don’t forget to check out Mando’s excellent website <a svelte-2837112113 href="http://www.mandolux.com/">mandolux</a>!</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-04-12</small>\n    Obviously Sam Ruby changed his feed format from scriptingNews to Atom; which renders my example link above pretty useless… So far I don’t know about any other scriptingNews feed, do you?</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-02-20</small>\n    I hope nobody minds the little line I added at the bottom of each RSS box… Of course, it’s not totally altruistic, but probably some people will find it informative. However, if you want to prevent it from being displayed simply add <code svelte-2837112113>.rssbox-promo {display: none;}</code> to your stylesheet.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-01-11</small>\n    New server, new troubles: I moved the viewer to a newly setup Ubuntu machine. Of course, I forgot to set some permission flags and owners, thus, preventing the script from working. However, I think everything is fixed and working again.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2005-11-16</small>\n    Just testing Google’s AdSense for a while. Since this page generates most of my traffic I wanted to see myself what a banner can do here. Hope you don’t mind.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2004-12-16</small>\n    Bugfix: Sometimes the logfile which is used to generate the list of sites using this script gets corrupted. This affected the whole setup page to return an error and thus, it needed to be caught. (You will see a “currently out of order” message then.)</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2004-04-26</small>\n    Last efforts to officially release the <a svelte-2837112113 href="//p3k.org/source/rss-box">code</a> to the open source community. There have been some bugs in the (image) rendering framework which I fixed so    far. I now include a dynamically rendered list of sites using (or pointing to) this script to give some examples for the curious at heart (me included). Finally, there’s a <a svelte-2837112113 href="//p3k.org/source/rss-box/branches/2.0/README">README</a> file with a short installation guide to make the script run on your own server.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2004-01-28</small>\n    When something goes wrong (most of the time this might be a wrong URL, ie. a 404 as result) an    <a svelte-2837112113 href="./?url=error">“error” box</a> will be displayed to signal the failure. Increased version up to 1.0 and labeled it as release candidate\n    (RC).</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2004-01-26</small>\n    Retouched the code in a very last effort to make the script running stand-alone (with Rebol but    <i svelte-2837112113>without</i> PHP, that is). Everything needed is now in <del svelte-2837112113>CVS</del> SVN so everybody can download from there. Potentially, a few minor bug fixes might follow short-term. Uh, and the HTML code is <a svelte-2837112113 href="http://validator.w3.org/check?uri=http%3A%2F%2Fp3k.org%2Frss%2F">valid XHTML 1.0</a> now.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2003-12-12</small>\n    The mirror at <del svelte-2837112113>http://publish.curry.com/rss/</del> is not working for quite a long time. I tried to contact Adam Curry but so far without success.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2003-03-30</small>\n    Moved to new server with new domain <del svelte-2837112113>forever.p3k.org</del>.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2003-03-25</small>\n    Updated Rebol to <a svelte-2837112113 href="http://www.rebol.com/news3310.html">version 2.5.5</a>. End of Rebol’s “DNS zombies” in the process list.\n    <i svelte-2837112113>Finally.</i></p>\n\n  <p svelte-2837112113><small svelte-2837112113>2002-02-19</small>\n    Added a very nice quote from <a svelte-2837112113 href="http://www.ourpla.net/cgi-bin/pikie.cgi?AbbeNormal">Abbe Normal</a> on top right of this document.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-11-17</small>\n    If you want a more compact view of the RSS box you can get it now using the corresponding checkbox. If it is enabled the descriptions of each item will not be displayed – given that the item title is defined (otherwise there would not be much to see). Additionally, the channel image (if defined) will not be displayed. Thanks jsyeo@compuserve.com for the suggestions!</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-09-21</small>\n    Since today the <code svelte-2837112113>textinput</code> tag is supported. It creates an appropriate form at the end of the box. Moreover, two bugs were fixed: one caused unnecessary information in the query string of the generated JavaScript tag. The other affected the display of the date’s time zone. Time zones now are generally displayed in GMT except where another time zone acronym is defined.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-09-04</small>\n    Added icons for enclosure and source; added XML button checkbox to enable output of the quasi-standard orange button linking to the XML source (ideaby adam@curry.com).</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-09-03</small>\n    It’s now possible to refine the style of the whole box using the newly implemented css classes <code svelte-2837112113>rssbox-title</code>, <code svelte-2837112113>rssbox-content</code>, <code svelte-2837112113>rssbox-item-title</code> and <code svelte-2837112113>rssbox-ttem-content</code> (idea by rdavies@orientpacific.com).</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-08-24</small>\n    Added a form input for limiting the item display. The number determines how many items will be shown in the box (seven is the default value). Good for often updated channels.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-08-15</small>\n    Detected a strange bug that prevented the viewer at <a svelte-2837112113 href="http://publish.curry.com/rss/">curry.com</a> loading http://p3k.org/rss.xml while http://www.p3k.org/rss.xml was no problem at all. Upgrading the Rebol installation to the current version solved theproblem, however the cause remains unclear…</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-08-08</small>\n    Fixed a small bug that corrupted channel URLs containing a query (as reported by kika@sloleht.ee). Configured server redirect from <del svelte-2837112113>http://piefke.helma.at/rss</del>.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-08-05</small>\n    Thanks to <a svelte-2837112113 href="http://www.curry.com/2001/07/31#coolRssService">Adam Curry</a>, the viewer is now mirrored at <del svelte-2837112113>http://publish.curry.com/rss</del>.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-07-30</small>\n    Added link to source code; added example links for all supported formats.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-05-30</small>\n    Fixed a little bug reported by fredi@email.ee that caused diacritic characters to be displayed as entity codes.</p>',this.h()},h:function(){m(r,"svelte-2837112113","")},m:function(e,t){o(r,e,t)},p:e,u:function(){i(r)},d:e}}function E(e){w(this,e),this._state=t({},e.data),document.getElementById("svelte-2837112113-style")||function(){var e=l("style");e.id="svelte-2837112113-style",e.textContent="h3[svelte-2837112113]{display:inline-block}h3+p[svelte-2837112113],summary+[svelte-2837112113]{margin-top:0}summary[svelte-2837112113]{outline:none}li+li[svelte-2837112113]{margin-top:0.5em}small[svelte-2837112113]{display:inline-block;margin-right:0.5em;color:#bbb}code[svelte-2837112113]{background-color:#ffc;font-size:0.8em;font-weight:200}",n(e,document.head)}(),this._fragment=H(this._state),e.target&&(this._fragment.c(),this._fragment.m(e.target,e.anchor||null))}t(E.prototype,C);var F=document.createElement("script");F.async=F.defer=!0,F.src="https://buttons.github.io/buttons.js",document.head.appendChild(F);function D(n){w(this,n),this._state=t({},n.data),this._fragment=function(t,n){var r;return{c:function(){(r=l("a")).textContent="Github",this.h()},h:function(){r.className="github-button",r.href="https://github.com/p3k/rss-box",r.dataset.size="large",r.dataset.showCount="true",m(r,"aria-label","Star p3k/rss-box on GitHub")},m:function(e,t){o(r,e,t)},p:e,u:function(){i(r)},d:e}}(this._state),n.target&&(this._fragment.c(),this._fragment.m(n.target,n.anchor||null))}t(D.prototype,C);function j(e){m(e,"svelte-5151739","")}function z(e){w(this,e),this._state=t(this.store._init(["appDescription","appVersion"]),e.data),this.store._add(this,["appDescription","appVersion"]),this._handlers.destroy=[_],document.getElementById("svelte-5151739-style")||function(){var e=l("style");e.id="svelte-5151739-style",e.textContent="h3[svelte-5151739]{display:inline-block}h3+p[svelte-5151739]{margin-top:0}small[svelte-5151739]{color:#bbb}.warning[svelte-5151739]{border-color:#e44;background:#fdd}",n(e,document.head)}();var r=function(){this.store.observe("appDescription",function(e){document.title=e})}.bind(this);e.root?this.root._oncreate.push(r):(this._oncreate=[r],this._beforecreate=[],this._aftercreate=[]),this._fragment=function(e,t){var r,s,a,u,m,p,f,g,v,b,y,w,x,k,_,C,$,S,T,B,A,R,M,I,L,N,H,F,z,U,q,X,O,P,V,J,G,Y,Q,W,K,Z,ee,te,ne,oe,ie,re,se,le,ae,ce;function ue(e){t.goto(e)}function de(e){t.goto(e)}function he(e){t.goto(e)}function me(e){t.goto(e)}function pe(e){t.goto(e)}function fe(e){t.goto(e)}var ge=new D({root:t.root}),ve=new E({root:t.root});return{c:function(){(r=l("div")).innerHTML='<small svelte-5151739><i>“JavaScript RSS Viewer puts little or long customizable RSS boxes anywhere you put HTML; build your own slashbox hell or heaven, it’s feedarific!” — <a href="http://ourpla.net/cgi/pikie">Abbe Normal</a></i></small>',s=c("\n\n"),a=l("h2"),u=c(e.$appDescription),m=c(" "),p=c(e.$appVersion),f=c("\n\n"),(g=l("p")).innerHTML='<strong>Reduced availability due to temporary violation of quota limit.</strong> You should <a href="//github.com/p3k/json3k">install your own JSONP proxy</a>. You can always support the project with your <a href="http://flattr.com/thing/681881/JavaScript-RSS-Box-Viewer">donation</a>.',v=c("\n\n"),b=l("p"),y=c("This viewer can display "),(w=l("a")).textContent="RSS",x=c(" feeds of version "),(k=l("a")).textContent="0.91",_=c(", "),(C=l("a")).textContent="0.92",$=c(", "),(S=l("a")).textContent="1.0",T=c(" and "),(B=l("a")).textContent="2.0",A=c(" as well as even the good old legacy format "),(R=l("a")).textContent="Scripting News 2",M=c(". There is also basic support for "),(I=l("a")).textContent="Atom 1.0",L=c("."),N=c("\n\n"),(H=l("p")).innerHTML='It provides a simple way to embed such RSS boxes in any <a href="http://validator.w3.org/">valid HTML document</a> via an automagically generated JavaScript tag — <i>for free!</i>',F=c("\n\n"),(z=l("p")).textContent="Just enter the URL of any compatible RSS feed, modify the layout settings as you like and push the Reload button. When finished, copy the HTML code into your own web page – and voilà!",U=c("\n\n"),(q=l("p")).innerHTML='The code behind this is written in JavaScript and runs completely in your browser*. You can get the source code together with all the other necessary files from the <a href="//github.com/p3k/rss-box">Github repository</a>.',X=c("\n\n"),(O=l("p")).innerHTML="<small svelte-5151739>* A proxy server is needed for cross-origin requests.</small>",P=c("\n\n"),V=l("p"),ge._fragment.c(),J=c("\n\n"),ve._fragment.c(),G=c("\n\n"),(Y=l("h3")).textContent="Future Development",Q=c("\n\n"),(W=l("p")).textContent="I have ceased actively developing this viewer but sometimes I get enthusiastic and fiddle around with the code. Of course it will be available here as is.",K=c("\n"),(Z=l("p")).innerHTML='For questions and comments feel free to contact me (Tobi) via e-mail: <a href="mailto:mail+rss@p3k.org">mail+rss@p3k.org</a>.',ee=c("\n\n"),(te=l("h3")).textContent="License",ne=c("\n\n"),(oe=l("p")).innerHTML='<span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">JavaScript RSS Box Viewer</span> by\n  <a xmlns:cc="http://creativecommons.org/ns#" href="http://p3k.org/rss" property="cc:attributionName" rel="cc:attributionURL">Tobi Schäfer</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/at/deed.en_US">Creative Commons Attribution-ShareAlike 3.0 Austria License</a>.',ie=c("\n"),(re=l("p")).innerHTML='Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="https://p3k.org/source/svn/rss-box/trunk/" rel="dct:source">https://p3k.org/source/svn/rss-box/trunk/</a>.',se=c("\n"),(le=l("p")).innerHTML='<a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/at/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/at/88x31.png"></a>',ae=c("\n\n"),(ce=l("small")).innerHTML='Thank you, <a href="//p3k.org/">p3k.org</a>!',this.h()},h:function(){j(g),g.className="msg warning",j(b),w.href="http://en.wikipedia.org/wiki/RSS",k.href="http://cyber.law.harvard.edu/rss/examples/sampleRss091.xml",d(k,"click",ue),C.href="http://cyber.law.harvard.edu/rss/examples/sampleRss092.xml",d(C,"click",de),S.href="http://rss.orf.at/fm4.xml",d(S,"click",he),B.href="http://blog.p3k.org/stories.xml",d(B,"click",me),R.href="http://essaysfromexodus.scripting.com/xml/scriptingNews2.xml",d(R,"click",pe),I.href="https://www.theregister.co.uk/headlines.atom",d(I,"click",fe),j(H),j(z),j(q),j(O),j(V),j(Y),j(W),j(Z),j(te),j(oe),j(re),j(le),j(ce)},m:function(e,t){o(r,e,t),o(s,e,t),o(a,e,t),n(u,a),n(m,a),n(p,a),o(f,e,t),o(g,e,t),o(v,e,t),o(b,e,t),n(y,b),n(w,b),n(x,b),n(k,b),n(_,b),n(C,b),n($,b),n(S,b),n(T,b),n(B,b),n(A,b),n(R,b),n(M,b),n(I,b),n(L,b),o(N,e,t),o(H,e,t),o(F,e,t),o(z,e,t),o(U,e,t),o(q,e,t),o(X,e,t),o(O,e,t),o(P,e,t),o(V,e,t),ge._mount(V,null),o(J,e,t),ve._mount(e,t),o(G,e,t),o(Y,e,t),o(Q,e,t),o(W,e,t),o(K,e,t),o(Z,e,t),o(ee,e,t),o(te,e,t),o(ne,e,t),o(oe,e,t),o(ie,e,t),o(re,e,t),o(se,e,t),o(le,e,t),o(ae,e,t),o(ce,e,t)},p:function(e,t){e.$appDescription&&(u.data=t.$appDescription),e.$appVersion&&(p.data=t.$appVersion)},u:function(){i(r),i(s),i(a),i(f),i(g),i(v),i(b),i(N),i(H),i(F),i(z),i(U),i(q),i(X),i(O),i(P),i(V),i(J),ve._unmount(),i(G),i(Y),i(Q),i(W),i(K),i(Z),i(ee),i(te),i(ne),i(oe),i(ie),i(re),i(se),i(le),i(ae),i(ce)},d:function(){h(k,"click",ue),h(C,"click",de),h(S,"click",he),h(B,"click",me),h(R,"click",pe),h(I,"click",fe),ge.destroy(!1),ve.destroy(!1)}}}(this._state,this),e.target&&(this._fragment.c(),this._fragment.m(e.target,e.anchor||null),this._lock=!0,k(this._beforecreate),k(this._oncreate),k(this._aftercreate),this._lock=!1)}t(z.prototype,{goto:function(e){e.preventDefault(),this.store.set({url:e.target.href})}},C),(window.adsbygoogle=window.adsbygoogle||[]).push({});var U=document.createElement("script");U.async=!0,U.src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js",document.head.appendChild(U);function q(t,n){var r;return{c:function(){r=l("ins"),this.h()},h:function(){m(r,"svelte-286980571","");r.className="adsbygoogle",p(r,"display","block"),r.dataset.adClient="ca-pub-3965028043153138",r.dataset.adSlot="6370257451",r.dataset.adFormat="auto"},m:function(e,t){o(r,e,t)},p:e,u:function(){i(r)},d:e}}function X(e){w(this,e),this._state=t({},e.data),document.getElementById("svelte-286980571-style")||function(){var e=l("style");e.id="svelte-286980571-style",e.textContent="ins[svelte-286980571]{overflow:hidden;margin-bottom:1em}",n(e,document.head)}(),this._fragment=q(this._state),e.target&&(this._fragment.c(),this._fragment.m(e.target,e.anchor||null))}t(X.prototype,C);function O(e){m(e,"svelte-940045756","")}function P(r){w(this,r),this._state=t({},r.data),document.getElementById("svelte-940045756-style")||function(){var e=l("style");e.id="svelte-940045756-style",e.textContent="svg[svelte-940045756]{width:1.2em;height:1.2em}polygon[svelte-940045756]{fill:currentColor;fill-rule:evenodd;clip-rule:evenodd}",n(e,document.head)}(),this._fragment=function(t,r){var s,l,c,u;return{c:function(){s=a("svg"),l=a("g"),c=a("polygon"),u=a("polygon"),this.h()},h:function(){O(s),O(c),m(c,"points","2,2 5,2 5,3 3,3 3,9 9,9 9,7 10,7 10,10 2,10"),O(u),m(u,"points","6.211,2 10,2 10,5.789 8.579,4.368 6.447,6.5 5.5,5.553 7.632,3.421"),m(s,"xmlns","http://www.w3.org/2000/svg"),m(s,"viewBox","0 0 12 12"),m(s,"preserveAspectRatio","xMinYMin")},m:function(e,t){o(s,e,t),n(l,s),n(c,l),n(u,l)},p:e,u:function(){i(s)},d:e}}(this._state),r.target&&(this._fragment.c(),this._fragment.m(r.target,r.anchor||null))}t(P.prototype,C);function V(e){m(e,"svelte-2589761347","")}function J(r){w(this,r),this._state=t({},r.data),document.getElementById("svelte-2589761347-style")||function(){var e=l("style");e.id="svelte-2589761347-style",e.textContent="svg[svelte-2589761347]{width:1em;height:1em}path[svelte-2589761347]{fill:currentColor}",n(e,document.head)}(),this._fragment=function(t,r){var s,l,c;return{c:function(){s=a("svg"),l=a("g"),c=a("path"),this.h()},h:function(){V(s),V(c),m(c,"d","M 384,192 Q 384,112 328,56 272,0 192,0 112,0 56,56 0,112 0,192 q 0,80 56,136 56,56 136,56 80,0 136,-56 56,-56 56,-136 z M 896,69 Q 898,41 879,21 861,0 832,0 H 697 Q 672,0 654,16.5 636,33 634,58 612,287 449.5,449.5 287,612 58,634 33,636 16.5,654 0,672 0,697 v 135 q 0,29 21,47 17,17 43,17 h 5 Q 229,883 375,815.5 521,748 634,634 748,521 815.5,375 883,229 896,69 z m 512,-2 Q 1410,40 1390,20 1372,0 1344,0 H 1201 Q 1175,0 1156.5,17.5 1138,35 1137,60 1125,275 1036,468.5 947,662 804.5,804.5 662,947 468.5,1036 275,1125 60,1138 35,1139 17.5,1157.5 0,1176 0,1201 v 143 q 0,28 20,46 18,18 44,18 h 3 Q 329,1395 568.5,1288 808,1181 994,994 1181,808 1288,568.5 1395,329 1408,67 z"),m(l,"transform","matrix(1,0,0,-1,212.61017,1346.1695)"),m(s,"xmlns","http://www.w3.org/2000/svg"),m(s,"viewBox","0 -256 1792 1792"),m(s,"preserveAspectRatio","xMinYMin")},m:function(e,t){o(s,e,t),n(l,s),n(c,l)},p:e,u:function(){i(s)},d:e}}(this._state),r.target&&(this._fragment.c(),this._fragment.m(r.target,r.anchor||null))}t(J.prototype,C);function G(e){m(e,"svelte-2967622608","")}function Y(r){w(this,r),this._state=t({},r.data),document.getElementById("svelte-2967622608-style")||function(){var e=l("style");e.id="svelte-2967622608-style",e.textContent="svg[svelte-2967622608]{width:1.2em;height:1.2em}path[svelte-2967622608]{fill:currentColor}",n(e,document.head)}(),this._fragment=function(t,r){var s,l;return{c:function(){s=a("svg"),l=a("path"),this.h()},h:function(){G(s),G(l),m(l,"d","m409 531l-5.244 6.733c-.983 1.262-.708 3.511.55 4.497 1.259.986 3.5.71 4.484-.552l5.244-6.733.655-.842c.656-.842.472-2.341-.367-2.998-.839-.658-2.334-.473-2.989.368l-.656.842-3.933 5.05-.656.842c-.328.421-.236 1.17.183 1.499.42.329 1.167.237 1.495-.184l4.589-5.891.839.658-4.589 5.891c-.656.842-2.15 1.026-2.989.368-.839-.658-1.023-2.157-.367-2.998l.656-.842 4.589-5.891c.983-1.262 3.225-1.538 4.484-.552 1.259.986 1.534 3.235.551 4.497l-.656.842-5.244 6.733c-1.311 1.683-4.3 2.051-5.978.736-1.678-1.315-2.045-4.313-.734-5.997l5.244-6.733.839.658"),m(l,"transform","matrix(.84782 0 0 .84521-338.85-445.68)"),m(l,"stroke","none"),m(s,"xmlns","http://www.w3.org/2000/svg"),m(s,"viewBox","0 0 16 16"),m(s,"preserveAspectRatio","xMinYMin")},m:function(e,t){o(s,e,t),n(l,s)},p:e,u:function(){i(s)},d:e}}(this._state),r.target&&(this._fragment.c(),this._fragment.m(r.target,r.anchor||null))}t(Y.prototype,C);function Q(e){return(e/1e3).toFixed(2)+" kB"}function W(e){return new Promise(function(t){var n=new Image;n.onload=function(){var e=Math.min(100,n.width),o=n.width>e?e/n.width:1;t({width:n.width*o+"px",height:n.height*o+"px"})},n.src=e.source})}function K(e){m(e,"svelte-1374782793","")}function Z(e,t){for(var r,a,u,d,h,m,f,g,v=!e.$headless&&te(e,t),b=e.$image&&!e.$compact&&re(e,t),y=e.$items,w=[],x=0;x<y.length;x+=1)w[x]=se(e,y,y[x],x,t);var k=e.$input&&ve(e,t);return{c:function(){r=l("div"),v&&v.c(),a=c("\n\n  "),u=l("div"),b&&b.c(),d=c("\n\n    ");for(var e=0;e<w.length;e+=1)w[e].c();h=c("\n\n    "),k&&k.c(),m=c("\n    "),f=l("div"),(g=l("a")).textContent="RSS Box by p3k.org",this.h()},h:function(){K(r),K(u),K(f),g.href=(t=void 0,void 0===t&&(t=null),R.app);var t;p(g,"color",e.$textColor),f.className="rssbox-promo rssBoxPromo",u.className="rssbox-content rssBoxContent",p(u,"background-color",e.$boxFillColor),p(u,"height",e.height),r.dataset.linkColor=e.$linkColor,r.className="rssbox rssBox",p(r,"max-width",e.width),p(r,"border-color",e.$frameColor),p(r,"border-radius",e.$radius+"px"),p(r,"font",e.$fontFace),p(r,"float",e.$align)},m:function(e,t){o(r,e,t),v&&v.m(r,null),n(a,r),n(u,r),b&&b.m(u,null),n(d,u);for(var i=0;i<w.length;i+=1)w[i].m(u,null);n(h,u),k&&k.m(u,null),n(m,u),n(f,u),n(g,f)},p:function(e,n){n.$headless?v&&(v.u(),v.d(),v=null):v?v.p(e,n):((v=te(n,t)).c(),v.m(r,a)),n.$image&&!n.$compact?b?b.p(e,n):((b=re(n,t)).c(),b.m(u,d)):b&&(b.u(),b.d(),b=null);var o=n.$items;if(e.$maxItems||e.$textColor||e.$items||e.itemTitleClass||e.$compact){for(var i=0;i<o.length;i+=1)w[i]?w[i].p(e,n,o,o[i],i):(w[i]=se(n,o,o[i],i,t),w[i].c(),w[i].m(u,h));for(;i<w.length;i+=1)w[i].u(),w[i].d();w.length=o.length}n.$input?k?k.p(e,n):((k=ve(n,t)).c(),k.m(u,m)):k&&(k.u(),k.d(),k=null),e.$textColor&&p(g,"color",n.$textColor),e.$boxFillColor&&p(u,"background-color",n.$boxFillColor),e.height&&p(u,"height",n.height),e.$linkColor&&(r.dataset.linkColor=n.$linkColor),e.width&&p(r,"max-width",n.width),e.$frameColor&&p(r,"border-color",n.$frameColor),e.$radius&&p(r,"border-radius",n.$radius+"px"),e.$fontFace&&p(r,"font",n.$fontFace),e.$align&&p(r,"float",n.$align)},u:function(){i(r),v&&v.u(),b&&b.u();for(var e=0;e<w.length;e+=1)w[e].u();k&&k.u()},d:function(){v&&v.d(),b&&b.d(),s(w),k&&k.d()}}}function ee(e,t){var r,s,a,c=new J({root:t.root});return{c:function(){r=l("div"),s=l("a"),c._fragment.c(),this.h()},h:function(){K(r),s.href=e.$url,s.title=a=e.$format+" "+e.$version,p(s,"color",e.$titleBarTextColor),r.className="rssbox-icon"},m:function(e,t){o(r,e,t),n(s,r),c._mount(s,null)},p:function(e,t){e.$url&&(s.href=t.$url),(e.$format||e.$version)&&a!==(a=t.$format+" "+t.$version)&&(s.title=a),e.$titleBarTextColor&&p(s,"color",t.$titleBarTextColor)},u:function(){i(r)},d:function(){c.destroy(!1)}}}function te(e,t){var r,s,a,u,d,h,m,f,g=e.$showXmlButton&&ee(e,t);return{c:function(){r=l("div"),g&&g.c(),s=c("\n      "),a=l("div"),u=l("a"),d=c(e.$title),h=c("\n      "),m=l("div"),f=c(e.$formattedDate),this.h()},h:function(){K(r),u.href=e.$link,p(u,"color",e.$titleBarTextColor),K(m),m.className="rssbox-date",r.className="rssbox-titlebar",p(r,"color",e.$titleBarTextColor),p(r,"background-color",e.$titleBarColor),p(r,"border-bottom-color",e.$frameColor)},m:function(e,t){o(r,e,t),g&&g.m(r,null),n(s,r),n(a,r),n(u,a),n(d,u),n(h,r),n(m,r),n(f,m)},p:function(e,n){n.$showXmlButton?g?g.p(e,n):((g=ee(n,t)).c(),g.m(r,s)):g&&(g.u(),g.d(),g=null),e.$title&&(d.data=n.$title),e.$link&&(u.href=n.$link),e.$titleBarTextColor&&p(u,"color",n.$titleBarTextColor),e.$formattedDate&&(f.data=n.$formattedDate),e.$titleBarTextColor&&p(r,"color",n.$titleBarTextColor),e.$titleBarColor&&p(r,"background-color",n.$titleBarColor),e.$frameColor&&p(r,"border-bottom-color",n.$frameColor)},u:function(){i(r),g&&g.u()},d:function(){g&&g.d()}}}function ne(t,n,o){return{c:e,m:e,p:e,u:e,d:e}}function oe(t,r,s){var a,c,u,d,h;return{c:function(){a=l("a"),c=l("div"),this.h()},h:function(){K(c),m(c,"alt",u=t.$image.description),c.className="rssbox-image",p(c,"background-image","url("+t.$image.source+")"),p(c,"width",r.width),p(c,"height",r.height),a.href=d=t.$image.link,a.title=h=t.$image.title},m:function(e,t){o(a,e,t),n(c,a)},p:function(e,t,n){e.$image&&u!==(u=t.$image.description)&&m(c,"alt",u),e.$image&&(p(c,"background-image","url("+t.$image.source+")"),p(c,"width",n.width),p(c,"height",n.height)),e.$image&&d!==(d=t.$image.link)&&(a.href=d),e.$image&&h!==(h=t.$image.title)&&(a.title=h)},u:function(){i(a)},d:e}}function ie(t,n,o){return{c:e,m:e,p:e,u:e,d:e}}function re(e,t){var n,r,s,l,a,c;function d(e,o,i,a){if(e===l){var u=r;r=(s=o)(a,c=i,t),u&&(u.u(),u.d(),r.c(),r.m(n.parentNode,n))}}function h(e,t){var n=l={};if((o=e)&&"function"==typeof o.then){if(e.then(function(e){d(n,oe,e,t)},function(e){d(n,ie,e,t)}),s!==ne)return d(n,ne,null,t),!0}else if(c=e,s!==oe)return d(n,oe,c,t),!0;var o}return h(a=W(e.$image),e),{c:function(){n=u(),r.c()},m:function(e,t){o(n,e,t),r.m(e,t)},p:function(e,t){"$image"in e&&a!==(a=W(t.$image))&&h(a,t)||r.p(e,t,c)},u:function(){i(n),r.u()},d:function(){l=null,r.d()}}}function se(e,t,n,r,s){var l,a=r<e.$maxItems&&ge(e,t,n,r,s);return{c:function(){a&&a.c(),l=u()},m:function(e,t){a&&a.m(e,t),o(l,e,t)},p:function(e,t,n,o,i){i<t.$maxItems?a?a.p(e,t,n,o,i):((a=ge(t,n,o,i,s)).c(),a.m(l.parentNode,l)):a&&(a.u(),a.d(),a=null)},u:function(){a&&a.u(),i(l)},d:function(){a&&a.d()}}}function le(t,n,r,s,a){var c,u,d=r.title;return{c:function(){c=l("a"),this.h()},h:function(){c.href=u=r.link},m:function(e,t){o(c,e,t),c.innerHTML=d},p:function(e,t,n,o,i){e.$items&&d!==(d=o.title)&&(c.innerHTML=d),e.$items&&u!==(u=o.link)&&(c.href=u)},u:function(){c.innerHTML="",i(c)},d:e}}function ae(t,n,s,a,c){var u,d,h=s.title;return{c:function(){u=l("noscript"),d=l("noscript")},m:function(e,t){o(u,e,t),u.insertAdjacentHTML("afterend",h),o(d,e,t)},p:function(e,t,n,o,i){e.$items&&h!==(h=o.title)&&(r(u,d),u.insertAdjacentHTML("afterend",h))},u:function(){r(u,d),i(u),i(d)},d:e}}function ce(e,t,n,r,s){var a,c,u=be(e,t,n,r),d=u(e,t,n,r,s);return{c:function(){a=l("div"),d.c(),this.h()},h:function(){K(a),a.className=c="rssbox-item-title "+e.itemTitleClass},m:function(e,t){o(a,e,t),d.m(a,null)},p:function(e,t,n,o,i){u===(u=be(t,n,o,i))&&d?d.p(e,t,n,o,i):(d.u(),d.d(),(d=u(t,n,o,i,s)).c(),d.m(a,null)),e.itemTitleClass&&c!==(c="rssbox-item-title "+t.itemTitleClass)&&(a.className=c)},u:function(){i(a),d.u()},d:function(){d.d()}}}function ue(e,t,n,o,i){var r=new J({root:i.root});return{c:function(){r._fragment.c()},m:function(e,t){r._mount(e,t)},u:function(){r._unmount()},d:function(){r.destroy(!1)}}}function de(e,t,n,o,i){var r=new P({root:i.root});return{c:function(){r._fragment.c()},m:function(e,t){r._mount(e,t)},u:function(){r._unmount()},d:function(){r.destroy(!1)}}}function he(e,t,n,r,s){var a,c,u,d=ye(e,t,n,r),h=d(e,t,n,r,s);return{c:function(){a=l("a"),h.c(),this.h()},h:function(){K(a),a.href=c=n.source.url,a.title=u=n.source.title,a.className="rssbox-source"},m:function(e,t){o(a,e,t),h.m(a,null)},p:function(e,t,n,o,i){d!==(d=ye(t,n,o,i))&&(h.u(),h.d(),(h=d(t,n,o,i,s)).c(),h.m(a,null)),e.$items&&c!==(c=o.source.url)&&(a.href=c),e.$items&&u!==(u=o.source.title)&&(a.title=u)},u:function(){i(a),h.u()},d:function(){h.d()}}}function me(e,t,n,r,s,a,c,u){var d,h,m,p=new Y({root:u.root});return{c:function(){d=l("a"),p._fragment.c(),this.h()},h:function(){K(d),d.href=h=a.url,d.title=m=Q(a.length)+" "+a.type,d.className="rssbox-enclosure"},m:function(e,t){o(d,e,t),p._mount(d,null)},p:function(e,t,n,o,i,r,s,l){e.$items&&h!==(h=s.url)&&(d.href=h),e.$items&&m!==(m=Q(s.length)+" "+s.type)&&(d.title=m)},u:function(){i(d)},d:function(){p.destroy(!1)}}}function pe(e,t,n,r,l){for(var a,c=n.enclosures,d=[],h=0;h<c.length;h+=1)d[h]=me(0,0,0,0,0,c[h],0,l);return{c:function(){for(var e=0;e<d.length;e+=1)d[e].c();a=u()},m:function(e,t){for(var n=0;n<d.length;n+=1)d[n].m(e,t);o(a,e,t)},p:function(e,t,n,o,i){var r=o.enclosures;if(e.$items){for(var s=0;s<r.length;s+=1)d[s]?d[s].p(e,t,n,o,i,r,r[s],s):(d[s]=me(0,0,0,0,0,r[s],0,l),d[s].c(),d[s].m(a.parentNode,a));for(;s<d.length;s+=1)d[s].u(),d[s].d();d.length=r.length}},u:function(){for(var e=0;e<d.length;e+=1)d[e].u();i(a)},d:function(){s(d)}}}function fe(e,t,s,a,u){var d,h,m,p,f,g=s.description,v=s.source&&he(e,t,s,a,u),b=s.enclosures&&pe(0,0,s,0,u);return{c:function(){d=l("aside"),v&&v.c(),h=c("\n\n              "),b&&b.c(),m=c("\n            "),p=l("noscript"),f=l("noscript"),this.h()},h:function(){K(d)},m:function(e,t){o(d,e,t),v&&v.m(d,null),n(h,d),b&&b.m(d,null),o(m,e,t),o(p,e,t),p.insertAdjacentHTML("afterend",g),o(f,e,t)},p:function(e,t,n,o,i){o.source?v?v.p(e,t,n,o,i):((v=he(t,n,o,i,u)).c(),v.m(d,h)):v&&(v.u(),v.d(),v=null),o.enclosures?b?b.p(e,t,n,o,i):((b=pe(0,0,o,0,u)).c(),b.m(d,null)):b&&(b.u(),b.d(),b=null),e.$items&&g!==(g=o.description)&&(r(p,f),p.insertAdjacentHTML("afterend",g))},u:function(){r(p,f),i(d),v&&v.u(),b&&b.u(),i(m),i(p),i(f)},d:function(){v&&v.d(),b&&b.d()}}}function ge(e,t,r,s,a){var u,d,h=r.title&&ce(e,t,r,s,a),m=!e.$compact&&fe(e,t,r,s,a);return{c:function(){u=l("div"),h&&h.c(),d=c("\n\n          "),m&&m.c(),this.h()},h:function(){K(u),u.className="rssbox-item-content rssBoxItemContent",p(u,"color",e.$textColor)},m:function(e,t){o(u,e,t),h&&h.m(u,null),n(d,u),m&&m.m(u,null)},p:function(e,t,n,o,i){o.title?h?h.p(e,t,n,o,i):((h=ce(t,n,o,i,a)).c(),h.m(u,d)):h&&(h.u(),h.d(),h=null),t.$compact?m&&(m.u(),m.d(),m=null):m?m.p(e,t,n,o,i):((m=fe(t,n,o,i,a)).c(),m.m(u,null)),e.$textColor&&p(u,"color",t.$textColor)},u:function(){i(u),h&&h.u(),m&&m.u()},d:function(){h&&h.d(),m&&m.d()}}}function ve(t,r){var s,a,c,u,d;return{c:function(){s=l("form"),a=l("input"),this.h()},h:function(){K(s),K(a),a.type="text",a.name=c=t.$input.name,a.placeholder="Enter search & hit return…",a.dataset.placeholder=u=t.$input.description,s.className="rssbox-form",s.method="get",s.action=d=t.$input.link},m:function(e,t){o(s,e,t),n(a,s)},p:function(e,t){e.$input&&c!==(c=t.$input.name)&&(a.name=c),e.$input&&u!==(u=t.$input.description)&&(a.dataset.placeholder=u),e.$input&&d!==(d=t.$input.link)&&(s.action=d)},u:function(){i(s)},d:e}}function be(e,t,n,o){return n.link?le:ae}function ye(e,t,n,o){return n.source.url.endsWith(".xml")?ue:de}function we(e){w(this,e),this._state=t(this.store._init(["height","width","compact","linkColor","frameColor","radius","fontFace","align","headless","titleBarTextColor","titleBarColor","showXmlButton","url","format","version","link","title","formattedDate","boxFillColor","image","items","maxItems","textColor","input"]),e.data),this.store._add(this,["height","width","compact","linkColor","frameColor","radius","fontFace","align","headless","titleBarTextColor","titleBarColor","showXmlButton","url","format","version","link","title","formattedDate","boxFillColor","image","items","maxItems","textColor","input"]),this._recompute({$height:1,$width:1,$compact:1},this._state),this._handlers.destroy=[_],document.getElementById("svelte-1374782793-style")||function(){var e=l("style");e.id="svelte-1374782793-style",e.textContent=".rssbox[svelte-1374782793]{box-sizing:border-box;width:100%;border:1px solid #000;font-family:sans-serif;overflow:hidden;border-radius:0;-moz-border-radius:0}.rssbox-icon[svelte-1374782793]{float:right;width:1em;margin-left:0.5em}.rssbox-titlebar[svelte-1374782793]{padding:0.5em;color:#000;background-color:#add8e6;border-bottom:1px solid #000;font-weight:bold;letter-spacing:0.01em}.rssbox-date[svelte-1374782793]{margin-top:0.2em;font-size:0.8em;font-weight:normal}.rssbox-content[svelte-1374782793]{height:auto;padding:0.5em;overflow-x:hidden;overflow-y:auto;background-color:#fff;clear:both;-ms-overflow-style:-ms-autohiding-scrollbar}.rssbox-content[svelte-1374782793] aside[svelte-1374782793]{clear:both;float:right}.rssbox-content[svelte-1374782793] aside a[svelte-1374782793]{display:block;margin-left:0.5em}.rssbox-image[svelte-1374782793]{float:right;margin:0 0 0.5em 0.5em;background-position:left center;background-repeat:no-repeat;background-size:contain}.rssbox-item-title.bold[svelte-1374782793]{font-weight:bold}.rssbox-enclosure[svelte-1374782793],.rssbox-source[svelte-1374782793]{display:block;width:1em}.rssbox-form[svelte-1374782793]{margin-bottom:0.8em}.rssbox-form[svelte-1374782793] input[svelte-1374782793]{padding:0.5em;background-color:#fff}.rssbox-promo[svelte-1374782793]{text-align:right;font-size:0.7em;letter-spacing:0.01em}",n(e,document.head)}();var o=function(){var e="rssbox-static-stylesheet",t="rssbox-dynamic-stylesheet",n=window[e],o=window[t];n||((n=document.createElement("link")).id=e,n.rel="stylesheet",n.href=R.app+"/box.css",document.head.appendChild(n)),o||((o=document.createElement("style")).id=t,document.head.appendChild(o)),this.store.observe("linkColor",function(e){if(e){var t='.rssbox[data-link-color="'+e+'"] a {\n        color: '+e+";\n      }";o.innerHTML.indexOf(t)<0&&(o.innerHTML+=t)}})}.bind(this);e.root?this.root._oncreate.push(o):(this._oncreate=[o],this._beforecreate=[],this._aftercreate=[]),this._fragment=Z(this._state,this),e.target&&(this._fragment.c(),this._fragment.m(e.target,e.anchor||null),this._lock=!0,k(this._beforecreate),k(this._oncreate),k(this._aftercreate),this._lock=!1)}t(we.prototype,C),we.prototype._recompute=function(e,t){e.$height&&v(t.height,t.height=(n=t.$height,n&&n>-1?n+"px":"100%"))&&(e.height=!0);var n;e.$width&&v(t.width,t.width=(o=t.$width,o?o+"px":"100%"))&&(e.width=!0);var o;e.$compact&&v(t.itemTitleClass,t.itemTitleClass=(i=t.$compact,i?"":"bold"))&&(e.itemTitleClass=!0);var i};var xe=!1;function ke(e){return e<.01?"< 0.01":e.toFixed(2).padStart(6)}var _e={update:function(e){e.target.open&&!xe&&this.load()},load:function(){var e=this;fetch(R.referrers).then(function(t){t.json().then(function(t){return e.display(t)})})},display:function(e){var t=e.reduce(function(e,t){if(t.url.startsWith("http")&&!t.url.startsWith(R.app)){var n=t.url.replace(/^([^.]*)www\./,"$1"),o=n.split("/")[2],i=e[o];i?t.hits>i.hits&&(i.url=t.url,i.hits=t.hits):(i={host:o,url:n,hits:t.hits,total:0},e[o]=i,e.push(i)),i.total+=t.hits}return e},[]),n=t.reduce(function(e,t){return e+t.total},0),o=t.map(function(e){return e.percentage=e.total/n*100,e});o.sort(function(e,t){return t.percentage-e.percentage}),this.set({referrers:o}),xe=!0}};function Ce(e){m(e,"svelte-957126438","")}function $e(t,r,s,a,u){var d,h,m,p,f,g,v,b=ke(s.percentage),y=s.host;return{c:function(){d=l("div"),h=l("code"),m=c(b),p=c("\n        "),f=l("a"),g=c(y),this.h()},h:function(){Ce(d),Ce(h),f.href=v=s.url,d.className="referrer"},m:function(e,t){o(d,e,t),n(h,d),n(m,h),n(p,d),n(f,d),n(g,f)},p:function(e,t,n,o,i){e.referrers&&b!==(b=ke(o.percentage))&&(m.data=b),e.referrers&&y!==(y=o.host)&&(g.data=y),e.referrers&&v!==(v=o.url)&&(f.href=v)},u:function(){i(d)},d:e}}function Se(e,t){for(var n,r=e.referrers,l=[],a=0;a<r.length;a+=1)l[a]=$e(0,0,r[a]);return{c:function(){for(var e=0;e<l.length;e+=1)l[e].c();n=u()},m:function(e,t){for(var i=0;i<l.length;i+=1)l[i].m(e,t);o(n,e,t)},p:function(e,t){var o=t.referrers;if(e.referrers){for(var i=0;i<o.length;i+=1)l[i]?l[i].p(e,t,o,o[i],i):(l[i]=$e(0,0,o[i]),l[i].c(),l[i].m(n.parentNode,n));for(;i<l.length;i+=1)l[i].u(),l[i].d();l.length=o.length}},u:function(){for(var e=0;e<l.length;e+=1)l[e].u();i(n)},d:function(){s(l)}}}function Te(t,n){var r;return{c:function(){r=c("Loading…")},m:function(e,t){o(r,e,t)},p:e,u:function(){i(r)},d:e}}function Be(e){return e.referrers.length?Se:Te}function Ae(e){w(this,e),this._state=t({referrers:[]},e.data),document.getElementById("svelte-957126438-style")||function(){var e=l("style");e.id="svelte-957126438-style",e.textContent="details[svelte-957126438]{line-height:1.2em}code[svelte-957126438]{margin-right:0.5em;color:#bbb;font-size:0.7em;white-space:pre}summary[svelte-957126438]{outline:none}.referrer[svelte-957126438]{white-space:nowrap}",n(e,document.head)}();var r=function(){"open"in document.createElement("details")==0&&this.load()}.bind(this);e.root?this.root._oncreate.push(r):this._oncreate=[r],this._fragment=function(e,t){var r,s,a,u=Be(e),m=u(e,t);function p(e){t.update(e)}return{c:function(){r=l("details"),s=l("summary"),a=c("\n  "),m.c(),this.h()},h:function(){Ce(r),Ce(s),d(r,"toggle",p)},m:function(e,t){o(r,e,t),n(s,r),n(a,r),m.m(r,null)},p:function(e,n){u===(u=Be(n))&&m?m.p(e,n):(m.u(),m.d(),(m=u(n,t)).c(),m.m(r,null))},u:function(){i(r),m.u()},d:function(){m.d(),h(r,"toggle",p)}}}(this._state,this),e.target&&(this._fragment.c(),this._fragment.m(e.target,e.anchor||null),k(this._oncreate))}t(Ae.prototype,_e,C);var Re={update:function(e){var t;if(e.preventDefault(),!e.target.checkValidity())return e.target.reportValidity();var n=e.target.name,o=e.target.type,i=e.target["checkbox"===o?"checked":"value"];this.store.set(((t={})[n]=i,t))},reload:function(e){e.preventDefault();var t=this.store.get("url");this.store.set({url:null}),this.store.set({url:t})},copy:function(e){try{e.target.select(),document.execCommand("copy")}catch(e){}},label:function(e){var t=e.target.parentNode.nextElementSibling,n=t.querySelector("input");n||(n=t.querySelector("summary")),n||(n=t.querySelector("textarea")),n&&(n.click&&n.click(),n.select&&n.select())}};function Me(e){m(e,"svelte-3994292734","")}function Ie(t,n){var r;return{c:function(){r=c("Loading...")},m:function(e,t){o(r,e,t)},p:e,u:function(){i(r)},d:e}}function Le(t,r){var s,a,u,d;return{c:function(){s=l("a"),a=c(t.$format),u=c(" "),d=c(t.$version),this.h()},h:function(){s.href=t.$url},m:function(e,t){o(s,e,t),n(a,s),n(u,s),n(d,s)},p:function(e,t){e.$format&&(a.data=t.$format),e.$version&&(d.data=t.$version),e.$url&&(s.href=t.$url)},u:function(){i(s)},d:e}}function Ne(t,n){var r;return{c:function(){(r=l("button")).textContent="Loading...",this.h()},h:function(){r.className="btn btn-sm btn-c",r.disabled=!0},m:function(e,t){o(r,e,t)},u:function(){i(r)},d:e}}function He(e,t){var n;function r(e){t.reload(e)}return{c:function(){(n=l("button")).textContent="Reload",this.h()},h:function(){n.className="btn btn-sm btn-b",n.type="button",d(n,"click",r)},m:function(e,t){o(n,e,t)},u:function(){i(n)},d:function(){h(n,"click",r)}}}function Ee(e){return e.$loading?Ie:Le}function Fe(e){return e.$loading?Ne:He}function De(e){w(this,e),this._state=t(this.store._init(["url","title","description","formattedDate","loading","format","version","maxItems","width","height","radius","showXmlButton","compact","headless","frameColor","titleBarColor","titleBarTextColor","boxFillColor","textColor","linkColor","fontFace","code"]),e.data),this.store._add(this,["url","title","description","formattedDate","loading","format","version","maxItems","width","height","radius","showXmlButton","compact","headless","frameColor","titleBarColor","titleBarTextColor","boxFillColor","textColor","linkColor","fontFace","code"]),this._handlers.destroy=[_],document.getElementById("svelte-3994292734-style")||function(){var e=l("style");e.id="svelte-3994292734-style",e.textContent="table[svelte-3994292734]{overflow:auto}tr[svelte-3994292734] td[svelte-3994292734]:first-child{color:#bbb;text-align:right;white-space:nowrap}summary[svelte-3994292734]{outline:none}input[type='color'][svelte-3994292734]{width:108px;height:30px;padding:1px 3px}.top[svelte-3994292734]{vertical-align:top}.source[svelte-3994292734]{line-height:1em}[name=url][svelte-3994292734],[name=fontFace][svelte-3994292734],[name=code][svelte-3994292734]{width:90%}[type=color][svelte-3994292734],[type=number][svelte-3994292734]{width:7em}[name=code][svelte-3994292734]{color:#bbb;height:10em;overflow:hidden;resize:vertical}",n(e,document.head)}(),e.root||(this._oncreate=[],this._beforecreate=[],this._aftercreate=[]),this._fragment=function(e,t){var r,s,a,u,m,f,g,v,b,y,w,x,k,_,C,$,S,T,B,A,R,M,I,L,N,H,E,F,D,j,z,U,q,X,O,P,V,J,G,Y,Q,W,K,Z,ee,te,ne,oe,ie,re,se,le,ae,ce,ue,de,he,me,pe,fe,ge,ve,be,ye,we,xe,ke,_e,Ce,$e,Se,Te,Be,Re,Ie,Le,Ne,He,De,je,ze,Ue,qe,Xe,Oe,Pe,Ve,Je,Ge,Ye,Qe,We,Ke,Ze,et,tt,nt,ot,it,rt,st,lt,at,ct,ut,dt,ht,mt,pt,ft,gt,vt,bt,yt,wt,xt,kt,_t,Ct,$t,St,Tt,Bt,At,Rt,Mt,It,Lt,Nt,Ht,Et,Ft,Dt,jt,zt,Ut,qt,Xt,Ot,Pt,Vt,Jt,Gt,Yt,Qt,Wt,Kt,Zt,en,tn,nn,on,rn,sn,ln,an,cn,un,dn;function hn(e){t.label(e)}function mn(e){t.update(e)}function pn(e){t.label(e)}var fn=Ee(e),gn=fn(e,t);function vn(e){t.label(e)}function bn(e){t.update(e)}function yn(e){t.label(e)}function wn(e){t.update(e)}function xn(e){t.label(e)}function kn(e){t.update(e)}function _n(e){t.label(e)}function Cn(e){t.update(e)}function $n(e){t.label(e)}function Sn(e){t.update(e)}function Tn(e){t.label(e)}function Bn(e){t.update(e)}function An(e){t.label(e)}function Rn(e){t.update(e)}function Mn(e){t.label(e)}function In(e){t.update(e)}function Ln(e){t.label(e)}function Nn(e){t.update(e)}function Hn(e){t.label(e)}function En(e){t.update(e)}function Fn(e){t.label(e)}function Dn(e){t.update(e)}function jn(e){t.label(e)}function zn(e){t.update(e)}function Un(e){t.label(e)}function qn(e){t.update(e)}function Xn(e){t.label(e)}function On(e){t.update(e)}var Pn=Fe(e),Vn=Pn(e,t);function Jn(e){t.label(e)}function Gn(e){t.copy(e)}function Yn(e){t.label(e)}var Qn=new Ae({root:t.root});function Wn(e){t.update(e)}return{c:function(){r=l("form"),s=l("table"),(a=l("colgroup")).innerHTML='<col width="*">\n      <col width="90%">',u=c("\n    "),m=l("tr"),f=l("td"),(g=l("label")).textContent="Feed URL",v=c("\n      "),b=l("td"),y=l("input"),w=c("\n    "),x=l("tr"),(k=l("td")).innerHTML="<label>Title</label>",_=c("\n      "),C=l("td"),$=c(e.$title),S=c("\n    "),T=l("tr"),B=l("td"),(A=l("label")).textContent="Description",R=c("\n      "),M=l("td"),I=l("details"),L=l("summary"),N=c("\n          "),H=c(e.$description),E=c("\n    "),F=l("tr"),(D=l("td")).innerHTML="<label>Last build</label>",j=c("\n      "),z=l("td"),U=c(e.$formattedDate),q=c("\n    "),X=l("tr"),(O=l("td")).innerHTML="<label>Source</label>",P=c("\n      "),V=l("td"),gn.c(),J=c("\n    "),G=l("tr"),Y=l("td"),(Q=l("label")).textContent="Max. items",W=c("\n      "),K=l("td"),Z=l("input"),ee=c("\n    "),te=l("tr"),ne=l("td"),(oe=l("label")).textContent="Max. width",ie=c("\n      "),re=l("td"),se=l("input"),le=c("\n        "),(ae=l("small")).textContent="px",ce=c("\n    "),ue=l("tr"),de=l("td"),(he=l("label")).textContent="Content height",me=c("\n      "),pe=l("td"),fe=l("input"),ge=c("\n        "),(ve=l("small")).textContent="px",be=c("\n    "),ye=l("tr"),we=l("td"),(xe=l("label")).textContent="Corner radius",ke=c("\n      "),_e=l("td"),Ce=l("input"),$e=c("\n        "),(Se=l("small")).textContent="px",Te=c("\n    "),Be=l("tr"),Re=l("td"),(Ie=l("label")).textContent="XML button",Le=c("\n      "),Ne=l("td"),He=l("input"),De=c("\n    "),je=l("tr"),ze=l("td"),(Ue=l("label")).textContent="Compact view",qe=c("\n      "),Xe=l("td"),Oe=l("input"),Pe=c("\n    "),Ve=l("tr"),Je=l("td"),(Ge=l("label")).textContent="Headless",Ye=c("\n      "),Qe=l("td"),We=l("input"),Ke=c("\n    "),Ze=l("tr"),et=l("td"),(tt=l("label")).textContent="Frame color",nt=c("\n      "),ot=l("td"),it=l("input"),rt=c("\n    "),st=l("tr"),lt=l("td"),(at=l("label")).textContent="Titlebar color",ct=c("\n      "),ut=l("td"),dt=l("input"),ht=c("\n    "),mt=l("tr"),pt=l("td"),(ft=l("label")).textContent="Title color",gt=c("\n      "),vt=l("td"),bt=l("input"),yt=c("\n    "),wt=l("tr"),xt=l("td"),(kt=l("label")).textContent="Box color",_t=c("\n      "),Ct=l("td"),$t=l("input"),St=c("\n    "),Tt=l("tr"),Bt=l("td"),(At=l("label")).textContent="Text color",Rt=c("\n      "),Mt=l("td"),It=l("input"),Lt=c("\n    "),Nt=l("tr"),Ht=l("td"),(Et=l("label")).textContent="Link color",Ft=c("\n      "),Dt=l("td"),jt=l("input"),zt=c("\n    "),Ut=l("tr"),qt=l("td"),(Xt=l("label")).textContent="Font face",Ot=c("\n      "),Pt=l("td"),Vt=l("input"),Jt=c("\n    "),Gt=l("tr"),Yt=l("td"),Qt=c("\n      "),Wt=l("td"),Vn.c(),Kt=c("\n    "),Zt=l("tr"),en=l("td"),(tn=l("label")).innerHTML="HTML code<br>\n          (copy&pasta)",nn=c("\n      "),on=l("td"),rn=l("textarea"),sn=c("\n    "),ln=l("tr"),an=l("td"),(cn=l("label")).textContent="Referrers",un=c("\n      "),dn=l("td"),Qn._fragment.c(),this.h()},h:function(){Me(s),Me(m),Me(f),d(g,"click",hn),Me(b),Me(y),y.type="url",y.name="url",y.value=e.$url,y.required=!0,d(y,"change",mn),Me(x),Me(k),Me(C),Me(T),Me(B),d(A,"click",pn),B.className="top",Me(M),Me(L),Me(F),Me(D),Me(z),Me(X),Me(O),Me(V),V.className="source",Me(G),Me(Y),d(Q,"click",vn),Me(K),Me(Z),Z.type="number",Z.name="maxItems",Z.value=e.$maxItems,Z.min="1",Z.max="99",Z.required=!0,d(Z,"change",bn),Me(te),Me(ne),d(oe,"click",yn),Me(re),Me(se),se.type="number",se.name="width",se.value=e.$width,se.min="100",se.max="9999",se.placeholder="spare",d(se,"change",wn),Me(ue),Me(de),d(he,"click",xn),Me(pe),Me(fe),fe.type="number",fe.name="height",fe.value=e.$height,fe.min="100",fe.max="9999",fe.placeholder="spare",d(fe,"change",kn),Me(ye),Me(we),d(xe,"click",_n),Me(_e),Me(Ce),Ce.type="number",Ce.name="radius",Ce.value=e.$radius,Ce.min="0",Ce.max="20",Ce.required=!0,d(Ce,"change",Cn),Me(Be),Me(Re),d(Ie,"click",$n),Me(Ne),He.type="checkbox",He.name="showXmlButton",He.value="1",He.checked=e.$showXmlButton,d(He,"change",Sn),Me(je),Me(ze),d(Ue,"click",Tn),Me(Xe),Oe.type="checkbox",Oe.name="compact",Oe.value="1",Oe.checked=e.$compact,d(Oe,"change",Bn),Me(Ve),Me(Je),d(Ge,"click",An),Me(Qe),We.type="checkbox",We.name="headless",We.value="1",We.checked=e.$headless,d(We,"change",Rn),Me(Ze),Me(et),d(tt,"click",Mn),Me(ot),Me(it),it.type="color",it.name="frameColor",it.value=e.$frameColor,it.size="6",it.maxLength="7",d(it,"change",In),Me(st),Me(lt),d(at,"click",Ln),Me(ut),Me(dt),dt.type="color",dt.name="titleBarColor",dt.value=e.$titleBarColor,dt.size="6",dt.maxLength="7",d(dt,"change",Nn),Me(mt),Me(pt),d(ft,"click",Hn),Me(vt),Me(bt),bt.type="color",bt.name="titleBarTextColor",bt.value=e.$titleBarTextColor,bt.size="6",bt.maxLength="7",d(bt,"change",En),Me(wt),Me(xt),d(kt,"click",Fn),Me(Ct),Me($t),$t.type="color",$t.name="boxFillColor",$t.value=e.$boxFillColor,$t.size="6",$t.maxLength="7",d($t,"change",Dn),Me(Tt),Me(Bt),d(At,"click",jn),Me(Mt),Me(It),It.type="color",It.name="textColor",It.value=e.$textColor,It.size="6",It.maxLength="7",d(It,"change",zn),Me(Nt),Me(Ht),d(Et,"click",Un),Me(Dt),Me(jt),jt.type="color",jt.name="linkColor",jt.value=e.$linkColor,jt.size="6",jt.maxLength="7",d(jt,"change",qn),Me(Ut),Me(qt),d(Xt,"click",Xn),Me(Pt),Me(Vt),Vt.name="fontFace",Vt.value=e.$fontFace,Vt.pattern="[\\d.]+(?:pt|px|em|%)+\\s+[\\s\\w\\-,]+",Vt.placeholder="e.g. 10pt Helvetica, sans-serif",d(Vt,"change",On),Me(Gt),Me(Yt),Me(Wt),Me(Zt),Me(en),d(tn,"click",Jn),Me(on),Me(rn),rn.name="code",rn.cols="10",rn.rows="3",rn.readOnly=!0,rn.value=e.$code,d(rn,"click",Gn),p(Zt,"vertical-align","top"),Me(ln),Me(an),cn.title="since midnight (GMT)",d(cn,"click",Yn),an.className="top",Me(dn),dn.className="top",s.className="table",d(r,"submit",Wn)},m:function(e,t){o(r,e,t),n(s,r),n(a,s),n(u,s),n(m,s),n(f,m),n(g,f),n(v,m),n(b,m),n(y,b),n(w,s),n(x,s),n(k,x),n(_,x),n(C,x),n($,C),n(S,s),n(T,s),n(B,T),n(A,B),n(R,T),n(M,T),n(I,M),n(L,I),n(N,I),n(H,I),n(E,s),n(F,s),n(D,F),n(j,F),n(z,F),n(U,z),n(q,s),n(X,s),n(O,X),n(P,X),n(V,X),gn.m(V,null),n(J,s),n(G,s),n(Y,G),n(Q,Y),n(W,G),n(K,G),n(Z,K),n(ee,s),n(te,s),n(ne,te),n(oe,ne),n(ie,te),n(re,te),n(se,re),n(le,re),n(ae,re),n(ce,s),n(ue,s),n(de,ue),n(he,de),n(me,ue),n(pe,ue),n(fe,pe),n(ge,pe),n(ve,pe),n(be,s),n(ye,s),n(we,ye),n(xe,we),n(ke,ye),n(_e,ye),n(Ce,_e),n($e,_e),n(Se,_e),n(Te,s),n(Be,s),n(Re,Be),n(Ie,Re),n(Le,Be),n(Ne,Be),n(He,Ne),n(De,s),n(je,s),n(ze,je),n(Ue,ze),n(qe,je),n(Xe,je),n(Oe,Xe),n(Pe,s),n(Ve,s),n(Je,Ve),n(Ge,Je),n(Ye,Ve),n(Qe,Ve),n(We,Qe),n(Ke,s),n(Ze,s),n(et,Ze),n(tt,et),n(nt,Ze),n(ot,Ze),n(it,ot),n(rt,s),n(st,s),n(lt,st),n(at,lt),n(ct,st),n(ut,st),n(dt,ut),n(ht,s),n(mt,s),n(pt,mt),n(ft,pt),n(gt,mt),n(vt,mt),n(bt,vt),n(yt,s),n(wt,s),n(xt,wt),n(kt,xt),n(_t,wt),n(Ct,wt),n($t,Ct),n(St,s),n(Tt,s),n(Bt,Tt),n(At,Bt),n(Rt,Tt),n(Mt,Tt),n(It,Mt),n(Lt,s),n(Nt,s),n(Ht,Nt),n(Et,Ht),n(Ft,Nt),n(Dt,Nt),n(jt,Dt),n(zt,s),n(Ut,s),n(qt,Ut),n(Xt,qt),n(Ot,Ut),n(Pt,Ut),n(Vt,Pt),n(Jt,s),n(Gt,s),n(Yt,Gt),n(Qt,Gt),n(Wt,Gt),Vn.m(Wt,null),n(Kt,s),n(Zt,s),n(en,Zt),n(tn,en),n(nn,Zt),n(on,Zt),n(rn,on),n(sn,s),n(ln,s),n(an,ln),n(cn,an),n(un,ln),n(dn,ln),Qn._mount(dn,null)},p:function(e,n){e.$url&&(y.value=n.$url),e.$title&&($.data=n.$title),e.$description&&(H.data=n.$description),e.$formattedDate&&(U.data=n.$formattedDate),fn===(fn=Ee(n))&&gn?gn.p(e,n):(gn.u(),gn.d(),(gn=fn(n,t)).c(),gn.m(V,null)),e.$maxItems&&(Z.value=n.$maxItems),e.$width&&(se.value=n.$width),e.$height&&(fe.value=n.$height),e.$radius&&(Ce.value=n.$radius),e.$showXmlButton&&(He.checked=n.$showXmlButton),e.$compact&&(Oe.checked=n.$compact),e.$headless&&(We.checked=n.$headless),e.$frameColor&&(it.value=n.$frameColor),e.$titleBarColor&&(dt.value=n.$titleBarColor),e.$titleBarTextColor&&(bt.value=n.$titleBarTextColor),e.$boxFillColor&&($t.value=n.$boxFillColor),e.$textColor&&(It.value=n.$textColor),e.$linkColor&&(jt.value=n.$linkColor),e.$fontFace&&(Vt.value=n.$fontFace),Pn!==(Pn=Fe(n))&&(Vn.u(),Vn.d(),(Vn=Pn(n,t)).c(),Vn.m(Wt,null)),e.$code&&(rn.value=n.$code)},u:function(){i(r),gn.u(),Vn.u()},d:function(){h(g,"click",hn),h(y,"change",mn),h(A,"click",pn),gn.d(),h(Q,"click",vn),h(Z,"change",bn),h(oe,"click",yn),h(se,"change",wn),h(he,"click",xn),h(fe,"change",kn),h(xe,"click",_n),h(Ce,"change",Cn),h(Ie,"click",$n),h(He,"change",Sn),h(Ue,"click",Tn),h(Oe,"change",Bn),h(Ge,"click",An),h(We,"change",Rn),h(tt,"click",Mn),h(it,"change",In),h(at,"click",Ln),h(dt,"change",Nn),h(ft,"click",Hn),h(bt,"change",En),h(kt,"click",Fn),h($t,"change",Dn),h(At,"click",jn),h(It,"change",zn),h(Et,"click",Un),h(jt,"change",qn),h(Xt,"click",Xn),h(Vt,"change",On),Vn.d(),h(tn,"click",Jn),h(rn,"click",Gn),h(cn,"click",Yn),Qn.destroy(!1),h(r,"submit",Wn)}}}(this._state,this),e.target&&(this._fragment.c(),this._fragment.m(e.target,e.anchor||null),this._lock=!0,k(this._beforecreate),k(this._oncreate),k(this._aftercreate),this._lock=!1)}t(De.prototype,Re,C);function je(r){w(this,r),this._state=t({},r.data),r.root||(this._oncreate=[],this._beforecreate=[],this._aftercreate=[]),this._fragment=function(t,r){var s,a,u,d,h,m,p,f=new we({root:r.root}),g=new De({root:r.root}),v=new X({root:r.root}),b=new z({root:r.root});return{c:function(){s=l("div"),a=l("div"),f._fragment.c(),u=c("\n  "),d=l("div"),g._fragment.c(),h=c("\n  "),m=l("div"),v._fragment.c(),p=c("\n    "),b._fragment.c(),this.h()},h:function(){a.className="col c2",d.className="col c5",m.className="col c5",s.className="row"},m:function(e,t){o(s,e,t),n(a,s),f._mount(a,null),n(u,s),n(d,s),g._mount(d,null),n(h,s),n(m,s),v._mount(m,null),n(p,m),b._mount(m,null)},p:e,u:function(){i(s)},d:function(){f.destroy(!1),g.destroy(!1),v.destroy(!1),b.destroy(!1)}}}(this._state,this),r.target&&(this._fragment.c(),this._fragment.m(r.target,r.anchor||null),this._lock=!0,k(this._beforecreate),k(this._oncreate),k(this._aftercreate),this._lock=!1)}t(je.prototype,C);!function(e){var t=document.createElement("script");t.src="https://cdn.polyfill.io/v2/polyfill.min.js?features="+["fetch","Object.assign","Promise","String.prototype.padStart"].join(),t.defer=t.async=!0,t.onload=e,document.head.appendChild(t)}(function(){var e=new N;e.compute("code",B,function(){var t=function(){var t=[];return B.forEach(function(n){var o=e.get(n);o&&t.push(n+"="+encodeURIComponent(o))}),t.join("&")}().replace(/&/g,"&amp;");return"<script async defer src='"+R.app+"/main.js?"+t+"'><\/script>"}),new je({target:document.querySelector("main"),store:e});var t,n=location.search;if(n&&n.startsWith("?url=")){t=n.substr(5).split("&")[0]}e.set({align:"initial",appDescription:"RSS Box Viewer",appVersion:"19.12.15",boxFillColor:"#ffead2",compact:!1,fontFace:"10pt sans-serif",frameColor:"#b3a28e",headless:!1,height:"",linkColor:"#2c7395",maxItems:7,radius:5,showXmlButton:!0,textColor:"#95412b",titleBarColor:"#90a8b3",titleBarTextColor:"#ffead2",url:t||R.default,width:""})})}();
+(function () {
+'use strict';
+
+function noop() {}
+
+function assign(target) {
+	var k,
+		source,
+		i = 1,
+		len = arguments.length;
+	for (; i < len; i++) {
+		source = arguments[i];
+		for (k in source) target[k] = source[k];
+	}
+
+	return target;
+}
+
+function appendNode(node, target) {
+	target.appendChild(node);
+}
+
+function insertNode(node, target, anchor) {
+	target.insertBefore(node, anchor);
+}
+
+function detachNode(node) {
+	node.parentNode.removeChild(node);
+}
+
+function detachBetween(before, after) {
+	while (before.nextSibling && before.nextSibling !== after) {
+		before.parentNode.removeChild(before.nextSibling);
+	}
+}
+
+function destroyEach(iterations) {
+	for (var i = 0; i < iterations.length; i += 1) {
+		if (iterations[i]) iterations[i].d();
+	}
+}
+
+function createElement(name) {
+	return document.createElement(name);
+}
+
+function createSvgElement(name) {
+	return document.createElementNS('http://www.w3.org/2000/svg', name);
+}
+
+function createText(data) {
+	return document.createTextNode(data);
+}
+
+function createComment() {
+	return document.createComment('');
+}
+
+function addListener(node, event, handler) {
+	node.addEventListener(event, handler, false);
+}
+
+function removeListener(node, event, handler) {
+	node.removeEventListener(event, handler, false);
+}
+
+function setAttribute(node, attribute, value) {
+	node.setAttribute(attribute, value);
+}
+
+function setStyle(node, key, value) {
+	node.style.setProperty(key, value);
+}
+
+function blankObject() {
+	return Object.create(null);
+}
+
+function destroy(detach) {
+	this.destroy = noop;
+	this.fire('destroy');
+	this.set = this.get = noop;
+
+	if (detach !== false) this._fragment.u();
+	this._fragment.d();
+	this._fragment = this._state = null;
+}
+
+function destroyDev(detach) {
+	destroy.call(this, detach);
+	this.destroy = function() {
+		console.warn('Component was already destroyed');
+	};
+}
+
+function differs(a, b) {
+	return a !== b || ((a && typeof a === 'object') || typeof a === 'function');
+}
+
+function dispatchObservers(component, group, changed, newState, oldState) {
+	for (var key in group) {
+		if (!changed[key]) continue;
+
+		var newValue = newState[key];
+		var oldValue = oldState[key];
+
+		var callbacks = group[key];
+		if (!callbacks) continue;
+
+		for (var i = 0; i < callbacks.length; i += 1) {
+			var callback = callbacks[i];
+			if (callback.__calling) continue;
+
+			callback.__calling = true;
+			callback.call(component, newValue, oldValue);
+			callback.__calling = false;
+		}
+	}
+}
+
+function fire(eventName, data) {
+	var handlers =
+		eventName in this._handlers && this._handlers[eventName].slice();
+	if (!handlers) return;
+
+	for (var i = 0; i < handlers.length; i += 1) {
+		handlers[i].call(this, data);
+	}
+}
+
+function get(key) {
+	return key ? this._state[key] : this._state;
+}
+
+function init(component, options) {
+	component._observers = { pre: blankObject(), post: blankObject() };
+	component._handlers = blankObject();
+	component._bind = options._bind;
+
+	component.options = options;
+	component.root = options.root || component;
+	component.store = component.root.store || options.store;
+}
+
+function observe(key, callback, options) {
+	var group = options && options.defer
+		? this._observers.post
+		: this._observers.pre;
+
+	(group[key] || (group[key] = [])).push(callback);
+
+	if (!options || options.init !== false) {
+		callback.__calling = true;
+		callback.call(this, this._state[key]);
+		callback.__calling = false;
+	}
+
+	return {
+		cancel: function() {
+			var index = group[key].indexOf(callback);
+			if (~index) group[key].splice(index, 1);
+		}
+	};
+}
+
+function observeDev(key, callback, options) {
+	var c = (key = '' + key).search(/[^\w]/);
+	if (c > -1) {
+		var message =
+			'The first argument to component.observe(...) must be the name of a top-level property';
+		if (c > 0)
+			message += ", i.e. '" + key.slice(0, c) + "' rather than '" + key + "'";
+
+		throw new Error(message);
+	}
+
+	return observe.call(this, key, callback, options);
+}
+
+function on(eventName, handler) {
+	if (eventName === 'teardown') return this.on('destroy', handler);
+
+	var handlers = this._handlers[eventName] || (this._handlers[eventName] = []);
+	handlers.push(handler);
+
+	return {
+		cancel: function() {
+			var index = handlers.indexOf(handler);
+			if (~index) handlers.splice(index, 1);
+		}
+	};
+}
+
+function onDev(eventName, handler) {
+	if (eventName === 'teardown') {
+		console.warn(
+			"Use component.on('destroy', ...) instead of component.on('teardown', ...) which has been deprecated and will be unsupported in Svelte 2"
+		);
+		return this.on('destroy', handler);
+	}
+
+	return on.call(this, eventName, handler);
+}
+
+function set(newState) {
+	this._set(assign({}, newState));
+	if (this.root._lock) return;
+	this.root._lock = true;
+	callAll(this.root._beforecreate);
+	callAll(this.root._oncreate);
+	callAll(this.root._aftercreate);
+	this.root._lock = false;
+}
+
+function _set(newState) {
+	var oldState = this._state,
+		changed = {},
+		dirty = false;
+
+	for (var key in newState) {
+		if (differs(newState[key], oldState[key])) changed[key] = dirty = true;
+	}
+	if (!dirty) return;
+
+	this._state = assign({}, oldState, newState);
+	this._recompute(changed, this._state);
+	if (this._bind) this._bind(changed, this._state);
+
+	if (this._fragment) {
+		dispatchObservers(this, this._observers.pre, changed, this._state, oldState);
+		this._fragment.p(changed, this._state);
+		dispatchObservers(this, this._observers.post, changed, this._state, oldState);
+	}
+}
+
+function setDev(newState) {
+	if (typeof newState !== 'object') {
+		throw new Error(
+			this._debugName + '.set was called without an object of data key-values to update.'
+		);
+	}
+
+	this._checkReadOnly(newState);
+	set.call(this, newState);
+}
+
+function callAll(fns) {
+	while (fns && fns.length) fns.pop()();
+}
+
+function _mount(target, anchor) {
+	this._fragment.m(target, anchor);
+}
+
+function _unmount() {
+	if (this._fragment) this._fragment.u();
+}
+
+function isPromise(value) {
+	return value && typeof value.then === 'function';
+}
+
+function removeFromStore() {
+	this.store._remove(this);
+}
+
+var protoDev = {
+	destroy: destroyDev,
+	get: get,
+	fire: fire,
+	observe: observeDev,
+	on: onDev,
+	set: setDev,
+	teardown: destroyDev,
+	_recompute: noop,
+	_set: _set,
+	_mount: _mount,
+	_unmount: _unmount
+};
+
+function Store(state) {
+	this._observers = { pre: blankObject(), post: blankObject() };
+	this._changeHandlers = [];
+	this._dependents = [];
+
+	this._computed = blankObject();
+	this._sortedComputedProperties = [];
+
+	this._state = assign({}, state);
+}
+
+assign(Store.prototype, {
+	_add: function(component, props) {
+		this._dependents.push({
+			component: component,
+			props: props
+		});
+	},
+
+	_init: function(props) {
+		var state = {};
+		for (var i = 0; i < props.length; i += 1) {
+			var prop = props[i];
+			state['$' + prop] = this._state[prop];
+		}
+		return state;
+	},
+
+	_remove: function(component) {
+		var i = this._dependents.length;
+		while (i--) {
+			if (this._dependents[i].component === component) {
+				this._dependents.splice(i, 1);
+				return;
+			}
+		}
+	},
+
+	_sortComputedProperties: function() {
+		var computed = this._computed;
+		var sorted = this._sortedComputedProperties = [];
+		var cycles;
+		var visited = blankObject();
+
+		function visit(key) {
+			if (cycles[key]) {
+				throw new Error('Cyclical dependency detected');
+			}
+
+			if (visited[key]) return;
+			visited[key] = true;
+
+			var c = computed[key];
+
+			if (c) {
+				cycles[key] = true;
+				c.deps.forEach(visit);
+				sorted.push(c);
+			}
+		}
+
+		for (var key in this._computed) {
+			cycles = blankObject();
+			visit(key);
+		}
+	},
+
+	compute: function(key, deps, fn) {
+		var value;
+
+		var c = {
+			deps: deps,
+			update: function(state, changed, dirty) {
+				var values = deps.map(function(dep) {
+					if (dep in changed) dirty = true;
+					return state[dep];
+				});
+
+				if (dirty) {
+					var newValue = fn.apply(null, values);
+					if (differs(newValue, value)) {
+						value = newValue;
+						changed[key] = true;
+						state[key] = value;
+					}
+				}
+			}
+		};
+
+		c.update(this._state, {}, true);
+
+		this._computed[key] = c;
+		this._sortComputedProperties();
+	},
+
+	get: get,
+
+	observe: observe,
+
+	onchange: function(callback) {
+		this._changeHandlers.push(callback);
+		return {
+			cancel: function() {
+				var index = this._changeHandlers.indexOf(callback);
+				if (~index) this._changeHandlers.splice(index, 1);
+			}
+		};
+	},
+
+	set: function(newState) {
+		var oldState = this._state,
+			changed = this._changed = {},
+			dirty = false;
+
+		for (var key in newState) {
+			if (this._computed[key]) throw new Error("'" + key + "' is a read-only property");
+			if (differs(newState[key], oldState[key])) changed[key] = dirty = true;
+		}
+		if (!dirty) return;
+
+		this._state = assign({}, oldState, newState);
+
+		for (var i = 0; i < this._sortedComputedProperties.length; i += 1) {
+			this._sortedComputedProperties[i].update(this._state, changed);
+		}
+
+		for (var i = 0; i < this._changeHandlers.length; i += 1) {
+			this._changeHandlers[i](this._state, changed);
+		}
+
+		dispatchObservers(this, this._observers.pre, changed, this._state, oldState);
+
+		var dependents = this._dependents.slice(); // guard against mutations
+		for (var i = 0; i < dependents.length; i += 1) {
+			var dependent = dependents[i];
+			var componentState = {};
+			dirty = false;
+
+			for (var j = 0; j < dependent.props.length; j += 1) {
+				var prop = dependent.props[j];
+				if (prop in changed) {
+					componentState['$' + prop] = this._state[prop];
+					dirty = true;
+				}
+			}
+
+			if (dirty) dependent.component.set(componentState);
+		}
+
+		dispatchObservers(this, this._observers.post, changed, this._state, oldState);
+	}
+});
+
+function RssParser() {
+  const DC_NAMESPACE = 'http://purl.org/dc/elements/1.1/';
+  const RDF_NAMESPACE = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+  const ISO_DATE_PATTERN = /([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9:]+).*$/;
+
+  const getDocument = function(xml) {
+    if (!xml) return;
+
+    let doc;
+
+    if (document.implementation.createDocument) {
+      const parser = new DOMParser();
+      doc = parser.parseFromString(xml, 'application/xml');
+    } else if (window.ActiveXObject) {
+      doc = new window.ActiveXObject('Microsoft.XMLDOM');
+      doc.async = 'false';
+      doc.loadXML(xml);
+    }
+
+    return doc;
+  };
+
+  const getChildElement = function(name, parent, namespace) {
+    if (!name || !parent) return null;
+    let method = 'getElementsByTagName';
+    if (namespace) method += 'NS';
+    return parent[method](name, namespace)[0];
+  };
+
+  const getText = function(node) {
+    if (!node) return '';
+    if (node.length) node = node[0];
+    return node.textContent;
+  };
+
+  const error = Error('Malformed RSS syntax');
+
+  const parseRss = function(root, type) {
+    const rss = { items: [] };
+    const channel = getChildElement('channel', root);
+
+    if (!channel) throw error;
+
+    rss.format = 'RSS';
+    rss.version = type === 'rdf:RDF' ? '1.0' : root.getAttribute('version');
+    rss.title = getText(getChildElement('title', channel));
+    rss.description = getText(getChildElement('description', channel));
+    rss.link = getText(getChildElement('link', channel));
+
+    const image = getChildElement('image', channel);
+
+    rss.image = image
+      ? {
+          source: getText(getChildElement('url', image)) || image.getAttributeNS(RDF_NAMESPACE, 'resource'),
+          title: getText(getChildElement('title', image)),
+          link: getText(getChildElement('link', image)),
+          width: getText(getChildElement('width', image)),
+          height: getText(getChildElement('height', image)),
+          description: getText(getChildElement('description', image))
+        }
+      : '';
+
+    if (type === 'rdf:RDF') {
+      const date = channel.getElementsByTagNameNS(DC_NAMESPACE, 'date');
+      rss.date = getDate(getText(date));
+      rss.rights = getText(channel.getElementsByTagNameNS(DC_NAMESPACE, 'creator'));
+
+      const textInput = getChildElement('textinput', root);
+
+      rss.input = textInput
+        ? {
+            link: getText(getChildElement('link', textInput)),
+            description: getText(getChildElement('description', textInput)),
+            name: getText(getChildElement('name', textInput)),
+            title: getText(getChildElement('title', textInput))
+          }
+        : '';
+    } else {
+      rss.date = getDate(
+        getText(getChildElement('lastBuildDate', channel)) || getText(getChildElement('pubDate', channel))
+      );
+      rss.rights = getText(getChildElement('copyright', channel));
+    }
+
+    // Create a native Array from HTMLCollection
+    const items = Array.apply(null, root.getElementsByTagName('item'));
+
+    items.forEach(node => {
+      const item = {
+        title: getText(getChildElement('title', node)),
+        description: getText(getChildElement('description', node)),
+        link: getText(getChildElement('link', node)) || getText(getChildElement('guid', node))
+      };
+
+      if (!item.description) {
+        let content = getText(getChildElement('encoded', node, 'content'));
+        if (content) {
+          item.description = content;
+        } else {
+          content = getText(getChildElement('encoded', node));
+          if (content) {
+            item.description = content;
+          }
+        }
+      }
+
+      addItemExtensions(node, item);
+      rss.items.push(item);
+    });
+
+    return rss;
+  };
+
+  const parseAtom = function(root) {
+    const rss = { items: [] };
+
+    rss.format = 'Atom';
+    rss.version = '1.0';
+    rss.title = getText(getChildElement('title', root));
+    rss.description = getText(getChildElement('subtitle', root));
+    rss.image = '';
+
+    const link = getChildElement('link:not([self])', root);
+    if (link) rss.link = link.getAttribute('href');
+
+    rss.date = getDate(getChildElement('updated', root));
+
+    const entries = Array.apply(null, root.getElementsByTagName('entry'));
+
+    entries.forEach(node => {
+      const item = {
+        title: getText(getChildElement('title', node)),
+        description: getText(getChildElement('summary', node))
+      };
+
+      const link = getChildElement('link', node);
+      if (link) item.link = link.getAttribute('href');
+
+      rss.items.push(item);
+    });
+
+    return rss;
+  };
+
+  const parseScriptingNews = function(root) {
+    const rss = { items: [] };
+    const channel = getChildElement('header', root);
+
+    if (!channel) throw error;
+
+    rss.format = 'Scripting News';
+    rss.version = getText(getChildElement('scriptingNewsVersion', channel));
+    rss.title = getText(getChildElement('channelTitle', channel));
+    rss.description = getText(getChildElement('channelDescription', channel));
+    rss.link = getText(getChildElement('channelLink', channel));
+
+    rss.date = getDate(
+      getText(getChildElement('lastBuildDate', channel)) || getText(getChildElement('pubDate', channel))
+    );
+
+    const imageUrl = getChildElement('imageUrl', channel);
+
+    if (imageUrl) {
+      rss.image = {
+        source: getText(imageUrl),
+        title: getText(getChildElement('imageTitle', channel)),
+        link: getText(getChildElement('imageLink', channel)),
+        width: getText(getChildElement('imageWidth', channel)),
+        height: getText(getChildElement('imageHeight', channel)),
+        description: getText(getChildElement('imageCaption', channel))
+      };
+    }
+
+    const items = Array.apply(null, root.getElementsByTagName('item'));
+
+    items.forEach(node => {
+      const item = { title: '' };
+
+      item.description = getText(getChildElement('text', node)).replace(/\n/g, ' ');
+
+      const link = getChildElement('link', node);
+
+      if (link) {
+        const text = getText(getChildElement('linetext', link))
+          .replace(/\n/g, ' ')
+          .trim();
+        if (text) {
+          item.description = item.description.replace(
+            new RegExp(text),
+            '<a href="' + getText(getChildElement('url', node)) + '">' + text + '</a>'
+          );
+        }
+        item.link = getText(getChildElement('url', link));
+      }
+
+      addItemExtensions(node, item);
+      rss.items.push(item);
+    });
+
+    return rss;
+  };
+
+  const addItemExtensions = function(node, item) {
+    const source = getChildElement('source', node);
+    // Create a native Array from HTMLCollection
+    const enclosures = Array.apply(null, node.getElementsByTagName('enclosure'));
+    const category = getChildElement('category', node);
+
+    if (source) {
+      item.source = {
+        url: source.getAttribute('url'),
+        title: source.textContent
+      };
+    }
+
+    item.enclosures = enclosures.map(enclosure => {
+      return {
+        url: enclosure.getAttribute('url'),
+        length: enclosure.getAttribute('length'),
+        type: enclosure.getAttribute('type')
+      };
+    });
+
+    if (category) {
+      item.category = {
+        domain: category.getAttribute('domain') || '',
+        content: category.textContent
+      };
+    }
+
+    return item;
+  };
+
+  const getDate = function(str) {
+    let millis = Date.parse(str);
+
+    if (isNaN(millis)) {
+      millis = Date.parse(String(str).replace(ISO_DATE_PATTERN, '$1/$2/$3 $4'));
+      if (isNaN(millis)) millis = Date.now();
+    }
+
+    return new Date(millis);
+  };
+
+  return {
+    parse: function(xml) {
+      const doc = getDocument(xml);
+      const root = doc.documentElement;
+      const type = root.nodeName;
+
+      switch (type) {
+        case 'feed':
+          return parseAtom(root);
+
+        case 'scriptingNews':
+          return parseScriptingNews(root);
+
+        default:
+          return parseRss(root, type);
+      }
+    }
+  };
+}
+
+const mode = 'dev';
+const stage = 'https://20191215t133215-dot-p3k-services.appspot.com';
+
+const urls$1 = (settings => settings[mode] || {})({
+  stage: {
+    app: 'https://p3k.org/rss-stage',
+    proxy: stage + '/roxy',
+    referrers: stage + '/ferris?group=test'
+  },
+
+  mixed: {
+    app: 'http://localhost:8000',
+    proxy: stage + '/roxy',
+    referrers: stage + '/ferris?group=rssbox'
+  },
+
+  prod: {
+    app: 'https://p3k.org/rss',
+    proxy: 'https://p3k-services.appspot.com/roxy',
+    referrers: 'https://p3k-services.appspot.com/ferris?group=rssbox',
+    default: 'https://blog.p3k.org/stories.xml'
+  }
+});
+
+//urls.default = urls.app + '/test/sampleRssAtom.xml';
+//urls.default = 'http://www.wienerzeitung.at/_export/rss/nachrichten/schlagzeilen/index.rss';
+
+const keys = [
+  'align',
+  'boxFillColor',
+  'compact',
+  'fontFace',
+  'frameColor',
+  'headless',
+  'height',
+  'linkColor',
+  'maxItems',
+  'radius',
+  'showXmlButton',
+  'textColor',
+  'titleBarColor',
+  'titleBarTextColor',
+  'url',
+  'width'
+];
+
+const baseUrl = 'http://localhost';
+
+const urls$$1 = {
+  app: baseUrl + ':8000',
+  proxy: baseUrl + ':8080/roxy',
+  referrers: baseUrl + ':8080/ferris?group=rssbox',
+  default: 'https://blog.p3k.org/stories.xml'
+};
+
+for (let key in urls$$1) {
+  if (key in urls$1) urls$$1[key] = urls$1[key];
+}
+
+const defaultError = {
+  loading: false,
+  compact: false,
+  maxItems: 3,
+  format: 'Error',
+  version: '❌',
+  title: 'RSS Box Error',
+  description:
+    'This output was automatically generated to report an error that occurred during a request to the  RSS Box Viewer.',
+  items: [
+    {
+      title: 'Oops, something went wrong…',
+      description: 'An error occurred while processing the request to the RSS Box Viewer.'
+    },
+    {
+      title: 'The following error message was returned:',
+      description: 'Unknown error'
+    },
+    { title: '' }
+  ]
+};
+
+function error(url, message) {
+  const error = Object.assign({}, defaultError);
+  error.link = urls$$1.app + '?url=' + url;
+  error.items[1].description = message;
+  error.items[2].description = `Most likely, this might have happened because of a non-existent or invalid RSS feed URL. <a href="https://validator.w3.org/feed/check.cgi?url=${url}">Please check</a> and possibly correct your input, then try again.`;
+  return error;
+}
+
+class RssStore extends Store {
+  constructor() {
+    const settings = {
+      date: new Date(),
+      description: '',
+      format: '',
+      image: '',
+      input: '',
+      items: [],
+      title: '',
+      version: ''
+    };
+
+    super(settings);
+
+    this.compute('formattedDate', ['date'], date => {
+      if (!date) return;
+      let month = (date.getMonth() + 1).toString().padStart(2, '0');
+      let day = date
+        .getDate()
+        .toString()
+        .padStart(2, '0');
+      let hours = date
+        .getHours()
+        .toString()
+        .padStart(2, '0');
+      let minutes = date
+        .getMinutes()
+        .toString()
+        .padStart(2, '0');
+      return `${date.getFullYear()}-${month}-${day}, ${hours}:${minutes}h`;
+    });
+
+    this.observe('url', this.fetch, { init: false });
+  }
+
+  fetch() {
+    const url = this.get('url');
+    if (!url) return;
+
+    this.set({ loading: true });
+
+    fetch(urls$$1.proxy + '?url=' + encodeURIComponent(url))
+      .then(res => {
+        if (!res.ok) throw Error(res.statusText);
+
+        res
+          .text()
+          .then(json => {
+            const parser = RssParser();
+            const data = JSON.parse(json);
+            if (data.headers['X-Roxy-Error']) throw Error(data.headers['X-Roxy-Error']);
+            const rss = parser.parse(data.content);
+            if (!rss.date) rss.date = new Date(data.headers.date);
+            rss.loading = false;
+            this.set(rss);
+          })
+          .catch(message => {
+            this.set(error(url, message));
+            console.error(message);
+          });
+      })
+      .catch(message => {
+        this.set(error(url, message));
+        console.error(message);
+      });
+  }
+}
+
+var version = "19.12.15";
+var description = "RSS Box Viewer";
+
+/* components/Changes.html generated by Svelte v1.50.0 */
+function encapsulateStyles$1(node) {
+	setAttribute(node, "svelte-2837112113", "");
+}
+
+function add_css$1() {
+	var style = createElement("style");
+	style.id = 'svelte-2837112113-style';
+	style.textContent = "h3[svelte-2837112113]{display:inline-block}h3+p[svelte-2837112113],summary+[svelte-2837112113]{margin-top:0}summary[svelte-2837112113]{outline:none}li+li[svelte-2837112113]{margin-top:0.5em}small[svelte-2837112113]{display:inline-block;margin-right:0.5em;color:#bbb}code[svelte-2837112113]{background-color:#ffc;font-size:0.8em;font-weight:200}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ2hhbmdlcy5odG1sIiwic291cmNlcyI6WyJDaGFuZ2VzLmh0bWwiXSwic291cmNlc0NvbnRlbnQiOlsiPGRldGFpbHM+XG4gIDxzdW1tYXJ5PlxuICAgIDxoMz5DaGFuZ2UgTG9nPC9oMz5cbiAgPC9zdW1tYXJ5PlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDE5LTEyLTE1PC9zbWFsbD5cbiAgICBVcGdyYWRlZCB0aGUgSlNPTlAgcHJveHkgdG8gUHl0aG9uIDMuNyBhbmQgc2xpZ2h0bHkgcmV0b3VjaGVkIHRoZSBjb25maWd1cmF0aW9uIGZvcm0uIEEgbWVycnkgZW5kaW5nIGZvciAyMDE5IGFuZCBhIGhhcHB5IG5ldyB5ZWFyIPCfjokgPGVtPkl04oCZcyBoaW5kc2lnaHQhPGVtPlxuICA8L3A+XG5cbiAgPHA+XG4gICAgPHNtYWxsPjIwMTgtMDEtMTk8L3NtYWxsPlxuICAgIE1vcmUgdGhhbiAxNSB5ZWFycyAoYW5kIHN0aWxsIGNvdW50aW5n4oCmKSBhZnRlciBpdHMgaW5jZXB0aW9uIHRoaXMgbGl0dGxlIHNlcnZpY2UgaXMgc3RpbGwgbGl2ZSBhbmQga2lja2luZyEgVGhlIGJlc3QgcGFydCBvZiB0aGlzIGhvYmJ5IHByb2plY3TigJlzIGxvbmctcnVubmluZyB0cmFpdDogdGhpcyB5ZWFyIGJyaW5ncyBhIGNvbXBsZXRlIHJld3JpdGUgYW5kIG92ZXJoYXVsIHdpdGggYW4gZXh0ZW5zaXZlIGxpc3Qgb2YgdXBkYXRlcyDigJMgYW5kIG9ubHkgc21hbGwgY2hhbmdlcyBpbiBmdW5jdGlvbmFsaXR5OlxuICA8L3A+XG4gIDx1bD5cbiAgICA8bGk+QWRkZWQgYmFzaWMgc3VwcG9ydCBmb3IgQXRvbSAxLjAgZmVlZHMg8J+UpTwvbGk+XG4gICAgPGxpPkFkZGVkIHN1cHBvcnQgZm9yIG11bHRpcGxlIGVuY2xvc3VyZXMgKFJTUyAwLjkzKTwvbGk+XG4gICAgPGxpPlJlcGxhY2VkIHZhbHVlIG9mIC0xIGZvciBhdXRvbWF0aWMgY29udGVudCBoZWlnaHQgd2l0aCDigJxlbXB0eeKAnSB2YWx1ZTwvbGk+XG4gICAgPGxpPkFkZGVkIHN1cHBvcnQgZm9yIOKAnGVtcHR54oCdIHZhbHVlIHRvIGJveCB3aWR0aCAobm93IGNhbGxlZCDigJ1tYXguIHdpZHRo4oCdKTwvbGk+XG4gICAgPGxpPlJlZHVjZWQgdG90YWwgc2l6ZSBvZiBlbWJlZGRlZCBkb3dubG9hZCBieSBtb3JlIHRoYW4gNjAlIOKaoTwvbGk+XG4gICAgPGxpPkluY3JlYXNlZCBwZXJmb3JtYW5jZSBvZiBsb2FkaW5nIGFuZCByZW5kZXJpbmcgYm94ZXM8L2xpPlxuICAgIDxsaT5JbXBsZW1lbnRlZCByZXNwb25zaXZlIENTUyBmb3IgYm90aCwgYm94ZXMgYW5kIGNvbmZpZ3VyYXRpb24gYXBwPC9saT5cbiAgICA8bGk+UmVwbGFjZWQgYml0bWFwIGljb25zIHdpdGggc2NhbGFibGUgdmVjdG9yIGdyYXBoaWNzPC9saT5cbiAgICA8bGk+Q29tcGxldGVseSByZXdyb3RlIHRoZSBhcHAgY29kZSB1c2luZyA8YSBocmVmPSdodHRwczovL3N2ZWx0ZS50ZWNobm9sb2d5Jz5TdmVsdGU8L2E+IGFuZCA8YSBocmVmPSdodHRwczovL21pbmNzcy5jb20vJz5taW4uY3NzPC9hPjwvbGk+XG4gICAgPGxpPlJlcGxhY2VkIHJlbWFpbmluZyBqUXVlcnkgY29kZSB3aXRoIHZhbmlsbGEgSmF2YVNjcmlwdDwvbGk+XG4gICAgPGxpPk1pZ3JhdGVkIGJ1aWxkIHNjcmlwdHMgdG8gUm9sbHVwIGFuZCBZYXJuPC9saT5cbiAgICA8bGk+QWRkZWQgc3VwcG9ydCBmb3IgbWlzc2luZyBicm93c2VyIGZlYXR1cmVzIHZpYSA8YSBocmVmPSdodHRwczovL3BvbHlmaWxscy5pbyc+cG9seWZpbGxzLmlvPC9hPjwvbGk+XG4gICAgPGxpPkRpc2NvbnRpbnVlZCBzdXBwb3J0IGZvciBvbGRlciBicm93c2VycyAoTVNJRSAmbHQ7IDExKTwvbGk+XG4gICAgPGxpPkJ1bXBlZCBtYWpvciB2ZXJzaW9uIHRvIDE4IChha2EgdGhlIHllYXIpLCBnZXR0aW5nIHJpZCBvZiBzZW1hbnRpYyB2ZXJzaW9uaW5nIGR1ZSB0byBsYWNrIG9mIHNlbWFudGljcyDwn5CxPC9saT5cbiAgPC91bD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAxNi0wMy0xMjwvc21hbGw+XG4gICAgQ29tcGxldGVseSByZXdyb3RlIGJ1aWxkIGVudmlyb25tZW50IHVzaW5nIFdlYlBhY2suIFN3aXRjaGVkIHRoZSA8YSBocmVmPSdodHRwczovL2dpdGh1Yi5jb20vcDNrL3Jzcy1ib3gnPnNvdXJjZSByZXBvc2l0b3J5PC9hPiBmcm9tIFNWTiB0byBHaXQsIGhvc3RlZCBhdCBHaXRodWIuIFRoaXMgZGVzZXJ2ZXMgYSBuZXcgbWFqb3IgdmVyc2lvbiBudW1iZXIhXG4gIDwvcD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAxMi0xMi0zMDwvc21hbGw+XG4gICAgQWRkZWQgc2ltcGxlIGNvZGUgdG8gbW9kaWZ5IHRoZSB3aWR0aCBhdHRyaWJ1dGUgb2YgaWZyYW1lLCBvYmplY3QgYW5kIGVtYmVkIGVsZW1lbnRzIHRvIG1ha2UgdGhlbSBmaXQgaW4gdGhlIGJveC4gQWxzbzogYnVtcGVkIHZlcnNpb24uIDxpPkEgaGFwcHkgbmV3IHllYXIgMjAxMywgZXZlcmJvZHkhPC9pPlxuICA8L3A+XG5cbiAgPHA+XG4gICAgPHNtYWxsPjIwMTItMTAtMjY8L3NtYWxsPlxuICAgIEFkZGVkIHNlY3Rpb24gYWJvdXQgQ3JlYXRpdmUgQ29tbW9ucyBMaWNlbnNlLCBiZWxvdy4gSW4gb3RoZXIgd29yZHM6IHlvdSBjYW4gbm93IGxlZ2FsbHkgcnVuIG15IGNvZGUgb24geW91ciBvd24gc2VydmVyLiAoWW91IGV2ZW4gY291bGQgcmVtb3ZlIHRoZSB0aW55IHJlZmVyZW5jZSB0byB0aGlzIHBhZ2UgaW4gdGhlIGZvb3RlciBvZiB0aGUgYm94LikgSG93ZXZlciwgSSB3b3VsZCBsaWtlIHRvIGFzayB5b3UgZm9yIHR3byB0aGluZ3MgaWYgeW91IHdhbnQgdG8gZG8gc286XG4gIDwvcD5cbiAgPHVsPlxuICAgIDxsaT5cbiAgICAgIFVzZSB5b3VyIG93biA8YSBocmVmPScvL2dpdGh1Yi5jb20vcDNrL2pzb24zayc+SlNPTlAgcHJveHk8L2E+IOKAkyBlc3BlY2lhbGx5LCB3aGVuIHlvdSBleHBlY3QgYSBoaWdoIGxvYWQgb24geW91ciBzZXJ2ZXIuXG4gICAgPC9saT5cbiAgICA8bGk+XG4gICAgICBQbGVhc2Ugc3VwcG9ydCB0aGUgc2VydmljZSB3aXRoIGEgPGEgaHJlZj0naHR0cDovL2ZsYXR0ci5jb20vdGhpbmcvNjgxODgxL0phdmFTY3JpcHQtUlNTLUJveC1WaWV3ZXInPmRvbmF0aW9uPC9hPi5cbiAgICA8L2xpPlxuICA8L3VsPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDEyLTA4LTAxPC9zbWFsbD5cbiAgICBBZGRlZCB0d28gbmV3LCBleHBlcmltZW50YWwgZmVhdHVyZXMg4oCTIGFuZCB0aHVzLCBpbmNyZWFzZWQgdmVyc2lvbiB0byAzLjM6XG4gIDwvcD5cbiAgPHVsPlxuICAgIDxsaT5cbiAgICAgIFRoZSBoZWlnaHQgb2YgdGhlIGlubmVyIGJveCBjb250ZW50IGNhbiBub3cgYmUgZGVmaW5lZCBieSBhIHBpeGVsIHZhbHVlLiBJZiB0aGUgaGVpZ2h0IGlzIGxlc3MgdGhhbiB0aGUgc3BhY2UgbmVlZGVkIGJ5IHRoZSBkZXNpcmVkIGFtb3VudCBvZiBpdGVtcyB5b3UgY2FuIHZlcnRpY2FsbHkgc2Nyb2xsIHRoZSBjb250ZW50LiBBIHZhbHVlIG9mIDxjb2RlPi0xPC9jb2RlPiBlbmFibGVzIHRoZSBkZWZhdWx0IGJlaGF2aW9yIGFuZCBhdXRvbWF0aWNhbGx5IHNldHMgdGhlIGhlaWdodCBhY2NvcmRpbmcgdG8gdGhlIGRpc3BsYXlpbmcgaXRlbXMuXG4gICAgPC9saT5cbiAgICA8bGk+XG4gICAgICBUaGUgc28tY2FsbGVkIOKAnGhlYWRsZXNz4oCdIG1vZGUgcmVtb3ZlcyB0aGUgdGl0bGViYXIgYW5kIHRoZSBmcmFtZSBmcm9tIHRoZSBib3guIFRoaXMgd2F5IHRoZSBib3ggY2FuIGJlIHVzZWQgbW9yZSBmbGV4aWJseSBpbiBzcGVjaWFsIHNpdHVhdGlvbnMuIEhvd2V2ZXIsIHRoaXMgZmVhdHVyZSBzb21laG93IHVuZGVybWluZXMgYW4gUlNTIGZlZWTigJlzIGF1dGhvcml0eSBzbyBJIGNvdW50IG9uIHlvdXIgZmFpcm5lc3MgdG8gZ2l2ZSBjcmVkaXQgd2hlcmUgY3JlZGl0IGlzIGR1ZSFcbiAgICA8L2xpPlxuICA8L3VsPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDEyLTA3LTE2PC9zbWFsbD5cbiAgICBTbGlnaHRseSBtb2RpZmllZCBvdXRwdXQgb2YgdGhlIEhUTUwgY29kZSB0byBiZSB1c2FibGUgd2l0aCBib3RoLCB1bnNlY3VyZWQgYW5kIHNlY3VyZWQgKEhUVFBTKSB3ZWIgc2VydmVycy4gWW91IGNhbiB1cGRhdGUgYWxyZWFkeSBlbWJlZGRlZCBjb2RlIGVhc2lseSBieSByZW1vdmluZyB0aGUgPGNvZGU+aHR0cDo8L2NvZGU+IHBhcnQgZnJvbSB0aGUgPGNvZGU+c3JjPC9jb2RlPiBhdHRyaWJ1dGUgb2YgdGhlIDxjb2RlPiZhbXA7bHQ7c2NyaXB0JmFtcDtndDs8L2NvZGU+IGVsZW1lbnQ6IDxjb2RlPiZhbXA7bHQ7c2NyaXB0IHNyYz0naHR0cDovL3Azay5vcmcvcnNz4oCmJyZhbXA7Z3Q7PC9jb2RlPiBiZWNvbWVzIDxjb2RlPiZhbXA7bHQ7c2NyaXB0IHNyYz0nLy9wM2sub3JnL3Jzc+KApicmYW1wO2d0OzwvY29kZT4uXG4gIDwvcD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAxMi0wNy0xMzwvc21hbGw+XG4gIDwvcD5cbiAgPHVsPlxuICAgIDxsaT5cbiAgICAgIEZpeGVkIElFIGJ1ZyAo4oCcaW5uZXJIVE1MIGlzIG51bGwgb3Igbm90IGFuIG9iamVjdOKAnSkgY2F1c2VkIGJ5IHVzaW5nIGpRdWVyeeKAmXMgaHRtbCgpIG1ldGhvZCBpbnN0ZWFkIG9mIHRleHQoKSB3aGVuIHBhcnNpbmcgYSA8Y29kZT4mYW1wO2x0O2NvbnRlbnQ6ZW5jb2RlZCZhbXA7Z3Q7PC9jb2RlPiBlbGVtZW50LlxuICAgIDwvbGk+XG4gICAgPGxpPlxuICAgICAgQ2hhbmdlZCBwcmlvcml0eSBvZiBlbGVtZW50czogb25seSBjaGVjayBmb3IgPGNvZGU+JmFtcDtsdDtjb250ZW50OmVuY29kZWQmYW1wO2d0OzwvY29kZT4gaWYgICAgIDxjb2RlPiZhbXA7bHQ7ZGVzY3JpcHRpb24mYW1wO2d0OzwvY29kZT4gaXMgbm90IGF2YWlsYWJsZS5cbiAgICA8L2xpPlxuICA8L3VsPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDEyLTA2LTA0PC9zbWFsbD5cbiAgPC9wPlxuICA8dWw+XG4gICAgPGxpPlxuICAgICAgSW1wbGVtZW50ZWQgc21hbGwgcm91dGluZSB0byByZXNpemUgaW1hZ2VzIGNvbnRhaW5lZCBpbiB0aGUgZmVlZCBjb250ZW50IHRvIGZpdCBpbiB0aGUgYm94LlxuICAgIDwvbGk+XG4gICAgPGxpPlxuICAgICAgQWRkZWQgc3VwcG9ydCBmb3IgbmV3IEhUTUw1IGZvcm0gaW5wdXQgdHlwZXMgYW5kIHRoZWlyIHZhbGlkYXRpb24uXG4gICAgPC9saT5cbiAgPC91bD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAxMi0wNS0zMTwvc21hbGw+XG4gICAgR29uZSAmYmV0YTtldGEhIOKAkyB3aXRoIHRocmVlIHRpbnkgYWRkaXRvbnM6XG4gIDwvcD5cbiAgPHVsPlxuICAgIDxsaT5cbiAgICAgIEFkZGVkIDxjb2RlPiZhbXA7bHQ7bm9zY3JpcHQmYW1wO2d0OzwvY29kZT4gZWxlbWVudCBmb3IgYnJvd3NlcnMgcHJvdmlkaW5nIG5vIEphdmFTY3JpcHQgZW5naW5lLlxuICAgIDwvbGk+XG4gICAgPGxpPlxuICAgICAgQWRkZWQgb3B0aW9uIHRvIGNhbGwgdGhlIGNvbmZpZ3VyYXRvciB3aXRoIGEgVVJMIGluIHRoZSBxdWVyeSBzdHJpbmcuXG4gICAgPC9saT5cbiAgICA8bGk+XG4gICAgICBBZGRlZCBhIGxpbmsgdG8gdGhlIFczQyBmZWVkIHZhbGlkYXRvciB0byB0aGUgY29udGVudHMgb2YgYSBib3ggZGlzcGxheWluZyBhbiBSU1MgZXJyb3IuXG4gICAgPC9saT5cbiAgPC91bD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAxMi0wNS0xOTwvc21hbGw+XG4gICAgQXBvbG9naWVzIGZvciB0aGUgUlNTIEJveGVzIG5vdCBzaG93aW5nIHVwIG9uIHlvdXIgcGFnZXMgZHVyaW5nIHRoZSBsYXN0IGZldyBkYXlzLiBJIG1hZGUgYSBzdHVwaWQgbWlzdGFrZSB0aGF0IGNhdXNlZCBvbmx5IHRoZSBzZXR1cCBwYWdlIHRvIHJlbmRlciBjb3JyZWN0bHkg4oCTIGFuZCBJIGRpZCBub3QgY2hlY2sgYW55IGVtYmVkZGVkIHNjcmlwdC4gPGk+QnVtbWVyITwvaT5cbiAgPC9wPlxuICA8cD5cbiAgICBBdCBsZWFzdCBub3cgZXZlcnl0aGluZyBzaG91bGQgYmUgYmFjayB0byBub3JtYWwuIChJIGhvcGUgdGhpcyBpbmNpZGVudCBkaWQgbm90IHNhYm90YWdlIHRoZSBGbGF0dHIgYnV0dG9uIEkgYWRkZWQgaW4gdGhlIG1lYW50aW1l4oCmIDxpPndpbmssIHdpbmshPC9pPilcbiAgPC9wPlxuICA8cD5Bbnl3YXksIHRoYW5rcyBmb3IgeW91ciB1bmRlcnN0YW5kaW5nLjwvcD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAxMi0wNS0xNjwvc21hbGw+XG4gICAgSSB0aGluayBJIGRpZCBub3QgbWVudGlvbiwgeWV0LCB0aGF0IHRoZSBjdXJyZW50IGluY2FybmF0aW9uIG9mIHRoZSBjb2RlIGlzIHRvdGFsbHkgZGlzY29ubmVjdGVkIGZyb20gdGhlIHZlcnNpb24gYXMgb2YgMjAwOS4gRWFjaCBpcyB1c2luZyB0aGVpciBvd24gY29kZWJhc2UsIHRoZSBsZWdhY3kgY29kZSB3YXMgbm90IG1vZGlmaWVkIGF0IGFsbCBhbmQgdGh1cywgaXQgaXMgbm90IGFmZmVjdGVkIGJ5IGFueSByZWNlbnQgY2hhbmdlcy4gWW91IGNhbiBjaGVjayB3aGljaCB2ZXJzaW9uIHlvdSBhcmUgdXNpbmcgYnkgbG9va2luZyBhdCB0aGUgc2NyaXB0IFVSTC4gSWYgaXQgY29udGFpbnMgdGhlIHN0cmluZyDigJxwcm94eS5y4oCdIHlvdSBnZXQgdGhlIOKAnGNsYXNzaWPigJ0gUlNTIEJveCByZW5kZXJpbmcuIFRoZSBtb2Rlcm5pemVkIHZlcnNpb24gY2FsbHMg4oCcaW5kZXguanPigJ0uIE5ldmVydGhlbGVzcywgeW91IGNhbm5vdCBzZXR1cCBib3hlcyB3aXRoIHRoZSBvbGQgVVJMIGFueW1vcmUuXG4gIDwvcD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAxMi0wNS0wOTwvc21hbGw+XG4gIDwvcD5cbiAgPHVsPlxuICAgIDxsaT5cbiAgICAgIEFkZGVkIHN1cHBvcnQgZm9yIDxjb2RlPiZhbXA7bHQ7Y29udGVudDplbmNvZGVkJmFtcDtndDs8L2NvZGU+IGVsZW1lbnQuXG4gICAgPC9saT5cbiAgICA8bGk+XG4gICAgICBJbXBsZW1lbnRlZCBNZW1jYWNoZSB1c2FnZSBpbiBBcHBFbmdpbmUgY29kZS5cbiAgICA8L2xpPlxuICAgIDxsaT5cbiAgICAgIEJlYXV0aWZpZWQgdGhpcyBwYWdlIGJ5IHVzaW5nIHRoZSA8YSBocmVmPSdodHRwOi8vd3d3Lmdvb2dsZS5jb20vd2ViZm9udHMvc3BlY2ltZW4vRHJvaWQrU2VyaWYnPkdvb2dsZeKAmXMgRHJvaWQgU2VyaWYgZm9udDwvYT4uXG4gICAgPC9saT5cbiAgPC91bD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAxMi0wNC0yNjwvc21hbGw+XG4gICAgQW1hemluZyEgQSBuZXcgdmVyc2lvbiEgQWZ0ZXIgbW9yZSB0aGFuIHR3byB5ZWFycyBoaWF0dXMgSSBjb21wbGV0ZWx5IHJld3JvdGUgdGhlIGNvZGViYXNlIGFuZCBmcmFtZXdvcms6XG4gIDwvcD5cbiAgPHVsPlxuICAgIDxsaT5cbiAgICAgIFJlbW92ZWQgZGVwZW5kZW5jeSB0byBSZWJvbCB1c2luZyBhIHNtYWxsIEpTT05QIHByb3h5IGF0IEdvb2dsZeKAmXMgQXBwRW5naW5lLlxuICAgIDwvbGk+XG4gICAgPGxpPlxuICAgICAgUmV3cm90ZSBYTUwgcGFyc2luZywgcmVwbGFjaW5nIG5hdGl2ZSBtZXRob2RzIHdpdGggalF1ZXJ5IG9uZXMuXG4gICAgPC9saT5cbiAgICA8bGk+XG4gICAgICBDbGVhbmVkIHVwIEhUTUwgb3V0cHV0IGZvciB0aGUgUlNTIEJveCwgcmVwbGFjaW5nIHRhYmxlcyB3aXRoIGRpdnMuIDxpPk5vdGU6IFlvdSBtaWdodCBuZWVkIHRvIGFkZCA8Y29kZT48YSBocmVmPSdodHRwOi8vY29kaW5nLnNtYXNoaW5nbWFnYXppbmUuY29tLzIwMTAvMTEvMDIvdGhlLWltcG9ydGFudC1jc3MtZGVjbGFyYXRpb24taG93LWFuZC13aGVuLXRvLXVzZS1pdC8nPiFpbXBvcnRhbnQ8L2E+PC9jb2RlPiB0byB5b3VyIGN1c3RvbSBSU1MgQm94IHN0eWxlc2hlZXQgZGVmaW5pdGlvbnMuPC9pPlxuICAgIDwvbGk+XG4gICAgPGxpPlxuICAgICAgUmVwbGFjZWQgZnVnbHkgY29sb3JwaWNrZXIgaW4gY29uZmlndXJhdG9yIHdpdGggdGhlIDxhIGhyZWY9J2h0dHBzOi8vZ2l0aHViLmNvbS9jbGF2aXNrYS9qcXVlcnktbWluaUNvbG9ycy8nPk1pbmlDb2xvcnMgalF1ZXJ5IHBsdWdpbjwvYT4uXG4gICAgPC9saT5cbiAgICA8bGk+XG4gICAgICBBZGRlZCBsaW5rIGNvbG9yIHNldHRpbmcgYW5kIHN0eWxlIGF0dHJpYnV0ZXMgZm9yIGNvcnJlY3RseSBhcHBseWluZyBjb2xvciBzZXR0aW5ncy5cbiAgICA8L2xpPlxuICAgIDxsaT5cbiAgICAgIEFkZGVkIGNvcm5lciByYWRpdXMgc2V0dGluZy4gPGk+Tm90ZTogZG9lcyBub3Qgd29yayBpbiBJRTggYW5kIGVhcmxpZXIgdmVyc2lvbnMuPC9pPlxuICAgIDwvbGk+XG4gICAgPGxpPlxuICAgICAgQWRkZWQgZm9udCBzaXplIHRvIHRoZSBmb250IGZhY2Ugc2V0dGluZy5cbiAgICA8L2xpPlxuICAgIDxsaT5cbiAgICAgIFJlbW92ZWQgYWxpZ24gc2V0dGluZyBmcm9tIGNvbmZpZ3VyYXRvciAoc3RpbGwgd29ya3MgaW4gc2NyaXB0IHRhZ3MgZ2VuZXJhdGVkIHdpdGggZWFybGllciB2ZXJzaW9ucykuXG4gICAgPC9saT5cbiAgPC91bD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAwOS0xMi0xMzwvc21hbGw+XG4gICAgU3dpdGNoZWQgb3V0cHV0IG9mIHRoaXMgcGFnZSB0byBIVE1MNSBhbmQgbWFkZSBzb21lIGFkYXB0YXRpb25zIGluIHRoZSBIVE1MIGNvZGUgYW5kIENTUyBzdHlsZXNoZWV0LiBVcGRhdGVkIHZlcnNpb24gc3RyaW5nIHRvIDIuMSwgZmluYWxseSFcbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDA5LTA5LTI4PC9zbWFsbD5cbiAgICBTb21lIG1pbm9yIGNoYW5nZXMgYWZ0ZXIgYSB3aGlsZTpcbiAgPC9wPlxuICA8dWw+XG4gICAgPGxpPlJlZmFjdG9yZWQgZGF0ZSBwYXJzaW5nIHRvIHNob3cgYWN0dWFsIGJ1aWxkIGRhdGVzIG1vcmUgcmVsaWFibHk8L2xpPlxuICAgIDxsaT5SZWZhY3RvcmVkIGNhY2hpbmcgcm91dGluZSAob25seSBpbiBvbmxpbmUgdmVyc2lvbik8L2xpPlxuICAgIDxsaT5VcGRhdGVkIHZlcnNpb24gc3RyaW5nIHRvIDIuMWIsIGFwcHJvYWNoaW5nIGFub3RoZXIgZmluYWwgdmVyc2lvbi48L2xpPlxuICA8L3VsPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDA4LTAyLTE5PC9zbWFsbD5cbiAgICBTZWVtcyB0aGVyZSB3ZXJlIHNvbWUgY2hhbmdlcyBpbiB0aGUgYWlyIGFzIEkgZGlkIG5vdCBwbGFuIGFub3RoZXIgdXBkYXRlIGJ1dCBoZXJlIGNvbWVzIHZlcnNpb24gMi4xIGJyaW5naW5nIHRvIHlvdTpcbiAgPC9wPlxuICA8dWw+XG4gICAgPGxpPlxuICAgICAgRnVsbCBjbGllbnQtc2lkZSBwcm9jZXNzaW5nIChvbmx5IHRoZSByYXcgZmVlZCBkYXRhIGlzIGZldGNoZWQgZnJvbSB0aGUgc2VydmVyKS5cbiAgICA8L2xpPlxuICAgIDxsaT5cbiAgICAgIFVzZXItZnJpZW5kbGllciBpbnRlcmZhY2Ugd2l0aCBjb2xvciBwaWNrZXJzLCBzdGF0dXMgYW5kIGVycm9yIGRpc3BsYXkgYXMgd2VsbCBhcyBpbnN0YW50IGZlZWRiYWNrIG9uIGFueSBjaGFuZ2UgaW4gc2V0dXAuXG4gICAgPC9saT5cbiAgICA8bGk+XG4gICAgICBBbmQgZmluYWxseSAoZHJ1bXJvbGwhKSBVbmljb2RlIHN1cHBvcnQgYXQgbGVhc3QgYXQgdGhpcyBpbnN0YWxsYXRpb24gb2YgdGhlIHZpZXdlci4gKEllLiB0aGUgZG93bmxvYWRlZCB2ZXJzaW9uIHN0aWxsIHdpbGwgb3V0cHV0IEFTQ0lJIG9ubHkuKVxuICAgIDwvbGk+XG4gIDwvdWw+XG5cbiAgPHA+XG4gICAgPHNtYWxsPjIwMDgtMDItMDM8L3NtYWxsPlxuICAgIE1hZGUgc29tZSBtb3JlIGltcHJvdmVtZW50cyBlc3BlY2lhbGx5IHJlZ2FyZGluZyB0aGUgZXJyb3IgaGFuZGxpbmcgYW5kIG91dHB1dC4gRnJvbSBub3cgb24gaXQgc2hvdWxkIGJlIG11Y2ggY2xlYXJlciB3aGF04oCZcyB3cm9uZyB3aXRoIGEgdmVyeSBSU1MgQm94LiBTaW5jZSB0aGVyZeKAmXMgbm93IGEgbG90IG1vcmUgb2YgY2xpZW50LXNpZGUgSmF2YVNjcmlwdCBjb2RlIGludm9sdmVkIEkgdGVzdGVkIHRoZSBzY3JpcHQgaW4gZm91ciBtYWpvciBicm93c2VycyB0aGF0IGFyZSBhdmFpbGFibGUgdG8gbWU6IEludGVybmV0IEV4cGxvcmVyIDcsIEZpcmVmb3ggMi4wLCBPcGVyYSA5LjI1IGFuZCBTYWZhcmkgMy5cbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDA4LTAyLTAxPC9zbWFsbD5cbiAgICBDb21wbGV0ZWx5IHJldmlzZWQgc2VydmVyLSBhbmQgY2xpZW50LXNpZGUgY29kZS4gWE1MIHJlbmRlcmluZyBpcyBub3cgZG9uZSBpbiB0aGUgYnJvd3NlciB3aGljaCBzcGVlZHMgdXAgdGhpbmdzIGFuZCBkZWNyZWFzZXMgdGhlIGxvYWQgb24gdGhlIHNlcnZlci4gRnVydGhlcm1vcmUsIHRoZSBsaXN0IG9mIHJlZmVycmVycyBpcyBub3cgbG9hZGVkIG9uIGRlbWFuZCB2aWEgQUpBWCBhbmQgdGh1cyBub3QgcmVuZGVyZWQgd2l0aCBldmVyeSByZXF1ZXN0LiBGaW5hbGx5LCBJIHJldG91Y2hlZCB0aGUgc2V0dXAgZm9ybSBpbnRlcmZhY2UgYW5kIGNsZWFuZWQgdXAgYm90aCBIVE1MIGFuZCBDU1MuXG4gIDwvcD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAwNi0xMi0yMDwvc21hbGw+XG4gICAgSSBhbSB2ZXJ5IGdsYWQgdGhhdCBteSBvbGQgbGl0dGxlIHNjcmlwdCBpcyBnYWluaW5nIGV2ZW4gbW9yZSBhdHRlbnRpb24gYWZ0ZXIgYWxsIHRoZXNlIHllYXJz4oCmICAgIDxpPlRoYW5rIHlvdSB2ZXJ5IG11Y2ggaW5kZWVkITwvaT4gU2luY2UgdGhlcmUgYXJlIGNvbWluZyBpbiBtb3JlIGFuZCBtb3JlIG9mIHRoZSBzYW1lIHJlcXVlc3RzIGFuZCBJIGFtIHJlYWxseSBub3QgYWJsZSB0byBoYW5kbGUgdGhlbSAoYXBvbG9naWVzISksIGhlcmUgaXMgc29tZSBhZHZpY2UgZm9yIGV2ZXJ5b25lOlxuICA8L3A+XG4gIDxvbD5cbiAgICA8bGk+XG4gICAgICA8YSBocmVmPSdodHRwOi8vZW4ud2lraXBlZGlhLm9yZy93aWtpL0Nhc2NhZGluZ19TdHlsZV9TaGVldHMnPlVzZSBjYXNjYWRpbmcgc3R5bGUgc2hlZXRzPC9hPiAoQ1NTKSB0byBjaGFuZ2UgZm9udCBzaXplcyAoYW5kIHRvIGdlbmVyYWxseSBkZWZpbmUgeW91ciBsYXlvdXQpLlxuICAgIDwvbGk+XG4gICAgPGxpPlxuICAgICAgPGEgaHJlZj0naHR0cDovL3d3dy5zaXRlcG9pbnQuY29tL2FydGljbGUvYmV3YXJlLW9wZW5pbmctbGlua3MtbmV3LXdpbmRvdyc+QmV3YXJlIG9mIG9wZW5pbmcgbGlua3MgaW4gYSBuZXcgd2luZG93LjwvYT4gSXTigJlzIG9mZmVuc2l2ZSB0byB5b3VyIHJlYWRlcnMuXG4gICAgPC9saT5cbiAgPC9vbD5cbiAgPHA+XG4gICAgPGk+QSBoYXBweSBlbmQgZm9yIDIwMDYhPC9pPlxuICA8L3A+XG5cbiAgPHA+XG4gICAgPHNtYWxsPjIwMDYtMDYtMTM8L3NtYWxsPlxuICAgIERpZCBzb21lIG1pbm9yIGJ1ZyBmaXhpbmcgYWdhaW4gKGFtb25nc3Qgb3RoZXJzIHJlcGxhY2luZyBzaW5nbGUgcXVvdGVzIHdpdGggJmFtcDthcG9zOyBhbmQgbm90ICZhbXA7cXVvdDsgZW50aXRpZXMpLiBGdXJ0aGVybW9yZSAoYW5kIGZpbmFsbHkpLCBJIHJlbW92ZWQgdGhlIOKAnFJD4oCdIChhcyBpbiDigJxSZWxlYXNlIENhbmRpZGF0ZeKAnSkgZnJvbSB0aGUgZG9jdW1lbnQgdGl0bGXigKZcbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDA2LTA2LTEyPC9zbWFsbD5cbiAgICBHYXJ5IGluZm9ybWVkIG1lIHRoYXQgbG9uZ2VyIGZlZWQgVVJMcyBjYXVzZSB0cm91YmxlIGFuZCB0aGUgZmVlZCBib3ggd2lsbCBub3QgYmUgZGlzcGxheWVkLiBUaGF04oCZcyBpbiBmYWN0IGEgYnVnLCBidXQgdW5mb3J0dW5hdGVseSBvbmUgdGhhdCBjYW5ub3QgYmUgZml4ZWQgc28gZWFzaWx5LiBNeSBzdWdnZXN0aW9uIGlzIHRvIHNob3J0ZW4gc3VjaCBVUkxzIGF0IG9uZSBvZiB0aGUgd2Vic2l0ZXMgYXJvdW5kIHRoYXQgcHJvdmlkZSBzdWNoIGEgc2VydmljZSwgZS5nLiA8YSBocmVmPSdodHRwOi8vdGlueXVybC5jb20nPnRpbnl1cmwuY29tPC9hPi5cbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDA2LTA0LTIzPC9zbWFsbD5cbiAgICBTd2l0Y2hlZCB0aGUgPGEgaHJlZj0nLy9wM2sub3JnL3NvdXJjZS9yc3MtYm94Lyc+c291cmNlIHJlcG9zaXRvcnk8L2E+IGZyb20gQ1ZTIHRvIFN1YnZlcnNpb24gKFNWTikuXG4gIDwvcD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAwNi0wNC0yMDwvc21hbGw+XG4gICAgQW5kcmV3IFBhbSBicm91Z2h0IHVwIGEgc2VyaW91cyBpc3N1ZSB0aGF0IHByb2JhYmx5IG1pZ2h0IGhhdmUgYWZmZWN0ZWQgc29tZSBtb3JlIHBlb3BsZSBhbHJlYWR5OiB0aGUgdmlld2VyIGRvZXMgbm90IHN1cHBvcnQgVVRGLTggKG9yIFVuaWNvZGUsIHJlc3AuKSBVbmZvcnR1bmF0ZWx5LCB0aGlzIGlzIOKAnGJ1aWx0LWlu4oCdIGludG8gdGhlIHVuZGVybHlpbmcgc2NyaXB0aW5nIGxhbmd1YWdlIChha2EgUmVib2wpLiBJ4oCZbSBzb3JyeSB0byBjYW5jZWwgdGhvc2UgdGlja2V0c+KApiA6KFxuICA8L3A+XG5cbiAgPHA+XG4gICAgPHNtYWxsPjIwMDYtMDQtMTM8L3NtYWxsPlxuICAgIEZpeGVkIGEgYnVnIHJlcG9ydGVkIGJ5IE1hbmRvIEdvbWV6IHRoYXQgY2F1c2VkIGZlZWRzIHVzaW5nIHRoZSAmYW1wO2x0O2d1aWQmYW1wO2d0OyBlbGVtZW50IGJlaW5nIGRpc3BsYXllZCB3aXRob3V0IGl0ZW0gbGlua3PigKYgRG9u4oCZdCBmb3JnZXQgdG8gY2hlY2sgb3V0IE1hbmRv4oCZcyBleGNlbGxlbnQgd2Vic2l0ZSA8YSBocmVmPSdodHRwOi8vd3d3Lm1hbmRvbHV4LmNvbS8nPm1hbmRvbHV4PC9hPiFcbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDA2LTA0LTEyPC9zbWFsbD5cbiAgICBPYnZpb3VzbHkgU2FtIFJ1YnkgY2hhbmdlZCBoaXMgZmVlZCBmb3JtYXQgZnJvbSBzY3JpcHRpbmdOZXdzIHRvIEF0b207IHdoaWNoIHJlbmRlcnMgbXkgZXhhbXBsZSBsaW5rIGFib3ZlIHByZXR0eSB1c2VsZXNz4oCmIFNvIGZhciBJIGRvbuKAmXQga25vdyBhYm91dCBhbnkgb3RoZXIgc2NyaXB0aW5nTmV3cyBmZWVkLCBkbyB5b3U/XG4gIDwvcD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAwNi0wMi0yMDwvc21hbGw+XG4gICAgSSBob3BlIG5vYm9keSBtaW5kcyB0aGUgbGl0dGxlIGxpbmUgSSBhZGRlZCBhdCB0aGUgYm90dG9tIG9mIGVhY2ggUlNTIGJveOKApiBPZiBjb3Vyc2UsIGl04oCZcyBub3QgdG90YWxseSBhbHRydWlzdGljLCBidXQgcHJvYmFibHkgc29tZSBwZW9wbGUgd2lsbCBmaW5kIGl0IGluZm9ybWF0aXZlLiBIb3dldmVyLCBpZiB5b3Ugd2FudCB0byBwcmV2ZW50IGl0IGZyb20gYmVpbmcgZGlzcGxheWVkIHNpbXBseSBhZGQgPGNvZGU+LnJzc2JveC1wcm9tbyB7ZGlzcGxheTogbm9uZTt9PC9jb2RlPiB0byB5b3VyIHN0eWxlc2hlZXQuXG4gIDwvcD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAwNi0wMS0xMTwvc21hbGw+XG4gICAgTmV3IHNlcnZlciwgbmV3IHRyb3VibGVzOiBJIG1vdmVkIHRoZSB2aWV3ZXIgdG8gYSBuZXdseSBzZXR1cCBVYnVudHUgbWFjaGluZS4gT2YgY291cnNlLCBJIGZvcmdvdCB0byBzZXQgc29tZSBwZXJtaXNzaW9uIGZsYWdzIGFuZCBvd25lcnMsIHRodXMsIHByZXZlbnRpbmcgdGhlIHNjcmlwdCBmcm9tIHdvcmtpbmcuIEhvd2V2ZXIsIEkgdGhpbmsgZXZlcnl0aGluZyBpcyBmaXhlZCBhbmQgd29ya2luZyBhZ2Fpbi5cbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDA1LTExLTE2PC9zbWFsbD5cbiAgICBKdXN0IHRlc3RpbmcgR29vZ2xl4oCZcyBBZFNlbnNlIGZvciBhIHdoaWxlLiBTaW5jZSB0aGlzIHBhZ2UgZ2VuZXJhdGVzIG1vc3Qgb2YgbXkgdHJhZmZpYyBJIHdhbnRlZCB0byBzZWUgbXlzZWxmIHdoYXQgYSBiYW5uZXIgY2FuIGRvIGhlcmUuIEhvcGUgeW91IGRvbuKAmXQgbWluZC5cbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDA0LTEyLTE2PC9zbWFsbD5cbiAgICBCdWdmaXg6IFNvbWV0aW1lcyB0aGUgbG9nZmlsZSB3aGljaCBpcyB1c2VkIHRvIGdlbmVyYXRlIHRoZSBsaXN0IG9mIHNpdGVzIHVzaW5nIHRoaXMgc2NyaXB0IGdldHMgY29ycnVwdGVkLiBUaGlzIGFmZmVjdGVkIHRoZSB3aG9sZSBzZXR1cCBwYWdlIHRvIHJldHVybiBhbiBlcnJvciBhbmQgdGh1cywgaXQgbmVlZGVkIHRvIGJlIGNhdWdodC4gKFlvdSB3aWxsIHNlZSBhIOKAnGN1cnJlbnRseSBvdXQgb2Ygb3JkZXLigJ0gbWVzc2FnZSB0aGVuLilcbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDA0LTA0LTI2PC9zbWFsbD5cbiAgICBMYXN0IGVmZm9ydHMgdG8gb2ZmaWNpYWxseSByZWxlYXNlIHRoZSA8YSBocmVmPScvL3Azay5vcmcvc291cmNlL3Jzcy1ib3gnPmNvZGU8L2E+IHRvIHRoZSBvcGVuIHNvdXJjZSBjb21tdW5pdHkuIFRoZXJlIGhhdmUgYmVlbiBzb21lIGJ1Z3MgaW4gdGhlIChpbWFnZSkgcmVuZGVyaW5nIGZyYW1ld29yayB3aGljaCBJIGZpeGVkIHNvICAgIGZhci4gSSBub3cgaW5jbHVkZSBhIGR5bmFtaWNhbGx5IHJlbmRlcmVkIGxpc3Qgb2Ygc2l0ZXMgdXNpbmcgKG9yIHBvaW50aW5nIHRvKSB0aGlzIHNjcmlwdCB0byBnaXZlIHNvbWUgZXhhbXBsZXMgZm9yIHRoZSBjdXJpb3VzIGF0IGhlYXJ0IChtZSBpbmNsdWRlZCkuIEZpbmFsbHksIHRoZXJl4oCZcyBhIDxhIGhyZWY9Jy8vcDNrLm9yZy9zb3VyY2UvcnNzLWJveC9icmFuY2hlcy8yLjAvUkVBRE1FJz5SRUFETUU8L2E+IGZpbGUgd2l0aCBhIHNob3J0IGluc3RhbGxhdGlvbiBndWlkZSB0byBtYWtlIHRoZSBzY3JpcHQgcnVuIG9uIHlvdXIgb3duIHNlcnZlci5cbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDA0LTAxLTI4PC9zbWFsbD5cbiAgICBXaGVuIHNvbWV0aGluZyBnb2VzIHdyb25nIChtb3N0IG9mIHRoZSB0aW1lIHRoaXMgbWlnaHQgYmUgYSB3cm9uZyBVUkwsIGllLiBhIDQwNCBhcyByZXN1bHQpIGFuICAgIDxhIGhyZWY9Jy4vP3VybD1lcnJvcic+4oCcZXJyb3LigJ0gYm94PC9hPiB3aWxsIGJlIGRpc3BsYXllZCB0byBzaWduYWwgdGhlIGZhaWx1cmUuIEluY3JlYXNlZCB2ZXJzaW9uIHVwIHRvIDEuMCBhbmQgbGFiZWxlZCBpdCBhcyByZWxlYXNlIGNhbmRpZGF0ZVxuICAgIChSQykuXG4gIDwvcD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAwNC0wMS0yNjwvc21hbGw+XG4gICAgUmV0b3VjaGVkIHRoZSBjb2RlIGluIGEgdmVyeSBsYXN0IGVmZm9ydCB0byBtYWtlIHRoZSBzY3JpcHQgcnVubmluZyBzdGFuZC1hbG9uZSAod2l0aCBSZWJvbCBidXQgICAgPGk+d2l0aG91dDwvaT4gUEhQLCB0aGF0IGlzKS4gRXZlcnl0aGluZyBuZWVkZWQgaXMgbm93IGluIDxkZWw+Q1ZTPC9kZWw+IFNWTiBzbyBldmVyeWJvZHkgY2FuIGRvd25sb2FkIGZyb20gdGhlcmUuIFBvdGVudGlhbGx5LCBhIGZldyBtaW5vciBidWcgZml4ZXMgbWlnaHQgZm9sbG93IHNob3J0LXRlcm0uIFVoLCBhbmQgdGhlIEhUTUwgY29kZSBpcyA8YSBocmVmPSdodHRwOi8vdmFsaWRhdG9yLnczLm9yZy9jaGVjaz91cmk9aHR0cCUzQSUyRiUyRnAzay5vcmclMkZyc3MlMkYnPnZhbGlkIFhIVE1MIDEuMDwvYT4gbm93LlxuICA8L3A+XG5cbiAgPHA+XG4gICAgPHNtYWxsPjIwMDMtMTItMTI8L3NtYWxsPlxuICAgIFRoZSBtaXJyb3IgYXQgPGRlbD5odHRwOi8vcHVibGlzaC5jdXJyeS5jb20vcnNzLzwvZGVsPiBpcyBub3Qgd29ya2luZyBmb3IgcXVpdGUgYSBsb25nIHRpbWUuIEkgdHJpZWQgdG8gY29udGFjdCBBZGFtIEN1cnJ5IGJ1dCBzbyBmYXIgd2l0aG91dCBzdWNjZXNzLlxuICA8L3A+XG5cbiAgPHA+XG4gICAgPHNtYWxsPjIwMDMtMDMtMzA8L3NtYWxsPlxuICAgIE1vdmVkIHRvIG5ldyBzZXJ2ZXIgd2l0aCBuZXcgZG9tYWluIDxkZWw+Zm9yZXZlci5wM2sub3JnPC9kZWw+LlxuICA8L3A+XG5cbiAgPHA+XG4gICAgPHNtYWxsPjIwMDMtMDMtMjU8L3NtYWxsPlxuICAgIFVwZGF0ZWQgUmVib2wgdG8gPGEgaHJlZj0naHR0cDovL3d3dy5yZWJvbC5jb20vbmV3czMzMTAuaHRtbCc+dmVyc2lvbiAyLjUuNTwvYT4uIEVuZCBvZiBSZWJvbOKAmXMg4oCcRE5TIHpvbWJpZXPigJ0gaW4gdGhlIHByb2Nlc3MgbGlzdC5cbiAgICA8aT5GaW5hbGx5LjwvaT5cbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDAyLTAyLTE5PC9zbWFsbD5cbiAgICBBZGRlZCBhIHZlcnkgbmljZSBxdW90ZSBmcm9tIDxhIGhyZWY9J2h0dHA6Ly93d3cub3VycGxhLm5ldC9jZ2ktYmluL3Bpa2llLmNnaT9BYmJlTm9ybWFsJz5BYmJlIE5vcm1hbDwvYT4gb24gdG9wIHJpZ2h0IG9mIHRoaXMgZG9jdW1lbnQuXG4gIDwvcD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAwMS0xMS0xNzwvc21hbGw+XG4gICAgSWYgeW91IHdhbnQgYSBtb3JlIGNvbXBhY3QgdmlldyBvZiB0aGUgUlNTIGJveCB5b3UgY2FuIGdldCBpdCBub3cgdXNpbmcgdGhlIGNvcnJlc3BvbmRpbmcgY2hlY2tib3guIElmIGl0IGlzIGVuYWJsZWQgdGhlIGRlc2NyaXB0aW9ucyBvZiBlYWNoIGl0ZW0gd2lsbCBub3QgYmUgZGlzcGxheWVkICYjODIxMTsgZ2l2ZW4gdGhhdCB0aGUgaXRlbSB0aXRsZSBpcyBkZWZpbmVkIChvdGhlcndpc2UgdGhlcmUgd291bGQgbm90IGJlIG11Y2ggdG8gc2VlKS4gQWRkaXRpb25hbGx5LCB0aGUgY2hhbm5lbCBpbWFnZSAoaWYgZGVmaW5lZCkgd2lsbCBub3QgYmUgZGlzcGxheWVkLiBUaGFua3MgJiMxMDY7JiMxMTU7JiMxMjE7JiMxMDE7JiMxMTE7JiM2NDsmIzk5OyYjMTExOyYjMTA5OyYjMTEyOyYjMTE3OyYjMTE1OyYjMTAxOyYjMTE0OyYjMTE4OyYjMTAxOyYjNDY7JiM5OTsmIzExMTsmIzEwOTsgZm9yIHRoZSBzdWdnZXN0aW9ucyFcbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDAxLTA5LTIxPC9zbWFsbD5cbiAgICBTaW5jZSB0b2RheSB0aGUgPGNvZGU+dGV4dGlucHV0PC9jb2RlPiB0YWcgaXMgc3VwcG9ydGVkLiBJdCBjcmVhdGVzIGFuIGFwcHJvcHJpYXRlIGZvcm0gYXQgdGhlIGVuZCBvZiB0aGUgYm94LiBNb3Jlb3ZlciwgdHdvIGJ1Z3Mgd2VyZSBmaXhlZDogb25lIGNhdXNlZCB1bm5lY2Vzc2FyeSBpbmZvcm1hdGlvbiBpbiB0aGUgcXVlcnkgc3RyaW5nIG9mIHRoZSBnZW5lcmF0ZWQgSmF2YVNjcmlwdCB0YWcuIFRoZSBvdGhlciBhZmZlY3RlZCB0aGUgZGlzcGxheSBvZiB0aGUgZGF0ZeKAmXMgdGltZSB6b25lLiBUaW1lIHpvbmVzIG5vdyBhcmUgZ2VuZXJhbGx5IGRpc3BsYXllZCBpbiBHTVQgZXhjZXB0IHdoZXJlIGFub3RoZXIgdGltZSB6b25lIGFjcm9ueW0gaXMgZGVmaW5lZC5cbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDAxLTA5LTA0PC9zbWFsbD5cbiAgICBBZGRlZCBpY29ucyBmb3IgZW5jbG9zdXJlIGFuZCBzb3VyY2U7IGFkZGVkIFhNTCBidXR0b24gY2hlY2tib3ggdG8gZW5hYmxlIG91dHB1dCBvZiB0aGUgcXVhc2ktc3RhbmRhcmQgb3JhbmdlIGJ1dHRvbiBsaW5raW5nIHRvIHRoZSBYTUwgc291cmNlIChpZGVhYnkgJiM5NzsmIzEwMDsmIzk3OyYjMTA5OyYjNjQ7JiM5OTsmIzExNzsmIzExNDsmIzExNDsmIzEyMTsmIzQ2OyYjOTk7JiMxMTE7JiMxMDk7KS5cbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDAxLTA5LTAzPC9zbWFsbD5cbiAgICBJdOKAmXMgbm93IHBvc3NpYmxlIHRvIHJlZmluZSB0aGUgc3R5bGUgb2YgdGhlIHdob2xlIGJveCB1c2luZyB0aGUgbmV3bHkgaW1wbGVtZW50ZWQgY3NzIGNsYXNzZXMgPGNvZGU+cnNzYm94LXRpdGxlPC9jb2RlPiwgPGNvZGU+cnNzYm94LWNvbnRlbnQ8L2NvZGU+LCA8Y29kZT5yc3Nib3gtaXRlbS10aXRsZTwvY29kZT4gYW5kIDxjb2RlPnJzc2JveC10dGVtLWNvbnRlbnQ8L2NvZGU+IChpZGVhIGJ5ICYjMTE0OyYjMTAwOyYjOTc7JiMxMTg7JiMxMDU7JiMxMDE7JiMxMTU7JiM2NDsmIzExMTsmIzExNDsmIzEwNTsmIzEwMTsmIzExMDsmIzExNjsmIzExMjsmIzk3OyYjOTk7JiMxMDU7JiMxMDI7JiMxMDU7JiM5OTsmIzQ2OyYjOTk7JiMxMTE7JiMxMDk7KS5cbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDAxLTA4LTI0PC9zbWFsbD5cbiAgICBBZGRlZCBhIGZvcm0gaW5wdXQgZm9yIGxpbWl0aW5nIHRoZSBpdGVtIGRpc3BsYXkuIFRoZSBudW1iZXIgZGV0ZXJtaW5lcyBob3cgbWFueSBpdGVtcyB3aWxsIGJlIHNob3duIGluIHRoZSBib3ggKHNldmVuIGlzIHRoZSBkZWZhdWx0IHZhbHVlKS4gR29vZCBmb3Igb2Z0ZW4gdXBkYXRlZCBjaGFubmVscy5cbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDAxLTA4LTE1PC9zbWFsbD5cbiAgICBEZXRlY3RlZCBhIHN0cmFuZ2UgYnVnIHRoYXQgcHJldmVudGVkIHRoZSB2aWV3ZXIgYXQgPGEgaHJlZj0naHR0cDovL3B1Ymxpc2guY3VycnkuY29tL3Jzcy8nPmN1cnJ5LmNvbTwvYT4gbG9hZGluZyBodHRwOi8vcDNrLm9yZy9yc3MueG1sIHdoaWxlIGh0dHA6Ly93d3cucDNrLm9yZy9yc3MueG1sIHdhcyBubyBwcm9ibGVtIGF0IGFsbC4gVXBncmFkaW5nIHRoZSBSZWJvbCBpbnN0YWxsYXRpb24gdG8gdGhlIGN1cnJlbnQgdmVyc2lvbiBzb2x2ZWQgdGhlcHJvYmxlbSwgaG93ZXZlciB0aGUgY2F1c2UgcmVtYWlucyB1bmNsZWFy4oCmXG4gIDwvcD5cblxuICA8cD5cbiAgICA8c21hbGw+MjAwMS0wOC0wODwvc21hbGw+XG4gICAgRml4ZWQgYSBzbWFsbCBidWcgdGhhdCBjb3JydXB0ZWQgY2hhbm5lbCBVUkxzIGNvbnRhaW5pbmcgYSBxdWVyeSAoYXMgcmVwb3J0ZWQgYnkgJiMxMDc7JiMxMDU7JiMxMDc7JiM5NzsmIzY0OyYjMTE1OyYjMTA4OyYjMTExOyYjMTA4OyYjMTAxOyYjMTA0OyYjMTE2OyYjNDY7JiMxMDE7JiMxMDE7KS4gQ29uZmlndXJlZCBzZXJ2ZXIgcmVkaXJlY3QgZnJvbSA8ZGVsPmh0dHA6Ly9waWVma2UuaGVsbWEuYXQvcnNzPC9kZWw+LlxuICA8L3A+XG5cbiAgPHA+XG4gICAgPHNtYWxsPjIwMDEtMDgtMDU8L3NtYWxsPlxuICAgIFRoYW5rcyB0byA8YSBocmVmPSdodHRwOi8vd3d3LmN1cnJ5LmNvbS8yMDAxLzA3LzMxI2Nvb2xSc3NTZXJ2aWNlJz5BZGFtIEN1cnJ5PC9hPiwgdGhlIHZpZXdlciBpcyBub3cgbWlycm9yZWQgYXQgPGRlbD5odHRwOi8vcHVibGlzaC5jdXJyeS5jb20vcnNzPC9kZWw+LlxuICA8L3A+XG5cbiAgPHA+XG4gICAgPHNtYWxsPjIwMDEtMDctMzA8L3NtYWxsPlxuICAgIEFkZGVkIGxpbmsgdG8gc291cmNlIGNvZGU7IGFkZGVkIGV4YW1wbGUgbGlua3MgZm9yIGFsbCBzdXBwb3J0ZWQgZm9ybWF0cy5cbiAgPC9wPlxuXG4gIDxwPlxuICAgIDxzbWFsbD4yMDAxLTA1LTMwPC9zbWFsbD5cbiAgICBGaXhlZCBhIGxpdHRsZSBidWcgcmVwb3J0ZWQgYnkgJiMxMDI7JiMxMTQ7JiMxMDE7JiMxMDA7JiMxMDU7JiM2NDsmIzEwMTsmIzEwOTsmIzk3OyYjMTA1OyYjMTA4OyYjNDY7JiMxMDE7JiMxMDE7IHRoYXQgY2F1c2VkIGRpYWNyaXRpYyBjaGFyYWN0ZXJzIHRvIGJlIGRpc3BsYXllZCBhcyBlbnRpdHkgY29kZXMuXG4gIDwvcD5cbjwvZGV0YWlscz5cblxuPHN0eWxlPlxuICBoMyB7XG4gICAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xuICB9XG5cbiAgaDMgKyBwLCBzdW1tYXJ5ICsgKiB7XG4gICAgbWFyZ2luLXRvcDogMDtcbiAgfVxuXG4gIHN1bW1hcnkge1xuICAgIG91dGxpbmU6IG5vbmU7XG4gIH1cblxuICBsaSArIGxpIHtcbiAgICBtYXJnaW4tdG9wOiAwLjVlbTtcbiAgfVxuXG4gIHNtYWxsIHtcbiAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XG4gICAgbWFyZ2luLXJpZ2h0OiAwLjVlbTtcbiAgICBjb2xvcjogI2JiYjtcbiAgfVxuXG4gIGNvZGUge1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNmZmM7XG4gICAgZm9udC1zaXplOiAwLjhlbTtcbiAgICBmb250LXdlaWdodDogMjAwO1xuICB9XG48L3N0eWxlPlxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQWdYRSxFQUFFLG1CQUFDLENBQUMsQUFDRixPQUFPLENBQUUsWUFBWSxBQUN2QixDQUFDLEFBRUQsRUFBRSxDQUFHLG9CQUFDLENBQUUsT0FBTyxDQUFHLG1CQUFFLENBQUMsQUFDbkIsVUFBVSxDQUFFLENBQUMsQUFDZixDQUFDLEFBRUQsT0FBTyxtQkFBQyxDQUFDLEFBQ1AsT0FBTyxDQUFFLElBQUksQUFDZixDQUFDLEFBRUQsRUFBRSxDQUFHLEVBQUUsbUJBQUMsQ0FBQyxBQUNQLFVBQVUsQ0FBRSxLQUFLLEFBQ25CLENBQUMsQUFFRCxLQUFLLG1CQUFDLENBQUMsQUFDTCxPQUFPLENBQUUsWUFBWSxDQUNyQixZQUFZLENBQUUsS0FBSyxDQUNuQixLQUFLLENBQUUsSUFBSSxBQUNiLENBQUMsQUFFRCxJQUFJLG1CQUFDLENBQUMsQUFDSixnQkFBZ0IsQ0FBRSxJQUFJLENBQ3RCLFNBQVMsQ0FBRSxLQUFLLENBQ2hCLFdBQVcsQ0FBRSxHQUFHLEFBQ2xCLENBQUMifQ== */";
+	appendNode(style, document.head);
+}
+
+function create_main_fragment$2(state, component) {
+	var details;
+
+	return {
+		c: function create() {
+			details = createElement("details");
+			details.innerHTML = "<summary svelte-2837112113><h3 svelte-2837112113>Change Log</h3></summary>\n\n  <p svelte-2837112113><small svelte-2837112113>2019-12-15</small>\n    Upgraded the JSONP proxy to Python 3.7 and slightly retouched the configuration form. A merry ending for 2019 and a happy new year 🎉 <em svelte-2837112113>It’s hindsight!<em svelte-2837112113></em></em></p>\n\n  <p svelte-2837112113><small svelte-2837112113>2018-01-19</small>\n    More than 15 years (and still counting…) after its inception this little service is still live and kicking! The best part of this hobby project’s long-running trait: this year brings a complete rewrite and overhaul with an extensive list of updates – and only small changes in functionality:</p>\n  <ul svelte-2837112113><li svelte-2837112113>Added basic support for Atom 1.0 feeds 🔥</li>\n    <li svelte-2837112113>Added support for multiple enclosures (RSS 0.93)</li>\n    <li svelte-2837112113>Replaced value of -1 for automatic content height with “empty” value</li>\n    <li svelte-2837112113>Added support for “empty” value to box width (now called ”max. width”)</li>\n    <li svelte-2837112113>Reduced total size of embedded download by more than 60% ⚡</li>\n    <li svelte-2837112113>Increased performance of loading and rendering boxes</li>\n    <li svelte-2837112113>Implemented responsive CSS for both, boxes and configuration app</li>\n    <li svelte-2837112113>Replaced bitmap icons with scalable vector graphics</li>\n    <li svelte-2837112113>Completely rewrote the app code using <a svelte-2837112113 href=\"https://svelte.technology\">Svelte</a> and <a svelte-2837112113 href=\"https://mincss.com/\">min.css</a></li>\n    <li svelte-2837112113>Replaced remaining jQuery code with vanilla JavaScript</li>\n    <li svelte-2837112113>Migrated build scripts to Rollup and Yarn</li>\n    <li svelte-2837112113>Added support for missing browser features via <a svelte-2837112113 href=\"https://polyfills.io\">polyfills.io</a></li>\n    <li svelte-2837112113>Discontinued support for older browsers (MSIE < 11)</li>\n    <li svelte-2837112113>Bumped major version to 18 (aka the year), getting rid of semantic versioning due to lack of semantics 🐱</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2016-03-12</small>\n    Completely rewrote build environment using WebPack. Switched the <a svelte-2837112113 href=\"https://github.com/p3k/rss-box\">source repository</a> from SVN to Git, hosted at Github. This deserves a new major version number!</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-12-30</small>\n    Added simple code to modify the width attribute of iframe, object and embed elements to make them fit in the box. Also: bumped version. <i svelte-2837112113>A happy new year 2013, everbody!</i></p>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-10-26</small>\n    Added section about Creative Commons License, below. In other words: you can now legally run my code on your own server. (You even could remove the tiny reference to this page in the footer of the box.) However, I would like to ask you for two things if you want to do so:</p>\n  <ul svelte-2837112113><li svelte-2837112113>Use your own <a svelte-2837112113 href=\"//github.com/p3k/json3k\">JSONP proxy</a> – especially, when you expect a high load on your server.</li>\n    <li svelte-2837112113>Please support the service with a <a svelte-2837112113 href=\"http://flattr.com/thing/681881/JavaScript-RSS-Box-Viewer\">donation</a>.</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-08-01</small>\n    Added two new, experimental features – and thus, increased version to 3.3:</p>\n  <ul svelte-2837112113><li svelte-2837112113>The height of the inner box content can now be defined by a pixel value. If the height is less than the space needed by the desired amount of items you can vertically scroll the content. A value of <code svelte-2837112113>-1</code> enables the default behavior and automatically sets the height according to the displaying items.</li>\n    <li svelte-2837112113>The so-called “headless” mode removes the titlebar and the frame from the box. This way the box can be used more flexibly in special situations. However, this feature somehow undermines an RSS feed’s authority so I count on your fairness to give credit where credit is due!</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-07-16</small>\n    Slightly modified output of the HTML code to be usable with both, unsecured and secured (HTTPS) web servers. You can update already embedded code easily by removing the <code svelte-2837112113>http:</code> part from the <code svelte-2837112113>src</code> attribute of the <code svelte-2837112113>&lt;script&gt;</code> element: <code svelte-2837112113>&lt;script src='http://p3k.org/rss…'&gt;</code> becomes <code svelte-2837112113>&lt;script src='//p3k.org/rss…'&gt;</code>.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-07-13</small></p>\n  <ul svelte-2837112113><li svelte-2837112113>Fixed IE bug (“innerHTML is null or not an object”) caused by using jQuery’s html() method instead of text() when parsing a <code svelte-2837112113>&lt;content:encoded&gt;</code> element.</li>\n    <li svelte-2837112113>Changed priority of elements: only check for <code svelte-2837112113>&lt;content:encoded&gt;</code> if     <code svelte-2837112113>&lt;description&gt;</code> is not available.</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-06-04</small></p>\n  <ul svelte-2837112113><li svelte-2837112113>Implemented small routine to resize images contained in the feed content to fit in the box.</li>\n    <li svelte-2837112113>Added support for new HTML5 form input types and their validation.</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-05-31</small>\n    Gone βeta! – with three tiny additons:</p>\n  <ul svelte-2837112113><li svelte-2837112113>Added <code svelte-2837112113>&lt;noscript&gt;</code> element for browsers providing no JavaScript engine.</li>\n    <li svelte-2837112113>Added option to call the configurator with a URL in the query string.</li>\n    <li svelte-2837112113>Added a link to the W3C feed validator to the contents of a box displaying an RSS error.</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-05-19</small>\n    Apologies for the RSS Boxes not showing up on your pages during the last few days. I made a stupid mistake that caused only the setup page to render correctly – and I did not check any embedded script. <i svelte-2837112113>Bummer!</i></p>\n  <p svelte-2837112113>At least now everything should be back to normal. (I hope this incident did not sabotage the Flattr button I added in the meantime… <i svelte-2837112113>wink, wink!</i>)</p>\n  <p svelte-2837112113>Anyway, thanks for your understanding.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-05-16</small>\n    I think I did not mention, yet, that the current incarnation of the code is totally disconnected from the version as of 2009. Each is using their own codebase, the legacy code was not modified at all and thus, it is not affected by any recent changes. You can check which version you are using by looking at the script URL. If it contains the string “proxy.r” you get the “classic” RSS Box rendering. The modernized version calls “index.js”. Nevertheless, you cannot setup boxes with the old URL anymore.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-05-09</small></p>\n  <ul svelte-2837112113><li svelte-2837112113>Added support for <code svelte-2837112113>&lt;content:encoded&gt;</code> element.</li>\n    <li svelte-2837112113>Implemented Memcache usage in AppEngine code.</li>\n    <li svelte-2837112113>Beautified this page by using the <a svelte-2837112113 href=\"http://www.google.com/webfonts/specimen/Droid+Serif\">Google’s Droid Serif font</a>.</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2012-04-26</small>\n    Amazing! A new version! After more than two years hiatus I completely rewrote the codebase and framework:</p>\n  <ul svelte-2837112113><li svelte-2837112113>Removed dependency to Rebol using a small JSONP proxy at Google’s AppEngine.</li>\n    <li svelte-2837112113>Rewrote XML parsing, replacing native methods with jQuery ones.</li>\n    <li svelte-2837112113>Cleaned up HTML output for the RSS Box, replacing tables with divs. <i svelte-2837112113>Note: You might need to add <code svelte-2837112113><a svelte-2837112113 href=\"http://coding.smashingmagazine.com/2010/11/02/the-important-css-declaration-how-and-when-to-use-it/\">!important</a></code> to your custom RSS Box stylesheet definitions.</i></li>\n    <li svelte-2837112113>Replaced fugly colorpicker in configurator with the <a svelte-2837112113 href=\"https://github.com/claviska/jquery-miniColors/\">MiniColors jQuery plugin</a>.</li>\n    <li svelte-2837112113>Added link color setting and style attributes for correctly applying color settings.</li>\n    <li svelte-2837112113>Added corner radius setting. <i svelte-2837112113>Note: does not work in IE8 and earlier versions.</i></li>\n    <li svelte-2837112113>Added font size to the font face setting.</li>\n    <li svelte-2837112113>Removed align setting from configurator (still works in script tags generated with earlier versions).</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2009-12-13</small>\n    Switched output of this page to HTML5 and made some adaptations in the HTML code and CSS stylesheet. Updated version string to 2.1, finally!</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2009-09-28</small>\n    Some minor changes after a while:</p>\n  <ul svelte-2837112113><li svelte-2837112113>Refactored date parsing to show actual build dates more reliably</li>\n    <li svelte-2837112113>Refactored caching routine (only in online version)</li>\n    <li svelte-2837112113>Updated version string to 2.1b, approaching another final version.</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2008-02-19</small>\n    Seems there were some changes in the air as I did not plan another update but here comes version 2.1 bringing to you:</p>\n  <ul svelte-2837112113><li svelte-2837112113>Full client-side processing (only the raw feed data is fetched from the server).</li>\n    <li svelte-2837112113>User-friendlier interface with color pickers, status and error display as well as instant feedback on any change in setup.</li>\n    <li svelte-2837112113>And finally (drumroll!) Unicode support at least at this installation of the viewer. (Ie. the downloaded version still will output ASCII only.)</li>\n  </ul>\n\n  <p svelte-2837112113><small svelte-2837112113>2008-02-03</small>\n    Made some more improvements especially regarding the error handling and output. From now on it should be much clearer what’s wrong with a very RSS Box. Since there’s now a lot more of client-side JavaScript code involved I tested the script in four major browsers that are available to me: Internet Explorer 7, Firefox 2.0, Opera 9.25 and Safari 3.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2008-02-01</small>\n    Completely revised server- and client-side code. XML rendering is now done in the browser which speeds up things and decreases the load on the server. Furthermore, the list of referrers is now loaded on demand via AJAX and thus not rendered with every request. Finally, I retouched the setup form interface and cleaned up both HTML and CSS.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-12-20</small>\n    I am very glad that my old little script is gaining even more attention after all these years…    <i svelte-2837112113>Thank you very much indeed!</i> Since there are coming in more and more of the same requests and I am really not able to handle them (apologies!), here is some advice for everyone:</p>\n  <ol svelte-2837112113><li svelte-2837112113><a svelte-2837112113 href=\"http://en.wikipedia.org/wiki/Cascading_Style_Sheets\">Use cascading style sheets</a> (CSS) to change font sizes (and to generally define your layout).</li>\n    <li svelte-2837112113><a svelte-2837112113 href=\"http://www.sitepoint.com/article/beware-opening-links-new-window\">Beware of opening links in a new window.</a> It’s offensive to your readers.</li>\n  </ol>\n  <p svelte-2837112113><i svelte-2837112113>A happy end for 2006!</i></p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-06-13</small>\n    Did some minor bug fixing again (amongst others replacing single quotes with &apos; and not &quot; entities). Furthermore (and finally), I removed the “RC” (as in “Release Candidate”) from the document title…</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-06-12</small>\n    Gary informed me that longer feed URLs cause trouble and the feed box will not be displayed. That’s in fact a bug, but unfortunately one that cannot be fixed so easily. My suggestion is to shorten such URLs at one of the websites around that provide such a service, e.g. <a svelte-2837112113 href=\"http://tinyurl.com\">tinyurl.com</a>.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-04-23</small>\n    Switched the <a svelte-2837112113 href=\"//p3k.org/source/rss-box/\">source repository</a> from CVS to Subversion (SVN).</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-04-20</small>\n    Andrew Pam brought up a serious issue that probably might have affected some more people already: the viewer does not support UTF-8 (or Unicode, resp.) Unfortunately, this is “built-in” into the underlying scripting language (aka Rebol). I’m sorry to cancel those tickets… :(</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-04-13</small>\n    Fixed a bug reported by Mando Gomez that caused feeds using the &lt;guid&gt; element being displayed without item links… Don’t forget to check out Mando’s excellent website <a svelte-2837112113 href=\"http://www.mandolux.com/\">mandolux</a>!</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-04-12</small>\n    Obviously Sam Ruby changed his feed format from scriptingNews to Atom; which renders my example link above pretty useless… So far I don’t know about any other scriptingNews feed, do you?</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-02-20</small>\n    I hope nobody minds the little line I added at the bottom of each RSS box… Of course, it’s not totally altruistic, but probably some people will find it informative. However, if you want to prevent it from being displayed simply add <code svelte-2837112113>.rssbox-promo {display: none;}</code> to your stylesheet.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2006-01-11</small>\n    New server, new troubles: I moved the viewer to a newly setup Ubuntu machine. Of course, I forgot to set some permission flags and owners, thus, preventing the script from working. However, I think everything is fixed and working again.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2005-11-16</small>\n    Just testing Google’s AdSense for a while. Since this page generates most of my traffic I wanted to see myself what a banner can do here. Hope you don’t mind.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2004-12-16</small>\n    Bugfix: Sometimes the logfile which is used to generate the list of sites using this script gets corrupted. This affected the whole setup page to return an error and thus, it needed to be caught. (You will see a “currently out of order” message then.)</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2004-04-26</small>\n    Last efforts to officially release the <a svelte-2837112113 href=\"//p3k.org/source/rss-box\">code</a> to the open source community. There have been some bugs in the (image) rendering framework which I fixed so    far. I now include a dynamically rendered list of sites using (or pointing to) this script to give some examples for the curious at heart (me included). Finally, there’s a <a svelte-2837112113 href=\"//p3k.org/source/rss-box/branches/2.0/README\">README</a> file with a short installation guide to make the script run on your own server.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2004-01-28</small>\n    When something goes wrong (most of the time this might be a wrong URL, ie. a 404 as result) an    <a svelte-2837112113 href=\"./?url=error\">“error” box</a> will be displayed to signal the failure. Increased version up to 1.0 and labeled it as release candidate\n    (RC).</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2004-01-26</small>\n    Retouched the code in a very last effort to make the script running stand-alone (with Rebol but    <i svelte-2837112113>without</i> PHP, that is). Everything needed is now in <del svelte-2837112113>CVS</del> SVN so everybody can download from there. Potentially, a few minor bug fixes might follow short-term. Uh, and the HTML code is <a svelte-2837112113 href=\"http://validator.w3.org/check?uri=http%3A%2F%2Fp3k.org%2Frss%2F\">valid XHTML 1.0</a> now.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2003-12-12</small>\n    The mirror at <del svelte-2837112113>http://publish.curry.com/rss/</del> is not working for quite a long time. I tried to contact Adam Curry but so far without success.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2003-03-30</small>\n    Moved to new server with new domain <del svelte-2837112113>forever.p3k.org</del>.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2003-03-25</small>\n    Updated Rebol to <a svelte-2837112113 href=\"http://www.rebol.com/news3310.html\">version 2.5.5</a>. End of Rebol’s “DNS zombies” in the process list.\n    <i svelte-2837112113>Finally.</i></p>\n\n  <p svelte-2837112113><small svelte-2837112113>2002-02-19</small>\n    Added a very nice quote from <a svelte-2837112113 href=\"http://www.ourpla.net/cgi-bin/pikie.cgi?AbbeNormal\">Abbe Normal</a> on top right of this document.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-11-17</small>\n    If you want a more compact view of the RSS box you can get it now using the corresponding checkbox. If it is enabled the descriptions of each item will not be displayed – given that the item title is defined (otherwise there would not be much to see). Additionally, the channel image (if defined) will not be displayed. Thanks jsyeo@compuserve.com for the suggestions!</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-09-21</small>\n    Since today the <code svelte-2837112113>textinput</code> tag is supported. It creates an appropriate form at the end of the box. Moreover, two bugs were fixed: one caused unnecessary information in the query string of the generated JavaScript tag. The other affected the display of the date’s time zone. Time zones now are generally displayed in GMT except where another time zone acronym is defined.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-09-04</small>\n    Added icons for enclosure and source; added XML button checkbox to enable output of the quasi-standard orange button linking to the XML source (ideaby adam@curry.com).</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-09-03</small>\n    It’s now possible to refine the style of the whole box using the newly implemented css classes <code svelte-2837112113>rssbox-title</code>, <code svelte-2837112113>rssbox-content</code>, <code svelte-2837112113>rssbox-item-title</code> and <code svelte-2837112113>rssbox-ttem-content</code> (idea by rdavies@orientpacific.com).</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-08-24</small>\n    Added a form input for limiting the item display. The number determines how many items will be shown in the box (seven is the default value). Good for often updated channels.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-08-15</small>\n    Detected a strange bug that prevented the viewer at <a svelte-2837112113 href=\"http://publish.curry.com/rss/\">curry.com</a> loading http://p3k.org/rss.xml while http://www.p3k.org/rss.xml was no problem at all. Upgrading the Rebol installation to the current version solved theproblem, however the cause remains unclear…</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-08-08</small>\n    Fixed a small bug that corrupted channel URLs containing a query (as reported by kika@sloleht.ee). Configured server redirect from <del svelte-2837112113>http://piefke.helma.at/rss</del>.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-08-05</small>\n    Thanks to <a svelte-2837112113 href=\"http://www.curry.com/2001/07/31#coolRssService\">Adam Curry</a>, the viewer is now mirrored at <del svelte-2837112113>http://publish.curry.com/rss</del>.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-07-30</small>\n    Added link to source code; added example links for all supported formats.</p>\n\n  <p svelte-2837112113><small svelte-2837112113>2001-05-30</small>\n    Fixed a little bug reported by fredi@email.ee that caused diacritic characters to be displayed as entity codes.</p>";
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$1(details);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(details, target, anchor);
+		},
+
+		p: noop,
+
+		u: function unmount() {
+			detachNode(details);
+		},
+
+		d: noop
+	};
+}
+
+function Changes(options) {
+	this._debugName = '<Changes>';
+	if (!options || (!options.target && !options.root)) throw new Error("'target' is a required option");
+	init(this, options);
+	this._state = assign({}, options.data);
+
+	if (!document.getElementById("svelte-2837112113-style")) add_css$1();
+
+	this._fragment = create_main_fragment$2(this._state, this);
+
+	if (options.target) {
+		if (options.hydrate) throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		this._fragment.c();
+		this._fragment.m(options.target, options.anchor || null);
+	}
+}
+
+assign(Changes.prototype, protoDev);
+
+Changes.prototype._checkReadOnly = function _checkReadOnly(newState) {
+};
+
+/* components/Github.html generated by Svelte v1.50.0 */
+const script = document.createElement('script');
+script.async = script.defer = true;
+script.src = 'https://buttons.github.io/buttons.js';
+document.head.appendChild(script);
+
+function create_main_fragment$3(state, component) {
+	var a;
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			a.textContent = "Github";
+			this.h();
+		},
+
+		h: function hydrate() {
+			a.className = "github-button";
+			a.href = "https://github.com/p3k/rss-box";
+			a.dataset.size = "large";
+			a.dataset.showCount = "true";
+			setAttribute(a, "aria-label", "Star p3k/rss-box on GitHub");
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+		},
+
+		p: noop,
+
+		u: function unmount() {
+			detachNode(a);
+		},
+
+		d: noop
+	};
+}
+
+function Github(options) {
+	this._debugName = '<Github>';
+	if (!options || (!options.target && !options.root)) throw new Error("'target' is a required option");
+	init(this, options);
+	this._state = assign({}, options.data);
+
+	this._fragment = create_main_fragment$3(this._state, this);
+
+	if (options.target) {
+		if (options.hydrate) throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		this._fragment.c();
+		this._fragment.m(options.target, options.anchor || null);
+	}
+}
+
+assign(Github.prototype, protoDev);
+
+Github.prototype._checkReadOnly = function _checkReadOnly(newState) {
+};
+
+/* components/About.html generated by Svelte v1.50.0 */
+var methods = {
+  goto(event) {
+    event.preventDefault();
+    this.store.set({ url: event.target.href });
+  }
+};
+
+function oncreate() {
+  this.store.observe('appDescription', description => {
+    document.title = description;
+  });
+}
+
+function encapsulateStyles(node) {
+	setAttribute(node, "svelte-5151739", "");
+}
+
+function add_css() {
+	var style = createElement("style");
+	style.id = 'svelte-5151739-style';
+	style.textContent = "h3[svelte-5151739]{display:inline-block}h3+p[svelte-5151739]{margin-top:0}small[svelte-5151739]{color:#bbb}.warning[svelte-5151739]{border-color:#e44;background:#fdd}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQWJvdXQuaHRtbCIsInNvdXJjZXMiOlsiQWJvdXQuaHRtbCJdLCJzb3VyY2VzQ29udGVudCI6WyI8ZGl2PlxuICA8c21hbGw+PGk+4oCcSmF2YVNjcmlwdCBSU1MgVmlld2VyIHB1dHMgbGl0dGxlIG9yIGxvbmcgY3VzdG9taXphYmxlIFJTUyBib3hlcyBhbnl3aGVyZSB5b3UgcHV0IEhUTUw7IGJ1aWxkIHlvdXIgb3duIHNsYXNoYm94IGhlbGwgb3IgaGVhdmVuLCBpdOKAmXMgZmVlZGFyaWZpYyHigJ0g4oCUIDxhIGhyZWY9J2h0dHA6Ly9vdXJwbGEubmV0L2NnaS9waWtpZSc+QWJiZSBOb3JtYWw8L2E+PC9pPjwvc21hbGw+XG48L2Rpdj5cblxuPGgyPnt7ICRhcHBEZXNjcmlwdGlvbiB9fSB7eyAkYXBwVmVyc2lvbiB9fTwvaDI+XG5cbjxwIGNsYXNzPSdtc2cgd2FybmluZyc+XG4gIDxzdHJvbmc+UmVkdWNlZCBhdmFpbGFiaWxpdHkgZHVlIHRvIHRlbXBvcmFyeSB2aW9sYXRpb24gb2YgcXVvdGEgbGltaXQuPC9zdHJvbmc+IFlvdSBzaG91bGQgPGEgaHJlZj0nLy9naXRodWIuY29tL3Azay9qc29uM2snPmluc3RhbGwgeW91ciBvd24gSlNPTlAgcHJveHk8L2E+LiBZb3UgY2FuIGFsd2F5cyBzdXBwb3J0IHRoZSBwcm9qZWN0IHdpdGggeW91ciA8YSBocmVmPSdodHRwOi8vZmxhdHRyLmNvbS90aGluZy82ODE4ODEvSmF2YVNjcmlwdC1SU1MtQm94LVZpZXdlcic+ZG9uYXRpb248L2E+LlxuPC9wPlxuXG48cD5cbiAgVGhpcyB2aWV3ZXIgY2FuIGRpc3BsYXkgPGEgaHJlZj0naHR0cDovL2VuLndpa2lwZWRpYS5vcmcvd2lraS9SU1MnPlJTUzwvYT4gZmVlZHMgb2YgdmVyc2lvbiA8YSBocmVmPSdodHRwOi8vY3liZXIubGF3LmhhcnZhcmQuZWR1L3Jzcy9leGFtcGxlcy9zYW1wbGVSc3MwOTEueG1sJyBvbjpjbGljaz0nZ290byhldmVudCknPjAuOTE8L2E+LCA8YSBocmVmPSdodHRwOi8vY3liZXIubGF3LmhhcnZhcmQuZWR1L3Jzcy9leGFtcGxlcy9zYW1wbGVSc3MwOTIueG1sJyBvbjpjbGljaz0nZ290byhldmVudCknPjAuOTI8L2E+LCA8YSBocmVmPSdodHRwOi8vcnNzLm9yZi5hdC9mbTQueG1sJyBvbjpjbGljaz0nZ290byhldmVudCknPjEuMDwvYT4gYW5kIDxhIGhyZWY9J2h0dHA6Ly9ibG9nLnAzay5vcmcvc3Rvcmllcy54bWwnIG9uOmNsaWNrPSdnb3RvKGV2ZW50KSc+Mi4wPC9hPiBhcyB3ZWxsIGFzIGV2ZW4gdGhlIGdvb2Qgb2xkIGxlZ2FjeSBmb3JtYXQgPGEgaHJlZj0naHR0cDovL2Vzc2F5c2Zyb21leG9kdXMuc2NyaXB0aW5nLmNvbS94bWwvc2NyaXB0aW5nTmV3czIueG1sJyBvbjpjbGljaz0nZ290byhldmVudCknPlNjcmlwdGluZyBOZXdzIDI8L2E+LiBUaGVyZSBpcyBhbHNvIGJhc2ljIHN1cHBvcnQgZm9yIDxhIGhyZWY9J2h0dHBzOi8vd3d3LnRoZXJlZ2lzdGVyLmNvLnVrL2hlYWRsaW5lcy5hdG9tJyBvbjpjbGljaz0nZ290byhldmVudCknPkF0b20gMS4wPC9hPi5cbjwvcD5cblxuPHA+XG4gIEl0IHByb3ZpZGVzIGEgc2ltcGxlIHdheSB0byBlbWJlZCBzdWNoIFJTUyBib3hlcyBpbiBhbnkgPGEgaHJlZj0naHR0cDovL3ZhbGlkYXRvci53My5vcmcvJz52YWxpZCBIVE1MIGRvY3VtZW50PC9hPiB2aWEgYW4gYXV0b21hZ2ljYWxseSBnZW5lcmF0ZWQgSmF2YVNjcmlwdCB0YWcg4oCUIDxpPmZvciBmcmVlITwvaT5cbjwvcD5cblxuPHA+XG4gIEp1c3QgZW50ZXIgdGhlIFVSTCBvZiBhbnkgY29tcGF0aWJsZSBSU1MgZmVlZCwgbW9kaWZ5IHRoZSBsYXlvdXQgc2V0dGluZ3MgYXMgeW91IGxpa2UgYW5kIHB1c2ggdGhlIFJlbG9hZCBidXR0b24uIFdoZW4gZmluaXNoZWQsIGNvcHkgdGhlIEhUTUwgY29kZSBpbnRvIHlvdXIgb3duIHdlYiBwYWdlIOKAkyBhbmQgdm9pbMOgIVxuPC9wPlxuXG48cD5cbiAgVGhlIGNvZGUgYmVoaW5kIHRoaXMgaXMgd3JpdHRlbiBpbiBKYXZhU2NyaXB0IGFuZCBydW5zIGNvbXBsZXRlbHkgaW4geW91ciBicm93c2VyKi4gWW91IGNhbiBnZXQgdGhlIHNvdXJjZSBjb2RlIHRvZ2V0aGVyIHdpdGggYWxsIHRoZSBvdGhlciBuZWNlc3NhcnkgZmlsZXMgZnJvbSB0aGUgPGEgaHJlZj0nLy9naXRodWIuY29tL3Azay9yc3MtYm94Jz5HaXRodWIgcmVwb3NpdG9yeTwvYT4uXG48L3A+XG5cbjxwPlxuICA8c21hbGw+KiBBIHByb3h5IHNlcnZlciBpcyBuZWVkZWQgZm9yIGNyb3NzLW9yaWdpbiByZXF1ZXN0cy48L3NtYWxsPlxuPC9wPlxuXG48cD5cbiAgPEdpdGh1Yi8+XG48L3A+XG5cbjxDaGFuZ2VzLz5cblxuPGgzPkZ1dHVyZSBEZXZlbG9wbWVudDwvaDM+XG5cbjxwPlxuICBJIGhhdmUgY2Vhc2VkIGFjdGl2ZWx5IGRldmVsb3BpbmcgdGhpcyB2aWV3ZXIgYnV0IHNvbWV0aW1lcyBJIGdldCBlbnRodXNpYXN0aWMgYW5kIGZpZGRsZSBhcm91bmQgd2l0aCB0aGUgY29kZS4gT2YgY291cnNlIGl0IHdpbGwgYmUgYXZhaWxhYmxlIGhlcmUgYXMgaXMuXG48L3A+XG48cD5cbiAgRm9yIHF1ZXN0aW9ucyBhbmQgY29tbWVudHMgZmVlbCBmcmVlIHRvIGNvbnRhY3QgbWUgKFRvYmkpIHZpYSBlLW1haWw6IDxhIGhyZWY9J21haWx0bzomIzEwOTsmIzk3OyYjMTA1OyYjMTA4OyYjNDM7JiMxMTQ7JiMxMTU7JiMxMTU7JiM2NDsmIzExMjsmIzUxOyYjMTA3OyYjNDY7JiMxMTE7JiMxMTQ7JiMxMDM7Jz4mIzEwOTsmIzk3OyYjMTA1OyYjMTA4OyYjNDM7JiMxMTQ7JiMxMTU7JiMxMTU7JiM2NDsmIzExMjsmIzUxOyYjMTA3OyYjNDY7JiMxMTE7JiMxMTQ7JiMxMDM7PC9hPi5cbjwvcD5cblxuPGgzPkxpY2Vuc2U8L2gzPlxuXG48cD5cbiAgPHNwYW4geG1sbnM6ZGN0PVwiaHR0cDovL3B1cmwub3JnL2RjL3Rlcm1zL1wiIHByb3BlcnR5PVwiZGN0OnRpdGxlXCI+SmF2YVNjcmlwdCBSU1MgQm94IFZpZXdlcjwvc3Bhbj4gYnlcbiAgPGEgeG1sbnM6Y2M9XCJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9ucyNcIiBocmVmPVwiaHR0cDovL3Azay5vcmcvcnNzXCIgcHJvcGVydHk9XCJjYzphdHRyaWJ1dGlvbk5hbWVcIiByZWw9XCJjYzphdHRyaWJ1dGlvblVSTFwiPlRvYmkgU2Now6RmZXI8L2E+IGlzIGxpY2Vuc2VkIHVuZGVyIGEgPGEgcmVsPVwibGljZW5zZVwiIGhyZWY9XCJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9saWNlbnNlcy9ieS1zYS8zLjAvYXQvZGVlZC5lbl9VU1wiPkNyZWF0aXZlIENvbW1vbnMgQXR0cmlidXRpb24tU2hhcmVBbGlrZSAzLjAgQXVzdHJpYSBMaWNlbnNlPC9hPi5cbjwvcD5cbjxwPlxuICBCYXNlZCBvbiBhIHdvcmsgYXQgPGEgeG1sbnM6ZGN0PVwiaHR0cDovL3B1cmwub3JnL2RjL3Rlcm1zL1wiIGhyZWY9XCJodHRwczovL3Azay5vcmcvc291cmNlL3N2bi9yc3MtYm94L3RydW5rL1wiIHJlbD1cImRjdDpzb3VyY2VcIj5odHRwczovL3Azay5vcmcvc291cmNlL3N2bi9yc3MtYm94L3RydW5rLzwvYT4uXG48L3A+XG48cD5cbiAgPGEgcmVsPVwibGljZW5zZVwiIGhyZWY9XCJodHRwOi8vY3JlYXRpdmVjb21tb25zLm9yZy9saWNlbnNlcy9ieS1zYS8zLjAvYXQvZGVlZC5lbl9VU1wiPlxuICAgIDxpbWcgYWx0PVwiQ3JlYXRpdmUgQ29tbW9ucyBMaWNlbnNlXCIgc3R5bGU9XCJib3JkZXItd2lkdGg6MFwiIHNyYz1cIi8vaS5jcmVhdGl2ZWNvbW1vbnMub3JnL2wvYnktc2EvMy4wL2F0Lzg4eDMxLnBuZ1wiIC8+XG4gIDwvYT5cbjwvcD5cblxuPHNtYWxsPlRoYW5rIHlvdSwgPGEgaHJlZj0nLy9wM2sub3JnLyc+cDNrLm9yZzwvYT4hPC9zbWFsbD5cblxuPHN0eWxlPlxuICBoMyB7XG4gICAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xuICB9XG5cbiAgaDMgKyBwIHtcbiAgICBtYXJnaW4tdG9wOiAwO1xuICB9XG5cbiAgc21hbGwge1xuICAgIGNvbG9yOiAjYmJiO1xuICB9XG5cbiAgLndhcm5pbmcge1xuICAgIGJvcmRlci1jb2xvcjogI2U0NDtcbiAgICBiYWNrZ3JvdW5kOiAjZmRkO1xuICB9XG48L3N0eWxlPlxuXG48c2NyaXB0PlxuICBpbXBvcnQgQ2hhbmdlcyBmcm9tICcuL0NoYW5nZXMuaHRtbCc7XG4gIGltcG9ydCBHaXRodWIgZnJvbSAnLi9HaXRodWIuaHRtbCc7XG5cbiAgZXhwb3J0IGRlZmF1bHQge1xuICAgIG9uY3JlYXRlKCkge1xuICAgICAgdGhpcy5zdG9yZS5vYnNlcnZlKCdhcHBEZXNjcmlwdGlvbicsIGRlc2NyaXB0aW9uID0+IHtcbiAgICAgICAgZG9jdW1lbnQudGl0bGUgPSBkZXNjcmlwdGlvbjtcbiAgICAgIH0pO1xuICAgIH0sXG5cbiAgICBjb21wb25lbnRzOiB7XG4gICAgICBDaGFuZ2VzLFxuICAgICAgR2l0aHViXG4gICAgfSxcblxuICAgIG1ldGhvZHM6IHtcbiAgICAgIGdvdG8oZXZlbnQpIHtcbiAgICAgICAgZXZlbnQucHJldmVudERlZmF1bHQoKTtcbiAgICAgICAgdGhpcy5zdG9yZS5zZXQoeyB1cmw6IGV2ZW50LnRhcmdldC5ocmVmIH0pO1xuICAgICAgfVxuICAgIH1cbiAgfVxuPC9zY3JpcHQ+XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBK0RFLEVBQUUsZ0JBQUMsQ0FBQyxBQUNGLE9BQU8sQ0FBRSxZQUFZLEFBQ3ZCLENBQUMsQUFFRCxFQUFFLENBQUcsQ0FBQyxnQkFBQyxDQUFDLEFBQ04sVUFBVSxDQUFFLENBQUMsQUFDZixDQUFDLEFBRUQsS0FBSyxnQkFBQyxDQUFDLEFBQ0wsS0FBSyxDQUFFLElBQUksQUFDYixDQUFDLEFBRUQsUUFBUSxnQkFBQyxDQUFDLEFBQ1IsWUFBWSxDQUFFLElBQUksQ0FDbEIsVUFBVSxDQUFFLElBQUksQUFDbEIsQ0FBQyJ9 */";
+	appendNode(style, document.head);
+}
+
+function create_main_fragment$1(state, component) {
+	var div, text_3, h2, text_4, text_5, text_6, text_7, p, text_14, p_1, text_15, a_3, text_17, a_4, text_19, a_5, text_21, a_6, text_23, a_7, text_25, a_8, text_27, a_9, text_29, text_30, p_2, text_36, p_3, text_38, p_4, text_42, p_5, text_45, p_6, text_47, text_48, h3, text_50, p_7, text_52, p_8, text_56, h3_1, text_58, p_9, text_65, p_10, text_69, p_11, text_72, small_2;
+
+	function click_handler(event) {
+		component.goto(event);
+	}
+
+	function click_handler_1(event) {
+		component.goto(event);
+	}
+
+	function click_handler_2(event) {
+		component.goto(event);
+	}
+
+	function click_handler_3(event) {
+		component.goto(event);
+	}
+
+	function click_handler_4(event) {
+		component.goto(event);
+	}
+
+	function click_handler_5(event) {
+		component.goto(event);
+	}
+
+	var github = new Github({
+		root: component.root
+	});
+
+	var changes = new Changes({
+		root: component.root
+	});
+
+	return {
+		c: function create() {
+			div = createElement("div");
+			div.innerHTML = "<small svelte-5151739><i>“JavaScript RSS Viewer puts little or long customizable RSS boxes anywhere you put HTML; build your own slashbox hell or heaven, it’s feedarific!” — <a href=\"http://ourpla.net/cgi/pikie\">Abbe Normal</a></i></small>";
+			text_3 = createText("\n\n");
+			h2 = createElement("h2");
+			text_4 = createText(state.$appDescription);
+			text_5 = createText(" ");
+			text_6 = createText(state.$appVersion);
+			text_7 = createText("\n\n");
+			p = createElement("p");
+			p.innerHTML = "<strong>Reduced availability due to temporary violation of quota limit.</strong> You should <a href=\"//github.com/p3k/json3k\">install your own JSONP proxy</a>. You can always support the project with your <a href=\"http://flattr.com/thing/681881/JavaScript-RSS-Box-Viewer\">donation</a>.";
+			text_14 = createText("\n\n");
+			p_1 = createElement("p");
+			text_15 = createText("This viewer can display ");
+			a_3 = createElement("a");
+			a_3.textContent = "RSS";
+			text_17 = createText(" feeds of version ");
+			a_4 = createElement("a");
+			a_4.textContent = "0.91";
+			text_19 = createText(", ");
+			a_5 = createElement("a");
+			a_5.textContent = "0.92";
+			text_21 = createText(", ");
+			a_6 = createElement("a");
+			a_6.textContent = "1.0";
+			text_23 = createText(" and ");
+			a_7 = createElement("a");
+			a_7.textContent = "2.0";
+			text_25 = createText(" as well as even the good old legacy format ");
+			a_8 = createElement("a");
+			a_8.textContent = "Scripting News 2";
+			text_27 = createText(". There is also basic support for ");
+			a_9 = createElement("a");
+			a_9.textContent = "Atom 1.0";
+			text_29 = createText(".");
+			text_30 = createText("\n\n");
+			p_2 = createElement("p");
+			p_2.innerHTML = "It provides a simple way to embed such RSS boxes in any <a href=\"http://validator.w3.org/\">valid HTML document</a> via an automagically generated JavaScript tag — <i>for free!</i>";
+			text_36 = createText("\n\n");
+			p_3 = createElement("p");
+			p_3.textContent = "Just enter the URL of any compatible RSS feed, modify the layout settings as you like and push the Reload button. When finished, copy the HTML code into your own web page – and voilà!";
+			text_38 = createText("\n\n");
+			p_4 = createElement("p");
+			p_4.innerHTML = "The code behind this is written in JavaScript and runs completely in your browser*. You can get the source code together with all the other necessary files from the <a href=\"//github.com/p3k/rss-box\">Github repository</a>.";
+			text_42 = createText("\n\n");
+			p_5 = createElement("p");
+			p_5.innerHTML = "<small svelte-5151739>* A proxy server is needed for cross-origin requests.</small>";
+			text_45 = createText("\n\n");
+			p_6 = createElement("p");
+			github._fragment.c();
+			text_47 = createText("\n\n");
+			changes._fragment.c();
+			text_48 = createText("\n\n");
+			h3 = createElement("h3");
+			h3.textContent = "Future Development";
+			text_50 = createText("\n\n");
+			p_7 = createElement("p");
+			p_7.textContent = "I have ceased actively developing this viewer but sometimes I get enthusiastic and fiddle around with the code. Of course it will be available here as is.";
+			text_52 = createText("\n");
+			p_8 = createElement("p");
+			p_8.innerHTML = "For questions and comments feel free to contact me (Tobi) via e-mail: <a href=\"mailto:mail+rss@p3k.org\">mail+rss@p3k.org</a>.";
+			text_56 = createText("\n\n");
+			h3_1 = createElement("h3");
+			h3_1.textContent = "License";
+			text_58 = createText("\n\n");
+			p_9 = createElement("p");
+			p_9.innerHTML = "<span xmlns:dct=\"http://purl.org/dc/terms/\" property=\"dct:title\">JavaScript RSS Box Viewer</span> by\n  <a xmlns:cc=\"http://creativecommons.org/ns#\" href=\"http://p3k.org/rss\" property=\"cc:attributionName\" rel=\"cc:attributionURL\">Tobi Schäfer</a> is licensed under a <a rel=\"license\" href=\"http://creativecommons.org/licenses/by-sa/3.0/at/deed.en_US\">Creative Commons Attribution-ShareAlike 3.0 Austria License</a>.";
+			text_65 = createText("\n");
+			p_10 = createElement("p");
+			p_10.innerHTML = "Based on a work at <a xmlns:dct=\"http://purl.org/dc/terms/\" href=\"https://p3k.org/source/svn/rss-box/trunk/\" rel=\"dct:source\">https://p3k.org/source/svn/rss-box/trunk/</a>.";
+			text_69 = createText("\n");
+			p_11 = createElement("p");
+			p_11.innerHTML = "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-sa/3.0/at/deed.en_US\"><img alt=\"Creative Commons License\" style=\"border-width:0\" src=\"//i.creativecommons.org/l/by-sa/3.0/at/88x31.png\"></a>";
+			text_72 = createText("\n\n");
+			small_2 = createElement("small");
+			small_2.innerHTML = "Thank you, <a href=\"//p3k.org/\">p3k.org</a>!";
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles(p);
+			p.className = "msg warning";
+			encapsulateStyles(p_1);
+			a_3.href = "http://en.wikipedia.org/wiki/RSS";
+			a_4.href = "http://cyber.law.harvard.edu/rss/examples/sampleRss091.xml";
+			addListener(a_4, "click", click_handler);
+			a_5.href = "http://cyber.law.harvard.edu/rss/examples/sampleRss092.xml";
+			addListener(a_5, "click", click_handler_1);
+			a_6.href = "http://rss.orf.at/fm4.xml";
+			addListener(a_6, "click", click_handler_2);
+			a_7.href = "http://blog.p3k.org/stories.xml";
+			addListener(a_7, "click", click_handler_3);
+			a_8.href = "http://essaysfromexodus.scripting.com/xml/scriptingNews2.xml";
+			addListener(a_8, "click", click_handler_4);
+			a_9.href = "https://www.theregister.co.uk/headlines.atom";
+			addListener(a_9, "click", click_handler_5);
+			encapsulateStyles(p_2);
+			encapsulateStyles(p_3);
+			encapsulateStyles(p_4);
+			encapsulateStyles(p_5);
+			encapsulateStyles(p_6);
+			encapsulateStyles(h3);
+			encapsulateStyles(p_7);
+			encapsulateStyles(p_8);
+			encapsulateStyles(h3_1);
+			encapsulateStyles(p_9);
+			encapsulateStyles(p_10);
+			encapsulateStyles(p_11);
+			encapsulateStyles(small_2);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(div, target, anchor);
+			insertNode(text_3, target, anchor);
+			insertNode(h2, target, anchor);
+			appendNode(text_4, h2);
+			appendNode(text_5, h2);
+			appendNode(text_6, h2);
+			insertNode(text_7, target, anchor);
+			insertNode(p, target, anchor);
+			insertNode(text_14, target, anchor);
+			insertNode(p_1, target, anchor);
+			appendNode(text_15, p_1);
+			appendNode(a_3, p_1);
+			appendNode(text_17, p_1);
+			appendNode(a_4, p_1);
+			appendNode(text_19, p_1);
+			appendNode(a_5, p_1);
+			appendNode(text_21, p_1);
+			appendNode(a_6, p_1);
+			appendNode(text_23, p_1);
+			appendNode(a_7, p_1);
+			appendNode(text_25, p_1);
+			appendNode(a_8, p_1);
+			appendNode(text_27, p_1);
+			appendNode(a_9, p_1);
+			appendNode(text_29, p_1);
+			insertNode(text_30, target, anchor);
+			insertNode(p_2, target, anchor);
+			insertNode(text_36, target, anchor);
+			insertNode(p_3, target, anchor);
+			insertNode(text_38, target, anchor);
+			insertNode(p_4, target, anchor);
+			insertNode(text_42, target, anchor);
+			insertNode(p_5, target, anchor);
+			insertNode(text_45, target, anchor);
+			insertNode(p_6, target, anchor);
+			github._mount(p_6, null);
+			insertNode(text_47, target, anchor);
+			changes._mount(target, anchor);
+			insertNode(text_48, target, anchor);
+			insertNode(h3, target, anchor);
+			insertNode(text_50, target, anchor);
+			insertNode(p_7, target, anchor);
+			insertNode(text_52, target, anchor);
+			insertNode(p_8, target, anchor);
+			insertNode(text_56, target, anchor);
+			insertNode(h3_1, target, anchor);
+			insertNode(text_58, target, anchor);
+			insertNode(p_9, target, anchor);
+			insertNode(text_65, target, anchor);
+			insertNode(p_10, target, anchor);
+			insertNode(text_69, target, anchor);
+			insertNode(p_11, target, anchor);
+			insertNode(text_72, target, anchor);
+			insertNode(small_2, target, anchor);
+		},
+
+		p: function update(changed, state) {
+			if (changed.$appDescription) {
+				text_4.data = state.$appDescription;
+			}
+
+			if (changed.$appVersion) {
+				text_6.data = state.$appVersion;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(div);
+			detachNode(text_3);
+			detachNode(h2);
+			detachNode(text_7);
+			detachNode(p);
+			detachNode(text_14);
+			detachNode(p_1);
+			detachNode(text_30);
+			detachNode(p_2);
+			detachNode(text_36);
+			detachNode(p_3);
+			detachNode(text_38);
+			detachNode(p_4);
+			detachNode(text_42);
+			detachNode(p_5);
+			detachNode(text_45);
+			detachNode(p_6);
+			detachNode(text_47);
+			changes._unmount();
+			detachNode(text_48);
+			detachNode(h3);
+			detachNode(text_50);
+			detachNode(p_7);
+			detachNode(text_52);
+			detachNode(p_8);
+			detachNode(text_56);
+			detachNode(h3_1);
+			detachNode(text_58);
+			detachNode(p_9);
+			detachNode(text_65);
+			detachNode(p_10);
+			detachNode(text_69);
+			detachNode(p_11);
+			detachNode(text_72);
+			detachNode(small_2);
+		},
+
+		d: function destroy$$1() {
+			removeListener(a_4, "click", click_handler);
+			removeListener(a_5, "click", click_handler_1);
+			removeListener(a_6, "click", click_handler_2);
+			removeListener(a_7, "click", click_handler_3);
+			removeListener(a_8, "click", click_handler_4);
+			removeListener(a_9, "click", click_handler_5);
+			github.destroy(false);
+			changes.destroy(false);
+		}
+	};
+}
+
+function About(options) {
+	this._debugName = '<About>';
+	if (!options || (!options.target && !options.root)) throw new Error("'target' is a required option");
+	init(this, options);
+	this._state = assign(this.store._init(["appDescription","appVersion"]), options.data);
+	this.store._add(this, ["appDescription","appVersion"]);
+	if (!('$appDescription' in this._state)) console.warn("<About> was created without expected data property '$appDescription'");
+	if (!('$appVersion' in this._state)) console.warn("<About> was created without expected data property '$appVersion'");
+
+	this._handlers.destroy = [removeFromStore];
+
+	if (!document.getElementById("svelte-5151739-style")) add_css();
+
+	var _oncreate = oncreate.bind(this);
+
+	if (!options.root) {
+		this._oncreate = [_oncreate];
+		this._beforecreate = [];
+		this._aftercreate = [];
+	} else {
+	 	this.root._oncreate.push(_oncreate);
+	 }
+
+	this._fragment = create_main_fragment$1(this._state, this);
+
+	if (options.target) {
+		if (options.hydrate) throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		this._fragment.c();
+		this._fragment.m(options.target, options.anchor || null);
+
+		this._lock = true;
+		callAll(this._beforecreate);
+		callAll(this._oncreate);
+		callAll(this._aftercreate);
+		this._lock = false;
+	}
+}
+
+assign(About.prototype, methods, protoDev);
+
+About.prototype._checkReadOnly = function _checkReadOnly(newState) {
+};
+
+/* components/Ad.html generated by Svelte v1.50.0 */
+(window.adsbygoogle = window.adsbygoogle || []).push({});
+
+const script$1 = document.createElement('script');
+script$1.async = true;
+script$1.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+document.head.appendChild(script$1);
+
+function encapsulateStyles$2(node) {
+	setAttribute(node, "svelte-286980571", "");
+}
+
+function add_css$2() {
+	var style = createElement("style");
+	style.id = 'svelte-286980571-style';
+	style.textContent = "ins[svelte-286980571]{overflow:hidden;margin-bottom:1em}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQWQuaHRtbCIsInNvdXJjZXMiOlsiQWQuaHRtbCJdLCJzb3VyY2VzQ29udGVudCI6WyI8aW5zIGNsYXNzPVwiYWRzYnlnb29nbGVcIiBzdHlsZT1cImRpc3BsYXk6YmxvY2tcIiBkYXRhLWFkLWNsaWVudD1cImNhLXB1Yi0zOTY1MDI4MDQzMTUzMTM4XCIgZGF0YS1hZC1zbG90PVwiNjM3MDI1NzQ1MVwiIGRhdGEtYWQtZm9ybWF0PVwiYXV0b1wiPjwvaW5zPlxuXG48c2NyaXB0PlxuICAod2luZG93LmFkc2J5Z29vZ2xlID0gd2luZG93LmFkc2J5Z29vZ2xlIHx8IFtdKS5wdXNoKHt9KTtcblxuICBjb25zdCBzY3JpcHQgPSBkb2N1bWVudC5jcmVhdGVFbGVtZW50KCdzY3JpcHQnKTtcbiAgc2NyaXB0LmFzeW5jID0gdHJ1ZTtcbiAgc2NyaXB0LnNyYyA9ICcvL3BhZ2VhZDIuZ29vZ2xlc3luZGljYXRpb24uY29tL3BhZ2VhZC9qcy9hZHNieWdvb2dsZS5qcyc7XG4gIGRvY3VtZW50LmhlYWQuYXBwZW5kQ2hpbGQoc2NyaXB0KTtcbjwvc2NyaXB0PlxuXG48c3R5bGU+XG4gIGlucyB7XG4gICAgb3ZlcmZsb3c6IGhpZGRlbjtcbiAgICBtYXJnaW4tYm90dG9tOiAxZW07XG4gIH1cbjwvc3R5bGU+XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBWUUsR0FBRyxrQkFBQyxDQUFDLEFBQ0gsUUFBUSxDQUFFLE1BQU0sQ0FDaEIsYUFBYSxDQUFFLEdBQUcsQUFDcEIsQ0FBQyJ9 */";
+	appendNode(style, document.head);
+}
+
+function create_main_fragment$4(state, component) {
+	var ins;
+
+	return {
+		c: function create() {
+			ins = createElement("ins");
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$2(ins);
+			ins.className = "adsbygoogle";
+			setStyle(ins, "display", "block");
+			ins.dataset.adClient = "ca-pub-3965028043153138";
+			ins.dataset.adSlot = "6370257451";
+			ins.dataset.adFormat = "auto";
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(ins, target, anchor);
+		},
+
+		p: noop,
+
+		u: function unmount() {
+			detachNode(ins);
+		},
+
+		d: noop
+	};
+}
+
+function Ad(options) {
+	this._debugName = '<Ad>';
+	if (!options || (!options.target && !options.root)) throw new Error("'target' is a required option");
+	init(this, options);
+	this._state = assign({}, options.data);
+
+	if (!document.getElementById("svelte-286980571-style")) add_css$2();
+
+	this._fragment = create_main_fragment$4(this._state, this);
+
+	if (options.target) {
+		if (options.hydrate) throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		this._fragment.c();
+		this._fragment.m(options.target, options.anchor || null);
+	}
+}
+
+assign(Ad.prototype, protoDev);
+
+Ad.prototype._checkReadOnly = function _checkReadOnly(newState) {
+};
+
+/* components/LinkIcon.html generated by Svelte v1.50.0 */
+function encapsulateStyles$4(node) {
+	setAttribute(node, "svelte-940045756", "");
+}
+
+function add_css$4() {
+	var style = createElement("style");
+	style.id = 'svelte-940045756-style';
+	style.textContent = "svg[svelte-940045756]{width:1.2em;height:1.2em}polygon[svelte-940045756]{fill:currentColor;fill-rule:evenodd;clip-rule:evenodd}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiTGlua0ljb24uaHRtbCIsInNvdXJjZXMiOlsiTGlua0ljb24uaHRtbCJdLCJzb3VyY2VzQ29udGVudCI6WyI8IS0tIFNvdXJjZTogaHR0cHM6Ly9jb21tb25zLndpa2ltZWRpYS5vcmcvd2lraS9GaWxlOlZpc3VhbEVkaXRvcl8tX0ljb25fLV9FeHRlcm5hbC1saW5rLnN2ZyAtLT5cblxuPHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMiAxMicgcHJlc2VydmVBc3BlY3RSYXRpbz0neE1pbllNaW4nPlxuICA8Zz5cbiAgICA8cG9seWdvbiBwb2ludHM9JzIsMiA1LDIgNSwzIDMsMyAzLDkgOSw5IDksNyAxMCw3IDEwLDEwIDIsMTAnLz5cbiAgICA8cG9seWdvbiBwb2ludHM9JzYuMjExLDIgMTAsMiAxMCw1Ljc4OSA4LjU3OSw0LjM2OCA2LjQ0Nyw2LjUgNS41LDUuNTUzIDcuNjMyLDMuNDIxJy8+XG4gIDwvZz5cbjwvc3ZnPlxuXG48c3R5bGU+XG4gIHN2ZyB7XG4gICAgd2lkdGg6IDEuMmVtO1xuICAgIGhlaWdodDogMS4yZW07XG4gIH1cblxuICBwb2x5Z29uIHtcbiAgICBmaWxsOiBjdXJyZW50Q29sb3I7XG4gICAgZmlsbC1ydWxlOiBldmVub2RkO1xuICAgIGNsaXAtcnVsZTogZXZlbm9kZDtcbiAgfVxuPC9zdHlsZT5cblxuPHNjcmlwdD5cbiAgZXhwb3J0IGRlZmF1bHQge1xuICAgIG5hbWVzcGFjZTogJ3N2ZydcbiAgfTtcbjwvc2NyaXB0PlxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQVVFLEdBQUcsa0JBQUMsQ0FBQyxBQUNILEtBQUssQ0FBRSxLQUFLLENBQ1osTUFBTSxDQUFFLEtBQUssQUFDZixDQUFDLEFBRUQsT0FBTyxrQkFBQyxDQUFDLEFBQ1AsSUFBSSxDQUFFLFlBQVksQ0FDbEIsU0FBUyxDQUFFLE9BQU8sQ0FDbEIsU0FBUyxDQUFFLE9BQU8sQUFDcEIsQ0FBQyJ9 */";
+	appendNode(style, document.head);
+}
+
+function create_main_fragment$6(state, component) {
+	var svg, g, polygon, polygon_1;
+
+	return {
+		c: function create() {
+			svg = createSvgElement("svg");
+			g = createSvgElement("g");
+			polygon = createSvgElement("polygon");
+			polygon_1 = createSvgElement("polygon");
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$4(svg);
+			encapsulateStyles$4(polygon);
+			setAttribute(polygon, "points", "2,2 5,2 5,3 3,3 3,9 9,9 9,7 10,7 10,10 2,10");
+			encapsulateStyles$4(polygon_1);
+			setAttribute(polygon_1, "points", "6.211,2 10,2 10,5.789 8.579,4.368 6.447,6.5 5.5,5.553 7.632,3.421");
+			setAttribute(svg, "xmlns", "http://www.w3.org/2000/svg");
+			setAttribute(svg, "viewBox", "0 0 12 12");
+			setAttribute(svg, "preserveAspectRatio", "xMinYMin");
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(svg, target, anchor);
+			appendNode(g, svg);
+			appendNode(polygon, g);
+			appendNode(polygon_1, g);
+		},
+
+		p: noop,
+
+		u: function unmount() {
+			detachNode(svg);
+		},
+
+		d: noop
+	};
+}
+
+function LinkIcon(options) {
+	this._debugName = '<LinkIcon>';
+	if (!options || (!options.target && !options.root)) throw new Error("'target' is a required option");
+	init(this, options);
+	this._state = assign({}, options.data);
+
+	if (!document.getElementById("svelte-940045756-style")) add_css$4();
+
+	this._fragment = create_main_fragment$6(this._state, this);
+
+	if (options.target) {
+		if (options.hydrate) throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		this._fragment.c();
+		this._fragment.m(options.target, options.anchor || null);
+	}
+}
+
+assign(LinkIcon.prototype, protoDev);
+
+LinkIcon.prototype._checkReadOnly = function _checkReadOnly(newState) {
+};
+
+/* components/RssIcon.html generated by Svelte v1.50.0 */
+function encapsulateStyles$5(node) {
+	setAttribute(node, "svelte-2589761347", "");
+}
+
+function add_css$5() {
+	var style = createElement("style");
+	style.id = 'svelte-2589761347-style';
+	style.textContent = "svg[svelte-2589761347]{width:1em;height:1em}path[svelte-2589761347]{fill:currentColor}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUnNzSWNvbi5odG1sIiwic291cmNlcyI6WyJSc3NJY29uLmh0bWwiXSwic291cmNlc0NvbnRlbnQiOlsiPCEtLSBTb3VyY2U6IGh0dHBzOi8vY29tbW9ucy53aWtpbWVkaWEub3JnL3dpa2kvRmlsZTpSc3NfZm9udF9hd2Vzb21lLnN2ZyAtLT5cblxuPHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgLTI1NiAxNzkyIDE3OTInIHByZXNlcnZlQXNwZWN0UmF0aW89J3hNaW5ZTWluJz5cbiAgPGcgdHJhbnNmb3JtPSdtYXRyaXgoMSwwLDAsLTEsMjEyLjYxMDE3LDEzNDYuMTY5NSknPlxuICAgIDxwYXRoIGQ9J00gMzg0LDE5MiBRIDM4NCwxMTIgMzI4LDU2IDI3MiwwIDE5MiwwIDExMiwwIDU2LDU2IDAsMTEyIDAsMTkyIHEgMCw4MCA1NiwxMzYgNTYsNTYgMTM2LDU2IDgwLDAgMTM2LC01NiA1NiwtNTYgNTYsLTEzNiB6IE0gODk2LDY5IFEgODk4LDQxIDg3OSwyMSA4NjEsMCA4MzIsMCBIIDY5NyBRIDY3MiwwIDY1NCwxNi41IDYzNiwzMyA2MzQsNTggNjEyLDI4NyA0NDkuNSw0NDkuNSAyODcsNjEyIDU4LDYzNCAzMyw2MzYgMTYuNSw2NTQgMCw2NzIgMCw2OTcgdiAxMzUgcSAwLDI5IDIxLDQ3IDE3LDE3IDQzLDE3IGggNSBRIDIyOSw4ODMgMzc1LDgxNS41IDUyMSw3NDggNjM0LDYzNCA3NDgsNTIxIDgxNS41LDM3NSA4ODMsMjI5IDg5Niw2OSB6IG0gNTEyLC0yIFEgMTQxMCw0MCAxMzkwLDIwIDEzNzIsMCAxMzQ0LDAgSCAxMjAxIFEgMTE3NSwwIDExNTYuNSwxNy41IDExMzgsMzUgMTEzNyw2MCAxMTI1LDI3NSAxMDM2LDQ2OC41IDk0Nyw2NjIgODA0LjUsODA0LjUgNjYyLDk0NyA0NjguNSwxMDM2IDI3NSwxMTI1IDYwLDExMzggMzUsMTEzOSAxNy41LDExNTcuNSAwLDExNzYgMCwxMjAxIHYgMTQzIHEgMCwyOCAyMCw0NiAxOCwxOCA0NCwxOCBoIDMgUSAzMjksMTM5NSA1NjguNSwxMjg4IDgwOCwxMTgxIDk5NCw5OTQgMTE4MSw4MDggMTI4OCw1NjguNSAxMzk1LDMyOSAxNDA4LDY3IHonLz5cbiAgPC9nPlxuPC9zdmc+XG5cbjxzdHlsZT5cbiAgc3ZnIHtcbiAgICB3aWR0aDogMWVtO1xuICAgIGhlaWdodDogMWVtO1xuICB9XG5cbiAgcGF0aCB7XG4gICAgZmlsbDogY3VycmVudENvbG9yO1xuICB9XG48L3N0eWxlPlxuXG5cbjxzY3JpcHQ+XG4gIGV4cG9ydCBkZWZhdWx0IHtcbiAgICBuYW1lc3BhY2U6ICdzdmcnXG4gIH1cbjwvc2NyaXB0PlxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQVNFLEdBQUcsbUJBQUMsQ0FBQyxBQUNILEtBQUssQ0FBRSxHQUFHLENBQ1YsTUFBTSxDQUFFLEdBQUcsQUFDYixDQUFDLEFBRUQsSUFBSSxtQkFBQyxDQUFDLEFBQ0osSUFBSSxDQUFFLFlBQVksQUFDcEIsQ0FBQyJ9 */";
+	appendNode(style, document.head);
+}
+
+function create_main_fragment$7(state, component) {
+	var svg, g, path;
+
+	return {
+		c: function create() {
+			svg = createSvgElement("svg");
+			g = createSvgElement("g");
+			path = createSvgElement("path");
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$5(svg);
+			encapsulateStyles$5(path);
+			setAttribute(path, "d", "M 384,192 Q 384,112 328,56 272,0 192,0 112,0 56,56 0,112 0,192 q 0,80 56,136 56,56 136,56 80,0 136,-56 56,-56 56,-136 z M 896,69 Q 898,41 879,21 861,0 832,0 H 697 Q 672,0 654,16.5 636,33 634,58 612,287 449.5,449.5 287,612 58,634 33,636 16.5,654 0,672 0,697 v 135 q 0,29 21,47 17,17 43,17 h 5 Q 229,883 375,815.5 521,748 634,634 748,521 815.5,375 883,229 896,69 z m 512,-2 Q 1410,40 1390,20 1372,0 1344,0 H 1201 Q 1175,0 1156.5,17.5 1138,35 1137,60 1125,275 1036,468.5 947,662 804.5,804.5 662,947 468.5,1036 275,1125 60,1138 35,1139 17.5,1157.5 0,1176 0,1201 v 143 q 0,28 20,46 18,18 44,18 h 3 Q 329,1395 568.5,1288 808,1181 994,994 1181,808 1288,568.5 1395,329 1408,67 z");
+			setAttribute(g, "transform", "matrix(1,0,0,-1,212.61017,1346.1695)");
+			setAttribute(svg, "xmlns", "http://www.w3.org/2000/svg");
+			setAttribute(svg, "viewBox", "0 -256 1792 1792");
+			setAttribute(svg, "preserveAspectRatio", "xMinYMin");
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(svg, target, anchor);
+			appendNode(g, svg);
+			appendNode(path, g);
+		},
+
+		p: noop,
+
+		u: function unmount() {
+			detachNode(svg);
+		},
+
+		d: noop
+	};
+}
+
+function RssIcon(options) {
+	this._debugName = '<RssIcon>';
+	if (!options || (!options.target && !options.root)) throw new Error("'target' is a required option");
+	init(this, options);
+	this._state = assign({}, options.data);
+
+	if (!document.getElementById("svelte-2589761347-style")) add_css$5();
+
+	this._fragment = create_main_fragment$7(this._state, this);
+
+	if (options.target) {
+		if (options.hydrate) throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		this._fragment.c();
+		this._fragment.m(options.target, options.anchor || null);
+	}
+}
+
+assign(RssIcon.prototype, protoDev);
+
+RssIcon.prototype._checkReadOnly = function _checkReadOnly(newState) {
+};
+
+/* components/PaperclipIcon.html generated by Svelte v1.50.0 */
+function encapsulateStyles$6(node) {
+	setAttribute(node, "svelte-2967622608", "");
+}
+
+function add_css$6() {
+	var style = createElement("style");
+	style.id = 'svelte-2967622608-style';
+	style.textContent = "svg[svelte-2967622608]{width:1.2em;height:1.2em}path[svelte-2967622608]{fill:currentColor}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUGFwZXJjbGlwSWNvbi5odG1sIiwic291cmNlcyI6WyJQYXBlcmNsaXBJY29uLmh0bWwiXSwic291cmNlc0NvbnRlbnQiOlsiPCEtLSBTb3VyY2U6IGh0dHBzOi8vY29tbW9ucy53aWtpbWVkaWEub3JnL3dpa2kvRmlsZTpBbnR1X2FwcGxpY2F0aW9uLXJ0Zi5zdmcgLS0+XG5cbjxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTYgMTYnIHByZXNlcnZlQXNwZWN0UmF0aW89J3hNaW5ZTWluJz5cbiAgPHBhdGggZD0nbTQwOSA1MzFsLTUuMjQ0IDYuNzMzYy0uOTgzIDEuMjYyLS43MDggMy41MTEuNTUgNC40OTcgMS4yNTkuOTg2IDMuNS43MSA0LjQ4NC0uNTUybDUuMjQ0LTYuNzMzLjY1NS0uODQyYy42NTYtLjg0Mi40NzItMi4zNDEtLjM2Ny0yLjk5OC0uODM5LS42NTgtMi4zMzQtLjQ3My0yLjk4OS4zNjhsLS42NTYuODQyLTMuOTMzIDUuMDUtLjY1Ni44NDJjLS4zMjguNDIxLS4yMzYgMS4xNy4xODMgMS40OTkuNDIuMzI5IDEuMTY3LjIzNyAxLjQ5NS0uMTg0bDQuNTg5LTUuODkxLjgzOS42NTgtNC41ODkgNS44OTFjLS42NTYuODQyLTIuMTUgMS4wMjYtMi45ODkuMzY4LS44MzktLjY1OC0xLjAyMy0yLjE1Ny0uMzY3LTIuOTk4bC42NTYtLjg0MiA0LjU4OS01Ljg5MWMuOTgzLTEuMjYyIDMuMjI1LTEuNTM4IDQuNDg0LS41NTIgMS4yNTkuOTg2IDEuNTM0IDMuMjM1LjU1MSA0LjQ5N2wtLjY1Ni44NDItNS4yNDQgNi43MzNjLTEuMzExIDEuNjgzLTQuMyAyLjA1MS01Ljk3OC43MzYtMS42NzgtMS4zMTUtMi4wNDUtNC4zMTMtLjczNC01Ljk5N2w1LjI0NC02LjczMy44MzkuNjU4JyB0cmFuc2Zvcm09J21hdHJpeCguODQ3ODIgMCAwIC44NDUyMS0zMzguODUtNDQ1LjY4KScgc3Ryb2tlPSdub25lJy8+XG48L3N2Zz5cblxuPHN0eWxlPlxuICBzdmcge1xuICAgIHdpZHRoOiAxLjJlbTtcbiAgICBoZWlnaHQ6IDEuMmVtO1xuICB9XG5cbiAgcGF0aCB7XG4gICAgZmlsbDogY3VycmVudENvbG9yO1xuICB9XG48L3N0eWxlPlxuXG48c2NyaXB0PlxuICBleHBvcnQgZGVmYXVsdCB7XG4gICAgbmFtZXNwYWNlOiAnc3ZnJ1xuICB9XG48L3NjcmlwdD5cbiJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFPRSxHQUFHLG1CQUFDLENBQUMsQUFDSCxLQUFLLENBQUUsS0FBSyxDQUNaLE1BQU0sQ0FBRSxLQUFLLEFBQ2YsQ0FBQyxBQUVELElBQUksbUJBQUMsQ0FBQyxBQUNKLElBQUksQ0FBRSxZQUFZLEFBQ3BCLENBQUMifQ== */";
+	appendNode(style, document.head);
+}
+
+function create_main_fragment$8(state, component) {
+	var svg, path;
+
+	return {
+		c: function create() {
+			svg = createSvgElement("svg");
+			path = createSvgElement("path");
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$6(svg);
+			encapsulateStyles$6(path);
+			setAttribute(path, "d", "m409 531l-5.244 6.733c-.983 1.262-.708 3.511.55 4.497 1.259.986 3.5.71 4.484-.552l5.244-6.733.655-.842c.656-.842.472-2.341-.367-2.998-.839-.658-2.334-.473-2.989.368l-.656.842-3.933 5.05-.656.842c-.328.421-.236 1.17.183 1.499.42.329 1.167.237 1.495-.184l4.589-5.891.839.658-4.589 5.891c-.656.842-2.15 1.026-2.989.368-.839-.658-1.023-2.157-.367-2.998l.656-.842 4.589-5.891c.983-1.262 3.225-1.538 4.484-.552 1.259.986 1.534 3.235.551 4.497l-.656.842-5.244 6.733c-1.311 1.683-4.3 2.051-5.978.736-1.678-1.315-2.045-4.313-.734-5.997l5.244-6.733.839.658");
+			setAttribute(path, "transform", "matrix(.84782 0 0 .84521-338.85-445.68)");
+			setAttribute(path, "stroke", "none");
+			setAttribute(svg, "xmlns", "http://www.w3.org/2000/svg");
+			setAttribute(svg, "viewBox", "0 0 16 16");
+			setAttribute(svg, "preserveAspectRatio", "xMinYMin");
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(svg, target, anchor);
+			appendNode(path, svg);
+		},
+
+		p: noop,
+
+		u: function unmount() {
+			detachNode(svg);
+		},
+
+		d: noop
+	};
+}
+
+function PaperclipIcon(options) {
+	this._debugName = '<PaperclipIcon>';
+	if (!options || (!options.target && !options.root)) throw new Error("'target' is a required option");
+	init(this, options);
+	this._state = assign({}, options.data);
+
+	if (!document.getElementById("svelte-2967622608-style")) add_css$6();
+
+	this._fragment = create_main_fragment$8(this._state, this);
+
+	if (options.target) {
+		if (options.hydrate) throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		this._fragment.c();
+		this._fragment.m(options.target, options.anchor || null);
+	}
+}
+
+assign(PaperclipIcon.prototype, protoDev);
+
+PaperclipIcon.prototype._checkReadOnly = function _checkReadOnly(newState) {
+};
+
+/* components/Box.html generated by Svelte v1.50.0 */
+function height($height) {
+	return $height && $height > -1 ? $height + 'px' : '100%';
+}
+
+function width($width) {
+	return $width ? $width + 'px' : '100%';
+}
+
+function itemTitleClass($compact) {
+	return !$compact ? 'bold' : '';
+}
+
+function kb(bytes) {
+  return (bytes / 1000).toFixed(2) + '\u200akB';
+}
+
+function appUrl(dummy = null) {
+  return urls$$1.app;
+}
+
+function load(data) {
+  return new Promise(fulfill => {
+    const image = new Image();
+
+    image.onload = () => {
+      const maxWidth = Math.min(100, image.width);
+      const factor = image.width > maxWidth ? maxWidth / image.width : 1;
+
+      fulfill({
+        width: (image.width * factor) + 'px',
+        height: (image.height * factor) + 'px'
+      });
+    };
+
+    image.src = data.source;
+  });
+}
+
+function oncreate$1() {
+  const staticId = 'rssbox-static-stylesheet';
+  const dynamicId = 'rssbox-dynamic-stylesheet';
+
+  let staticCss = window[staticId];
+  let dynamicCss = window[dynamicId];
+
+  if (!staticCss) {
+    staticCss = document.createElement('link');
+    staticCss.id = staticId;
+    staticCss.rel = 'stylesheet';
+    staticCss.href = urls$$1.app + '/box.css';
+    document.head.appendChild(staticCss);
+  }
+
+  if (!dynamicCss) {
+    dynamicCss = document.createElement('style');
+    dynamicCss.id = dynamicId;
+    document.head.appendChild(dynamicCss);
+  }
+
+  this.store.observe('linkColor', color => {
+    if (!color) return;
+
+    let rule =
+      `.rssbox[data-link-color="${color}"] a {
+        color: ${color};
+      }`;
+
+    if (dynamicCss.innerHTML.indexOf(rule) < 0) dynamicCss.innerHTML += rule;
+  });
+}
+
+function encapsulateStyles$3(node) {
+	setAttribute(node, "svelte-1374782793", "");
+}
+
+function add_css$3() {
+	var style = createElement("style");
+	style.id = 'svelte-1374782793-style';
+	style.textContent = ".rssbox[svelte-1374782793]{box-sizing:border-box;width:100%;border:1px solid #000;font-family:sans-serif;overflow:hidden;border-radius:0;-moz-border-radius:0}.rssbox-icon[svelte-1374782793]{float:right;width:1em;margin-left:0.5em}.rssbox-titlebar[svelte-1374782793]{padding:0.5em;color:#000;background-color:#add8e6;border-bottom:1px solid #000;font-weight:bold;letter-spacing:0.01em}.rssbox-date[svelte-1374782793]{margin-top:0.2em;font-size:0.8em;font-weight:normal}.rssbox-content[svelte-1374782793]{height:auto;padding:0.5em;overflow-x:hidden;overflow-y:auto;background-color:#fff;clear:both;-ms-overflow-style:-ms-autohiding-scrollbar}.rssbox-content[svelte-1374782793] aside[svelte-1374782793]{clear:both;float:right}.rssbox-content[svelte-1374782793] aside a[svelte-1374782793]{display:block;margin-left:0.5em}.rssbox-image[svelte-1374782793]{float:right;margin:0 0 0.5em 0.5em;background-position:left center;background-repeat:no-repeat;background-size:contain}.rssbox-item-title.bold[svelte-1374782793]{font-weight:bold}.rssbox-enclosure[svelte-1374782793],.rssbox-source[svelte-1374782793]{display:block;width:1em}.rssbox-form[svelte-1374782793]{margin-bottom:0.8em}.rssbox-form[svelte-1374782793] input[svelte-1374782793]{padding:0.5em;background-color:#fff}.rssbox-promo[svelte-1374782793]{text-align:right;font-size:0.7em;letter-spacing:0.01em}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQm94Lmh0bWwiLCJzb3VyY2VzIjpbIkJveC5odG1sIl0sInNvdXJjZXNDb250ZW50IjpbIjxkaXYgZGF0YS1saW5rLWNvbG9yPSd7eyAkbGlua0NvbG9yIH19JyBjbGFzcz0ncnNzYm94IHJzc0JveCcgc3R5bGU9J21heC13aWR0aDoge3sgd2lkdGggfX07IGJvcmRlci1jb2xvcjoge3sgJGZyYW1lQ29sb3IgfX07IGJvcmRlci1yYWRpdXM6IHt7ICRyYWRpdXMgfX1weDsgZm9udDoge3sgJGZvbnRGYWNlIH19OyBmbG9hdDoge3sgJGFsaWduIH19Oyc+XG4gIHt7ICNpZiAhJGhlYWRsZXNzIH19XG4gICAgPGRpdiBjbGFzcz0ncnNzYm94LXRpdGxlYmFyJyBzdHlsZT0nY29sb3I6IHt7ICR0aXRsZUJhclRleHRDb2xvciB9fTsgYmFja2dyb3VuZC1jb2xvcjoge3sgJHRpdGxlQmFyQ29sb3IgfX07IGJvcmRlci1ib3R0b20tY29sb3I6IHt7ICRmcmFtZUNvbG9yIH19Oyc+XG4gICAgICB7eyAjaWYgJHNob3dYbWxCdXR0b24gfX1cbiAgICAgICAgPGRpdiBjbGFzcz0ncnNzYm94LWljb24nPlxuICAgICAgICAgIDxhIGhyZWY9J3t7ICR1cmwgfX0nIHRpdGxlPSd7eyAkZm9ybWF0IH19IHt7ICR2ZXJzaW9uIH19JyBzdHlsZT0nY29sb3I6IHt7ICR0aXRsZUJhclRleHRDb2xvciB9fSc+XG4gICAgICAgICAgICA8UnNzSWNvbi8+XG4gICAgICAgICAgPC9hPlxuICAgICAgICA8L2Rpdj5cbiAgICAgIHt7IC9pZiB9fVxuICAgICAgPGRpdj5cbiAgICAgICAgPGEgaHJlZj0ne3sgJGxpbmsgfX0nIHN0eWxlPSdjb2xvcjoge3sgJHRpdGxlQmFyVGV4dENvbG9yIH19Oyc+XG4gICAgICAgICAge3sgJHRpdGxlIH19XG4gICAgICAgIDwvYT5cbiAgICAgIDwvZGl2PlxuICAgICAgPGRpdiBjbGFzcz0ncnNzYm94LWRhdGUnPlxuICAgICAgICB7eyAkZm9ybWF0dGVkRGF0ZSB9fVxuICAgICAgPC9kaXY+XG4gICAgPC9kaXY+XG4gIHt7IC9pZiB9fVxuXG4gIDxkaXYgY2xhc3M9J3Jzc2JveC1jb250ZW50IHJzc0JveENvbnRlbnQnIHN0eWxlPSdiYWNrZ3JvdW5kLWNvbG9yOiB7eyAkYm94RmlsbENvbG9yIH19OyBoZWlnaHQ6IHt7IGhlaWdodCB9fTsnPlxuICAgIHt7ICNpZiAkaW1hZ2UgJiYgISRjb21wYWN0IH19XG4gICAgICB7eyAjYXdhaXQgbG9hZCgkaW1hZ2UpIH19XG4gICAgICB7eyB0aGVuIGltYWdlIH19XG4gICAgICAgIDxhIGhyZWY9J3t7ICRpbWFnZS5saW5rIH19JyB0aXRsZT0ne3sgJGltYWdlLnRpdGxlIH19Jz5cbiAgICAgICAgICA8ZGl2IGFsdD0ne3sgJGltYWdlLmRlc2NyaXB0aW9uIH19JyBjbGFzcz0ncnNzYm94LWltYWdlJyBzdHlsZT0nYmFja2dyb3VuZC1pbWFnZTogdXJsKHt7ICRpbWFnZS5zb3VyY2UgfX0pOyB3aWR0aDoge3sgaW1hZ2Uud2lkdGggfX07IGhlaWdodDoge3sgaW1hZ2UuaGVpZ2h0IH19Oyc+PC9kaXY+XG4gICAgICAgIDwvYT5cbiAgICAgIHt7IC9hd2FpdCB9fVxuICAgIHt7IC9pZiB9fVxuXG4gICAge3sgI2VhY2ggJGl0ZW1zIGFzIGl0ZW0sIGluZGV4IH19XG4gICAgICB7eyAjaWYgaW5kZXggPCAkbWF4SXRlbXMgfX1cbiAgICAgICAgPGRpdiBjbGFzcz0ncnNzYm94LWl0ZW0tY29udGVudCByc3NCb3hJdGVtQ29udGVudCcgc3R5bGU9J2NvbG9yOiB7eyAkdGV4dENvbG9yIH19Jz5cbiAgICAgICAgICB7eyAjaWYgaXRlbS50aXRsZSB9fVxuICAgICAgICAgICAgPGRpdiBjbGFzcz0ncnNzYm94LWl0ZW0tdGl0bGUge3sgaXRlbVRpdGxlQ2xhc3MgfX0nPlxuICAgICAgICAgICAgICB7eyAjaWYgaXRlbS5saW5rIH19XG4gICAgICAgICAgICAgICAgPGEgaHJlZj0ne3sgaXRlbS5saW5rIH19Jz5cbiAgICAgICAgICAgICAgICAgIHt7eyBpdGVtLnRpdGxlIH19fVxuICAgICAgICAgICAgICAgIDwvYT5cbiAgICAgICAgICAgICAge3sgZWxzZSB9fVxuICAgICAgICAgICAgICAgIHt7eyBpdGVtLnRpdGxlIH19fVxuICAgICAgICAgICAgICB7eyAvaWYgfX1cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgIHt7IC9pZiB9fVxuXG4gICAgICAgICAge3sgI2lmICEkY29tcGFjdCB9fVxuICAgICAgICAgICAgPGFzaWRlPlxuICAgICAgICAgICAgICB7eyAjaWYgaXRlbS5zb3VyY2UgfX1cbiAgICAgICAgICAgICAgICA8YSBocmVmPSd7eyBpdGVtLnNvdXJjZS51cmwgfX0nIHRpdGxlPSd7eyBpdGVtLnNvdXJjZS50aXRsZSB9fScgY2xhc3M9J3Jzc2JveC1zb3VyY2UnPlxuICAgICAgICAgICAgICAgICAge3sgI2lmIGl0ZW0uc291cmNlLnVybC5lbmRzV2l0aCgnLnhtbCcpIH19XG4gICAgICAgICAgICAgICAgICAgIDxSc3NJY29uLz5cbiAgICAgICAgICAgICAgICAgIHt7IGVsc2UgfX1cbiAgICAgICAgICAgICAgICAgICAgPExpbmtJY29uLz5cbiAgICAgICAgICAgICAgICAgIHt7IC9pZiB9fVxuICAgICAgICAgICAgICAgIDwvYT5cbiAgICAgICAgICAgICAge3sgL2lmIH19XG5cbiAgICAgICAgICAgICAge3sgI2lmIGl0ZW0uZW5jbG9zdXJlcyB9fVxuICAgICAgICAgICAgICAgIHt7ICNlYWNoIGl0ZW0uZW5jbG9zdXJlcyBhcyBlbmNsb3N1cmUgfX1cbiAgICAgICAgICAgICAgICAgIDxhIGhyZWY9J3t7IGVuY2xvc3VyZS51cmwgfX0nIHRpdGxlPSd7eyBrYihlbmNsb3N1cmUubGVuZ3RoKSB9fSB7eyBlbmNsb3N1cmUudHlwZSB9fScgY2xhc3M9J3Jzc2JveC1lbmNsb3N1cmUnPlxuICAgICAgICAgICAgICAgICAgICA8UGFwZXJjbGlwSWNvbi8+XG4gICAgICAgICAgICAgICAgICA8L2E+XG4gICAgICAgICAgICAgICAge3sgL2VhY2ggfX1cbiAgICAgICAgICAgICAge3sgL2lmIH19XG4gICAgICAgICAgICA8L2FzaWRlPlxuICAgICAgICAgICAge3t7IGl0ZW0uZGVzY3JpcHRpb24gfX19XG4gICAgICAgICAge3sgL2lmIH19XG4gICAgICAgIDwvZGl2PlxuICAgICAge3sgL2lmIH19XG4gICAge3sgL2VhY2ggfX1cblxuICAgIHt7ICNpZiAkaW5wdXQgfX1cbiAgICAgIDxmb3JtIGNsYXNzPSdyc3Nib3gtZm9ybScgbWV0aG9kPSdnZXQnIGFjdGlvbj0ne3sgJGlucHV0LmxpbmsgfX0nPlxuICAgICAgICA8aW5wdXQgdHlwZT0ndGV4dCcgbmFtZT0ne3sgJGlucHV0Lm5hbWUgfX0nIHBsYWNlaG9sZGVyPSdFbnRlciBzZWFyY2ggJmFtcDsgaGl0IHJldHVybuKApicgZGF0YS1wbGFjZWhvbGRlcj0ne3sgJGlucHV0LmRlc2NyaXB0aW9uIH19Jz5cbiAgICAgICAgPCEtLSBpbnB1dCB0eXBlPSdzdWJtaXQnIHZhbHVlPSd7eyAkaW5wdXQudGl0bGUgfX0nIC0tPlxuICAgICAgPC9mb3JtPlxuICAgIHt7IC9pZiB9fVxuICAgIDxkaXYgY2xhc3M9J3Jzc2JveC1wcm9tbyByc3NCb3hQcm9tbyc+XG4gICAgICA8YSBocmVmPSd7eyBhcHBVcmwoKSB9fScgc3R5bGU9J2NvbG9yOiB7eyAkdGV4dENvbG9yIH19Jz5SU1MgQm94IGJ5IHAzay5vcmc8L2E+XG4gICAgPC9kaXY+XG4gIDwvZGl2PlxuPC9kaXY+XG5cbjxzdHlsZT5cbiAgLnJzc2JveCB7XG4gICAgYm94LXNpemluZzogYm9yZGVyLWJveDtcbiAgICB3aWR0aDogMTAwJTtcbiAgICBib3JkZXI6IDFweCBzb2xpZCAjMDAwO1xuICAgIGZvbnQtZmFtaWx5OiBzYW5zLXNlcmlmO1xuICAgIG92ZXJmbG93OiBoaWRkZW47XG4gICAgYm9yZGVyLXJhZGl1czogMDtcbiAgICAtbW96LWJvcmRlci1yYWRpdXM6IDA7XG4gIH1cblxuICAucnNzYm94LWljb24ge1xuICAgIGZsb2F0OiByaWdodDtcbiAgICB3aWR0aDogMWVtO1xuICAgIG1hcmdpbi1sZWZ0OiAwLjVlbTtcbiAgfVxuXG4gIC5yc3Nib3gtdGl0bGViYXIge1xuICAgIHBhZGRpbmc6IDAuNWVtO1xuICAgIGNvbG9yOiAjMDAwO1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNhZGQ4ZTY7XG4gICAgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkICMwMDA7XG4gICAgZm9udC13ZWlnaHQ6IGJvbGQ7XG4gICAgbGV0dGVyLXNwYWNpbmc6IDAuMDFlbTtcbiAgfVxuXG4gIC5yc3Nib3gtZGF0ZSB7XG4gICAgbWFyZ2luLXRvcDogMC4yZW07XG4gICAgZm9udC1zaXplOiAwLjhlbTtcbiAgICBmb250LXdlaWdodDogbm9ybWFsO1xuICB9XG5cbiAgLnJzc2JveC1jb250ZW50IHtcbiAgICBoZWlnaHQ6IGF1dG87XG4gICAgcGFkZGluZzogMC41ZW07XG4gICAgb3ZlcmZsb3cteDogaGlkZGVuO1xuICAgIG92ZXJmbG93LXk6IGF1dG87XG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2ZmZjtcbiAgICBjbGVhcjogYm90aDtcbiAgICAtbXMtb3ZlcmZsb3ctc3R5bGU6IC1tcy1hdXRvaGlkaW5nLXNjcm9sbGJhcjtcbiAgfVxuXG4gIC5yc3Nib3gtY29udGVudCBhc2lkZSB7XG4gICAgY2xlYXI6IGJvdGg7XG4gICAgZmxvYXQ6IHJpZ2h0O1xuICB9XG5cbiAgLnJzc2JveC1jb250ZW50IGFzaWRlIGEge1xuICAgIGRpc3BsYXk6IGJsb2NrO1xuICAgIG1hcmdpbi1sZWZ0OiAwLjVlbTtcbiAgfVxuXG4gIC5yc3Nib3gtaW1hZ2Uge1xuICAgIGZsb2F0OiByaWdodDtcbiAgICBtYXJnaW46IDAgMCAwLjVlbSAwLjVlbTtcbiAgICBiYWNrZ3JvdW5kLXBvc2l0aW9uOiBsZWZ0IGNlbnRlcjtcbiAgICBiYWNrZ3JvdW5kLXJlcGVhdDogbm8tcmVwZWF0O1xuICAgIGJhY2tncm91bmQtc2l6ZTogY29udGFpbjtcbiAgfVxuXG4gIC5yc3Nib3gtaXRlbS10aXRsZS5ib2xkIHtcbiAgICBmb250LXdlaWdodDogYm9sZDtcbiAgfVxuXG4gIC5yc3Nib3gtZW5jbG9zdXJlLCAucnNzYm94LXNvdXJjZSB7XG4gICAgZGlzcGxheTogYmxvY2s7XG4gICAgd2lkdGg6IDFlbTtcbiAgfVxuXG4gIC5yc3Nib3gtZm9ybSB7XG4gICAgbWFyZ2luLWJvdHRvbTogMC44ZW07XG4gIH1cblxuICAucnNzYm94LWZvcm0gaW5wdXQge1xuICAgIHBhZGRpbmc6IDAuNWVtO1xuICAgIGJhY2tncm91bmQtY29sb3I6ICNmZmY7XG4gIH1cblxuICAucnNzYm94LXByb21vIHtcbiAgICB0ZXh0LWFsaWduOiByaWdodDtcbiAgICBmb250LXNpemU6IDAuN2VtO1xuICAgIGxldHRlci1zcGFjaW5nOiAwLjAxZW07XG4gIH1cbjwvc3R5bGU+XG5cbjxzY3JpcHQ+XG4gIGltcG9ydCB7IHVybHMgfSBmcm9tICcuLi9zcmMvc2V0dGluZ3MnO1xuICBpbXBvcnQgTGlua0ljb24gZnJvbSAnLi9MaW5rSWNvbi5odG1sJztcbiAgaW1wb3J0IFJzc0ljb24gZnJvbSAnLi9Sc3NJY29uLmh0bWwnO1xuICBpbXBvcnQgUGFwZXJjbGlwSWNvbiBmcm9tICcuL1BhcGVyY2xpcEljb24uaHRtbCc7XG5cbiAgZXhwb3J0IGRlZmF1bHQge1xuICAgIGNvbXBvbmVudHM6IHtcbiAgICAgIExpbmtJY29uLFxuICAgICAgUGFwZXJjbGlwSWNvbixcbiAgICAgIFJzc0ljb25cbiAgICB9LFxuXG4gICAgb25jcmVhdGUoKSB7XG4gICAgICBjb25zdCBzdGF0aWNJZCA9ICdyc3Nib3gtc3RhdGljLXN0eWxlc2hlZXQnO1xuICAgICAgY29uc3QgZHluYW1pY0lkID0gJ3Jzc2JveC1keW5hbWljLXN0eWxlc2hlZXQnO1xuXG4gICAgICBsZXQgc3RhdGljQ3NzID0gd2luZG93W3N0YXRpY0lkXTtcbiAgICAgIGxldCBkeW5hbWljQ3NzID0gd2luZG93W2R5bmFtaWNJZF07XG5cbiAgICAgIGlmICghc3RhdGljQ3NzKSB7XG4gICAgICAgIHN0YXRpY0NzcyA9IGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2xpbmsnKTtcbiAgICAgICAgc3RhdGljQ3NzLmlkID0gc3RhdGljSWQ7XG4gICAgICAgIHN0YXRpY0Nzcy5yZWwgPSAnc3R5bGVzaGVldCc7XG4gICAgICAgIHN0YXRpY0Nzcy5ocmVmID0gdXJscy5hcHAgKyAnL2JveC5jc3MnO1xuICAgICAgICBkb2N1bWVudC5oZWFkLmFwcGVuZENoaWxkKHN0YXRpY0Nzcyk7XG4gICAgICB9XG5cbiAgICAgIGlmICghZHluYW1pY0Nzcykge1xuICAgICAgICBkeW5hbWljQ3NzID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnc3R5bGUnKTtcbiAgICAgICAgZHluYW1pY0Nzcy5pZCA9IGR5bmFtaWNJZDtcbiAgICAgICAgZG9jdW1lbnQuaGVhZC5hcHBlbmRDaGlsZChkeW5hbWljQ3NzKTtcbiAgICAgIH1cblxuICAgICAgdGhpcy5zdG9yZS5vYnNlcnZlKCdsaW5rQ29sb3InLCBjb2xvciA9PiB7XG4gICAgICAgIGlmICghY29sb3IpIHJldHVybjtcblxuICAgICAgICBsZXQgcnVsZSA9XG4gICAgICAgICAgYC5yc3Nib3hbZGF0YS1saW5rLWNvbG9yPVwiJHtjb2xvcn1cIl0gYSB7XG4gICAgICAgICAgICBjb2xvcjogJHtjb2xvcn07XG4gICAgICAgICAgfWA7XG5cbiAgICAgICAgaWYgKGR5bmFtaWNDc3MuaW5uZXJIVE1MLmluZGV4T2YocnVsZSkgPCAwKSBkeW5hbWljQ3NzLmlubmVySFRNTCArPSBydWxlO1xuICAgICAgfSk7XG4gICAgfSxcblxuICAgIGhlbHBlcnM6IHtcbiAgICAgIGtiKGJ5dGVzKSB7XG4gICAgICAgIHJldHVybiAoYnl0ZXMgLyAxMDAwKS50b0ZpeGVkKDIpICsgJ1xcdTIwMGFrQic7XG4gICAgICB9LFxuXG4gICAgICAvLyBXaXRob3V0IHRoZSBkdW1teSBhcmd1bWVudCBTdmVsdGUgY29tcGxhaW5zIGFib3V0IHRoaXMgbm90IGJlaW5nIGEgcHVyZSBmdW5jdGlvblxuICAgICAgYXBwVXJsKGR1bW15ID0gbnVsbCkge1xuICAgICAgICByZXR1cm4gdXJscy5hcHA7XG4gICAgICB9LFxuXG4gICAgICBsb2FkKGRhdGEpIHtcbiAgICAgICAgcmV0dXJuIG5ldyBQcm9taXNlKGZ1bGZpbGwgPT4ge1xuICAgICAgICAgIGNvbnN0IGltYWdlID0gbmV3IEltYWdlKCk7XG5cbiAgICAgICAgICBpbWFnZS5vbmxvYWQgPSAoKSA9PiB7XG4gICAgICAgICAgICBjb25zdCBtYXhXaWR0aCA9IE1hdGgubWluKDEwMCwgaW1hZ2Uud2lkdGgpO1xuICAgICAgICAgICAgY29uc3QgZmFjdG9yID0gaW1hZ2Uud2lkdGggPiBtYXhXaWR0aCA/IG1heFdpZHRoIC8gaW1hZ2Uud2lkdGggOiAxO1xuXG4gICAgICAgICAgICBmdWxmaWxsKHtcbiAgICAgICAgICAgICAgd2lkdGg6IChpbWFnZS53aWR0aCAqIGZhY3RvcikgKyAncHgnLFxuICAgICAgICAgICAgICBoZWlnaHQ6IChpbWFnZS5oZWlnaHQgKiBmYWN0b3IpICsgJ3B4J1xuICAgICAgICAgICAgfSk7XG4gICAgICAgICAgfTtcblxuICAgICAgICAgIGltYWdlLnNyYyA9IGRhdGEuc291cmNlO1xuICAgICAgICB9KTtcbiAgICAgIH1cbiAgICB9LFxuXG4gICAgY29tcHV0ZWQ6IHtcbiAgICAgIGhlaWdodDogJGhlaWdodCA9PiAkaGVpZ2h0ICYmICRoZWlnaHQgPiAtMSA/ICRoZWlnaHQgKyAncHgnIDogJzEwMCUnLFxuICAgICAgd2lkdGg6ICR3aWR0aCA9PiAkd2lkdGggPyAkd2lkdGggKyAncHgnIDogJzEwMCUnLFxuICAgICAgaXRlbVRpdGxlQ2xhc3M6ICRjb21wYWN0ID0+ICEkY29tcGFjdCA/ICdib2xkJyA6ICcnXG4gICAgfVxuICB9O1xuPC9zY3JpcHQ+XG4iXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBcUZFLE9BQU8sbUJBQUMsQ0FBQyxBQUNQLFVBQVUsQ0FBRSxVQUFVLENBQ3RCLEtBQUssQ0FBRSxJQUFJLENBQ1gsTUFBTSxDQUFFLEdBQUcsQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUN0QixXQUFXLENBQUUsVUFBVSxDQUN2QixRQUFRLENBQUUsTUFBTSxDQUNoQixhQUFhLENBQUUsQ0FBQyxDQUNoQixrQkFBa0IsQ0FBRSxDQUFDLEFBQ3ZCLENBQUMsQUFFRCxZQUFZLG1CQUFDLENBQUMsQUFDWixLQUFLLENBQUUsS0FBSyxDQUNaLEtBQUssQ0FBRSxHQUFHLENBQ1YsV0FBVyxDQUFFLEtBQUssQUFDcEIsQ0FBQyxBQUVELGdCQUFnQixtQkFBQyxDQUFDLEFBQ2hCLE9BQU8sQ0FBRSxLQUFLLENBQ2QsS0FBSyxDQUFFLElBQUksQ0FDWCxnQkFBZ0IsQ0FBRSxPQUFPLENBQ3pCLGFBQWEsQ0FBRSxHQUFHLENBQUMsS0FBSyxDQUFDLElBQUksQ0FDN0IsV0FBVyxDQUFFLElBQUksQ0FDakIsY0FBYyxDQUFFLE1BQU0sQUFDeEIsQ0FBQyxBQUVELFlBQVksbUJBQUMsQ0FBQyxBQUNaLFVBQVUsQ0FBRSxLQUFLLENBQ2pCLFNBQVMsQ0FBRSxLQUFLLENBQ2hCLFdBQVcsQ0FBRSxNQUFNLEFBQ3JCLENBQUMsQUFFRCxlQUFlLG1CQUFDLENBQUMsQUFDZixNQUFNLENBQUUsSUFBSSxDQUNaLE9BQU8sQ0FBRSxLQUFLLENBQ2QsVUFBVSxDQUFFLE1BQU0sQ0FDbEIsVUFBVSxDQUFFLElBQUksQ0FDaEIsZ0JBQWdCLENBQUUsSUFBSSxDQUN0QixLQUFLLENBQUUsSUFBSSxDQUNYLGtCQUFrQixDQUFFLHdCQUF3QixBQUM5QyxDQUFDLEFBRUQsa0NBQWUsQ0FBQyxLQUFLLG1CQUFDLENBQUMsQUFDckIsS0FBSyxDQUFFLElBQUksQ0FDWCxLQUFLLENBQUUsS0FBSyxBQUNkLENBQUMsQUFFRCxrQ0FBZSxDQUFDLEtBQUssQ0FBQyxDQUFDLG1CQUFDLENBQUMsQUFDdkIsT0FBTyxDQUFFLEtBQUssQ0FDZCxXQUFXLENBQUUsS0FBSyxBQUNwQixDQUFDLEFBRUQsYUFBYSxtQkFBQyxDQUFDLEFBQ2IsS0FBSyxDQUFFLEtBQUssQ0FDWixNQUFNLENBQUUsQ0FBQyxDQUFDLENBQUMsQ0FBQyxLQUFLLENBQUMsS0FBSyxDQUN2QixtQkFBbUIsQ0FBRSxJQUFJLENBQUMsTUFBTSxDQUNoQyxpQkFBaUIsQ0FBRSxTQUFTLENBQzVCLGVBQWUsQ0FBRSxPQUFPLEFBQzFCLENBQUMsQUFFRCxrQkFBa0IsS0FBSyxtQkFBQyxDQUFDLEFBQ3ZCLFdBQVcsQ0FBRSxJQUFJLEFBQ25CLENBQUMsQUFFRCxvQ0FBaUIsQ0FBRSxjQUFjLG1CQUFDLENBQUMsQUFDakMsT0FBTyxDQUFFLEtBQUssQ0FDZCxLQUFLLENBQUUsR0FBRyxBQUNaLENBQUMsQUFFRCxZQUFZLG1CQUFDLENBQUMsQUFDWixhQUFhLENBQUUsS0FBSyxBQUN0QixDQUFDLEFBRUQsK0JBQVksQ0FBQyxLQUFLLG1CQUFDLENBQUMsQUFDbEIsT0FBTyxDQUFFLEtBQUssQ0FDZCxnQkFBZ0IsQ0FBRSxJQUFJLEFBQ3hCLENBQUMsQUFFRCxhQUFhLG1CQUFDLENBQUMsQUFDYixVQUFVLENBQUUsS0FBSyxDQUNqQixTQUFTLENBQUUsS0FBSyxDQUNoQixjQUFjLENBQUUsTUFBTSxBQUN4QixDQUFDIn0= */";
+	appendNode(style, document.head);
+}
+
+function create_main_fragment$5(state, component) {
+	var div, text, div_1, text_1, text_2, text_3, div_2, a, a_href_value;
+
+	var if_block = (!state.$headless) && create_if_block(state, component);
+
+	var if_block_1 = (state.$image && !state.$compact) && create_if_block_2(state, component);
+
+	var $items = state.$items;
+
+	var each_blocks = [];
+
+	for (var i = 0; i < $items.length; i += 1) {
+		each_blocks[i] = create_each_block(state, $items, $items[i], i, component);
+	}
+
+	var if_block_2 = (state.$input) && create_if_block_12(state, component);
+
+	return {
+		c: function create() {
+			div = createElement("div");
+			if (if_block) if_block.c();
+			text = createText("\n\n  ");
+			div_1 = createElement("div");
+			if (if_block_1) if_block_1.c();
+			text_1 = createText("\n\n    ");
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].c();
+			}
+
+			text_2 = createText("\n\n    ");
+			if (if_block_2) if_block_2.c();
+			text_3 = createText("\n    ");
+			div_2 = createElement("div");
+			a = createElement("a");
+			a.textContent = "RSS Box by p3k.org";
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$3(div);
+			encapsulateStyles$3(div_1);
+			encapsulateStyles$3(div_2);
+			a.href = a_href_value = appUrl();
+			setStyle(a, "color", state.$textColor);
+			div_2.className = "rssbox-promo rssBoxPromo";
+			div_1.className = "rssbox-content rssBoxContent";
+			setStyle(div_1, "background-color", state.$boxFillColor);
+			setStyle(div_1, "height", state.height);
+			div.dataset.linkColor = state.$linkColor;
+			div.className = "rssbox rssBox";
+			setStyle(div, "max-width", state.width);
+			setStyle(div, "border-color", state.$frameColor);
+			setStyle(div, "border-radius", "" + state.$radius + "px");
+			setStyle(div, "font", state.$fontFace);
+			setStyle(div, "float", state.$align);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(div, target, anchor);
+			if (if_block) if_block.m(div, null);
+			appendNode(text, div);
+			appendNode(div_1, div);
+			if (if_block_1) if_block_1.m(div_1, null);
+			appendNode(text_1, div_1);
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].m(div_1, null);
+			}
+
+			appendNode(text_2, div_1);
+			if (if_block_2) if_block_2.m(div_1, null);
+			appendNode(text_3, div_1);
+			appendNode(div_2, div_1);
+			appendNode(a, div_2);
+		},
+
+		p: function update(changed, state) {
+			if (!state.$headless) {
+				if (if_block) {
+					if_block.p(changed, state);
+				} else {
+					if_block = create_if_block(state, component);
+					if_block.c();
+					if_block.m(div, text);
+				}
+			} else if (if_block) {
+				if_block.u();
+				if_block.d();
+				if_block = null;
+			}
+
+			if (state.$image && !state.$compact) {
+				if (if_block_1) {
+					if_block_1.p(changed, state);
+				} else {
+					if_block_1 = create_if_block_2(state, component);
+					if_block_1.c();
+					if_block_1.m(div_1, text_1);
+				}
+			} else if (if_block_1) {
+				if_block_1.u();
+				if_block_1.d();
+				if_block_1 = null;
+			}
+
+			var $items = state.$items;
+
+			if (changed.$maxItems || changed.$textColor || changed.$items || changed.itemTitleClass || changed.$compact) {
+				for (var i = 0; i < $items.length; i += 1) {
+					if (each_blocks[i]) {
+						each_blocks[i].p(changed, state, $items, $items[i], i);
+					} else {
+						each_blocks[i] = create_each_block(state, $items, $items[i], i, component);
+						each_blocks[i].c();
+						each_blocks[i].m(div_1, text_2);
+					}
+				}
+
+				for (; i < each_blocks.length; i += 1) {
+					each_blocks[i].u();
+					each_blocks[i].d();
+				}
+				each_blocks.length = $items.length;
+			}
+
+			if (state.$input) {
+				if (if_block_2) {
+					if_block_2.p(changed, state);
+				} else {
+					if_block_2 = create_if_block_12(state, component);
+					if_block_2.c();
+					if_block_2.m(div_1, text_3);
+				}
+			} else if (if_block_2) {
+				if_block_2.u();
+				if_block_2.d();
+				if_block_2 = null;
+			}
+
+			if (changed.$textColor) {
+				setStyle(a, "color", state.$textColor);
+			}
+
+			if (changed.$boxFillColor) {
+				setStyle(div_1, "background-color", state.$boxFillColor);
+			}
+
+			if (changed.height) {
+				setStyle(div_1, "height", state.height);
+			}
+
+			if (changed.$linkColor) {
+				div.dataset.linkColor = state.$linkColor;
+			}
+
+			if (changed.width) {
+				setStyle(div, "max-width", state.width);
+			}
+
+			if (changed.$frameColor) {
+				setStyle(div, "border-color", state.$frameColor);
+			}
+
+			if (changed.$radius) {
+				setStyle(div, "border-radius", "" + state.$radius + "px");
+			}
+
+			if (changed.$fontFace) {
+				setStyle(div, "font", state.$fontFace);
+			}
+
+			if (changed.$align) {
+				setStyle(div, "float", state.$align);
+			}
+		},
+
+		u: function unmount() {
+			detachNode(div);
+			if (if_block) if_block.u();
+			if (if_block_1) if_block_1.u();
+
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].u();
+			}
+
+			if (if_block_2) if_block_2.u();
+		},
+
+		d: function destroy$$1() {
+			if (if_block) if_block.d();
+			if (if_block_1) if_block_1.d();
+
+			destroyEach(each_blocks);
+
+			if (if_block_2) if_block_2.d();
+		}
+	};
+}
+
+// (4:6) {{ #if $showXmlButton }}
+function create_if_block_1(state, component) {
+	var div, a, a_title_value;
+
+	var rssicon = new RssIcon({
+		root: component.root
+	});
+
+	return {
+		c: function create() {
+			div = createElement("div");
+			a = createElement("a");
+			rssicon._fragment.c();
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$3(div);
+			a.href = state.$url;
+			a.title = a_title_value = "" + state.$format + " " + state.$version;
+			setStyle(a, "color", state.$titleBarTextColor);
+			div.className = "rssbox-icon";
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(div, target, anchor);
+			appendNode(a, div);
+			rssicon._mount(a, null);
+		},
+
+		p: function update(changed, state) {
+			if (changed.$url) {
+				a.href = state.$url;
+			}
+
+			if ((changed.$format || changed.$version) && a_title_value !== (a_title_value = "" + state.$format + " " + state.$version)) {
+				a.title = a_title_value;
+			}
+
+			if (changed.$titleBarTextColor) {
+				setStyle(a, "color", state.$titleBarTextColor);
+			}
+		},
+
+		u: function unmount() {
+			detachNode(div);
+		},
+
+		d: function destroy$$1() {
+			rssicon.destroy(false);
+		}
+	};
+}
+
+// (2:2) {{ #if !$headless }}
+function create_if_block(state, component) {
+	var div, text, div_1, a, text_1, text_4, div_2, text_5;
+
+	var if_block = (state.$showXmlButton) && create_if_block_1(state, component);
+
+	return {
+		c: function create() {
+			div = createElement("div");
+			if (if_block) if_block.c();
+			text = createText("\n      ");
+			div_1 = createElement("div");
+			a = createElement("a");
+			text_1 = createText(state.$title);
+			text_4 = createText("\n      ");
+			div_2 = createElement("div");
+			text_5 = createText(state.$formattedDate);
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$3(div);
+			a.href = state.$link;
+			setStyle(a, "color", state.$titleBarTextColor);
+			encapsulateStyles$3(div_2);
+			div_2.className = "rssbox-date";
+			div.className = "rssbox-titlebar";
+			setStyle(div, "color", state.$titleBarTextColor);
+			setStyle(div, "background-color", state.$titleBarColor);
+			setStyle(div, "border-bottom-color", state.$frameColor);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(div, target, anchor);
+			if (if_block) if_block.m(div, null);
+			appendNode(text, div);
+			appendNode(div_1, div);
+			appendNode(a, div_1);
+			appendNode(text_1, a);
+			appendNode(text_4, div);
+			appendNode(div_2, div);
+			appendNode(text_5, div_2);
+		},
+
+		p: function update(changed, state) {
+			if (state.$showXmlButton) {
+				if (if_block) {
+					if_block.p(changed, state);
+				} else {
+					if_block = create_if_block_1(state, component);
+					if_block.c();
+					if_block.m(div, text);
+				}
+			} else if (if_block) {
+				if_block.u();
+				if_block.d();
+				if_block = null;
+			}
+
+			if (changed.$title) {
+				text_1.data = state.$title;
+			}
+
+			if (changed.$link) {
+				a.href = state.$link;
+			}
+
+			if (changed.$titleBarTextColor) {
+				setStyle(a, "color", state.$titleBarTextColor);
+			}
+
+			if (changed.$formattedDate) {
+				text_5.data = state.$formattedDate;
+			}
+
+			if (changed.$titleBarTextColor) {
+				setStyle(div, "color", state.$titleBarTextColor);
+			}
+
+			if (changed.$titleBarColor) {
+				setStyle(div, "background-color", state.$titleBarColor);
+			}
+
+			if (changed.$frameColor) {
+				setStyle(div, "border-bottom-color", state.$frameColor);
+			}
+		},
+
+		u: function unmount() {
+			detachNode(div);
+			if (if_block) if_block.u();
+		},
+
+		d: function destroy$$1() {
+			if (if_block) if_block.d();
+		}
+	};
+}
+
+// (24:31)        {{ then image }}
+function create_pending_block(state, _, component) {
+
+	return {
+		c: noop,
+
+		m: noop,
+
+		p: noop,
+
+		u: noop,
+
+		d: noop
+	};
+}
+
+// (25:6) {{ then image }}
+function create_then_block(state, image, component) {
+	var a, div, div_alt_value, a_href_value, a_title_value;
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			div = createElement("div");
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$3(div);
+			setAttribute(div, "alt", div_alt_value = state.$image.description);
+			div.className = "rssbox-image";
+			setStyle(div, "background-image", "url(" + state.$image.source + ")");
+			setStyle(div, "width", image.width);
+			setStyle(div, "height", image.height);
+			a.href = a_href_value = state.$image.link;
+			a.title = a_title_value = state.$image.title;
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+			appendNode(div, a);
+		},
+
+		p: function update(changed, state, image) {
+			if ((changed.$image) && div_alt_value !== (div_alt_value = state.$image.description)) {
+				setAttribute(div, "alt", div_alt_value);
+			}
+
+			if (changed.$image) {
+				setStyle(div, "background-image", "url(" + state.$image.source + ")");
+				setStyle(div, "width", image.width);
+				setStyle(div, "height", image.height);
+			}
+
+			if ((changed.$image) && a_href_value !== (a_href_value = state.$image.link)) {
+				a.href = a_href_value;
+			}
+
+			if ((changed.$image) && a_title_value !== (a_title_value = state.$image.title)) {
+				a.title = a_title_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(a);
+		},
+
+		d: noop
+	};
+}
+
+// (1:0) <div data-link-color='{{ $linkColor }}
+function create_catch_block(state, __1, component) {
+
+	return {
+		c: noop,
+
+		m: noop,
+
+		p: noop,
+
+		u: noop,
+
+		d: noop
+	};
+}
+
+// (23:4) {{ #if $image && !$compact }}
+function create_if_block_2(state, component) {
+	var await_block_anchor, await_block_1, await_block_type, await_token, promise, resolved;
+
+	function replace_await_block(token, type, value, state) {
+		if (token !== await_token) return;
+
+		var old_block = await_block_1;
+		await_block_1 = (await_block_type = type)(state, resolved = value, component);
+
+		if (old_block) {
+			old_block.u();
+			old_block.d();
+			await_block_1.c();
+			await_block_1.m(await_block_anchor.parentNode, await_block_anchor);
+		}
+	}
+
+	function handle_promise(promise, state) {
+		var token = await_token = {};
+
+		if (isPromise(promise)) {
+			promise.then(function(value) {
+				replace_await_block(token, create_then_block, value, state);
+			}, function (error) {
+				replace_await_block(token, create_catch_block, error, state);
+			});
+
+			// if we previously had a then/catch block, destroy it
+			if (await_block_type !== create_pending_block) {
+				replace_await_block(token, create_pending_block, null, state);
+				return true;
+			}
+		} else {
+			resolved = promise;
+			if (await_block_type !== create_then_block) {
+				replace_await_block(token, create_then_block, resolved, state);
+				return true;
+			}
+		}
+	}
+
+	handle_promise(promise = load(state.$image), state);
+
+	return {
+		c: function create() {
+			await_block_anchor = createComment();
+
+			await_block_1.c();
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(await_block_anchor, target, anchor);
+
+			await_block_1.m(target, anchor);
+		},
+
+		p: function update(changed, state) {
+			if (('$image' in changed) && promise !== (promise = load(state.$image)) && handle_promise(promise, state)) {
+				// nothing
+			} else {
+				await_block_1.p(changed, state, resolved);
+			}
+		},
+
+		u: function unmount() {
+			detachNode(await_block_anchor);
+
+			await_block_1.u();
+		},
+
+		d: function destroy$$1() {
+			await_token = null;
+			await_block_1.d();
+		}
+	};
+}
+
+// (32:4) {{ #each $items as item, index }}
+function create_each_block(state, $items, item, index, component) {
+	var if_block_anchor;
+
+	var if_block = (index < state.$maxItems) && create_if_block_3(state, $items, item, index, component);
+
+	return {
+		c: function create() {
+			if (if_block) if_block.c();
+			if_block_anchor = createComment();
+		},
+
+		m: function mount(target, anchor) {
+			if (if_block) if_block.m(target, anchor);
+			insertNode(if_block_anchor, target, anchor);
+		},
+
+		p: function update(changed, state, $items, item, index) {
+			if (index < state.$maxItems) {
+				if (if_block) {
+					if_block.p(changed, state, $items, item, index);
+				} else {
+					if_block = create_if_block_3(state, $items, item, index, component);
+					if_block.c();
+					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+				}
+			} else if (if_block) {
+				if_block.u();
+				if_block.d();
+				if_block = null;
+			}
+		},
+
+		u: function unmount() {
+			if (if_block) if_block.u();
+			detachNode(if_block_anchor);
+		},
+
+		d: function destroy$$1() {
+			if (if_block) if_block.d();
+		}
+	};
+}
+
+// (37:14) {{ #if item.link }}
+function create_if_block_5(state, $items, item, index, component) {
+	var a, raw_value = item.title, a_href_value;
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			this.h();
+		},
+
+		h: function hydrate() {
+			a.href = a_href_value = item.link;
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+			a.innerHTML = raw_value;
+		},
+
+		p: function update(changed, state, $items, item, index) {
+			if ((changed.$items) && raw_value !== (raw_value = item.title)) {
+				a.innerHTML = raw_value;
+			}
+
+			if ((changed.$items) && a_href_value !== (a_href_value = item.link)) {
+				a.href = a_href_value;
+			}
+		},
+
+		u: function unmount() {
+			a.innerHTML = '';
+
+			detachNode(a);
+		},
+
+		d: noop
+	};
+}
+
+// (41:14) {{ else }}
+function create_if_block_6(state, $items, item, index, component) {
+	var raw_value = item.title, raw_before, raw_after;
+
+	return {
+		c: function create() {
+			raw_before = createElement('noscript');
+			raw_after = createElement('noscript');
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(raw_before, target, anchor);
+			raw_before.insertAdjacentHTML("afterend", raw_value);
+			insertNode(raw_after, target, anchor);
+		},
+
+		p: function update(changed, state, $items, item, index) {
+			if ((changed.$items) && raw_value !== (raw_value = item.title)) {
+				detachBetween(raw_before, raw_after);
+				raw_before.insertAdjacentHTML("afterend", raw_value);
+			}
+		},
+
+		u: function unmount() {
+			detachBetween(raw_before, raw_after);
+
+			detachNode(raw_before);
+			detachNode(raw_after);
+		},
+
+		d: noop
+	};
+}
+
+// (35:10) {{ #if item.title }}
+function create_if_block_4(state, $items, item, index, component) {
+	var div, div_class_value;
+
+	var current_block_type = select_block_type(state, $items, item, index);
+	var if_block = current_block_type(state, $items, item, index, component);
+
+	return {
+		c: function create() {
+			div = createElement("div");
+			if_block.c();
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$3(div);
+			div.className = div_class_value = "rssbox-item-title " + state.itemTitleClass;
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(div, target, anchor);
+			if_block.m(div, null);
+		},
+
+		p: function update(changed, state, $items, item, index) {
+			if (current_block_type === (current_block_type = select_block_type(state, $items, item, index)) && if_block) {
+				if_block.p(changed, state, $items, item, index);
+			} else {
+				if_block.u();
+				if_block.d();
+				if_block = current_block_type(state, $items, item, index, component);
+				if_block.c();
+				if_block.m(div, null);
+			}
+
+			if ((changed.itemTitleClass) && div_class_value !== (div_class_value = "rssbox-item-title " + state.itemTitleClass)) {
+				div.className = div_class_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(div);
+			if_block.u();
+		},
+
+		d: function destroy$$1() {
+			if_block.d();
+		}
+	};
+}
+
+// (51:18) {{ #if item.source.url.endsWith('.xml') }}
+function create_if_block_9(state, $items, item, index, component) {
+
+	var rssicon = new RssIcon({
+		root: component.root
+	});
+
+	return {
+		c: function create() {
+			rssicon._fragment.c();
+		},
+
+		m: function mount(target, anchor) {
+			rssicon._mount(target, anchor);
+		},
+
+		u: function unmount() {
+			rssicon._unmount();
+		},
+
+		d: function destroy$$1() {
+			rssicon.destroy(false);
+		}
+	};
+}
+
+// (53:18) {{ else }}
+function create_if_block_10(state, $items, item, index, component) {
+
+	var linkicon = new LinkIcon({
+		root: component.root
+	});
+
+	return {
+		c: function create() {
+			linkicon._fragment.c();
+		},
+
+		m: function mount(target, anchor) {
+			linkicon._mount(target, anchor);
+		},
+
+		u: function unmount() {
+			linkicon._unmount();
+		},
+
+		d: function destroy$$1() {
+			linkicon.destroy(false);
+		}
+	};
+}
+
+// (49:14) {{ #if item.source }}
+function create_if_block_8(state, $items, item, index, component) {
+	var a, a_href_value, a_title_value;
+
+	var current_block_type = select_block_type_1(state, $items, item, index);
+	var if_block = current_block_type(state, $items, item, index, component);
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			if_block.c();
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$3(a);
+			a.href = a_href_value = item.source.url;
+			a.title = a_title_value = item.source.title;
+			a.className = "rssbox-source";
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+			if_block.m(a, null);
+		},
+
+		p: function update(changed, state, $items, item, index) {
+			if (current_block_type !== (current_block_type = select_block_type_1(state, $items, item, index))) {
+				if_block.u();
+				if_block.d();
+				if_block = current_block_type(state, $items, item, index, component);
+				if_block.c();
+				if_block.m(a, null);
+			}
+
+			if ((changed.$items) && a_href_value !== (a_href_value = item.source.url)) {
+				a.href = a_href_value;
+			}
+
+			if ((changed.$items) && a_title_value !== (a_title_value = item.source.title)) {
+				a.title = a_title_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(a);
+			if_block.u();
+		},
+
+		d: function destroy$$1() {
+			if_block.d();
+		}
+	};
+}
+
+// (60:16) {{ #each item.enclosures as enclosure }}
+function create_each_block_1(state, $items, item, index, enclosures, enclosure, enclosure_index, component) {
+	var a, a_href_value, a_title_value;
+
+	var paperclipicon = new PaperclipIcon({
+		root: component.root
+	});
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			paperclipicon._fragment.c();
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$3(a);
+			a.href = a_href_value = enclosure.url;
+			a.title = a_title_value = "" + kb(enclosure.length) + " " + enclosure.type;
+			a.className = "rssbox-enclosure";
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+			paperclipicon._mount(a, null);
+		},
+
+		p: function update(changed, state, $items, item, index, enclosures, enclosure, enclosure_index) {
+			if ((changed.$items) && a_href_value !== (a_href_value = enclosure.url)) {
+				a.href = a_href_value;
+			}
+
+			if ((changed.$items) && a_title_value !== (a_title_value = "" + kb(enclosure.length) + " " + enclosure.type)) {
+				a.title = a_title_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(a);
+		},
+
+		d: function destroy$$1() {
+			paperclipicon.destroy(false);
+		}
+	};
+}
+
+// (59:14) {{ #if item.enclosures }}
+function create_if_block_11(state, $items, item, index, component) {
+	var each_anchor;
+
+	var enclosures = item.enclosures;
+
+	var each_blocks = [];
+
+	for (var i = 0; i < enclosures.length; i += 1) {
+		each_blocks[i] = create_each_block_1(state, $items, item, index, enclosures, enclosures[i], i, component);
+	}
+
+	return {
+		c: function create() {
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].c();
+			}
+
+			each_anchor = createComment();
+		},
+
+		m: function mount(target, anchor) {
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].m(target, anchor);
+			}
+
+			insertNode(each_anchor, target, anchor);
+		},
+
+		p: function update(changed, state, $items, item, index) {
+			var enclosures = item.enclosures;
+
+			if (changed.$items) {
+				for (var i = 0; i < enclosures.length; i += 1) {
+					if (each_blocks[i]) {
+						each_blocks[i].p(changed, state, $items, item, index, enclosures, enclosures[i], i);
+					} else {
+						each_blocks[i] = create_each_block_1(state, $items, item, index, enclosures, enclosures[i], i, component);
+						each_blocks[i].c();
+						each_blocks[i].m(each_anchor.parentNode, each_anchor);
+					}
+				}
+
+				for (; i < each_blocks.length; i += 1) {
+					each_blocks[i].u();
+					each_blocks[i].d();
+				}
+				each_blocks.length = enclosures.length;
+			}
+		},
+
+		u: function unmount() {
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].u();
+			}
+
+			detachNode(each_anchor);
+		},
+
+		d: function destroy$$1() {
+			destroyEach(each_blocks);
+		}
+	};
+}
+
+// (47:10) {{ #if !$compact }}
+function create_if_block_7(state, $items, item, index, component) {
+	var aside, text, text_2, raw_value = item.description, raw_before, raw_after;
+
+	var if_block = (item.source) && create_if_block_8(state, $items, item, index, component);
+
+	var if_block_1 = (item.enclosures) && create_if_block_11(state, $items, item, index, component);
+
+	return {
+		c: function create() {
+			aside = createElement("aside");
+			if (if_block) if_block.c();
+			text = createText("\n\n              ");
+			if (if_block_1) if_block_1.c();
+			text_2 = createText("\n            ");
+			raw_before = createElement('noscript');
+			raw_after = createElement('noscript');
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$3(aside);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(aside, target, anchor);
+			if (if_block) if_block.m(aside, null);
+			appendNode(text, aside);
+			if (if_block_1) if_block_1.m(aside, null);
+			insertNode(text_2, target, anchor);
+			insertNode(raw_before, target, anchor);
+			raw_before.insertAdjacentHTML("afterend", raw_value);
+			insertNode(raw_after, target, anchor);
+		},
+
+		p: function update(changed, state, $items, item, index) {
+			if (item.source) {
+				if (if_block) {
+					if_block.p(changed, state, $items, item, index);
+				} else {
+					if_block = create_if_block_8(state, $items, item, index, component);
+					if_block.c();
+					if_block.m(aside, text);
+				}
+			} else if (if_block) {
+				if_block.u();
+				if_block.d();
+				if_block = null;
+			}
+
+			if (item.enclosures) {
+				if (if_block_1) {
+					if_block_1.p(changed, state, $items, item, index);
+				} else {
+					if_block_1 = create_if_block_11(state, $items, item, index, component);
+					if_block_1.c();
+					if_block_1.m(aside, null);
+				}
+			} else if (if_block_1) {
+				if_block_1.u();
+				if_block_1.d();
+				if_block_1 = null;
+			}
+
+			if ((changed.$items) && raw_value !== (raw_value = item.description)) {
+				detachBetween(raw_before, raw_after);
+				raw_before.insertAdjacentHTML("afterend", raw_value);
+			}
+		},
+
+		u: function unmount() {
+			detachBetween(raw_before, raw_after);
+
+			detachNode(aside);
+			if (if_block) if_block.u();
+			if (if_block_1) if_block_1.u();
+			detachNode(text_2);
+			detachNode(raw_before);
+			detachNode(raw_after);
+		},
+
+		d: function destroy$$1() {
+			if (if_block) if_block.d();
+			if (if_block_1) if_block_1.d();
+		}
+	};
+}
+
+// (33:6) {{ #if index < $maxItems }}
+function create_if_block_3(state, $items, item, index, component) {
+	var div, text;
+
+	var if_block = (item.title) && create_if_block_4(state, $items, item, index, component);
+
+	var if_block_1 = (!state.$compact) && create_if_block_7(state, $items, item, index, component);
+
+	return {
+		c: function create() {
+			div = createElement("div");
+			if (if_block) if_block.c();
+			text = createText("\n\n          ");
+			if (if_block_1) if_block_1.c();
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$3(div);
+			div.className = "rssbox-item-content rssBoxItemContent";
+			setStyle(div, "color", state.$textColor);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(div, target, anchor);
+			if (if_block) if_block.m(div, null);
+			appendNode(text, div);
+			if (if_block_1) if_block_1.m(div, null);
+		},
+
+		p: function update(changed, state, $items, item, index) {
+			if (item.title) {
+				if (if_block) {
+					if_block.p(changed, state, $items, item, index);
+				} else {
+					if_block = create_if_block_4(state, $items, item, index, component);
+					if_block.c();
+					if_block.m(div, text);
+				}
+			} else if (if_block) {
+				if_block.u();
+				if_block.d();
+				if_block = null;
+			}
+
+			if (!state.$compact) {
+				if (if_block_1) {
+					if_block_1.p(changed, state, $items, item, index);
+				} else {
+					if_block_1 = create_if_block_7(state, $items, item, index, component);
+					if_block_1.c();
+					if_block_1.m(div, null);
+				}
+			} else if (if_block_1) {
+				if_block_1.u();
+				if_block_1.d();
+				if_block_1 = null;
+			}
+
+			if (changed.$textColor) {
+				setStyle(div, "color", state.$textColor);
+			}
+		},
+
+		u: function unmount() {
+			detachNode(div);
+			if (if_block) if_block.u();
+			if (if_block_1) if_block_1.u();
+		},
+
+		d: function destroy$$1() {
+			if (if_block) if_block.d();
+			if (if_block_1) if_block_1.d();
+		}
+	};
+}
+
+// (73:4) {{ #if $input }}
+function create_if_block_12(state, component) {
+	var form, input, input_name_value, input_data_placeholder_value, form_action_value;
+
+	return {
+		c: function create() {
+			form = createElement("form");
+			input = createElement("input");
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$3(form);
+			encapsulateStyles$3(input);
+			input.type = "text";
+			input.name = input_name_value = state.$input.name;
+			input.placeholder = "Enter search & hit return…";
+			input.dataset.placeholder = input_data_placeholder_value = state.$input.description;
+			form.className = "rssbox-form";
+			form.method = "get";
+			form.action = form_action_value = state.$input.link;
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(form, target, anchor);
+			appendNode(input, form);
+		},
+
+		p: function update(changed, state) {
+			if ((changed.$input) && input_name_value !== (input_name_value = state.$input.name)) {
+				input.name = input_name_value;
+			}
+
+			if ((changed.$input) && input_data_placeholder_value !== (input_data_placeholder_value = state.$input.description)) {
+				input.dataset.placeholder = input_data_placeholder_value;
+			}
+
+			if ((changed.$input) && form_action_value !== (form_action_value = state.$input.link)) {
+				form.action = form_action_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(form);
+		},
+
+		d: noop
+	};
+}
+
+function select_block_type(state, $items, item, index) {
+	if (item.link) return create_if_block_5;
+	return create_if_block_6;
+}
+
+function select_block_type_1(state, $items, item, index) {
+	if (item.source.url.endsWith('.xml')) return create_if_block_9;
+	return create_if_block_10;
+}
+
+function Box(options) {
+	this._debugName = '<Box>';
+	if (!options || (!options.target && !options.root)) throw new Error("'target' is a required option");
+	init(this, options);
+	this._state = assign(this.store._init(["height","width","compact","linkColor","frameColor","radius","fontFace","align","headless","titleBarTextColor","titleBarColor","showXmlButton","url","format","version","link","title","formattedDate","boxFillColor","image","items","maxItems","textColor","input"]), options.data);
+	this.store._add(this, ["height","width","compact","linkColor","frameColor","radius","fontFace","align","headless","titleBarTextColor","titleBarColor","showXmlButton","url","format","version","link","title","formattedDate","boxFillColor","image","items","maxItems","textColor","input"]);
+	this._recompute({ $height: 1, $width: 1, $compact: 1 }, this._state);
+	if (!('$height' in this._state)) console.warn("<Box> was created without expected data property '$height'");
+	if (!('$width' in this._state)) console.warn("<Box> was created without expected data property '$width'");
+	if (!('$compact' in this._state)) console.warn("<Box> was created without expected data property '$compact'");
+	if (!('$linkColor' in this._state)) console.warn("<Box> was created without expected data property '$linkColor'");
+	if (!('width' in this._state)) console.warn("<Box> was created without expected data property 'width'");
+	if (!('$frameColor' in this._state)) console.warn("<Box> was created without expected data property '$frameColor'");
+	if (!('$radius' in this._state)) console.warn("<Box> was created without expected data property '$radius'");
+	if (!('$fontFace' in this._state)) console.warn("<Box> was created without expected data property '$fontFace'");
+	if (!('$align' in this._state)) console.warn("<Box> was created without expected data property '$align'");
+	if (!('$headless' in this._state)) console.warn("<Box> was created without expected data property '$headless'");
+	if (!('$titleBarTextColor' in this._state)) console.warn("<Box> was created without expected data property '$titleBarTextColor'");
+	if (!('$titleBarColor' in this._state)) console.warn("<Box> was created without expected data property '$titleBarColor'");
+	if (!('$showXmlButton' in this._state)) console.warn("<Box> was created without expected data property '$showXmlButton'");
+	if (!('$url' in this._state)) console.warn("<Box> was created without expected data property '$url'");
+	if (!('$format' in this._state)) console.warn("<Box> was created without expected data property '$format'");
+	if (!('$version' in this._state)) console.warn("<Box> was created without expected data property '$version'");
+	if (!('$link' in this._state)) console.warn("<Box> was created without expected data property '$link'");
+	if (!('$title' in this._state)) console.warn("<Box> was created without expected data property '$title'");
+	if (!('$formattedDate' in this._state)) console.warn("<Box> was created without expected data property '$formattedDate'");
+	if (!('$boxFillColor' in this._state)) console.warn("<Box> was created without expected data property '$boxFillColor'");
+	if (!('height' in this._state)) console.warn("<Box> was created without expected data property 'height'");
+	if (!('$image' in this._state)) console.warn("<Box> was created without expected data property '$image'");
+	if (!('$items' in this._state)) console.warn("<Box> was created without expected data property '$items'");
+	if (!('$maxItems' in this._state)) console.warn("<Box> was created without expected data property '$maxItems'");
+	if (!('$textColor' in this._state)) console.warn("<Box> was created without expected data property '$textColor'");
+	if (!('itemTitleClass' in this._state)) console.warn("<Box> was created without expected data property 'itemTitleClass'");
+	if (!('$input' in this._state)) console.warn("<Box> was created without expected data property '$input'");
+
+	this._handlers.destroy = [removeFromStore];
+
+	if (!document.getElementById("svelte-1374782793-style")) add_css$3();
+
+	var _oncreate = oncreate$1.bind(this);
+
+	if (!options.root) {
+		this._oncreate = [_oncreate];
+		this._beforecreate = [];
+		this._aftercreate = [];
+	} else {
+	 	this.root._oncreate.push(_oncreate);
+	 }
+
+	this._fragment = create_main_fragment$5(this._state, this);
+
+	if (options.target) {
+		if (options.hydrate) throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		this._fragment.c();
+		this._fragment.m(options.target, options.anchor || null);
+
+		this._lock = true;
+		callAll(this._beforecreate);
+		callAll(this._oncreate);
+		callAll(this._aftercreate);
+		this._lock = false;
+	}
+}
+
+assign(Box.prototype, protoDev);
+
+Box.prototype._checkReadOnly = function _checkReadOnly(newState) {
+	if ('height' in newState && !this._updatingReadonlyProperty) throw new Error("<Box>: Cannot set read-only property 'height'");
+	if ('width' in newState && !this._updatingReadonlyProperty) throw new Error("<Box>: Cannot set read-only property 'width'");
+	if ('itemTitleClass' in newState && !this._updatingReadonlyProperty) throw new Error("<Box>: Cannot set read-only property 'itemTitleClass'");
+};
+
+Box.prototype._recompute = function _recompute(changed, state) {
+	if (changed.$height) {
+		if (differs(state.height, (state.height = height(state.$height)))) changed.height = true;
+	}
+
+	if (changed.$width) {
+		if (differs(state.width, (state.width = width(state.$width)))) changed.width = true;
+	}
+
+	if (changed.$compact) {
+		if (differs(state.itemTitleClass, (state.itemTitleClass = itemTitleClass(state.$compact)))) changed.itemTitleClass = true;
+	}
+};
+
+/* components/Referrers.html generated by Svelte v1.50.0 */
+let loaded = false;
+
+function data() {
+  return {
+    referrers: []
+  }
+}
+
+function format(float) {
+  if (float < 0.01) return '< 0.01';
+  return float.toFixed(2).padStart(6)
+}
+
+var methods$2 = {
+  update(event) {
+    if (event.target.open && !loaded) this.load();
+  },
+
+  load() {
+    fetch(urls$$1.referrers).then(res => {
+      res.json().then(data => this.display(data));
+    });
+  },
+
+  display(data) {
+    const hosts = data.reduce((accu, item) => {
+      if (item.url.startsWith('http') && !item.url.startsWith(urls$$1.app)) {
+        const url = item.url.replace(/^([^.]*)www\./, '$1');
+        const host = url.split('/')[2];
+        let data = accu[host];
+
+        if (!data) {
+          data = { host, url, hits: item.hits, total: 0 };
+          accu[host] = data;
+          accu.push(data);
+        } else if (item.hits > data.hits) {
+          data.url = item.url;
+          data.hits = item.hits;
+        }
+
+        data.total += item.hits;
+      }
+      return accu;
+    }, []);
+
+    const total = hosts.reduce((accu, item) => accu += item.total, 0);
+
+    const referrers = hosts.map(item => {
+      item.percentage = item.total / total * 100;
+      return item;
+    });
+
+    referrers.sort((a, b) => b.percentage - a.percentage);
+
+    this.set({ referrers });
+    loaded = true;
+  }
+};
+
+function oncreate$2() {
+  if ('open' in document.createElement('details') === false) {
+    this.load();
+  }
+}
+
+function encapsulateStyles$8(node) {
+	setAttribute(node, "svelte-957126438", "");
+}
+
+function add_css$8() {
+	var style = createElement("style");
+	style.id = 'svelte-957126438-style';
+	style.textContent = "details[svelte-957126438]{line-height:1.2em}code[svelte-957126438]{margin-right:0.5em;color:#bbb;font-size:0.7em;white-space:pre}summary[svelte-957126438]{outline:none}.referrer[svelte-957126438]{white-space:nowrap}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiUmVmZXJyZXJzLmh0bWwiLCJzb3VyY2VzIjpbIlJlZmVycmVycy5odG1sIl0sInNvdXJjZXNDb250ZW50IjpbIjxkZXRhaWxzIG9uOnRvZ2dsZT0ndXBkYXRlKGV2ZW50KSc+XG4gIDxzdW1tYXJ5Pjwvc3VtbWFyeT5cbiAge3sgI2lmIHJlZmVycmVycy5sZW5ndGggfX1cbiAgICB7eyAjZWFjaCByZWZlcnJlcnMgYXMgcmVmZXJyZXIgfX1cbiAgICAgIDxkaXYgY2xhc3M9J3JlZmVycmVyJz5cbiAgICAgICAgPGNvZGU+e3sgZm9ybWF0KHJlZmVycmVyLnBlcmNlbnRhZ2UpIH19PC9jb2RlPlxuICAgICAgICA8YSBocmVmPSd7eyByZWZlcnJlci51cmwgfX0nPnt7IHJlZmVycmVyLmhvc3QgfX08L2E+XG4gICAgICA8L2Rpdj5cbiAgICB7eyAvZWFjaCB9fVxuICB7eyBlbHNlIH19XG4gICAgTG9hZGluZ+KAplxuICB7eyAvaWYgfX1cbjwvZGV0YWlscz5cblxuPHN0eWxlPlxuICBkZXRhaWxzIHtcbiAgICBsaW5lLWhlaWdodDogMS4yZW07XG4gIH1cblxuICBjb2RlIHtcbiAgICBtYXJnaW4tcmlnaHQ6IDAuNWVtO1xuICAgIGNvbG9yOiAjYmJiO1xuICAgIGZvbnQtc2l6ZTogMC43ZW07XG4gICAgd2hpdGUtc3BhY2U6IHByZTtcbiAgfVxuXG4gIHN1bW1hcnkge1xuICAgIG91dGxpbmU6IG5vbmU7XG4gIH1cblxuICAucmVmZXJyZXIge1xuICAgIHdoaXRlLXNwYWNlOiBub3dyYXA7XG4gIH1cbjwvc3R5bGU+XG5cbjxzY3JpcHQ+XG4gIGltcG9ydCB7IHVybHMgfSBmcm9tICcuLi9zcmMvc2V0dGluZ3MnO1xuXG4gIGxldCBsb2FkZWQgPSBmYWxzZTtcblxuICBleHBvcnQgZGVmYXVsdCB7XG4gICAgb25jcmVhdGUoKSB7XG4gICAgICBpZiAoJ29wZW4nIGluIGRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2RldGFpbHMnKSA9PT0gZmFsc2UpIHtcbiAgICAgICAgdGhpcy5sb2FkKCk7XG4gICAgICB9XG4gICAgfSxcblxuICAgIGRhdGEoKSB7XG4gICAgICByZXR1cm4ge1xuICAgICAgICByZWZlcnJlcnM6IFtdXG4gICAgICB9XG4gICAgfSxcblxuICAgIGhlbHBlcnM6IHtcbiAgICAgIGZvcm1hdDogZmxvYXQgPT4ge1xuICAgICAgICBpZiAoZmxvYXQgPCAwLjAxKSByZXR1cm4gJzwgMC4wMSc7XG4gICAgICAgIHJldHVybiBmbG9hdC50b0ZpeGVkKDIpLnBhZFN0YXJ0KDYpXG4gICAgICB9XG4gICAgfSxcblxuICAgIG1ldGhvZHM6IHtcbiAgICAgIHVwZGF0ZShldmVudCkge1xuICAgICAgICBpZiAoZXZlbnQudGFyZ2V0Lm9wZW4gJiYgIWxvYWRlZCkgdGhpcy5sb2FkKCk7XG4gICAgICB9LFxuXG4gICAgICBsb2FkKCkge1xuICAgICAgICBmZXRjaCh1cmxzLnJlZmVycmVycykudGhlbihyZXMgPT4ge1xuICAgICAgICAgIHJlcy5qc29uKCkudGhlbihkYXRhID0+IHRoaXMuZGlzcGxheShkYXRhKSk7XG4gICAgICAgIH0pO1xuICAgICAgfSxcblxuICAgICAgZGlzcGxheShkYXRhKSB7XG4gICAgICAgIGNvbnN0IGhvc3RzID0gZGF0YS5yZWR1Y2UoKGFjY3UsIGl0ZW0pID0+IHtcbiAgICAgICAgICBpZiAoaXRlbS51cmwuc3RhcnRzV2l0aCgnaHR0cCcpICYmICFpdGVtLnVybC5zdGFydHNXaXRoKHVybHMuYXBwKSkge1xuICAgICAgICAgICAgY29uc3QgdXJsID0gaXRlbS51cmwucmVwbGFjZSgvXihbXi5dKil3d3dcXC4vLCAnJDEnKTtcbiAgICAgICAgICAgIGNvbnN0IGhvc3QgPSB1cmwuc3BsaXQoJy8nKVsyXTtcbiAgICAgICAgICAgIGxldCBkYXRhID0gYWNjdVtob3N0XTtcblxuICAgICAgICAgICAgaWYgKCFkYXRhKSB7XG4gICAgICAgICAgICAgIGRhdGEgPSB7IGhvc3QsIHVybCwgaGl0czogaXRlbS5oaXRzLCB0b3RhbDogMCB9O1xuICAgICAgICAgICAgICBhY2N1W2hvc3RdID0gZGF0YTtcbiAgICAgICAgICAgICAgYWNjdS5wdXNoKGRhdGEpO1xuICAgICAgICAgICAgfSBlbHNlIGlmIChpdGVtLmhpdHMgPiBkYXRhLmhpdHMpIHtcbiAgICAgICAgICAgICAgZGF0YS51cmwgPSBpdGVtLnVybDtcbiAgICAgICAgICAgICAgZGF0YS5oaXRzID0gaXRlbS5oaXRzO1xuICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICBkYXRhLnRvdGFsICs9IGl0ZW0uaGl0cztcbiAgICAgICAgICB9XG4gICAgICAgICAgcmV0dXJuIGFjY3U7XG4gICAgICAgIH0sIFtdKTtcblxuICAgICAgICBjb25zdCB0b3RhbCA9IGhvc3RzLnJlZHVjZSgoYWNjdSwgaXRlbSkgPT4gYWNjdSArPSBpdGVtLnRvdGFsLCAwKTtcblxuICAgICAgICBjb25zdCByZWZlcnJlcnMgPSBob3N0cy5tYXAoaXRlbSA9PiB7XG4gICAgICAgICAgaXRlbS5wZXJjZW50YWdlID0gaXRlbS50b3RhbCAvIHRvdGFsICogMTAwO1xuICAgICAgICAgIHJldHVybiBpdGVtO1xuICAgICAgICB9KTtcblxuICAgICAgICByZWZlcnJlcnMuc29ydCgoYSwgYikgPT4gYi5wZXJjZW50YWdlIC0gYS5wZXJjZW50YWdlKTtcblxuICAgICAgICB0aGlzLnNldCh7IHJlZmVycmVycyB9KTtcbiAgICAgICAgbG9hZGVkID0gdHJ1ZTtcbiAgICAgIH1cbiAgICB9XG4gIH1cbjwvc2NyaXB0PlxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQWVFLE9BQU8sa0JBQUMsQ0FBQyxBQUNQLFdBQVcsQ0FBRSxLQUFLLEFBQ3BCLENBQUMsQUFFRCxJQUFJLGtCQUFDLENBQUMsQUFDSixZQUFZLENBQUUsS0FBSyxDQUNuQixLQUFLLENBQUUsSUFBSSxDQUNYLFNBQVMsQ0FBRSxLQUFLLENBQ2hCLFdBQVcsQ0FBRSxHQUFHLEFBQ2xCLENBQUMsQUFFRCxPQUFPLGtCQUFDLENBQUMsQUFDUCxPQUFPLENBQUUsSUFBSSxBQUNmLENBQUMsQUFFRCxTQUFTLGtCQUFDLENBQUMsQUFDVCxXQUFXLENBQUUsTUFBTSxBQUNyQixDQUFDIn0= */";
+	appendNode(style, document.head);
+}
+
+function create_main_fragment$10(state, component) {
+	var details, summary, text;
+
+	var current_block_type = select_block_type$2(state);
+	var if_block = current_block_type(state, component);
+
+	function toggle_handler(event) {
+		component.update(event);
+	}
+
+	return {
+		c: function create() {
+			details = createElement("details");
+			summary = createElement("summary");
+			text = createText("\n  ");
+			if_block.c();
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$8(details);
+			encapsulateStyles$8(summary);
+			addListener(details, "toggle", toggle_handler);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(details, target, anchor);
+			appendNode(summary, details);
+			appendNode(text, details);
+			if_block.m(details, null);
+		},
+
+		p: function update(changed, state) {
+			if (current_block_type === (current_block_type = select_block_type$2(state)) && if_block) {
+				if_block.p(changed, state);
+			} else {
+				if_block.u();
+				if_block.d();
+				if_block = current_block_type(state, component);
+				if_block.c();
+				if_block.m(details, null);
+			}
+		},
+
+		u: function unmount() {
+			detachNode(details);
+			if_block.u();
+		},
+
+		d: function destroy$$1() {
+			if_block.d();
+			removeListener(details, "toggle", toggle_handler);
+		}
+	};
+}
+
+// (4:4) {{ #each referrers as referrer }}
+function create_each_block$1(state, referrers, referrer, referrer_index, component) {
+	var div, code, text_value = format(referrer.percentage), text, text_1, a, text_2_value = referrer.host, text_2, a_href_value;
+
+	return {
+		c: function create() {
+			div = createElement("div");
+			code = createElement("code");
+			text = createText(text_value);
+			text_1 = createText("\n        ");
+			a = createElement("a");
+			text_2 = createText(text_2_value);
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$8(div);
+			encapsulateStyles$8(code);
+			a.href = a_href_value = referrer.url;
+			div.className = "referrer";
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(div, target, anchor);
+			appendNode(code, div);
+			appendNode(text, code);
+			appendNode(text_1, div);
+			appendNode(a, div);
+			appendNode(text_2, a);
+		},
+
+		p: function update(changed, state, referrers, referrer, referrer_index) {
+			if ((changed.referrers) && text_value !== (text_value = format(referrer.percentage))) {
+				text.data = text_value;
+			}
+
+			if ((changed.referrers) && text_2_value !== (text_2_value = referrer.host)) {
+				text_2.data = text_2_value;
+			}
+
+			if ((changed.referrers) && a_href_value !== (a_href_value = referrer.url)) {
+				a.href = a_href_value;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(div);
+		},
+
+		d: noop
+	};
+}
+
+// (3:2) {{ #if referrers.length }}
+function create_if_block$2(state, component) {
+	var each_anchor;
+
+	var referrers = state.referrers;
+
+	var each_blocks = [];
+
+	for (var i = 0; i < referrers.length; i += 1) {
+		each_blocks[i] = create_each_block$1(state, referrers, referrers[i], i, component);
+	}
+
+	return {
+		c: function create() {
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].c();
+			}
+
+			each_anchor = createComment();
+		},
+
+		m: function mount(target, anchor) {
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].m(target, anchor);
+			}
+
+			insertNode(each_anchor, target, anchor);
+		},
+
+		p: function update(changed, state) {
+			var referrers = state.referrers;
+
+			if (changed.referrers) {
+				for (var i = 0; i < referrers.length; i += 1) {
+					if (each_blocks[i]) {
+						each_blocks[i].p(changed, state, referrers, referrers[i], i);
+					} else {
+						each_blocks[i] = create_each_block$1(state, referrers, referrers[i], i, component);
+						each_blocks[i].c();
+						each_blocks[i].m(each_anchor.parentNode, each_anchor);
+					}
+				}
+
+				for (; i < each_blocks.length; i += 1) {
+					each_blocks[i].u();
+					each_blocks[i].d();
+				}
+				each_blocks.length = referrers.length;
+			}
+		},
+
+		u: function unmount() {
+			for (var i = 0; i < each_blocks.length; i += 1) {
+				each_blocks[i].u();
+			}
+
+			detachNode(each_anchor);
+		},
+
+		d: function destroy$$1() {
+			destroyEach(each_blocks);
+		}
+	};
+}
+
+// (10:2) {{ else }}
+function create_if_block_1$2(state, component) {
+	var text;
+
+	return {
+		c: function create() {
+			text = createText("Loading…");
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(text, target, anchor);
+		},
+
+		p: noop,
+
+		u: function unmount() {
+			detachNode(text);
+		},
+
+		d: noop
+	};
+}
+
+function select_block_type$2(state) {
+	if (state.referrers.length) return create_if_block$2;
+	return create_if_block_1$2;
+}
+
+function Referrers(options) {
+	this._debugName = '<Referrers>';
+	if (!options || (!options.target && !options.root)) throw new Error("'target' is a required option");
+	init(this, options);
+	this._state = assign(data(), options.data);
+	if (!('referrers' in this._state)) console.warn("<Referrers> was created without expected data property 'referrers'");
+
+	if (!document.getElementById("svelte-957126438-style")) add_css$8();
+
+	var _oncreate = oncreate$2.bind(this);
+
+	if (!options.root) {
+		this._oncreate = [_oncreate];
+	} else {
+	 	this.root._oncreate.push(_oncreate);
+	 }
+
+	this._fragment = create_main_fragment$10(this._state, this);
+
+	if (options.target) {
+		if (options.hydrate) throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		this._fragment.c();
+		this._fragment.m(options.target, options.anchor || null);
+
+		callAll(this._oncreate);
+	}
+}
+
+assign(Referrers.prototype, methods$2, protoDev);
+
+Referrers.prototype._checkReadOnly = function _checkReadOnly(newState) {
+};
+
+/* components/Configurator.html generated by Svelte v1.50.0 */
+var methods$1 = {
+  update(event) {
+    event.preventDefault();
+    if (!event.target.checkValidity()) return event.target.reportValidity();
+    const name = event.target.name;
+    const type = event.target.type;
+    const value = event.target[type === 'checkbox' ? 'checked' : 'value'];
+    this.store.set({ [name]: value });
+  },
+
+  reload(event) {
+    event.preventDefault();
+    const url = this.store.get('url');
+    this.store.set({ url: null });
+    this.store.set({ url });
+  },
+
+  copy(event) {
+    try {
+      event.target.select();
+      document.execCommand('copy');
+    } catch (error) { }
+  },
+
+  label(event) {
+    const sibling = event.target.parentNode.nextElementSibling;
+    let input = sibling.querySelector('input');
+    if (!input) input = sibling.querySelector('summary');
+    if (!input) input = sibling.querySelector('textarea');
+    if (!input) return;
+    if (input.click) input.click();
+    if (input.select) input.select();
+  }
+};
+
+function encapsulateStyles$7(node) {
+	setAttribute(node, "svelte-3994292734", "");
+}
+
+function add_css$7() {
+	var style = createElement("style");
+	style.id = 'svelte-3994292734-style';
+	style.textContent = "table[svelte-3994292734]{overflow:auto}tr[svelte-3994292734] td[svelte-3994292734]:first-child{color:#bbb;text-align:right;white-space:nowrap}summary[svelte-3994292734]{outline:none}input[type='color'][svelte-3994292734]{width:108px;height:30px;padding:1px 3px}.top[svelte-3994292734]{vertical-align:top}.source[svelte-3994292734]{line-height:1em}[name=url][svelte-3994292734],[name=fontFace][svelte-3994292734],[name=code][svelte-3994292734]{width:90%}[type=color][svelte-3994292734],[type=number][svelte-3994292734]{width:7em}[name=code][svelte-3994292734]{color:#bbb;height:10em;overflow:hidden;resize:vertical}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiQ29uZmlndXJhdG9yLmh0bWwiLCJzb3VyY2VzIjpbIkNvbmZpZ3VyYXRvci5odG1sIl0sInNvdXJjZXNDb250ZW50IjpbIjxmb3JtIG9uOnN1Ym1pdD0ndXBkYXRlKGV2ZW50KSc+XG4gIDx0YWJsZSBjbGFzcz0ndGFibGUnPlxuICAgIDxjb2xncm91cD5cbiAgICAgIDxjb2wgd2lkdGg9JyonPlxuICAgICAgPGNvbCB3aWR0aD0nOTAlJz5cbiAgICA8L2NvbGdyb3VwPlxuICAgIDx0cj5cbiAgICAgIDx0ZD5cbiAgICAgICAgPGxhYmVsIG9uOmNsaWNrPSdsYWJlbChldmVudCknPkZlZWQgVVJMPC9sYWJlbD5cbiAgICAgIDwvdGQ+XG4gICAgICA8dGQ+XG4gICAgICAgIDxpbnB1dCB0eXBlPSd1cmwnIG5hbWU9J3VybCcgdmFsdWU9J3t7ICR1cmwgfX0nIHJlcXVpcmVkIG9uOmNoYW5nZT0ndXBkYXRlKGV2ZW50KSc+XG4gICAgICA8L3RkPlxuICAgIDwvdHI+XG4gICAgPHRyPlxuICAgICAgPHRkPlxuICAgICAgICA8bGFiZWw+VGl0bGU8L2xhYmVsPlxuICAgICAgPC90ZD5cbiAgICAgIDx0ZD57eyAkdGl0bGUgfX08L3RkPlxuICAgIDwvdHI+XG4gICAgPHRyPlxuICAgICAgPHRkIGNsYXNzPSd0b3AnPlxuICAgICAgICA8bGFiZWwgb246Y2xpY2s9J2xhYmVsKGV2ZW50KSc+RGVzY3JpcHRpb248L2xhYmVsPlxuICAgICAgPC90ZD5cbiAgICAgIDx0ZD5cbiAgICAgICAgPGRldGFpbHM+XG4gICAgICAgICAgPHN1bW1hcnk+PC9zdW1tYXJ5PlxuICAgICAgICAgIHt7ICRkZXNjcmlwdGlvbiB9fVxuICAgICAgICA8L2RldGFpbHM+XG4gICAgICA8L3RkPlxuICAgIDwvdHI+XG4gICAgPHRyPlxuICAgICAgPHRkPlxuICAgICAgICA8bGFiZWw+TGFzdCBidWlsZDwvbGFiZWw+XG4gICAgICA8L3RkPlxuICAgICAgPHRkPnt7ICRmb3JtYXR0ZWREYXRlIH19PC90ZD5cbiAgICA8L3RyPlxuICAgIDx0cj5cbiAgICAgIDx0ZD5cbiAgICAgICAgPGxhYmVsPlNvdXJjZTwvbGFiZWw+XG4gICAgICA8L3RkPlxuICAgICAgPHRkIGNsYXNzPSdzb3VyY2UnPlxuICAgICAgICB7eyAjaWYgJGxvYWRpbmcgfX1cbiAgICAgICAgICBMb2FkaW5nLi4uXG4gICAgICAgIHt7IGVsc2UgfX1cbiAgICAgICAgICA8YSBocmVmPSd7eyAkdXJsIH19Jz57eyAkZm9ybWF0IH19IHt7ICR2ZXJzaW9uIH19PC9hPlxuICAgICAgICB7eyAvaWYgfX1cbiAgICAgIDwvdGQ+XG4gICAgPC90cj5cbiAgICA8dHI+XG4gICAgICA8dGQ+XG4gICAgICAgIDxsYWJlbCBvbjpjbGljaz0nbGFiZWwoZXZlbnQpJz5NYXguIGl0ZW1zPC9sYWJlbD5cbiAgICAgIDwvdGQ+XG4gICAgICA8dGQ+XG4gICAgICAgIDxpbnB1dCB0eXBlPSdudW1iZXInIG5hbWU9J21heEl0ZW1zJyB2YWx1ZT0ne3sgJG1heEl0ZW1zIH19JyBtaW49MSBtYXg9OTkgcmVxdWlyZWQgb246Y2hhbmdlPSd1cGRhdGUoZXZlbnQpJz5cbiAgICAgIDwvdGQ+XG4gICAgPC90cj5cbiAgICA8dHI+XG4gICAgICA8dGQ+XG4gICAgICAgIDxsYWJlbCBvbjpjbGljaz0nbGFiZWwoZXZlbnQpJz5NYXguIHdpZHRoPC9sYWJlbD5cbiAgICAgIDwvdGQ+XG4gICAgICA8dGQ+XG4gICAgICAgIDxpbnB1dCB0eXBlPSdudW1iZXInIG5hbWU9J3dpZHRoJyB2YWx1ZT0ne3sgJHdpZHRoIH19JyBtaW49MTAwIG1heD05OTk5IG9uOmNoYW5nZT0ndXBkYXRlKGV2ZW50KScgcGxhY2Vob2xkZXI9J3NwYXJlJz5cbiAgICAgICAgPHNtYWxsPnB4PC9zbWFsbD5cbiAgICAgIDwvdGQ+XG4gICAgPC90cj5cbiAgICA8dHI+XG4gICAgICA8dGQ+XG4gICAgICAgIDxsYWJlbCBvbjpjbGljaz0nbGFiZWwoZXZlbnQpJz5Db250ZW50IGhlaWdodDwvbGFiZWw+XG4gICAgICA8L3RkPlxuICAgICAgPHRkPlxuICAgICAgICA8aW5wdXQgdHlwZT0nbnVtYmVyJyBuYW1lPSdoZWlnaHQnIHZhbHVlPSd7eyAkaGVpZ2h0IH19JyBtaW49MTAwIG1heD05OTk5IG9uOmNoYW5nZT0ndXBkYXRlKGV2ZW50KScgcGxhY2Vob2xkZXI9J3NwYXJlJz5cbiAgICAgICAgPHNtYWxsPnB4PC9zbWFsbD5cbiAgICAgIDwvdGQ+XG4gICAgPC90cj5cbiAgICA8dHI+XG4gICAgICA8dGQ+XG4gICAgICAgIDxsYWJlbCBvbjpjbGljaz0nbGFiZWwoZXZlbnQpJz5Db3JuZXIgcmFkaXVzPC9sYWJlbD5cbiAgICAgIDwvdGQ+XG4gICAgICA8dGQ+XG4gICAgICAgIDxpbnB1dCB0eXBlPSdudW1iZXInIG5hbWU9J3JhZGl1cycgdmFsdWU9J3t7ICRyYWRpdXMgfX0nIG1pbj0wIG1heD0yMCByZXF1aXJlZCBvbjpjaGFuZ2U9J3VwZGF0ZShldmVudCknPlxuICAgICAgICA8c21hbGw+cHg8L3NtYWxsPlxuICAgICAgPC90ZD5cbiAgICA8L3RyPlxuICAgIDx0cj5cbiAgICAgIDx0ZD5cbiAgICAgICAgPGxhYmVsIG9uOmNsaWNrPSdsYWJlbChldmVudCknPlhNTCBidXR0b248L2xhYmVsPlxuICAgICAgPC90ZD5cbiAgICAgIDx0ZD5cbiAgICAgICAgPGlucHV0IHR5cGU9J2NoZWNrYm94JyBuYW1lPSdzaG93WG1sQnV0dG9uJyB2YWx1ZT0nMScgY2hlY2tlZD0ne3sgJHNob3dYbWxCdXR0b24gfX0nIG9uOmNoYW5nZT0ndXBkYXRlKGV2ZW50KSc+XG4gICAgICA8L3RkPlxuICAgIDwvdHI+XG4gICAgPHRyPlxuICAgICAgPHRkPlxuICAgICAgICA8bGFiZWwgb246Y2xpY2s9J2xhYmVsKGV2ZW50KSc+Q29tcGFjdCB2aWV3PC9sYWJlbD5cbiAgICAgIDwvdGQ+XG4gICAgICA8dGQ+XG4gICAgICAgIDxpbnB1dCB0eXBlPSdjaGVja2JveCcgbmFtZT0nY29tcGFjdCcgdmFsdWU9JzEnIGNoZWNrZWQ9J3t7ICRjb21wYWN0IH19JyBvbjpjaGFuZ2U9J3VwZGF0ZShldmVudCknPlxuICAgICAgPC90ZD5cbiAgICA8L3RyPlxuICAgIDx0cj5cbiAgICAgIDx0ZD5cbiAgICAgICAgPGxhYmVsIG9uOmNsaWNrPSdsYWJlbChldmVudCknPkhlYWRsZXNzPC9sYWJlbD5cbiAgICAgIDwvdGQ+XG4gICAgICA8dGQ+XG4gICAgICAgIDxpbnB1dCB0eXBlPSdjaGVja2JveCcgbmFtZT0naGVhZGxlc3MnIHZhbHVlPScxJyBjaGVja2VkPSd7eyAkaGVhZGxlc3MgfX0nIG9uOmNoYW5nZT0ndXBkYXRlKGV2ZW50KSc+XG4gICAgICA8L3RkPlxuICAgIDwvdHI+XG4gICAgPHRyPlxuICAgICAgPHRkPlxuICAgICAgICA8bGFiZWwgb246Y2xpY2s9J2xhYmVsKGV2ZW50KSc+RnJhbWUgY29sb3I8L2xhYmVsPlxuICAgICAgPC90ZD5cbiAgICAgIDx0ZD5cbiAgICAgICAgPGlucHV0IHR5cGU9J2NvbG9yJyBuYW1lPSdmcmFtZUNvbG9yJyB2YWx1ZT0ne3sgJGZyYW1lQ29sb3IgfX0nIHNpemU9NiBtYXhsZW5ndGg9NyBvbjpjaGFuZ2U9J3VwZGF0ZShldmVudCknPlxuICAgICAgPC90ZD5cbiAgICA8L3RyPlxuICAgIDx0cj5cbiAgICAgIDx0ZD5cbiAgICAgICAgPGxhYmVsIG9uOmNsaWNrPSdsYWJlbChldmVudCknPlRpdGxlYmFyIGNvbG9yPC9sYWJlbD5cbiAgICAgIDwvdGQ+XG4gICAgICA8dGQ+XG4gICAgICAgIDxpbnB1dCB0eXBlPSdjb2xvcicgbmFtZT0ndGl0bGVCYXJDb2xvcicgdmFsdWU9J3t7ICR0aXRsZUJhckNvbG9yIH19JyBzaXplPTYgbWF4bGVuZ3RoPTcgb246Y2hhbmdlPSd1cGRhdGUoZXZlbnQpJz5cbiAgICAgIDwvdGQ+XG4gICAgPC90cj5cbiAgICA8dHI+XG4gICAgICA8dGQ+XG4gICAgICAgIDxsYWJlbCBvbjpjbGljaz0nbGFiZWwoZXZlbnQpJz5UaXRsZSBjb2xvcjwvbGFiZWw+XG4gICAgICA8L3RkPlxuICAgICAgPHRkPlxuICAgICAgICA8aW5wdXQgdHlwZT0nY29sb3InIG5hbWU9J3RpdGxlQmFyVGV4dENvbG9yJyB2YWx1ZT0ne3sgJHRpdGxlQmFyVGV4dENvbG9yIH19JyBzaXplPTYgbWF4bGVuZ3RoPTcgb246Y2hhbmdlPSd1cGRhdGUoZXZlbnQpJz5cbiAgICAgIDwvdGQ+XG4gICAgPC90cj5cbiAgICA8dHI+XG4gICAgICA8dGQ+XG4gICAgICAgIDxsYWJlbCBvbjpjbGljaz0nbGFiZWwoZXZlbnQpJz5Cb3ggY29sb3I8L2xhYmVsPlxuICAgICAgPC90ZD5cbiAgICAgIDx0ZD5cbiAgICAgICAgPGlucHV0IHR5cGU9J2NvbG9yJyBuYW1lPSdib3hGaWxsQ29sb3InIHZhbHVlPSd7eyAkYm94RmlsbENvbG9yIH19JyBzaXplPTYgbWF4bGVuZ3RoPTcgb246Y2hhbmdlPSd1cGRhdGUoZXZlbnQpJz5cbiAgICAgIDwvdGQ+XG4gICAgPC90cj5cbiAgICA8dHI+XG4gICAgICA8dGQ+XG4gICAgICAgIDxsYWJlbCBvbjpjbGljaz0nbGFiZWwoZXZlbnQpJz5UZXh0IGNvbG9yPC9sYWJlbD5cbiAgICAgIDwvdGQ+XG4gICAgICA8dGQ+XG4gICAgICAgIDxpbnB1dCB0eXBlPSdjb2xvcicgbmFtZT0ndGV4dENvbG9yJyB2YWx1ZT0ne3sgJHRleHRDb2xvciB9fScgc2l6ZT02IG1heGxlbmd0aD03IG9uOmNoYW5nZT0ndXBkYXRlKGV2ZW50KSc+XG4gICAgICA8L3RkPlxuICAgIDwvdHI+XG4gICAgPHRyPlxuICAgICAgPHRkPlxuICAgICAgICA8bGFiZWwgb246Y2xpY2s9J2xhYmVsKGV2ZW50KSc+TGluayBjb2xvcjwvbGFiZWw+XG4gICAgICA8L3RkPlxuICAgICAgPHRkPlxuICAgICAgICA8aW5wdXQgdHlwZT0nY29sb3InIG5hbWU9J2xpbmtDb2xvcicgdmFsdWU9J3t7ICRsaW5rQ29sb3IgfX0nIHNpemU9NiBtYXhsZW5ndGg9NyBvbjpjaGFuZ2U9J3VwZGF0ZShldmVudCknPlxuICAgICAgPC90ZD5cbiAgICA8L3RyPlxuICAgIDx0cj5cbiAgICAgIDx0ZD5cbiAgICAgICAgPGxhYmVsIG9uOmNsaWNrPSdsYWJlbChldmVudCknPkZvbnQgZmFjZTwvbGFiZWw+XG4gICAgICA8L3RkPlxuICAgICAgPHRkPlxuICAgICAgICA8aW5wdXQgbmFtZT0nZm9udEZhY2UnIHZhbHVlPSd7eyAkZm9udEZhY2UgfX0nIG9uOmNoYW5nZT0ndXBkYXRlKGV2ZW50KScgcGF0dGVybj0nW1xcZC5dKyg/OnB0fHB4fGVtfCUpK1xccytbXFxzXFx3XFwtLF0rJyBwbGFjZWhvbGRlcj0nZS5nLiAxMHB0IEhlbHZldGljYSwgc2Fucy1zZXJpZic+XG4gICAgICA8L3RkPlxuICAgIDwvdHI+XG4gICAgPHRyPlxuICAgICAgPHRkPjwvdGQ+XG4gICAgICA8dGQ+XG4gICAgICAgIHt7ICNpZiAkbG9hZGluZyB9fVxuICAgICAgICAgIDxidXR0b24gY2xhc3M9J2J0biBidG4tc20gYnRuLWMnIGRpc2FibGVkPkxvYWRpbmcuLi48L2J1dHRvbj5cbiAgICAgICAge3sgZWxzZSB9fVxuICAgICAgICAgIDxidXR0b24gY2xhc3M9J2J0biBidG4tc20gYnRuLWInIHR5cGU9J2J1dHRvbicgb246Y2xpY2s9J3JlbG9hZChldmVudCknPlJlbG9hZDwvYnV0dG9uPlxuICAgICAgICB7eyAvaWYgfX1cbiAgICAgIDwvdGQ+XG4gICAgPC90cj5cbiAgICA8dHIgc3R5bGU9J3ZlcnRpY2FsLWFsaWduOiB0b3AnPlxuICAgICAgPHRkPlxuICAgICAgICA8bGFiZWwgb246Y2xpY2s9J2xhYmVsKGV2ZW50KSc+XG4gICAgICAgICAgSFRNTCBjb2RlPGJyPlxuICAgICAgICAgIChjb3B5JmFtcDtwYXN0YSlcbiAgICAgICAgPC9sYWJlbD5cbiAgICAgIDwvdGQ+XG4gICAgICA8dGQ+XG4gICAgICAgIDx0ZXh0YXJlYSBuYW1lPSdjb2RlJyBjb2xzPScxMCcgcm93cz0nMycgcmVhZG9ubHkgb246Y2xpY2s9J2NvcHkoZXZlbnQpJz57eyAkY29kZSB9fTwvdGV4dGFyZWE+XG4gICAgICA8L3RkPlxuICAgIDwvdHI+XG4gICAgPHRyPlxuICAgICAgPHRkIGNsYXNzPSd0b3AnPlxuICAgICAgICA8bGFiZWwgb246Y2xpY2s9J2xhYmVsKGV2ZW50KScgdGl0bGU9J3NpbmNlIG1pZG5pZ2h0IChHTVQpJz5cbiAgICAgICAgICBSZWZlcnJlcnNcbiAgICAgICAgPC9sYWJlbD5cbiAgICAgIDwvdGQ+XG4gICAgICA8dGQgY2xhc3M9J3RvcCc+XG4gICAgICAgIDxSZWZlcnJlcnMvPlxuICAgICAgPC90ZD5cbiAgICA8L3RyPlxuICA8L3RhYmxlPlxuPC9mb3JtPlxuXG48c3R5bGU+XG4gIHRhYmxlIHtcbiAgICBvdmVyZmxvdzogYXV0bztcbiAgfVxuXG4gIHRyIHRkOmZpcnN0LWNoaWxkIHtcbiAgICBjb2xvcjogI2JiYjtcbiAgICB0ZXh0LWFsaWduOiByaWdodDtcbiAgICB3aGl0ZS1zcGFjZTogbm93cmFwO1xuICB9XG5cbiAgc3VtbWFyeSB7XG4gICAgb3V0bGluZTogbm9uZTtcbiAgfVxuXG4gIGlucHV0W3R5cGU9J2NvbG9yJ10ge1xuICAgIHdpZHRoOiAxMDhweDtcbiAgICBoZWlnaHQ6IDMwcHg7XG4gICAgcGFkZGluZzogMXB4IDNweDtcbiAgfVxuXG4gIC50b3Age1xuICAgIHZlcnRpY2FsLWFsaWduOiB0b3A7XG4gIH1cblxuICAuc291cmNlIHtcbiAgICBsaW5lLWhlaWdodDogMWVtO1xuICB9XG5cbiAgW25hbWU9dXJsXSwgW25hbWU9Zm9udEZhY2VdLCBbbmFtZT1jb2RlXSB7XG4gICAgd2lkdGg6IDkwJTtcbiAgfVxuXG4gIFt0eXBlPWNvbG9yXSwgW3R5cGU9bnVtYmVyXSB7XG4gICAgd2lkdGg6IDdlbTtcbiAgfVxuXG4gIFtuYW1lPWNvZGVdIHtcbiAgICBjb2xvcjogI2JiYjtcbiAgICBoZWlnaHQ6IDEwZW07XG4gICAgb3ZlcmZsb3c6IGhpZGRlbjtcbiAgICByZXNpemU6IHZlcnRpY2FsO1xuICB9XG48L3N0eWxlPlxuXG48c2NyaXB0PlxuICBpbXBvcnQgUmVmZXJyZXJzIGZyb20gJy4vUmVmZXJyZXJzLmh0bWwnO1xuXG4gIGV4cG9ydCBkZWZhdWx0IHtcbiAgICBjb21wb25lbnRzOiB7XG4gICAgICBSZWZlcnJlcnNcbiAgICB9LFxuXG4gICAgbWV0aG9kczoge1xuICAgICAgdXBkYXRlKGV2ZW50KSB7XG4gICAgICAgIGV2ZW50LnByZXZlbnREZWZhdWx0KCk7XG4gICAgICAgIGlmICghZXZlbnQudGFyZ2V0LmNoZWNrVmFsaWRpdHkoKSkgcmV0dXJuIGV2ZW50LnRhcmdldC5yZXBvcnRWYWxpZGl0eSgpO1xuICAgICAgICBjb25zdCBuYW1lID0gZXZlbnQudGFyZ2V0Lm5hbWU7XG4gICAgICAgIGNvbnN0IHR5cGUgPSBldmVudC50YXJnZXQudHlwZTtcbiAgICAgICAgY29uc3QgdmFsdWUgPSBldmVudC50YXJnZXRbdHlwZSA9PT0gJ2NoZWNrYm94JyA/ICdjaGVja2VkJyA6ICd2YWx1ZSddO1xuICAgICAgICB0aGlzLnN0b3JlLnNldCh7IFtuYW1lXTogdmFsdWUgfSk7XG4gICAgICB9LFxuXG4gICAgICByZWxvYWQoZXZlbnQpIHtcbiAgICAgICAgZXZlbnQucHJldmVudERlZmF1bHQoKTtcbiAgICAgICAgY29uc3QgdXJsID0gdGhpcy5zdG9yZS5nZXQoJ3VybCcpO1xuICAgICAgICB0aGlzLnN0b3JlLnNldCh7IHVybDogbnVsbCB9KTtcbiAgICAgICAgdGhpcy5zdG9yZS5zZXQoeyB1cmwgfSk7XG4gICAgICB9LFxuXG4gICAgICBjb3B5KGV2ZW50KSB7XG4gICAgICAgIHRyeSB7XG4gICAgICAgICAgZXZlbnQudGFyZ2V0LnNlbGVjdCgpO1xuICAgICAgICAgIGRvY3VtZW50LmV4ZWNDb21tYW5kKCdjb3B5Jyk7XG4gICAgICAgIH0gY2F0Y2ggKGVycm9yKSB7IH1cbiAgICAgIH0sXG5cbiAgICAgIGxhYmVsKGV2ZW50KSB7XG4gICAgICAgIGNvbnN0IHNpYmxpbmcgPSBldmVudC50YXJnZXQucGFyZW50Tm9kZS5uZXh0RWxlbWVudFNpYmxpbmc7XG4gICAgICAgIGxldCBpbnB1dCA9IHNpYmxpbmcucXVlcnlTZWxlY3RvcignaW5wdXQnKTtcbiAgICAgICAgaWYgKCFpbnB1dCkgaW5wdXQgPSBzaWJsaW5nLnF1ZXJ5U2VsZWN0b3IoJ3N1bW1hcnknKTtcbiAgICAgICAgaWYgKCFpbnB1dCkgaW5wdXQgPSBzaWJsaW5nLnF1ZXJ5U2VsZWN0b3IoJ3RleHRhcmVhJyk7XG4gICAgICAgIGlmICghaW5wdXQpIHJldHVybjtcbiAgICAgICAgaWYgKGlucHV0LmNsaWNrKSBpbnB1dC5jbGljaygpO1xuICAgICAgICBpZiAoaW5wdXQuc2VsZWN0KSBpbnB1dC5zZWxlY3QoKTtcbiAgICAgIH1cbiAgICB9XG4gIH1cbjwvc2NyaXB0PlxuIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQXVNRSxLQUFLLG1CQUFDLENBQUMsQUFDTCxRQUFRLENBQUUsSUFBSSxBQUNoQixDQUFDLEFBRUQscUJBQUUsQ0FBQyxxQkFBRSxZQUFZLEFBQUMsQ0FBQyxBQUNqQixLQUFLLENBQUUsSUFBSSxDQUNYLFVBQVUsQ0FBRSxLQUFLLENBQ2pCLFdBQVcsQ0FBRSxNQUFNLEFBQ3JCLENBQUMsQUFFRCxPQUFPLG1CQUFDLENBQUMsQUFDUCxPQUFPLENBQUUsSUFBSSxBQUNmLENBQUMsQUFFRCxLQUFLLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBQyxtQkFBQyxDQUFDLEFBQ25CLEtBQUssQ0FBRSxLQUFLLENBQ1osTUFBTSxDQUFFLElBQUksQ0FDWixPQUFPLENBQUUsR0FBRyxDQUFDLEdBQUcsQUFDbEIsQ0FBQyxBQUVELElBQUksbUJBQUMsQ0FBQyxBQUNKLGNBQWMsQ0FBRSxHQUFHLEFBQ3JCLENBQUMsQUFFRCxPQUFPLG1CQUFDLENBQUMsQUFDUCxXQUFXLENBQUUsR0FBRyxBQUNsQixDQUFDLEFBRUQsQ0FBQyxJQUFJLENBQUMsR0FBRyxvQkFBQyxDQUFFLENBQUMsSUFBSSxDQUFDLFFBQVEsb0JBQUMsQ0FBRSxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsbUJBQUMsQ0FBQyxBQUN4QyxLQUFLLENBQUUsR0FBRyxBQUNaLENBQUMsQUFFRCxDQUFDLElBQUksQ0FBQyxLQUFLLG9CQUFDLENBQUUsQ0FBQyxJQUFJLENBQUMsTUFBTSxDQUFDLG1CQUFDLENBQUMsQUFDM0IsS0FBSyxDQUFFLEdBQUcsQUFDWixDQUFDLEFBRUQsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLG1CQUFDLENBQUMsQUFDWCxLQUFLLENBQUUsSUFBSSxDQUNYLE1BQU0sQ0FBRSxJQUFJLENBQ1osUUFBUSxDQUFFLE1BQU0sQ0FDaEIsTUFBTSxDQUFFLFFBQVEsQUFDbEIsQ0FBQyJ9 */";
+	appendNode(style, document.head);
+}
+
+function create_main_fragment$9(state, component) {
+	var form, table, colgroup, text_2, tr, td, label, text_5, td_1, input, text_8, tr_1, td_2, text_11, td_3, text_12, text_14, tr_2, td_4, label_2, text_17, td_5, details, summary, text_18, text_19, text_23, tr_3, td_6, text_26, td_7, text_27, text_29, tr_4, td_8, text_32, td_9, text_35, tr_5, td_10, label_5, text_38, td_11, input_1, text_41, tr_6, td_12, label_6, text_44, td_13, input_2, text_45, small, text_49, tr_7, td_14, label_7, text_52, td_15, input_3, text_53, small_1, text_57, tr_8, td_16, label_8, text_60, td_17, input_4, text_61, small_2, text_65, tr_9, td_18, label_9, text_68, td_19, input_5, text_71, tr_10, td_20, label_10, text_74, td_21, input_6, text_77, tr_11, td_22, label_11, text_80, td_23, input_7, text_83, tr_12, td_24, label_12, text_86, td_25, input_8, text_89, tr_13, td_26, label_13, text_92, td_27, input_9, text_95, tr_14, td_28, label_14, text_98, td_29, input_10, text_101, tr_15, td_30, label_15, text_104, td_31, input_11, text_107, tr_16, td_32, label_16, text_110, td_33, input_12, text_113, tr_17, td_34, label_17, text_116, td_35, input_13, text_119, tr_18, td_36, label_18, text_122, td_37, input_14, text_125, tr_19, td_38, text_126, td_39, text_129, tr_20, td_40, label_19, text_133, td_41, textarea, text_136, tr_21, td_42, label_20, text_139, td_43;
+
+	function click_handler(event) {
+		component.label(event);
+	}
+
+	function change_handler(event) {
+		component.update(event);
+	}
+
+	function click_handler_1(event) {
+		component.label(event);
+	}
+
+	var current_block_type = select_block_type$1(state);
+	var if_block = current_block_type(state, component);
+
+	function click_handler_2(event) {
+		component.label(event);
+	}
+
+	function change_handler_1(event) {
+		component.update(event);
+	}
+
+	function click_handler_3(event) {
+		component.label(event);
+	}
+
+	function change_handler_2(event) {
+		component.update(event);
+	}
+
+	function click_handler_4(event) {
+		component.label(event);
+	}
+
+	function change_handler_3(event) {
+		component.update(event);
+	}
+
+	function click_handler_5(event) {
+		component.label(event);
+	}
+
+	function change_handler_4(event) {
+		component.update(event);
+	}
+
+	function click_handler_6(event) {
+		component.label(event);
+	}
+
+	function change_handler_5(event) {
+		component.update(event);
+	}
+
+	function click_handler_7(event) {
+		component.label(event);
+	}
+
+	function change_handler_6(event) {
+		component.update(event);
+	}
+
+	function click_handler_8(event) {
+		component.label(event);
+	}
+
+	function change_handler_7(event) {
+		component.update(event);
+	}
+
+	function click_handler_9(event) {
+		component.label(event);
+	}
+
+	function change_handler_8(event) {
+		component.update(event);
+	}
+
+	function click_handler_10(event) {
+		component.label(event);
+	}
+
+	function change_handler_9(event) {
+		component.update(event);
+	}
+
+	function click_handler_11(event) {
+		component.label(event);
+	}
+
+	function change_handler_10(event) {
+		component.update(event);
+	}
+
+	function click_handler_12(event) {
+		component.label(event);
+	}
+
+	function change_handler_11(event) {
+		component.update(event);
+	}
+
+	function click_handler_13(event) {
+		component.label(event);
+	}
+
+	function change_handler_12(event) {
+		component.update(event);
+	}
+
+	function click_handler_14(event) {
+		component.label(event);
+	}
+
+	function change_handler_13(event) {
+		component.update(event);
+	}
+
+	function click_handler_15(event) {
+		component.label(event);
+	}
+
+	function change_handler_14(event) {
+		component.update(event);
+	}
+
+	var current_block_type_1 = select_block_type_1$1(state);
+	var if_block_1 = current_block_type_1(state, component);
+
+	function click_handler_16(event) {
+		component.label(event);
+	}
+
+	function click_handler_17(event) {
+		component.copy(event);
+	}
+
+	function click_handler_18(event) {
+		component.label(event);
+	}
+
+	var referrers = new Referrers({
+		root: component.root
+	});
+
+	function submit_handler(event) {
+		component.update(event);
+	}
+
+	return {
+		c: function create() {
+			form = createElement("form");
+			table = createElement("table");
+			colgroup = createElement("colgroup");
+			colgroup.innerHTML = "<col width=\"*\">\n      <col width=\"90%\">";
+			text_2 = createText("\n    ");
+			tr = createElement("tr");
+			td = createElement("td");
+			label = createElement("label");
+			label.textContent = "Feed URL";
+			text_5 = createText("\n      ");
+			td_1 = createElement("td");
+			input = createElement("input");
+			text_8 = createText("\n    ");
+			tr_1 = createElement("tr");
+			td_2 = createElement("td");
+			td_2.innerHTML = "<label>Title</label>";
+			text_11 = createText("\n      ");
+			td_3 = createElement("td");
+			text_12 = createText(state.$title);
+			text_14 = createText("\n    ");
+			tr_2 = createElement("tr");
+			td_4 = createElement("td");
+			label_2 = createElement("label");
+			label_2.textContent = "Description";
+			text_17 = createText("\n      ");
+			td_5 = createElement("td");
+			details = createElement("details");
+			summary = createElement("summary");
+			text_18 = createText("\n          ");
+			text_19 = createText(state.$description);
+			text_23 = createText("\n    ");
+			tr_3 = createElement("tr");
+			td_6 = createElement("td");
+			td_6.innerHTML = "<label>Last build</label>";
+			text_26 = createText("\n      ");
+			td_7 = createElement("td");
+			text_27 = createText(state.$formattedDate);
+			text_29 = createText("\n    ");
+			tr_4 = createElement("tr");
+			td_8 = createElement("td");
+			td_8.innerHTML = "<label>Source</label>";
+			text_32 = createText("\n      ");
+			td_9 = createElement("td");
+			if_block.c();
+			text_35 = createText("\n    ");
+			tr_5 = createElement("tr");
+			td_10 = createElement("td");
+			label_5 = createElement("label");
+			label_5.textContent = "Max. items";
+			text_38 = createText("\n      ");
+			td_11 = createElement("td");
+			input_1 = createElement("input");
+			text_41 = createText("\n    ");
+			tr_6 = createElement("tr");
+			td_12 = createElement("td");
+			label_6 = createElement("label");
+			label_6.textContent = "Max. width";
+			text_44 = createText("\n      ");
+			td_13 = createElement("td");
+			input_2 = createElement("input");
+			text_45 = createText("\n        ");
+			small = createElement("small");
+			small.textContent = "px";
+			text_49 = createText("\n    ");
+			tr_7 = createElement("tr");
+			td_14 = createElement("td");
+			label_7 = createElement("label");
+			label_7.textContent = "Content height";
+			text_52 = createText("\n      ");
+			td_15 = createElement("td");
+			input_3 = createElement("input");
+			text_53 = createText("\n        ");
+			small_1 = createElement("small");
+			small_1.textContent = "px";
+			text_57 = createText("\n    ");
+			tr_8 = createElement("tr");
+			td_16 = createElement("td");
+			label_8 = createElement("label");
+			label_8.textContent = "Corner radius";
+			text_60 = createText("\n      ");
+			td_17 = createElement("td");
+			input_4 = createElement("input");
+			text_61 = createText("\n        ");
+			small_2 = createElement("small");
+			small_2.textContent = "px";
+			text_65 = createText("\n    ");
+			tr_9 = createElement("tr");
+			td_18 = createElement("td");
+			label_9 = createElement("label");
+			label_9.textContent = "XML button";
+			text_68 = createText("\n      ");
+			td_19 = createElement("td");
+			input_5 = createElement("input");
+			text_71 = createText("\n    ");
+			tr_10 = createElement("tr");
+			td_20 = createElement("td");
+			label_10 = createElement("label");
+			label_10.textContent = "Compact view";
+			text_74 = createText("\n      ");
+			td_21 = createElement("td");
+			input_6 = createElement("input");
+			text_77 = createText("\n    ");
+			tr_11 = createElement("tr");
+			td_22 = createElement("td");
+			label_11 = createElement("label");
+			label_11.textContent = "Headless";
+			text_80 = createText("\n      ");
+			td_23 = createElement("td");
+			input_7 = createElement("input");
+			text_83 = createText("\n    ");
+			tr_12 = createElement("tr");
+			td_24 = createElement("td");
+			label_12 = createElement("label");
+			label_12.textContent = "Frame color";
+			text_86 = createText("\n      ");
+			td_25 = createElement("td");
+			input_8 = createElement("input");
+			text_89 = createText("\n    ");
+			tr_13 = createElement("tr");
+			td_26 = createElement("td");
+			label_13 = createElement("label");
+			label_13.textContent = "Titlebar color";
+			text_92 = createText("\n      ");
+			td_27 = createElement("td");
+			input_9 = createElement("input");
+			text_95 = createText("\n    ");
+			tr_14 = createElement("tr");
+			td_28 = createElement("td");
+			label_14 = createElement("label");
+			label_14.textContent = "Title color";
+			text_98 = createText("\n      ");
+			td_29 = createElement("td");
+			input_10 = createElement("input");
+			text_101 = createText("\n    ");
+			tr_15 = createElement("tr");
+			td_30 = createElement("td");
+			label_15 = createElement("label");
+			label_15.textContent = "Box color";
+			text_104 = createText("\n      ");
+			td_31 = createElement("td");
+			input_11 = createElement("input");
+			text_107 = createText("\n    ");
+			tr_16 = createElement("tr");
+			td_32 = createElement("td");
+			label_16 = createElement("label");
+			label_16.textContent = "Text color";
+			text_110 = createText("\n      ");
+			td_33 = createElement("td");
+			input_12 = createElement("input");
+			text_113 = createText("\n    ");
+			tr_17 = createElement("tr");
+			td_34 = createElement("td");
+			label_17 = createElement("label");
+			label_17.textContent = "Link color";
+			text_116 = createText("\n      ");
+			td_35 = createElement("td");
+			input_13 = createElement("input");
+			text_119 = createText("\n    ");
+			tr_18 = createElement("tr");
+			td_36 = createElement("td");
+			label_18 = createElement("label");
+			label_18.textContent = "Font face";
+			text_122 = createText("\n      ");
+			td_37 = createElement("td");
+			input_14 = createElement("input");
+			text_125 = createText("\n    ");
+			tr_19 = createElement("tr");
+			td_38 = createElement("td");
+			text_126 = createText("\n      ");
+			td_39 = createElement("td");
+			if_block_1.c();
+			text_129 = createText("\n    ");
+			tr_20 = createElement("tr");
+			td_40 = createElement("td");
+			label_19 = createElement("label");
+			label_19.innerHTML = "HTML code<br>\n          (copy&pasta)";
+			text_133 = createText("\n      ");
+			td_41 = createElement("td");
+			textarea = createElement("textarea");
+			text_136 = createText("\n    ");
+			tr_21 = createElement("tr");
+			td_42 = createElement("td");
+			label_20 = createElement("label");
+			label_20.textContent = "Referrers";
+			text_139 = createText("\n      ");
+			td_43 = createElement("td");
+			referrers._fragment.c();
+			this.h();
+		},
+
+		h: function hydrate() {
+			encapsulateStyles$7(table);
+			encapsulateStyles$7(tr);
+			encapsulateStyles$7(td);
+			addListener(label, "click", click_handler);
+			encapsulateStyles$7(td_1);
+			encapsulateStyles$7(input);
+			input.type = "url";
+			input.name = "url";
+			input.value = state.$url;
+			input.required = true;
+			addListener(input, "change", change_handler);
+			encapsulateStyles$7(tr_1);
+			encapsulateStyles$7(td_2);
+			encapsulateStyles$7(td_3);
+			encapsulateStyles$7(tr_2);
+			encapsulateStyles$7(td_4);
+			addListener(label_2, "click", click_handler_1);
+			td_4.className = "top";
+			encapsulateStyles$7(td_5);
+			encapsulateStyles$7(summary);
+			encapsulateStyles$7(tr_3);
+			encapsulateStyles$7(td_6);
+			encapsulateStyles$7(td_7);
+			encapsulateStyles$7(tr_4);
+			encapsulateStyles$7(td_8);
+			encapsulateStyles$7(td_9);
+			td_9.className = "source";
+			encapsulateStyles$7(tr_5);
+			encapsulateStyles$7(td_10);
+			addListener(label_5, "click", click_handler_2);
+			encapsulateStyles$7(td_11);
+			encapsulateStyles$7(input_1);
+			input_1.type = "number";
+			input_1.name = "maxItems";
+			input_1.value = state.$maxItems;
+			input_1.min = "1";
+			input_1.max = "99";
+			input_1.required = true;
+			addListener(input_1, "change", change_handler_1);
+			encapsulateStyles$7(tr_6);
+			encapsulateStyles$7(td_12);
+			addListener(label_6, "click", click_handler_3);
+			encapsulateStyles$7(td_13);
+			encapsulateStyles$7(input_2);
+			input_2.type = "number";
+			input_2.name = "width";
+			input_2.value = state.$width;
+			input_2.min = "100";
+			input_2.max = "9999";
+			input_2.placeholder = "spare";
+			addListener(input_2, "change", change_handler_2);
+			encapsulateStyles$7(tr_7);
+			encapsulateStyles$7(td_14);
+			addListener(label_7, "click", click_handler_4);
+			encapsulateStyles$7(td_15);
+			encapsulateStyles$7(input_3);
+			input_3.type = "number";
+			input_3.name = "height";
+			input_3.value = state.$height;
+			input_3.min = "100";
+			input_3.max = "9999";
+			input_3.placeholder = "spare";
+			addListener(input_3, "change", change_handler_3);
+			encapsulateStyles$7(tr_8);
+			encapsulateStyles$7(td_16);
+			addListener(label_8, "click", click_handler_5);
+			encapsulateStyles$7(td_17);
+			encapsulateStyles$7(input_4);
+			input_4.type = "number";
+			input_4.name = "radius";
+			input_4.value = state.$radius;
+			input_4.min = "0";
+			input_4.max = "20";
+			input_4.required = true;
+			addListener(input_4, "change", change_handler_4);
+			encapsulateStyles$7(tr_9);
+			encapsulateStyles$7(td_18);
+			addListener(label_9, "click", click_handler_6);
+			encapsulateStyles$7(td_19);
+			input_5.type = "checkbox";
+			input_5.name = "showXmlButton";
+			input_5.value = "1";
+			input_5.checked = state.$showXmlButton;
+			addListener(input_5, "change", change_handler_5);
+			encapsulateStyles$7(tr_10);
+			encapsulateStyles$7(td_20);
+			addListener(label_10, "click", click_handler_7);
+			encapsulateStyles$7(td_21);
+			input_6.type = "checkbox";
+			input_6.name = "compact";
+			input_6.value = "1";
+			input_6.checked = state.$compact;
+			addListener(input_6, "change", change_handler_6);
+			encapsulateStyles$7(tr_11);
+			encapsulateStyles$7(td_22);
+			addListener(label_11, "click", click_handler_8);
+			encapsulateStyles$7(td_23);
+			input_7.type = "checkbox";
+			input_7.name = "headless";
+			input_7.value = "1";
+			input_7.checked = state.$headless;
+			addListener(input_7, "change", change_handler_7);
+			encapsulateStyles$7(tr_12);
+			encapsulateStyles$7(td_24);
+			addListener(label_12, "click", click_handler_9);
+			encapsulateStyles$7(td_25);
+			encapsulateStyles$7(input_8);
+			input_8.type = "color";
+			input_8.name = "frameColor";
+			input_8.value = state.$frameColor;
+			input_8.size = "6";
+			input_8.maxLength = "7";
+			addListener(input_8, "change", change_handler_8);
+			encapsulateStyles$7(tr_13);
+			encapsulateStyles$7(td_26);
+			addListener(label_13, "click", click_handler_10);
+			encapsulateStyles$7(td_27);
+			encapsulateStyles$7(input_9);
+			input_9.type = "color";
+			input_9.name = "titleBarColor";
+			input_9.value = state.$titleBarColor;
+			input_9.size = "6";
+			input_9.maxLength = "7";
+			addListener(input_9, "change", change_handler_9);
+			encapsulateStyles$7(tr_14);
+			encapsulateStyles$7(td_28);
+			addListener(label_14, "click", click_handler_11);
+			encapsulateStyles$7(td_29);
+			encapsulateStyles$7(input_10);
+			input_10.type = "color";
+			input_10.name = "titleBarTextColor";
+			input_10.value = state.$titleBarTextColor;
+			input_10.size = "6";
+			input_10.maxLength = "7";
+			addListener(input_10, "change", change_handler_10);
+			encapsulateStyles$7(tr_15);
+			encapsulateStyles$7(td_30);
+			addListener(label_15, "click", click_handler_12);
+			encapsulateStyles$7(td_31);
+			encapsulateStyles$7(input_11);
+			input_11.type = "color";
+			input_11.name = "boxFillColor";
+			input_11.value = state.$boxFillColor;
+			input_11.size = "6";
+			input_11.maxLength = "7";
+			addListener(input_11, "change", change_handler_11);
+			encapsulateStyles$7(tr_16);
+			encapsulateStyles$7(td_32);
+			addListener(label_16, "click", click_handler_13);
+			encapsulateStyles$7(td_33);
+			encapsulateStyles$7(input_12);
+			input_12.type = "color";
+			input_12.name = "textColor";
+			input_12.value = state.$textColor;
+			input_12.size = "6";
+			input_12.maxLength = "7";
+			addListener(input_12, "change", change_handler_12);
+			encapsulateStyles$7(tr_17);
+			encapsulateStyles$7(td_34);
+			addListener(label_17, "click", click_handler_14);
+			encapsulateStyles$7(td_35);
+			encapsulateStyles$7(input_13);
+			input_13.type = "color";
+			input_13.name = "linkColor";
+			input_13.value = state.$linkColor;
+			input_13.size = "6";
+			input_13.maxLength = "7";
+			addListener(input_13, "change", change_handler_13);
+			encapsulateStyles$7(tr_18);
+			encapsulateStyles$7(td_36);
+			addListener(label_18, "click", click_handler_15);
+			encapsulateStyles$7(td_37);
+			encapsulateStyles$7(input_14);
+			input_14.name = "fontFace";
+			input_14.value = state.$fontFace;
+			input_14.pattern = "[\\d.]+(?:pt|px|em|%)+\\s+[\\s\\w\\-,]+";
+			input_14.placeholder = "e.g. 10pt Helvetica, sans-serif";
+			addListener(input_14, "change", change_handler_14);
+			encapsulateStyles$7(tr_19);
+			encapsulateStyles$7(td_38);
+			encapsulateStyles$7(td_39);
+			encapsulateStyles$7(tr_20);
+			encapsulateStyles$7(td_40);
+			addListener(label_19, "click", click_handler_16);
+			encapsulateStyles$7(td_41);
+			encapsulateStyles$7(textarea);
+			textarea.name = "code";
+			textarea.cols = "10";
+			textarea.rows = "3";
+			textarea.readOnly = true;
+			textarea.value = state.$code;
+			addListener(textarea, "click", click_handler_17);
+			setStyle(tr_20, "vertical-align", "top");
+			encapsulateStyles$7(tr_21);
+			encapsulateStyles$7(td_42);
+			label_20.title = "since midnight (GMT)";
+			addListener(label_20, "click", click_handler_18);
+			td_42.className = "top";
+			encapsulateStyles$7(td_43);
+			td_43.className = "top";
+			table.className = "table";
+			addListener(form, "submit", submit_handler);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(form, target, anchor);
+			appendNode(table, form);
+			appendNode(colgroup, table);
+			appendNode(text_2, table);
+			appendNode(tr, table);
+			appendNode(td, tr);
+			appendNode(label, td);
+			appendNode(text_5, tr);
+			appendNode(td_1, tr);
+			appendNode(input, td_1);
+			appendNode(text_8, table);
+			appendNode(tr_1, table);
+			appendNode(td_2, tr_1);
+			appendNode(text_11, tr_1);
+			appendNode(td_3, tr_1);
+			appendNode(text_12, td_3);
+			appendNode(text_14, table);
+			appendNode(tr_2, table);
+			appendNode(td_4, tr_2);
+			appendNode(label_2, td_4);
+			appendNode(text_17, tr_2);
+			appendNode(td_5, tr_2);
+			appendNode(details, td_5);
+			appendNode(summary, details);
+			appendNode(text_18, details);
+			appendNode(text_19, details);
+			appendNode(text_23, table);
+			appendNode(tr_3, table);
+			appendNode(td_6, tr_3);
+			appendNode(text_26, tr_3);
+			appendNode(td_7, tr_3);
+			appendNode(text_27, td_7);
+			appendNode(text_29, table);
+			appendNode(tr_4, table);
+			appendNode(td_8, tr_4);
+			appendNode(text_32, tr_4);
+			appendNode(td_9, tr_4);
+			if_block.m(td_9, null);
+			appendNode(text_35, table);
+			appendNode(tr_5, table);
+			appendNode(td_10, tr_5);
+			appendNode(label_5, td_10);
+			appendNode(text_38, tr_5);
+			appendNode(td_11, tr_5);
+			appendNode(input_1, td_11);
+			appendNode(text_41, table);
+			appendNode(tr_6, table);
+			appendNode(td_12, tr_6);
+			appendNode(label_6, td_12);
+			appendNode(text_44, tr_6);
+			appendNode(td_13, tr_6);
+			appendNode(input_2, td_13);
+			appendNode(text_45, td_13);
+			appendNode(small, td_13);
+			appendNode(text_49, table);
+			appendNode(tr_7, table);
+			appendNode(td_14, tr_7);
+			appendNode(label_7, td_14);
+			appendNode(text_52, tr_7);
+			appendNode(td_15, tr_7);
+			appendNode(input_3, td_15);
+			appendNode(text_53, td_15);
+			appendNode(small_1, td_15);
+			appendNode(text_57, table);
+			appendNode(tr_8, table);
+			appendNode(td_16, tr_8);
+			appendNode(label_8, td_16);
+			appendNode(text_60, tr_8);
+			appendNode(td_17, tr_8);
+			appendNode(input_4, td_17);
+			appendNode(text_61, td_17);
+			appendNode(small_2, td_17);
+			appendNode(text_65, table);
+			appendNode(tr_9, table);
+			appendNode(td_18, tr_9);
+			appendNode(label_9, td_18);
+			appendNode(text_68, tr_9);
+			appendNode(td_19, tr_9);
+			appendNode(input_5, td_19);
+			appendNode(text_71, table);
+			appendNode(tr_10, table);
+			appendNode(td_20, tr_10);
+			appendNode(label_10, td_20);
+			appendNode(text_74, tr_10);
+			appendNode(td_21, tr_10);
+			appendNode(input_6, td_21);
+			appendNode(text_77, table);
+			appendNode(tr_11, table);
+			appendNode(td_22, tr_11);
+			appendNode(label_11, td_22);
+			appendNode(text_80, tr_11);
+			appendNode(td_23, tr_11);
+			appendNode(input_7, td_23);
+			appendNode(text_83, table);
+			appendNode(tr_12, table);
+			appendNode(td_24, tr_12);
+			appendNode(label_12, td_24);
+			appendNode(text_86, tr_12);
+			appendNode(td_25, tr_12);
+			appendNode(input_8, td_25);
+			appendNode(text_89, table);
+			appendNode(tr_13, table);
+			appendNode(td_26, tr_13);
+			appendNode(label_13, td_26);
+			appendNode(text_92, tr_13);
+			appendNode(td_27, tr_13);
+			appendNode(input_9, td_27);
+			appendNode(text_95, table);
+			appendNode(tr_14, table);
+			appendNode(td_28, tr_14);
+			appendNode(label_14, td_28);
+			appendNode(text_98, tr_14);
+			appendNode(td_29, tr_14);
+			appendNode(input_10, td_29);
+			appendNode(text_101, table);
+			appendNode(tr_15, table);
+			appendNode(td_30, tr_15);
+			appendNode(label_15, td_30);
+			appendNode(text_104, tr_15);
+			appendNode(td_31, tr_15);
+			appendNode(input_11, td_31);
+			appendNode(text_107, table);
+			appendNode(tr_16, table);
+			appendNode(td_32, tr_16);
+			appendNode(label_16, td_32);
+			appendNode(text_110, tr_16);
+			appendNode(td_33, tr_16);
+			appendNode(input_12, td_33);
+			appendNode(text_113, table);
+			appendNode(tr_17, table);
+			appendNode(td_34, tr_17);
+			appendNode(label_17, td_34);
+			appendNode(text_116, tr_17);
+			appendNode(td_35, tr_17);
+			appendNode(input_13, td_35);
+			appendNode(text_119, table);
+			appendNode(tr_18, table);
+			appendNode(td_36, tr_18);
+			appendNode(label_18, td_36);
+			appendNode(text_122, tr_18);
+			appendNode(td_37, tr_18);
+			appendNode(input_14, td_37);
+			appendNode(text_125, table);
+			appendNode(tr_19, table);
+			appendNode(td_38, tr_19);
+			appendNode(text_126, tr_19);
+			appendNode(td_39, tr_19);
+			if_block_1.m(td_39, null);
+			appendNode(text_129, table);
+			appendNode(tr_20, table);
+			appendNode(td_40, tr_20);
+			appendNode(label_19, td_40);
+			appendNode(text_133, tr_20);
+			appendNode(td_41, tr_20);
+			appendNode(textarea, td_41);
+			appendNode(text_136, table);
+			appendNode(tr_21, table);
+			appendNode(td_42, tr_21);
+			appendNode(label_20, td_42);
+			appendNode(text_139, tr_21);
+			appendNode(td_43, tr_21);
+			referrers._mount(td_43, null);
+		},
+
+		p: function update(changed, state) {
+			if (changed.$url) {
+				input.value = state.$url;
+			}
+
+			if (changed.$title) {
+				text_12.data = state.$title;
+			}
+
+			if (changed.$description) {
+				text_19.data = state.$description;
+			}
+
+			if (changed.$formattedDate) {
+				text_27.data = state.$formattedDate;
+			}
+
+			if (current_block_type === (current_block_type = select_block_type$1(state)) && if_block) {
+				if_block.p(changed, state);
+			} else {
+				if_block.u();
+				if_block.d();
+				if_block = current_block_type(state, component);
+				if_block.c();
+				if_block.m(td_9, null);
+			}
+
+			if (changed.$maxItems) {
+				input_1.value = state.$maxItems;
+			}
+
+			if (changed.$width) {
+				input_2.value = state.$width;
+			}
+
+			if (changed.$height) {
+				input_3.value = state.$height;
+			}
+
+			if (changed.$radius) {
+				input_4.value = state.$radius;
+			}
+
+			if (changed.$showXmlButton) {
+				input_5.checked = state.$showXmlButton;
+			}
+
+			if (changed.$compact) {
+				input_6.checked = state.$compact;
+			}
+
+			if (changed.$headless) {
+				input_7.checked = state.$headless;
+			}
+
+			if (changed.$frameColor) {
+				input_8.value = state.$frameColor;
+			}
+
+			if (changed.$titleBarColor) {
+				input_9.value = state.$titleBarColor;
+			}
+
+			if (changed.$titleBarTextColor) {
+				input_10.value = state.$titleBarTextColor;
+			}
+
+			if (changed.$boxFillColor) {
+				input_11.value = state.$boxFillColor;
+			}
+
+			if (changed.$textColor) {
+				input_12.value = state.$textColor;
+			}
+
+			if (changed.$linkColor) {
+				input_13.value = state.$linkColor;
+			}
+
+			if (changed.$fontFace) {
+				input_14.value = state.$fontFace;
+			}
+
+			if (current_block_type_1 !== (current_block_type_1 = select_block_type_1$1(state))) {
+				if_block_1.u();
+				if_block_1.d();
+				if_block_1 = current_block_type_1(state, component);
+				if_block_1.c();
+				if_block_1.m(td_39, null);
+			}
+
+			if (changed.$code) {
+				textarea.value = state.$code;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(form);
+			if_block.u();
+			if_block_1.u();
+		},
+
+		d: function destroy$$1() {
+			removeListener(label, "click", click_handler);
+			removeListener(input, "change", change_handler);
+			removeListener(label_2, "click", click_handler_1);
+			if_block.d();
+			removeListener(label_5, "click", click_handler_2);
+			removeListener(input_1, "change", change_handler_1);
+			removeListener(label_6, "click", click_handler_3);
+			removeListener(input_2, "change", change_handler_2);
+			removeListener(label_7, "click", click_handler_4);
+			removeListener(input_3, "change", change_handler_3);
+			removeListener(label_8, "click", click_handler_5);
+			removeListener(input_4, "change", change_handler_4);
+			removeListener(label_9, "click", click_handler_6);
+			removeListener(input_5, "change", change_handler_5);
+			removeListener(label_10, "click", click_handler_7);
+			removeListener(input_6, "change", change_handler_6);
+			removeListener(label_11, "click", click_handler_8);
+			removeListener(input_7, "change", change_handler_7);
+			removeListener(label_12, "click", click_handler_9);
+			removeListener(input_8, "change", change_handler_8);
+			removeListener(label_13, "click", click_handler_10);
+			removeListener(input_9, "change", change_handler_9);
+			removeListener(label_14, "click", click_handler_11);
+			removeListener(input_10, "change", change_handler_10);
+			removeListener(label_15, "click", click_handler_12);
+			removeListener(input_11, "change", change_handler_11);
+			removeListener(label_16, "click", click_handler_13);
+			removeListener(input_12, "change", change_handler_12);
+			removeListener(label_17, "click", click_handler_14);
+			removeListener(input_13, "change", change_handler_13);
+			removeListener(label_18, "click", click_handler_15);
+			removeListener(input_14, "change", change_handler_14);
+			if_block_1.d();
+			removeListener(label_19, "click", click_handler_16);
+			removeListener(textarea, "click", click_handler_17);
+			removeListener(label_20, "click", click_handler_18);
+			referrers.destroy(false);
+			removeListener(form, "submit", submit_handler);
+		}
+	};
+}
+
+// (43:8) {{ #if $loading }}
+function create_if_block$1(state, component) {
+	var text;
+
+	return {
+		c: function create() {
+			text = createText("Loading...");
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(text, target, anchor);
+		},
+
+		p: noop,
+
+		u: function unmount() {
+			detachNode(text);
+		},
+
+		d: noop
+	};
+}
+
+// (45:8) {{ else }}
+function create_if_block_1$1(state, component) {
+	var a, text, text_1, text_2;
+
+	return {
+		c: function create() {
+			a = createElement("a");
+			text = createText(state.$format);
+			text_1 = createText(" ");
+			text_2 = createText(state.$version);
+			this.h();
+		},
+
+		h: function hydrate() {
+			a.href = state.$url;
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(a, target, anchor);
+			appendNode(text, a);
+			appendNode(text_1, a);
+			appendNode(text_2, a);
+		},
+
+		p: function update(changed, state) {
+			if (changed.$format) {
+				text.data = state.$format;
+			}
+
+			if (changed.$version) {
+				text_2.data = state.$version;
+			}
+
+			if (changed.$url) {
+				a.href = state.$url;
+			}
+		},
+
+		u: function unmount() {
+			detachNode(a);
+		},
+
+		d: noop
+	};
+}
+
+// (168:8) {{ #if $loading }}
+function create_if_block_2$1(state, component) {
+	var button;
+
+	return {
+		c: function create() {
+			button = createElement("button");
+			button.textContent = "Loading...";
+			this.h();
+		},
+
+		h: function hydrate() {
+			button.className = "btn btn-sm btn-c";
+			button.disabled = true;
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(button, target, anchor);
+		},
+
+		u: function unmount() {
+			detachNode(button);
+		},
+
+		d: noop
+	};
+}
+
+// (170:8) {{ else }}
+function create_if_block_3$1(state, component) {
+	var button;
+
+	function click_handler(event) {
+		component.reload(event);
+	}
+
+	return {
+		c: function create() {
+			button = createElement("button");
+			button.textContent = "Reload";
+			this.h();
+		},
+
+		h: function hydrate() {
+			button.className = "btn btn-sm btn-b";
+			button.type = "button";
+			addListener(button, "click", click_handler);
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(button, target, anchor);
+		},
+
+		u: function unmount() {
+			detachNode(button);
+		},
+
+		d: function destroy$$1() {
+			removeListener(button, "click", click_handler);
+		}
+	};
+}
+
+function select_block_type$1(state) {
+	if (state.$loading) return create_if_block$1;
+	return create_if_block_1$1;
+}
+
+function select_block_type_1$1(state) {
+	if (state.$loading) return create_if_block_2$1;
+	return create_if_block_3$1;
+}
+
+function Configurator(options) {
+	this._debugName = '<Configurator>';
+	if (!options || (!options.target && !options.root)) throw new Error("'target' is a required option");
+	init(this, options);
+	this._state = assign(this.store._init(["url","title","description","formattedDate","loading","format","version","maxItems","width","height","radius","showXmlButton","compact","headless","frameColor","titleBarColor","titleBarTextColor","boxFillColor","textColor","linkColor","fontFace","code"]), options.data);
+	this.store._add(this, ["url","title","description","formattedDate","loading","format","version","maxItems","width","height","radius","showXmlButton","compact","headless","frameColor","titleBarColor","titleBarTextColor","boxFillColor","textColor","linkColor","fontFace","code"]);
+	if (!('$url' in this._state)) console.warn("<Configurator> was created without expected data property '$url'");
+	if (!('$title' in this._state)) console.warn("<Configurator> was created without expected data property '$title'");
+	if (!('$description' in this._state)) console.warn("<Configurator> was created without expected data property '$description'");
+	if (!('$formattedDate' in this._state)) console.warn("<Configurator> was created without expected data property '$formattedDate'");
+	if (!('$loading' in this._state)) console.warn("<Configurator> was created without expected data property '$loading'");
+	if (!('$format' in this._state)) console.warn("<Configurator> was created without expected data property '$format'");
+	if (!('$version' in this._state)) console.warn("<Configurator> was created without expected data property '$version'");
+	if (!('$maxItems' in this._state)) console.warn("<Configurator> was created without expected data property '$maxItems'");
+	if (!('$width' in this._state)) console.warn("<Configurator> was created without expected data property '$width'");
+	if (!('$height' in this._state)) console.warn("<Configurator> was created without expected data property '$height'");
+	if (!('$radius' in this._state)) console.warn("<Configurator> was created without expected data property '$radius'");
+	if (!('$showXmlButton' in this._state)) console.warn("<Configurator> was created without expected data property '$showXmlButton'");
+	if (!('$compact' in this._state)) console.warn("<Configurator> was created without expected data property '$compact'");
+	if (!('$headless' in this._state)) console.warn("<Configurator> was created without expected data property '$headless'");
+	if (!('$frameColor' in this._state)) console.warn("<Configurator> was created without expected data property '$frameColor'");
+	if (!('$titleBarColor' in this._state)) console.warn("<Configurator> was created without expected data property '$titleBarColor'");
+	if (!('$titleBarTextColor' in this._state)) console.warn("<Configurator> was created without expected data property '$titleBarTextColor'");
+	if (!('$boxFillColor' in this._state)) console.warn("<Configurator> was created without expected data property '$boxFillColor'");
+	if (!('$textColor' in this._state)) console.warn("<Configurator> was created without expected data property '$textColor'");
+	if (!('$linkColor' in this._state)) console.warn("<Configurator> was created without expected data property '$linkColor'");
+	if (!('$fontFace' in this._state)) console.warn("<Configurator> was created without expected data property '$fontFace'");
+	if (!('$code' in this._state)) console.warn("<Configurator> was created without expected data property '$code'");
+
+	this._handlers.destroy = [removeFromStore];
+
+	if (!document.getElementById("svelte-3994292734-style")) add_css$7();
+
+	if (!options.root) {
+		this._oncreate = [];
+		this._beforecreate = [];
+		this._aftercreate = [];
+	}
+
+	this._fragment = create_main_fragment$9(this._state, this);
+
+	if (options.target) {
+		if (options.hydrate) throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		this._fragment.c();
+		this._fragment.m(options.target, options.anchor || null);
+
+		this._lock = true;
+		callAll(this._beforecreate);
+		callAll(this._oncreate);
+		callAll(this._aftercreate);
+		this._lock = false;
+	}
+}
+
+assign(Configurator.prototype, methods$1, protoDev);
+
+Configurator.prototype._checkReadOnly = function _checkReadOnly(newState) {
+};
+
+/* components/App.html generated by Svelte v1.50.0 */
+function create_main_fragment(state, component) {
+	var div, div_1, text_1, div_2, text_3, div_3, text_4;
+
+	var box = new Box({
+		root: component.root
+	});
+
+	var configurator = new Configurator({
+		root: component.root
+	});
+
+	var ad = new Ad({
+		root: component.root
+	});
+
+	var about = new About({
+		root: component.root
+	});
+
+	return {
+		c: function create() {
+			div = createElement("div");
+			div_1 = createElement("div");
+			box._fragment.c();
+			text_1 = createText("\n  ");
+			div_2 = createElement("div");
+			configurator._fragment.c();
+			text_3 = createText("\n  ");
+			div_3 = createElement("div");
+			ad._fragment.c();
+			text_4 = createText("\n    ");
+			about._fragment.c();
+			this.h();
+		},
+
+		h: function hydrate() {
+			div_1.className = "col c2";
+			div_2.className = "col c5";
+			div_3.className = "col c5";
+			div.className = "row";
+		},
+
+		m: function mount(target, anchor) {
+			insertNode(div, target, anchor);
+			appendNode(div_1, div);
+			box._mount(div_1, null);
+			appendNode(text_1, div);
+			appendNode(div_2, div);
+			configurator._mount(div_2, null);
+			appendNode(text_3, div);
+			appendNode(div_3, div);
+			ad._mount(div_3, null);
+			appendNode(text_4, div_3);
+			about._mount(div_3, null);
+		},
+
+		p: noop,
+
+		u: function unmount() {
+			detachNode(div);
+		},
+
+		d: function destroy$$1() {
+			box.destroy(false);
+			configurator.destroy(false);
+			ad.destroy(false);
+			about.destroy(false);
+		}
+	};
+}
+
+function App(options) {
+	this._debugName = '<App>';
+	if (!options || (!options.target && !options.root)) throw new Error("'target' is a required option");
+	init(this, options);
+	this._state = assign({}, options.data);
+
+	if (!options.root) {
+		this._oncreate = [];
+		this._beforecreate = [];
+		this._aftercreate = [];
+	}
+
+	this._fragment = create_main_fragment(this._state, this);
+
+	if (options.target) {
+		if (options.hydrate) throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
+		this._fragment.c();
+		this._fragment.m(options.target, options.anchor || null);
+
+		this._lock = true;
+		callAll(this._beforecreate);
+		callAll(this._oncreate);
+		callAll(this._aftercreate);
+		this._lock = false;
+	}
+}
+
+assign(App.prototype, protoDev);
+
+App.prototype._checkReadOnly = function _checkReadOnly(newState) {
+};
+
+var polyfill = callback => {
+  const features = ['fetch', 'Object.assign', 'Promise', 'String.prototype.padStart'];
+
+  const script = document.createElement('script');
+  script.src = 'https://cdn.polyfill.io/v2/polyfill.min.js?features=' + features.join();
+  script.defer = script.async = true;
+  script.onload = callback;
+  document.head.appendChild(script);
+};
+
+polyfill(() => {
+  const getQuery = () => {
+    const query = [];
+
+    keys.forEach(key => {
+      const value = store.get(key);
+      if (!value) return;
+      query.push(key + '=' + encodeURIComponent(value));
+    });
+
+    return query.join('&');
+  };
+
+  const store = new RssStore();
+
+  store.compute('code', keys, () => {
+    const query = getQuery().replace(/&/g, '&amp;');
+    return `<script async defer src='${urls$$1.app}/main.js?${query}'></script>`;
+  });
+
+  new App({
+    target: document.querySelector('main'),
+    store
+  });
+
+  const query = location.search;
+  let url;
+
+  if (query && query.startsWith('?url=')) {
+    const parts = query.substr(5).split('&');
+    url = parts[0];
+  }
+
+  store.set({
+    align: 'initial',
+    appDescription: description,
+    appVersion: version,
+    boxFillColor: '#ffead2',
+    compact: false,
+    fontFace: '10pt sans-serif',
+    frameColor: '#b3a28e',
+    headless: false,
+    height: '',
+    linkColor: '#2c7395',
+    maxItems: 7,
+    radius: 5,
+    showXmlButton: true,
+    textColor: '#95412b',
+    titleBarColor: '#90a8b3',
+    titleBarTextColor: '#ffead2',
+    url: url || urls$$1.default,
+    width: ''
+  });
+
+  // For debugging
+  //window.store = store;
+});
+
+}());
 //# sourceMappingURL=app.js.map
