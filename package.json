@@ -1,6 +1,6 @@
 {
   "name": "rss-box",
-  "version": "19.12.10",
+  "version": "19.12.15",
   "description": "RSS Box Viewer",
   "main": "src/app.js",
   "scripts": {
