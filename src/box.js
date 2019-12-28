@@ -31,7 +31,7 @@ ready(
       );
     };
 
-    const search = urls.app;
+    const search = urls.app.replace(/^https?:/, '');
     const scripts = Array.apply(null, document.querySelectorAll('script[src*="' + search + '"]'));
 
     scripts.forEach(script => {
