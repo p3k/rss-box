@@ -4,7 +4,7 @@ import json from 'rollup-plugin-json';
 import replace from '@rollup/plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import svelte from 'rollup-plugin-svelte';
-import uglify from 'rollup-plugin-uglify';
+import { terser } from 'rollup-plugin-terser';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -12,7 +12,7 @@ const config = name => {
   return {
     input: `src/${name}.js`,
     output: {
-      name,
+      name: name,
       sourcemap: true,
       format: 'iife',
       file: `dist/${name}.js`
@@ -47,7 +47,7 @@ const plugins = () => [
   // If we're building for production (npm run build
   // instead of npm run dev), transpile and minify
   production && buble({ exclude: 'node_modules/**' }),
-  production && uglify()
+  production && terser()
 ];
 
 export default [config('app'), config('main'), config('box')];
