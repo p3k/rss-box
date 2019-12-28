@@ -1,5 +1,5 @@
 import buble from '@rollup/plugin-buble';
-import commonjs from 'rollup-plugin-commonjs';
+import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
