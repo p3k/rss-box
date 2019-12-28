@@ -35,7 +35,7 @@ polyfill(() => {
 
   if (query && query.startsWith('?url=')) {
     const parts = query.substr(5).split('&');
-    url = parts[0];
+    url = decodeURIComponent(parts[0]);
   }
 
   store.set({
