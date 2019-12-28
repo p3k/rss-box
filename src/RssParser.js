@@ -11,6 +11,7 @@ function RssParser() {
     if (document.implementation.createDocument) {
       const parser = new DOMParser();
       doc = parser.parseFromString(xml, 'application/xml');
+      if (getChildElement('parsererror', doc.documentElement)) throw error;
     } else if (window.ActiveXObject) {
       doc = new window.ActiveXObject('Microsoft.XMLDOM');
       doc.async = 'false';
