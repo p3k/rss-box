@@ -2,7 +2,7 @@ import buble from '@rollup/plugin-buble';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
-import resolve from 'rollup-plugin-node-resolve';
+import resolve from '@rollup/plugin-node-resolve';
 import svelte from 'rollup-plugin-svelte';
 
 import { terser } from 'rollup-plugin-terser';
