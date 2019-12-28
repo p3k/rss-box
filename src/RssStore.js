@@ -45,7 +45,17 @@ export default class RssStore extends Store {
 
     this.set({ loading: true });
 
-    fetch(urls.proxy + '?url=' + encodeURIComponent(url))
+    const headers = new Headers({
+      Accept: [
+        'application/rss+xml',
+        'application/rdf+xml',
+        'application/atom+xml',
+        'application/xml;q=0.9',
+        'text/xml;q=0.8'
+      ].join()
+    });
+
+    fetch(urls.proxy + '?url=' + encodeURIComponent(url), { headers, referrerPolicy: 'no-referrer' })
       .then(res => {
         if (!res.ok) throw Error(res.statusText);
 
