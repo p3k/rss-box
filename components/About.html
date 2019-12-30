@@ -1,15 +1,47 @@
+<script>
+  import { app, config } from '../src/stores';
+  import Changes from './Changes.html';
+  import Github from './Github.html';
+
+  function goto() {
+    event.preventDefault();
+    config.set({ url: event.target.href });
+  }
+
+  app.subscribe(state => document.title = state.description);
+</script>
+
+<style>
+  h3 {
+    display: inline-block;
+  }
+
+  h3 + p {
+    margin-top: 0;
+  }
+
+  small {
+    color: #bbb;
+  }
+
+  .warning {
+    border-color: #e44;
+    background: #fdd;
+  }
+</style>
+
 <div>
   <small><i>“JavaScript RSS Viewer puts little or long customizable RSS boxes anywhere you put HTML; build your own slashbox hell or heaven, it’s feedarific!” — <a href='http://ourpla.net/cgi/pikie'>Abbe Normal</a></i></small>
 </div>
 
-<h2>{{ $appDescription }} {{ $appVersion }}</h2>
+<h2>{ $app.description } { $app.version }</h2>
 
 <p class='msg warning'>
-  <strong>Reduced availability due to temporary violation of quota limit.</strong> You should <a href='//github.com/p3k/json3k'>install your own JSONP proxy</a>. You can always support the project with your <a href='http://flattr.com/thing/681881/JavaScript-RSS-Box-Viewer'>donation</a>.
+  <strong>Reduced availability due to temporary violation of quota limit.</strong> You should <a href='https://github.com/p3k/json3k'>install your own JSONP proxy</a>. You can always support the project with your <a href='http://flattr.com/thing/681881/JavaScript-RSS-Box-Viewer'>donation</a>.
 </p>
 
 <p>
-  This viewer can display <a href='http://en.wikipedia.org/wiki/RSS'>RSS</a> feeds of version <a href='http://cyber.law.harvard.edu/rss/examples/sampleRss091.xml' on:click='goto(event)'>0.91</a>, <a href='http://cyber.law.harvard.edu/rss/examples/sampleRss092.xml' on:click='goto(event)'>0.92</a>, <a href='http://rss.orf.at/fm4.xml' on:click='goto(event)'>1.0</a> and <a href='http://blog.p3k.org/stories.xml' on:click='goto(event)'>2.0</a> as well as even the good old legacy format <a href='http://essaysfromexodus.scripting.com/xml/scriptingNews2.xml' on:click='goto(event)'>Scripting News 2</a>. There is also basic support for <a href='https://www.theregister.co.uk/headlines.atom' on:click='goto(event)'>Atom 1.0</a>.
+  This viewer can display <a href='http://en.wikipedia.org/wiki/RSS'>RSS</a> feeds of version <a href='http://cyber.law.harvard.edu/rss/examples/sampleRss091.xml' on:click={ goto }>0.91</a>, <a href='http://cyber.law.harvard.edu/rss/examples/sampleRss092.xml' on:click={ goto }>0.92</a>, <a href='http://rss.orf.at/fm4.xml' on:click={ goto }>1.0</a> and <a href='http://blog.p3k.org/stories.xml' on:click={ goto }>2.0</a> as well as even the good old legacy format <a href='http://essaysfromexodus.scripting.com/xml/scriptingNews2.xml' on:click={ goto }>Scripting News 2</a>. There is also basic support for <a href='https://www.theregister.co.uk/headlines.atom' on:click={ goto }>Atom 1.0</a>.
 </p>
 
 <p>
@@ -21,7 +53,7 @@
 </p>
 
 <p>
-  The code behind this is written in JavaScript and runs completely in your browser*. You can get the source code together with all the other necessary files from the <a href='//github.com/p3k/rss-box'>Github repository</a>.
+  The code behind this is written in JavaScript and runs completely in your browser*. You can get the source code together with all the other necessary files from the <a href='https://github.com/p3k/rss-box'>Github repository</a>.
 </p>
 
 <p>
@@ -46,60 +78,16 @@
 <h3>License</h3>
 
 <p>
-  <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">JavaScript RSS Box Viewer</span> by
-  <a xmlns:cc="http://creativecommons.org/ns#" href="http://p3k.org/rss" property="cc:attributionName" rel="cc:attributionURL">Tobi Schäfer</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/at/deed.en_US">Creative Commons Attribution-ShareAlike 3.0 Austria License</a>.
+  <span xmlns:dct='http://purl.org/dc/terms/' property='dct:title'>JavaScript RSS Box Viewer</span> by
+  <a xmlns:cc='http://creativecommons.org/ns#' href='http://p3k.org/rss' property='cc:attributionName' rel='cc:attributionURL'>Tobi Schäfer</a> is licensed under a <a rel='license' href='http://creativecommons.org/licenses/by-sa/3.0/at/deed.en_US'>Creative Commons Attribution-ShareAlike 3.0 Austria License</a>.
 </p>
 <p>
-  Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="https://p3k.org/source/svn/rss-box/trunk/" rel="dct:source">https://p3k.org/source/svn/rss-box/trunk/</a>.
+  Based on a work at <a xmlns:dct='http://purl.org/dc/terms/' href='https://p3k.org/source/svn/rss-box/trunk/' rel='dct:source'>https://p3k.org/source/svn/rss-box/trunk/</a>.
 </p>
 <p>
-  <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/at/deed.en_US">
-    <img alt="Creative Commons License" style="border-width:0" src="//i.creativecommons.org/l/by-sa/3.0/at/88x31.png" />
+  <a rel='license' href='http://creativecommons.org/licenses/by-sa/3.0/at/deed.en_US'>
+    <img alt='Creative Commons License' style='border-width:0' src='https://i.creativecommons.org/l/by-sa/3.0/at/88x31.png'>
   </a>
 </p>
 
-<small>Thank you, <a href='//p3k.org/'>p3k.org</a>!</small>
-
-<style>
-  h3 {
-    display: inline-block;
-  }
-
-  h3 + p {
-    margin-top: 0;
-  }
-
-  small {
-    color: #bbb;
-  }
-
-  .warning {
-    border-color: #e44;
-    background: #fdd;
-  }
-</style>
-
-<script>
-  import Changes from './Changes.html';
-  import Github from './Github.html';
-
-  export default {
-    oncreate() {
-      this.store.observe('appDescription', description => {
-        document.title = description;
-      });
-    },
-
-    components: {
-      Changes,
-      Github
-    },
-
-    methods: {
-      goto(event) {
-        event.preventDefault();
-        this.store.set({ url: event.target.href });
-      }
-    }
-  }
-</script>
+<small>Thank you, <a href='https://p3k.org/'>p3k.org</a>!</small>

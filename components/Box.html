@@ -1,86 +1,74 @@
-<div data-link-color='{{ $linkColor }}' class='rssbox rssBox' style='max-width: {{ width }}; border-color: {{ $frameColor }}; border-radius: {{ $radius }}px; font: {{ $fontFace }}; float: {{ $align }};'>
-  {{ #if !$headless }}
-    <div class='rssbox-titlebar' style='color: {{ $titleBarTextColor }}; background-color: {{ $titleBarColor }}; border-bottom-color: {{ $frameColor }};'>
-      {{ #if $showXmlButton }}
-        <div class='rssbox-icon'>
-          <a href='{{ $url }}' title='{{ $format }} {{ $version }}' style='color: {{ $titleBarTextColor }}'>
-            <RssIcon/>
-          </a>
-        </div>
-      {{ /if }}
-      <div>
-        <a href='{{ $link }}' style='color: {{ $titleBarTextColor }};'>
-          {{ $title }}
-        </a>
-      </div>
-      <div class='rssbox-date'>
-        {{ $formattedDate }}
-      </div>
-    </div>
-  {{ /if }}
+<script>
+  import { onMount } from 'svelte';
 
-  <div class='rssbox-content rssBoxContent' style='background-color: {{ $boxFillColor }}; height: {{ height }};'>
-    {{ #if $image && !$compact }}
-      {{ #await load($image) }}
-      {{ then image }}
-        <a href='{{ $image.link }}' title='{{ $image.title }}'>
-          <div alt='{{ $image.description }}' class='rssbox-image' style='background-image: url({{ $image.source }}); width: {{ image.width }}; height: {{ image.height }};'></div>
-        </a>
-      {{ /await }}
-    {{ /if }}
+  import { config, feed } from '../src/stores';
+  import { urls } from '../src/urls';
 
-    {{ #each $items as item, index }}
-      {{ #if index < $maxItems }}
-        <div class='rssbox-item-content rssBoxItemContent' style='color: {{ $textColor }}'>
-          {{ #if item.title }}
-            <div class='rssbox-item-title {{ itemTitleClass }}'>
-              {{ #if item.link }}
-                <a href='{{ item.link }}'>
-                  {{{ item.title }}}
-                </a>
-              {{ else }}
-                {{{ item.title }}}
-              {{ /if }}
-            </div>
-          {{ /if }}
+  import LinkIcon from './LinkIcon.html';
+  import RssIcon from './RssIcon.html';
+  import PaperclipIcon from './PaperclipIcon.html';
 
-          {{ #if !$compact }}
-            <aside>
-              {{ #if item.source }}
-                <a href='{{ item.source.url }}' title='{{ item.source.title }}' class='rssbox-source'>
-                  {{ #if item.source.url.endsWith('.xml') }}
-                    <RssIcon/>
-                  {{ else }}
-                    <LinkIcon/>
-                  {{ /if }}
-                </a>
-              {{ /if }}
+  onMount(() => {
+    const staticId = 'rssbox-static-stylesheet';
+    const dynamicId = 'rssbox-dynamic-stylesheet';
 
-              {{ #if item.enclosures }}
-                {{ #each item.enclosures as enclosure }}
-                  <a href='{{ enclosure.url }}' title='{{ kb(enclosure.length) }} {{ enclosure.type }}' class='rssbox-enclosure'>
-                    <PaperclipIcon/>
-                  </a>
-                {{ /each }}
-              {{ /if }}
-            </aside>
-            {{{ item.description }}}
-          {{ /if }}
-        </div>
-      {{ /if }}
-    {{ /each }}
+    let staticCss = window[staticId];
+    let dynamicCss = window[dynamicId];
 
-    {{ #if $input }}
-      <form class='rssbox-form' method='get' action='{{ $input.link }}'>
-        <input type='text' name='{{ $input.name }}' placeholder='Enter search &amp; hit return…' data-placeholder='{{ $input.description }}'>
-        <!-- input type='submit' value='{{ $input.title }}' -->
-      </form>
-    {{ /if }}
-    <div class='rssbox-promo rssBoxPromo'>
-      <a href='{{ appUrl() }}' style='color: {{ $textColor }}'>RSS Box by p3k.org</a>
-    </div>
-  </div>
-</div>
+    if (!staticCss) {
+      staticCss = document.createElement('link');
+      staticCss.id = staticId;
+      staticCss.rel = 'stylesheet';
+      staticCss.href = urls.app + '/box.css';
+      document.head.appendChild(staticCss);
+    }
+
+    if (!dynamicCss) {
+      dynamicCss = document.createElement('style');
+      dynamicCss.id = dynamicId;
+      document.head.appendChild(dynamicCss);
+    }
+
+    config.subscribe(state => {
+      const color = state.linkColor;
+
+      if (!color) return;
+
+      let rule =
+        `.rssbox[data-link-color="${ color }"] a {
+          color: ${ color };
+        }`;
+
+      if (dynamicCss.innerHTML.indexOf(rule) < 0) dynamicCss.innerHTML += rule;
+    });
+  });
+
+  function kb(bytes) {
+    return (bytes / 1000).toFixed(2) + '\u200akB';
+  }
+
+  function load(data) {
+    return new Promise(fulfill => {
+      const image = new Image();
+
+      image.onload = () => {
+        const maxWidth = Math.min(100, image.width);
+        const factor = image.width > maxWidth ? maxWidth / image.width : 1;
+
+        fulfill({
+          width: (image.width * factor) + 'px',
+          height: (image.height * factor) + 'px'
+        });
+      };
+
+      image.src = data.source;
+    });
+  }
+
+  $: height = $config.height && $config.height > -1 ? $config.height + 'px' : '100%';
+  $: width = $config.width ? $config.width + 'px' : '100%';
+  $: itemTitleClass = !$config.compact ? 'bold' : '';
+</script>
 
 <style>
   .rssbox {
@@ -167,85 +155,84 @@
   }
 </style>
 
-<script>
-  import { urls } from '../src/settings';
-  import LinkIcon from './LinkIcon.html';
-  import RssIcon from './RssIcon.html';
-  import PaperclipIcon from './PaperclipIcon.html';
+<div data-link-color='{ $config.linkColor }' class='rssbox rssBox' style='max-width: { width }; border-color: { $config.frameColor }; border-radius: { $config.radius }px; font: { $config.fontFace }; float: { $config.align };'>
+  { #if !$config.headless }
+    <div class='rssbox-titlebar' style='color: { $config.titleBarTextColor }; background-color: { $config.titleBarColor }; border-bottom-color: { $config.frameColor };'>
+      { #if $config.showXmlButton }
+        <div class='rssbox-icon'>
+          <a href='{ $config.url }' title='{ $feed.format } { $feed.version }' style='color: { $config.titleBarTextColor }'>
+            <RssIcon/>
+          </a>
+        </div>
+      { /if }
+      <div>
+        <a href='{ $feed.link }' style='color: { $config.titleBarTextColor };'>
+          { $feed.title }
+        </a>
+      </div>
+      <div class='rssbox-date'>
+        { feed.formatDate($feed.date) }
+      </div>
+    </div>
+  { /if }
 
-  export default {
-    components: {
-      LinkIcon,
-      PaperclipIcon,
-      RssIcon
-    },
+  <div class='rssbox-content rssBoxContent' style='background-color: { $config.boxFillColor }; height: { height };'>
+    { #if $feed.image && !$config.compact }
+      { #await load($feed.image) then image }
+        <a href='{ $feed.image.link }' title='{ $feed.image.title }'>
+          <div alt='{ $feed.image.description }' class='rssbox-image' style='background-image: url({ $feed.image.source }); width: { image.width }; height: { image.height };'></div>
+        </a>
+      { /await }
+    { /if }
 
-    oncreate() {
-      const staticId = 'rssbox-static-stylesheet';
-      const dynamicId = 'rssbox-dynamic-stylesheet';
+    { #each $feed.items as item, index }
+      { #if index < $config.maxItems }
+        <div class='rssbox-item-content rssBoxItemContent' style='color: { $config.textColor }'>
+          { #if item.title }
+            <div class='rssbox-item-title { itemTitleClass }'>
+              { #if item.link }
+                <a href='{ item.link }'>
+                  {@html item.title }
+                </a>
+              { :else }
+                {@html item.title }
+              { /if }
+            </div>
+          { /if }
 
-      let staticCss = window[staticId];
-      let dynamicCss = window[dynamicId];
+          { #if !$config.compact }
+            <aside>
+              { #if item.source }
+                <a href='{ item.source.url }' title='{ item.source.title }' class='rssbox-source'>
+                  { #if item.source.url.endsWith('.xml') }
+                    <RssIcon/>
+                  { :else }
+                    <LinkIcon/>
+                  { /if }
+                </a>
+              { /if }
 
-      if (!staticCss) {
-        staticCss = document.createElement('link');
-        staticCss.id = staticId;
-        staticCss.rel = 'stylesheet';
-        staticCss.href = urls.app + '/box.css';
-        document.head.appendChild(staticCss);
-      }
+              { #if item.enclosures }
+                { #each item.enclosures as enclosure }
+                  <a href='{ enclosure.url }' title='{ kb(enclosure.length) } { enclosure.type }' class='rssbox-enclosure'>
+                    <PaperclipIcon/>
+                  </a>
+                { /each }
+              { /if }
+            </aside>
+            {@html item.description }
+          { /if }
+        </div>
+      { /if }
+    { /each }
 
-      if (!dynamicCss) {
-        dynamicCss = document.createElement('style');
-        dynamicCss.id = dynamicId;
-        document.head.appendChild(dynamicCss);
-      }
-
-      this.store.observe('linkColor', color => {
-        if (!color) return;
-
-        let rule =
-          `.rssbox[data-link-color="${color}"] a {
-            color: ${color};
-          }`;
-
-        if (dynamicCss.innerHTML.indexOf(rule) < 0) dynamicCss.innerHTML += rule;
-      });
-    },
-
-    helpers: {
-      kb(bytes) {
-        return (bytes / 1000).toFixed(2) + '\u200akB';
-      },
-
-      // Without the dummy argument Svelte complains about this not being a pure function
-      appUrl(dummy = null) {
-        return urls.app;
-      },
-
-      load(data) {
-        return new Promise(fulfill => {
-          const image = new Image();
-
-          image.onload = () => {
-            const maxWidth = Math.min(100, image.width);
-            const factor = image.width > maxWidth ? maxWidth / image.width : 1;
-
-            fulfill({
-              width: (image.width * factor) + 'px',
-              height: (image.height * factor) + 'px'
-            });
-          };
-
-          image.src = data.source;
-        });
-      }
-    },
-
-    computed: {
-      height: $height => $height && $height > -1 ? $height + 'px' : '100%',
-      width: $width => $width ? $width + 'px' : '100%',
-      itemTitleClass: $compact => !$compact ? 'bold' : ''
-    }
-  };
-</script>
+    { #if $feed.input }
+      <form class='rssbox-form' method='get' action='{ $feed.input.link }'>
+        <input type='text' name='{ $feed.input.name }' placeholder='Enter search &amp; hit return…' data-placeholder='{ $feed.input.description }'>
+      </form>
+    { /if }
+    <div class='rssbox-promo rssBoxPromo'>
+      <a href='{ urls.app }' style='color: { $config.textColor }'>RSS Box by p3k.org</a>
+    </div>
+  </div>
+</div>

@@ -1,200 +1,66 @@
-<form on:submit='update(event)'>
-  <table class='table'>
-    <colgroup>
-      <col width='*'>
-      <col width='90%'>
-    </colgroup>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Feed URL</label>
-      </td>
-      <td>
-        <input type='url' name='url' value='{{ $url }}' required on:change='update(event)'>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label>Title</label>
-      </td>
-      <td>{{ $title }}</td>
-    </tr>
-    <tr>
-      <td class='top'>
-        <label on:click='label(event)'>Description</label>
-      </td>
-      <td>
-        <details>
-          <summary></summary>
-          {{ $description }}
-        </details>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label>Last build</label>
-      </td>
-      <td>{{ $formattedDate }}</td>
-    </tr>
-    <tr>
-      <td>
-        <label>Source</label>
-      </td>
-      <td class='source'>
-        {{ #if $loading }}
-          Loading...
-        {{ else }}
-          <a href='{{ $url }}'>{{ $format }} {{ $version }}</a>
-        {{ /if }}
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Max. items</label>
-      </td>
-      <td>
-        <input type='number' name='maxItems' value='{{ $maxItems }}' min=1 max=99 required on:change='update(event)'>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Max. width</label>
-      </td>
-      <td>
-        <input type='number' name='width' value='{{ $width }}' min=100 max=9999 on:change='update(event)' placeholder='spare'>
-        <small>px</small>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Content height</label>
-      </td>
-      <td>
-        <input type='number' name='height' value='{{ $height }}' min=100 max=9999 on:change='update(event)' placeholder='spare'>
-        <small>px</small>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Corner radius</label>
-      </td>
-      <td>
-        <input type='number' name='radius' value='{{ $radius }}' min=0 max=20 required on:change='update(event)'>
-        <small>px</small>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>XML button</label>
-      </td>
-      <td>
-        <input type='checkbox' name='showXmlButton' value='1' checked='{{ $showXmlButton }}' on:change='update(event)'>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Compact view</label>
-      </td>
-      <td>
-        <input type='checkbox' name='compact' value='1' checked='{{ $compact }}' on:change='update(event)'>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Headless</label>
-      </td>
-      <td>
-        <input type='checkbox' name='headless' value='1' checked='{{ $headless }}' on:change='update(event)'>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Frame color</label>
-      </td>
-      <td>
-        <input type='color' name='frameColor' value='{{ $frameColor }}' size=6 maxlength=7 on:change='update(event)'>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Titlebar color</label>
-      </td>
-      <td>
-        <input type='color' name='titleBarColor' value='{{ $titleBarColor }}' size=6 maxlength=7 on:change='update(event)'>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Title color</label>
-      </td>
-      <td>
-        <input type='color' name='titleBarTextColor' value='{{ $titleBarTextColor }}' size=6 maxlength=7 on:change='update(event)'>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Box color</label>
-      </td>
-      <td>
-        <input type='color' name='boxFillColor' value='{{ $boxFillColor }}' size=6 maxlength=7 on:change='update(event)'>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Text color</label>
-      </td>
-      <td>
-        <input type='color' name='textColor' value='{{ $textColor }}' size=6 maxlength=7 on:change='update(event)'>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Link color</label>
-      </td>
-      <td>
-        <input type='color' name='linkColor' value='{{ $linkColor }}' size=6 maxlength=7 on:change='update(event)'>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <label on:click='label(event)'>Font face</label>
-      </td>
-      <td>
-        <input name='fontFace' value='{{ $fontFace }}' on:change='update(event)' pattern='[\d.]+(?:pt|px|em|%)+\s+[\s\w\-,]+' placeholder='e.g. 10pt Helvetica, sans-serif'>
-      </td>
-    </tr>
-    <tr>
-      <td></td>
-      <td>
-        {{ #if $loading }}
-          <button class='btn btn-sm btn-c' disabled>Loading...</button>
-        {{ else }}
-          <button class='btn btn-sm btn-b' type='button' on:click='reload(event)'>Reload</button>
-        {{ /if }}
-      </td>
-    </tr>
-    <tr style='vertical-align: top'>
-      <td>
-        <label on:click='label(event)'>
-          HTML code<br>
-          (copy&amp;pasta)
-        </label>
-      </td>
-      <td>
-        <textarea name='code' cols='10' rows='3' readonly on:click='copy(event)'>{{ $code }}</textarea>
-      </td>
-    </tr>
-    <tr>
-      <td class='top'>
-        <label on:click='label(event)' title='since midnight (GMT)'>
-          Referrers
-        </label>
-      </td>
-      <td class='top'>
-        <Referrers/>
-      </td>
-    </tr>
-  </table>
-</form>
+
+<script>
+  import { config, feed } from '../src/stores';
+  import { urls } from '../src/urls';
+
+  import Referrers from './Referrers.html';
+
+  function validate(event) {
+    event.preventDefault();
+    if (!event.target.checkValidity()) event.target.reportValidity();
+  }
+
+  function update(event) {
+    if (!validate(event)) return;
+    const name = event.target.name;
+    const type = event.target.type;
+    const value = event.target[type === 'checkbox' ? 'checked' : 'value'];
+    config.set({ [name]: value });
+  }
+
+  function reload(event) {
+    event.preventDefault();
+    const url = document.querySelector('input[name="url"]').value;
+    config.set({ url: null });
+    config.set({ url });
+  }
+
+  function copy(event) {
+    try {
+      event.target.select();
+      document.execCommand('copy');
+    } catch (error) { }
+  }
+
+  function label(event) {
+    const sibling = event.target.parentNode.nextElementSibling;
+    let input = sibling.querySelector('input');
+    if (!input) input = sibling.querySelector('summary');
+    if (!input) input = sibling.querySelector('textarea');
+    if (!input) return;
+    if (input.click) input.click();
+    if (input.select) input.select();
+  }
+
+  function getQuery() {
+    const query = [];
+
+    Object.keys($config).forEach(key => {
+      let value = $config[key];
+      if (value === null || value === undefined) value = '';
+      query.push(key + '=' + encodeURIComponent(value));
+    });
+
+    return query.join('&');
+  }
+
+  function code() {
+    const query = getQuery().replace(/&/g, '&amp;');
+    // Need to be careful with the script-end-tag to prevent template error
+    // See https://github.com/sveltejs/svelte/issues/3840
+    return `<script async defer src='${ urls.app }/main.js?${ query }'>${ '<' }/script>`;
+  }
+</script>
 
 <style>
   table {
@@ -215,6 +81,10 @@
     width: 108px;
     height: 30px;
     padding: 1px 3px;
+  }
+
+  button {
+    width: 100px;
   }
 
   .top {
@@ -241,47 +111,200 @@
   }
 </style>
 
-<script>
-  import Referrers from './Referrers.html';
-
-  export default {
-    components: {
-      Referrers
-    },
-
-    methods: {
-      update(event) {
-        event.preventDefault();
-        if (!event.target.checkValidity()) return event.target.reportValidity();
-        const name = event.target.name;
-        const type = event.target.type;
-        const value = event.target[type === 'checkbox' ? 'checked' : 'value'];
-        this.store.set({ [name]: value });
-      },
-
-      reload(event) {
-        event.preventDefault();
-        const url = this.store.get('url');
-        this.store.set({ url: null });
-        this.store.set({ url });
-      },
-
-      copy(event) {
-        try {
-          event.target.select();
-          document.execCommand('copy');
-        } catch (error) { }
-      },
-
-      label(event) {
-        const sibling = event.target.parentNode.nextElementSibling;
-        let input = sibling.querySelector('input');
-        if (!input) input = sibling.querySelector('summary');
-        if (!input) input = sibling.querySelector('textarea');
-        if (!input) return;
-        if (input.click) input.click();
-        if (input.select) input.select();
-      }
-    }
-  }
-</script>
+<form>
+  <table class='table'>
+    <colgroup>
+      <col width='*'>
+      <col width='90%'>
+    </colgroup>
+    <tr>
+      <td>
+        <label on:click={ label }>Feed URL</label>
+      </td>
+      <td>
+        <input type='url' value={ $config.url } name='url' required on:change={ update }>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label>Title</label>
+      </td>
+      <td>{ $feed.title }</td>
+    </tr>
+    <tr>
+      <td class='top'>
+        <label on:click={ label }>Description</label>
+      </td>
+      <td>
+        <details>
+          <summary></summary>
+          { $feed.description }
+        </details>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label>Last build</label>
+      </td>
+      <td>{ feed.formatDate($feed.date) }</td>
+    </tr>
+    <tr>
+      <td>
+        <label>Source</label>
+      </td>
+      <td class='source'>
+        { #if $feed.loading }
+          Loading...
+        { :else }
+          <a href='{ $config.url }'>{ $feed.format } { $feed.version }</a>
+        { /if }
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>Max. items</label>
+      </td>
+      <td>
+        <input type='number' name='maxItems' bind:value='{ $config.maxItems }' min=1 max=99 required on:change={ validate }>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>Max. width</label>
+      </td>
+      <td>
+        <input type='number' name='width' bind:value='{ $config.width }' min=100 max=9999 on:change={ validate } placeholder='spare'>
+        <small>px</small>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>Content height</label>
+      </td>
+      <td>
+        <input type='number' name='height' bind:value='{ $config.height }' min=100 max=9999 on:change={ validate } placeholder='spare'>
+        <small>px</small>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>Corner radius</label>
+      </td>
+      <td>
+        <input type='number' name='radius' bind:value='{ $config.radius }' min=0 max=20 required on:change={ validate }>
+        <small>px</small>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>XML button</label>
+      </td>
+      <td>
+        <input type='checkbox' name='showXmlButton' value='1' bind:checked='{ $config.showXmlButton }' on:change={ validate }>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>Compact view</label>
+      </td>
+      <td>
+        <input type='checkbox' name='compact' value='1' bind:checked='{ $config.compact }' on:change={ validate }>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>Headless</label>
+      </td>
+      <td>
+        <input type='checkbox' name='headless' value='1' bind:checked='{ $config.headless }' on:change={ validate }>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>Frame color</label>
+      </td>
+      <td>
+        <input type='color' name='frameColor' bind:value='{ $config.frameColor }' size=6 maxlength=7 on:change={ validate }>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>Titlebar color</label>
+      </td>
+      <td>
+        <input type='color' name='titleBarColor' bind:value='{ $config.titleBarColor }' size=6 maxlength=7 on:change={ validate }>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>Title color</label>
+      </td>
+      <td>
+        <input type='color' name='titleBarTextColor' bind:value='{ $config.titleBarTextColor }' size=6 maxlength=7 on:change={ validate }>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>Box color</label>
+      </td>
+      <td>
+        <input type='color' name='boxFillColor' bind:value='{ $config.boxFillColor }' size=6 maxlength=7 on:change={ validate }>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>Text color</label>
+      </td>
+      <td>
+        <input type='color' name='textColor' bind:value='{ $config.textColor }' size=6 maxlength=7 on:change={ validate }>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>Link color</label>
+      </td>
+      <td>
+        <input type='color' name='linkColor' bind:value='{ $config.linkColor }' size=6 maxlength=7 on:change={ validate }>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label on:click={ label }>Font face</label>
+      </td>
+      <td>
+        <input name='fontFace' bind:value='{ $config.fontFace }' on:change={ validate } pattern='[\d.]+(?:pt|px|em|%)+\s+[\s\w\-,]+' placeholder='e.g. 10pt Helvetica, sans-serif'>
+      </td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>
+        { #if $feed.loading }
+          <button class='btn btn-sm btn-c' disabled>Loading...</button>
+        { :else }
+          <button class='btn btn-sm btn-b' on:click={ reload }>Reload</button>
+        { /if }
+      </td>
+    </tr>
+    <tr style='vertical-align: top'>
+      <td>
+        <label on:click={ label }>
+          HTML code<br>
+          (copy&amp;pasta)
+        </label>
+      </td>
+      <td>
+        <textarea name='code' cols='10' rows='3' readonly on:click={ copy }>{ code($config) }</textarea>
+      </td>
+    </tr>
+    <tr>
+      <td class='top'>
+        <label on:click={ label } title='since midnight (GMT)'>
+          Referrers
+        </label>
+      </td>
+      <td class='top'>
+        <Referrers/>
+      </td>
+    </tr>
+  </table>
+</form>

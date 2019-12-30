@@ -1,7 +1,7 @@
 // This is the entrypoint for embedded box scripts
 // All it does is to once load the framework which does the actual work
 
-import { urls } from './settings';
+import { urls } from './urls';
 import { version } from '../package.json';
 
 const id = '__rssbox_viewer_' + version.replace(/\D/g, '_') + '_init__';
