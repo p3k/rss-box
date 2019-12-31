@@ -1,7 +1,10 @@
 <script>
-  import { app, config } from '../src/stores';
+  import { app } from '../src/stores';
   import Changes from './Changes.html';
   import Github from './Github.html';
+
+  // Stores coming in via props
+  export let config;
 
   function goto() {
     event.preventDefault();

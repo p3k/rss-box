@@ -5,7 +5,7 @@ import { RssParser } from './rss-parser';
 import { urls } from './urls';
 import { description, version } from '../package.json';
 
-function ObjectStore(defaultState) {
+const ObjectStore = defaultState => {
   const { subscribe, update } = writable(defaultState);
 
   const _update = newState =>
@@ -25,47 +25,14 @@ function ObjectStore(defaultState) {
     update: _update,
     set: _update
   };
-}
+};
 
-export const app = readable({ description, version });
-
-export const config = ObjectStore({
-  align: 'initial',
-  boxFillColor: '#ffead2',
-  compact: false,
-  fontFace: '10pt sans-serif',
-  frameColor: '#b3a28e',
-  headless: false,
-  height: '',
-  linkColor: '#2c7395',
-  maxItems: 7,
-  radius: 5,
-  showXmlButton: true,
-  textColor: '#95412b',
-  titleBarColor: '#90a8b3',
-  titleBarTextColor: '#ffead2',
-  url: '',
-  width: ''
-});
-
-export const feed = ObjectStore({
-  date: new Date(),
-  description: '',
-  format: '',
-  image: '',
-  input: '',
-  items: [],
-  loading: false,
-  title: '',
-  version: ''
-});
-
-export const referrers = writable([]);
-
-feed.fetch = url => {
+function fetchFeed(url) {
   if (!url) return;
 
-  feed.set({ loading: true });
+  const store = this;// || feed;
+
+  store.set({ loading: true });
 
   const headers = new Headers({
     Accept: [
@@ -89,20 +56,22 @@ feed.fetch = url => {
           if (data.headers['X-Roxy-Error']) throw Error(data.headers['X-Roxy-Error']);
           const rss = parser.parse(data.content);
           if (!rss.date) rss.date = new Date(data.headers.date);
-          feed.set({ ...rss, loading: false });
+          store.set({ ...rss, loading: false });
         })
         .catch(message => {
-          feed.set(error(url, message));
+          store.set(error(url, message));
           console.error(message);
         });
     })
     .catch(message => {
-      feed.set(error(url, message));
+      store.set(error(url, message));
       console.error(message);
     });
-};
+}
 
-referrers.fetch = () => {
+function fetchReferrers() {
+  const store = this || referrers;
+
   fetch(urls.referrers)
     .then(res => res.json())
     .then(data => {
@@ -128,18 +97,17 @@ referrers.fetch = () => {
 
       const total = hosts.reduce((accu, item) => accu += item.total, 0);
 
-      const _referrers = hosts.map(item => {
+      const referrers = hosts.map(item => {
         item.percentage = (item.total / total) * 100;
         return item;
       });
 
-      _referrers.sort((a, b) => b.percentage - a.percentage);
-
-      referrers.set(_referrers);
+      referrers.sort((a, b) => b.percentage - a.percentage);
+      store.set(referrers);
     });
-};
+}
 
-feed.formatDate = date => {
+export const formatDate = date => {
   if (!date) return;
 
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -161,6 +129,55 @@ feed.formatDate = date => {
 
   return `${date.getFullYear()}-${month}-${day}, ${hours}:${minutes}h`;
 };
+
+export const ConfigStore = () => {
+  const store = ObjectStore({
+    align: 'initial',
+    boxFillColor: '#ffead2',
+    compact: false,
+    fontFace: '10pt sans-serif',
+    frameColor: '#b3a28e',
+    headless: false,
+    height: '',
+    linkColor: '#2c7395',
+    maxItems: 7,
+    radius: 5,
+    showXmlButton: true,
+    textColor: '#95412b',
+    titleBarColor: '#90a8b3',
+    titleBarTextColor: '#ffead2',
+    url: '',
+    width: ''
+  });
+
+  return store;
+};
+
+export const FeedStore = () => {
+  const store = ObjectStore({
+    date: new Date(),
+    description: '',
+    format: '',
+    image: '',
+    input: '',
+    items: [],
+    link: '',
+    loading: false,
+    title: '',
+    version: ''
+  });
+
+  store.fetch = fetchFeed.bind(store);
+  store.formatDate = formatDate.bind(store);
+  return store;
+};
+
+export const app = readable({ description, version });
+export const config = ConfigStore();
+export const feed = FeedStore();
+export const referrers = writable([]);
+
+referrers.fetch = fetchReferrers.bind(referrers);
 
 // For debugging
 //window.stores = { app, config, feed, referrers };

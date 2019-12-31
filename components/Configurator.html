@@ -1,9 +1,12 @@
 
 <script>
-  import { config, feed } from '../src/stores';
   import { urls } from '../src/urls';
 
   import Referrers from './Referrers.html';
+
+  // Stores coming in via props
+  export let feed;
+  export let config;
 
   function validate(event) {
     event.preventDefault();

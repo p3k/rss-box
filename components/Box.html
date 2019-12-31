@@ -1,12 +1,14 @@
 <script>
   import { onMount } from 'svelte';
-
-  import { config, feed } from '../src/stores';
   import { urls } from '../src/urls';
 
   import LinkIcon from './LinkIcon.html';
   import RssIcon from './RssIcon.html';
   import PaperclipIcon from './PaperclipIcon.html';
+
+  // Stores coming in via props
+  export let feed;
+  export let config;
 
   onMount(() => {
     const staticId = 'rssbox-static-stylesheet';

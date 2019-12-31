@@ -3,17 +3,21 @@
   import Ad from './Ad.html';
   import Box from './Box.html';
   import Configurator from './Configurator.html';
+
+  // Stores coming in via props
+  export let feed;
+  export let config;
 </script>
 
 <div class='row'>
   <div class='col c2'>
-    <Box/>
+    <Box { feed } { config }/>
   </div>
   <div class='col c5'>
-    <Configurator/>
+    <Configurator { feed } { config }/>
   </div>
   <div class='col c5'>
     <Ad/>
-    <About/>
+    <About { config }/>
   </div>
 </div>
