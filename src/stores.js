@@ -44,7 +44,7 @@ export const config = ObjectStore({
   textColor: '#95412b',
   titleBarColor: '#90a8b3',
   titleBarTextColor: '#ffead2',
-  url: urls.feed,
+  url: '',
   width: ''
 });
 
@@ -89,9 +89,7 @@ feed.fetch = url => {
           if (data.headers['X-Roxy-Error']) throw Error(data.headers['X-Roxy-Error']);
           const rss = parser.parse(data.content);
           if (!rss.date) rss.date = new Date(data.headers.date);
-          rss.loading = false;
-          feed.set(rss);
-          config.set({ url });
+          feed.set({ ...rss, loading: false });
         })
         .catch(message => {
           feed.set(error(url, message));
