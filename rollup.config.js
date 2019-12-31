@@ -25,11 +25,13 @@ const config = name => {
 const plugins = () => [
   replace({ __BUILD_MODE__: production ? 'prod' : 'dev' }),
   svelte({ dev: !production }),
+
   resolve(),
   commonjs(),
   json(),
-  production && buble(),
+
+  production && buble({ objectAssign: true }),
   production && terser()
 ];
 
-export default [config('app'), config('main'), config('box')];
+export default [config('app'), config('main'), config('box'), config('polyfill.io')];

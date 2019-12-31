@@ -7,18 +7,22 @@
 <link rel='shortcut icon' href='img/rss.png'>
 <link rel='stylesheet' href='min.css'>
 
+<!-- Polyfills need to be loaded already here because app.js is already using Promise et al. -->
+<script src='./polyfill.io.js'></script>
+<script>polyfill.io();</script>
+
 <style>
-body {
-  margin: 0 1%;
-}
+  body {
+    margin: 0 1%;
+  }
 
-a {
-  text-decoration: none;
-}
+  a {
+    text-decoration: none;
+  }
 
-a:hover {
-  text-decoration: underline;
-}
+  a:hover {
+    text-decoration: underline;
+  }
 </style>
 
 <main>
@@ -27,4 +31,4 @@ a:hover {
   </noscript>
 </main>
 
-<script src='app.js'></script>
+<script async defer src='app.js'></script>
