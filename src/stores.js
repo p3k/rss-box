@@ -46,22 +46,16 @@ function fetchFeed(url) {
 
   fetch(urls.proxy + '?url=' + encodeURIComponent(url), { headers, referrerPolicy: 'no-referrer' })
     .then(res => {
-      if (!res.ok) throw Error(res.statusText);
+      if (res.status > 399) throw Error(res.statusText);
+      return res.text();
+    }).then(json => {
+      const parser = RssParser();
+      const data = JSON.parse(json);
+      const rss = parser.parse(data.content);
 
-      res
-        .text()
-        .then(json => {
-          const parser = RssParser();
-          const data = JSON.parse(json);
-          if (data.headers['X-Roxy-Error']) throw Error(data.headers['X-Roxy-Error']);
-          const rss = parser.parse(data.content);
-          if (!rss.date) rss.date = new Date(data.headers.date);
-          store.set({ ...rss, loading: false });
-        })
-        .catch(message => {
-          store.set(error(url, message));
-          console.error(message);
-        });
+      if (!rss.date) rss.date = new Date(data.headers.date);
+
+      store.set({ ...rss, loading: false });
     })
     .catch(message => {
       store.set(error(url, message));
