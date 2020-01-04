@@ -30,7 +30,7 @@ const ObjectStore = defaultState => {
 function fetchFeed(url) {
   if (!url) return;
 
-  const store = this;// || feed;
+  const store = this;
 
   store.set({ loading: true });
 
@@ -70,7 +70,7 @@ function fetchFeed(url) {
 }
 
 function fetchReferrers() {
-  const store = this || referrers;
+  const store = this;
 
   fetch(urls.referrers)
     .then(res => res.json())
