@@ -4,6 +4,7 @@ import error from './error';
 import { RssParser } from './rss-parser';
 import { urls } from './urls';
 import { description, version } from '../package.json';
+import statusCodes from './status-codes';
 
 const ObjectStore = defaultState => {
   const { subscribe, update } = writable(defaultState);
@@ -46,7 +47,7 @@ function fetchFeed(url) {
 
   fetch(urls.proxy + '?url=' + encodeURIComponent(url), { headers, referrerPolicy: 'no-referrer' })
     .then(res => {
-      if (res.status > 399) throw Error(res.statusText);
+      if (res.status > 399) throw Error(statusCodes[res.status]);
       return res.text();
     }).then(json => {
       const parser = RssParser();
