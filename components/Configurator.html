@@ -23,9 +23,7 @@
 
   function reload(event) {
     event.preventDefault();
-    const url = document.querySelector('input[name="url"]').value;
-    config.set({ url: null });
-    config.set({ url });
+    config.set({ url: document.querySelector('input[name="url"]').value });
   }
 
   function copy(event) {

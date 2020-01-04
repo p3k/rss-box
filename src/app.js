@@ -12,7 +12,6 @@ const query = location.search;
 let url;
 
 config.subscribe(state => {
-  if (!state.url || url === state.url) return;
   url = state.url;
   feed.fetch(url, feed);
 });
