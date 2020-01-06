@@ -67,9 +67,11 @@ function fetchFeed(url) {
 function fetchReferrers() {
   const store = this;
 
-  fetch(urls.referrers)
+  fetch(urls.proxy + '?url=' + encodeURIComponent(urls.referrers))
     .then(res => res.json())
-    .then(data => {
+    .then(json => {
+      const data = JSON.parse(json.content);
+
       const hosts = data.reduce((accu, item) => {
         if (item.url.startsWith('http') && !item.url.startsWith(urls.app)) {
           const url = item.url.replace(/^([^.]*)www\./, '$1');
