@@ -1,0 +1,2 @@
+this.polyfill=this.polyfill||{},this.polyfill.io=function(){"use strict";return function(t){var o=document.createElement("script");o.src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&features="+encodeURIComponent(["fetch","Object.assign","Promise","String.prototype.padStart","String.prototype.startsWith","Array.prototype.fill","Array.from"].join()),o.crossOrigin="anonymous",o.onload=t,document.head.appendChild(o)}}();
+//# sourceMappingURL=polyfill.io.js.map

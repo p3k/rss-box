@@ -1,16 +1,59 @@
-<details on:toggle='update(event)'>
-  <summary></summary>
-  {{ #if referrers.length }}
-    {{ #each referrers as referrer }}
-      <div class='referrer'>
-        <code>{{ format(referrer.percentage) }}</code>
-        <a href='{{ referrer.url }}'>{{ referrer.host }}</a>
-      </div>
-    {{ /each }}
-  {{ else }}
-    Loading…
-  {{ /if }}
-</details>
+<script>
+  import { onMount } from 'svelte';
+  import { referrers } from '../src/stores';
+  import { urls } from '../src/urls';
+
+  import RssIcon from './RssIcon.html';
+
+  onMount(() => {
+    if ('open' in document.createElement('details') === false) {
+      load();
+    }
+  });
+
+  function format(float) {
+    if (float < 0.01) return '< 0.01';
+    return float.toFixed(2).padStart(6);
+  }
+
+  function update(event) {
+    if (event.target.open && !loaded) load();
+  }
+
+  function load() {
+    referrers.fetch();
+  }
+
+  function injectFeedUrl(event) {
+    const referrer = $referrers[event.target.dataset.index];
+    const data = referrer.metadata;
+
+    if (!data || !data.feedUrls) return;
+
+    let index;
+
+    if (event.metaKey) {
+      // Cycle through the index of the feedUrls array to allow accessing multiple feed urls via one icon
+      event.preventDefault();
+      index = parseInt(event.target.dataset.feedIndex, 10) + 1;
+      if (index >= data.feedUrls.length) index = 0;
+      event.target.dataset.feedIndex = index;
+    } else {
+      // Inject the feed url with the current index into the link element’s href attribute
+      index = event.target.dataset.feedIndex;
+      const feedUrl = `${ urls.app }/?url=${ data.feedUrls[index] }`;
+      if (event.target.href === feedUrl) return;
+      event.target.href = feedUrl;
+    }
+  }
+
+  function appLinkClass(index) {
+    const referrer = $referrers[index];
+    const data = referrer.metadata;
+
+    if (!data || !data.feedUrls) return 'warn';
+  }
+</script>
 
 <style>
   details {
@@ -18,7 +61,7 @@
   }
 
   code {
-    margin-right: 0.5em;
+    margin-right: 0.3em;
     color: #bbb;
     font-size: 0.7em;
     white-space: pre;
@@ -31,77 +74,44 @@
   .referrer {
     white-space: nowrap;
   }
+
+  .appLink {
+    position: relative;
+    top: 2px;
+    color: #ffa600;
+  }
+
+  .appLink.warn {
+    pointer-events: none;
+  }
+
+  .appLink :global(svg) {
+    pointer-events: none;
+  }
+
+  .appLink.warn :global(svg) {
+    color: #ddd;
+  }
 </style>
 
-<script>
-  import { urls } from '../src/settings';
-
-  let loaded = false;
-
-  export default {
-    oncreate() {
-      if ('open' in document.createElement('details') === false) {
-        this.load();
-      }
-    },
-
-    data() {
-      return {
-        referrers: []
-      }
-    },
-
-    helpers: {
-      format: float => {
-        if (float < 0.01) return '< 0.01';
-        return float.toFixed(2).padStart(6)
-      }
-    },
-
-    methods: {
-      update(event) {
-        if (event.target.open && !loaded) this.load();
-      },
-
-      load() {
-        fetch(urls.referrers).then(res => {
-          res.json().then(data => this.display(data));
-        });
-      },
-
-      display(data) {
-        const hosts = data.reduce((accu, item) => {
-          if (item.url.startsWith('http') && !item.url.startsWith(urls.app)) {
-            const url = item.url.replace(/^([^.]*)www\./, '$1');
-            const host = url.split('/')[2];
-            let data = accu[host];
-
-            if (!data) {
-              data = { host, url, hits: item.hits, total: 0 };
-              accu[host] = data;
-              accu.push(data);
-            } else if (item.hits > data.hits) {
-              data.url = item.url;
-              data.hits = item.hits;
-            }
-
-            data.total += item.hits;
-          }
-          return accu;
-        }, []);
-
-        const total = hosts.reduce((accu, item) => accu += item.total, 0);
-
-        const referrers = hosts.map(item => {
-          item.percentage = item.total / total * 100;
-          return item;
-        });
-
-        referrers.sort((a, b) => b.percentage - a.percentage);
-
-        this.set({ referrers });
-        loaded = true;
-      }
-    }
-  }
-</script>
+<details on:toggle={ load }>
+  <summary></summary>
+  { #if $referrers.length }
+    { #each $referrers as referrer, index }
+      <div class='referrer'>
+        <code>{ format(referrer.percentage) }</code>
+        <a href='.'
+            class='appLink { appLinkClass(index) }'
+            data-index={ index }
+            data-feed-index='0'
+            on:mouseover={ injectFeedUrl }
+            on:click={ injectFeedUrl }>
+          <RssIcon/>
+        </a>
+        <a href='{ referrer.url }'>{ referrer.host }</a>
+      </div>
+    { /each }
+  { :else }
+    Loading…
+  { /if }
+</details>

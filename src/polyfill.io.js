@@ -1,9 +1,22 @@
+let loaded = false;
+
 export default callback => {
-  const features = ['fetch', 'Object.assign', 'Promise', 'String.prototype.padStart'];
+  if (loaded) return;
+
+  const features = [
+    'fetch',
+    'Object.assign',
+    'Promise',
+    'String.prototype.padStart',
+    'String.prototype.startsWith',
+    'Array.prototype.fill',
+    'Array.from'
+  ];
 
   const script = document.createElement('script');
-  script.src = 'https://cdn.polyfill.io/v2/polyfill.min.js?features=' + features.join();
-  script.defer = script.async = true;
+  script.src = 'https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&features=' + encodeURIComponent(features.join());
+  script.crossOrigin = 'anonymous';
   script.onload = callback;
+
   document.head.appendChild(script);
 };

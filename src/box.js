@@ -1,66 +1,99 @@
 import ready from 'domready';
 
-import RssStore from './RssStore';
-import Box from '../components/Box.html';
-import { defaults, keys, urls } from './settings';
-import polyfill from './polyfill.io';
+import { ConfigStore, FeedStore } from './stores';
+import { urls } from './urls';
 import getNativeObject from './native.js';
 
-ready(
-  polyfill(() => {
-    const reduce = getNativeObject('Array').prototype.reduce;
+import Box from '../components/Box.html';
 
-    const getNativeValue = value => {
-      if (value === 'true') return true;
-      if (value === 'false') return false;
-      return value;
-    };
+// These are backwards-compatible settings
+const defaults = {
+  align: 'initial',
+  boxFillColor: '#fff',
+  compact: false,
+  fontFace: 'inherit',
+  frameColor: '#000',
+  headless: false,
+  height: '',
+  linkColor: '',
+  maxItems: 7,
+  radius: 0,
+  showXmlButton: false,
+  textColor: '#000',
+  titleBarColor: '#add8e6',
+  titleBarTextColor: '#000',
+  width: '200'
+};
 
-    const parseQuery = query => {
-      const parts = query.split('&');
-      return reduce.call(
-        parts,
-        (data, pair) => {
-          const [key, value] = pair.split('=');
-          if (keys.indexOf(key) > -1) {
-            data[key] = getNativeValue(decodeURIComponent(value));
-          }
-          return data;
-        },
-        {}
-      );
-    };
+const keys = [...Object.keys(defaults), 'url'];
 
-    const search = urls.app.replace(/^https?:/, '');
-    const scripts = Array.apply(null, document.querySelectorAll('script[src*="' + search + '"]'));
+ready(() => {
+  const reduce = getNativeObject('Array').prototype.reduce;
 
-    scripts.forEach(script => {
-      const query = script.src.split('?')[1];
-      if (!query) return;
+  const getNativeValue = value => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    return value;
+  };
 
-      let data = parseQuery(query);
+  const parseQuery = query => {
+    const parts = query.split('&');
+    return reduce.call(
+      parts,
+      (data, pair) => {
+        const [key, value] = pair.split('=');
+        if (keys.indexOf(key) > -1) {
+          data[key] = getNativeValue(decodeURIComponent(value));
+        }
+        return data;
+      },
+      {}
+    );
+  };
 
-      if (!data.url) data.url = urls.default;
-      data = Object.assign({}, defaults, data);
+  // Earlier versions used protocol-less URLs like `//p3k.org/rss`
+  const search = urls.app.replace(/^https?:/, '');
+  const scripts = Array.apply(null, document.querySelectorAll('script[src*="' + search + '"]'));
+  const feedUrls = [];
 
-      const store = new RssStore();
-      store.set(data);
+  scripts.forEach(script => {
+    const query = script.src.split('?')[1];
 
-      const parent = script.parentNode;
-      const container = document.createElement('div');
-      parent.insertBefore(container, script);
+    if (!query) return;
 
-      void new Box({
-        target: container,
-        store
-      });
+    let data = parseQuery(query);
 
-      // Only for IE11
-      script.parentNode.removeChild(script);
+    if (!data.url) data.url = urls.feed;
+
+    data = Object.assign({}, defaults, data);
+
+    // Create new stores for each box to prevent multiple boxes getting the same data
+    const feed = FeedStore();
+    const config = ConfigStore();
+
+    config.set(data);
+    feed.fetch(data.url, feed);
+
+    const parent = script.parentNode;
+    const container = document.createElement('div');
+
+    parent.insertBefore(container, script);
+
+    void new Box({
+      target: container,
+      props: { feed, config }
     });
 
-    if (location.href.indexOf(urls.app) < 0) {
-      fetch(urls.referrers + '&url=' + encodeURIComponent(location.href));
+    // Only for IE11
+    script.parentNode.removeChild(script);
+
+    if (data.url !== urls.feed && feedUrls.indexOf(data.url) < 0) {
+      feedUrls.push(data.url);
     }
-  })
-);
+  });
+
+  if (location.href.indexOf(urls.app) < 0) {
+    const metadata = JSON.stringify({ feedUrls });
+    fetch(urls.referrers + '&url=' + encodeURIComponent(location.href) + '&metadata=' + encodeURIComponent(metadata));
+  }
+});

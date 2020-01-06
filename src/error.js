@@ -1,4 +1,4 @@
-import { urls } from './settings';
+import { urls } from './urls';
 
 const defaultError = {
   loading: false,
@@ -8,7 +8,8 @@ const defaultError = {
   version: '❌',
   title: 'RSS Box Error',
   description:
-    'This output was automatically generated to report an error that occurred during a request to the  RSS Box Viewer.',
+    'This output was automatically generated to report an error that occurred during a request to the RSS Box Viewer.',
+  image: '',
   items: [
     {
       title: 'Oops, something went wrong…',

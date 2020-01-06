@@ -23,32 +23,15 @@ const config = name => {
 };
 
 const plugins = () => [
-  replace({
-    __BUILD_MODE__: production ? 'prod' : 'dev'
-  }),
+  replace({ __BUILD_MODE__: production ? 'prod' : 'dev' }),
+  svelte({ dev: !production }),
 
-  svelte({
-    // enable run-time checks when not in production
-    dev: !production,
-    // this results in smaller CSS files
-    cascade: false,
-    store: true
-  }),
-
-  // If you have external dependencies installed from
-  // npm, you'll most likely need these plugins. In
-  // some cases you'll need additional configuration —
-  // consult the documentation for details:
-  // https://github.com/rollup/rollup-plugin-commonjs
   resolve(),
   commonjs(),
-
   json(),
 
-  // If we're building for production (npm run build
-  // instead of npm run dev), transpile and minify
-  production && buble({ exclude: 'node_modules/**' }),
+  production && buble({ objectAssign: true }),
   production && terser()
 ];
 
-export default [config('app'), config('main'), config('box')];
+export default [config('app'), config('main'), config('box'), config('polyfill.io')];

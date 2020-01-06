@@ -1,3 +1,33 @@
+<style>
+  h3 {
+    display: inline-block;
+  }
+
+  h3 + p, summary + * {
+    margin-top: 0;
+  }
+
+  summary {
+    outline: none;
+  }
+
+  li + li {
+    margin-top: 0.5em;
+  }
+
+  small {
+    display: inline-block;
+    margin-right: 0.5em;
+    color: #bbb;
+  }
+
+  code {
+    background-color: #ffc;
+    font-size: 0.8em;
+    font-weight: 200;
+  }
+</style>
+
 <details>
   <summary>
     <h3>Change Log</h3>
@@ -45,7 +75,7 @@
   </p>
   <ul>
     <li>
-      Use your own <a href='//github.com/p3k/json3k'>JSONP proxy</a> – especially, when you expect a high load on your server.
+      Use your own <a href='https://github.com/p3k/json3k'>JSONP proxy</a> – especially, when you expect a high load on your server.
     </li>
     <li>
       Please support the service with a <a href='http://flattr.com/thing/681881/JavaScript-RSS-Box-Viewer'>donation</a>.
@@ -67,7 +97,7 @@
 
   <p>
     <small>2012-07-16</small>
-    Slightly modified output of the HTML code to be usable with both, unsecured and secured (HTTPS) web servers. You can update already embedded code easily by removing the <code>http:</code> part from the <code>src</code> attribute of the <code>&amp;lt;script&amp;gt;</code> element: <code>&amp;lt;script src='http://p3k.org/rss…'&amp;gt;</code> becomes <code>&amp;lt;script src='//p3k.org/rss…'&amp;gt;</code>.
+    Slightly modified output of the HTML code to be usable with both, unsecured and secured (HTTPS) web servers. You can update already embedded code easily by removing the <code>http:</code> part from the <code>src</code> attribute of the <code>&lt;script&gt;</code> element: <code>&lt;script src='http://p3k.org/rss…'&gt;</code> becomes <code>&lt;script src='//p3k.org/rss…'&gt;</code>.
   </p>
 
   <p>
@@ -75,10 +105,10 @@
   </p>
   <ul>
     <li>
-      Fixed IE bug (“innerHTML is null or not an object”) caused by using jQuery’s html() method instead of text() when parsing a <code>&amp;lt;content:encoded&amp;gt;</code> element.
+      Fixed IE bug (“innerHTML is null or not an object”) caused by using jQuery’s html() method instead of text() when parsing a <code>&lt;content:encoded&gt;</code> element.
     </li>
     <li>
-      Changed priority of elements: only check for <code>&amp;lt;content:encoded&amp;gt;</code> if     <code>&amp;lt;description&amp;gt;</code> is not available.
+      Changed priority of elements: only check for <code>&lt;content:encoded&gt;</code> if     <code>&lt;description&gt;</code> is not available.
     </li>
   </ul>
 
@@ -100,7 +130,7 @@
   </p>
   <ul>
     <li>
-      Added <code>&amp;lt;noscript&amp;gt;</code> element for browsers providing no JavaScript engine.
+      Added <code>&lt;noscript&gt;</code> element for browsers providing no JavaScript engine.
     </li>
     <li>
       Added option to call the configurator with a URL in the query string.
@@ -129,7 +159,7 @@
   </p>
   <ul>
     <li>
-      Added support for <code>&amp;lt;content:encoded&amp;gt;</code> element.
+      Added support for <code>&lt;content:encoded&gt;</code> element.
     </li>
     <li>
       Implemented Memcache usage in AppEngine code.
@@ -229,7 +259,7 @@
 
   <p>
     <small>2006-06-13</small>
-    Did some minor bug fixing again (amongst others replacing single quotes with &amp;apos; and not &amp;quot; entities). Furthermore (and finally), I removed the “RC” (as in “Release Candidate”) from the document title…
+    Did some minor bug fixing again (amongst others replacing single quotes with &apos; and not &quot; entities). Furthermore (and finally), I removed the “RC” (as in “Release Candidate”) from the document title…
   </p>
 
   <p>
@@ -239,7 +269,7 @@
 
   <p>
     <small>2006-04-23</small>
-    Switched the <a href='//p3k.org/source/rss-box/'>source repository</a> from CVS to Subversion (SVN).
+    Switched the <a href='https://p3k.org/source/rss-box/'>source repository</a> from CVS to Subversion (SVN).
   </p>
 
   <p>
@@ -249,7 +279,7 @@
 
   <p>
     <small>2006-04-13</small>
-    Fixed a bug reported by Mando Gomez that caused feeds using the &amp;lt;guid&amp;gt; element being displayed without item links… Don’t forget to check out Mando’s excellent website <a href='http://www.mandolux.com/'>mandolux</a>!
+    Fixed a bug reported by Mando Gomez that caused feeds using the &lt;guid&gt; element being displayed without item links… Don’t forget to check out Mando’s excellent website <a href='http://www.mandolux.com/'>mandolux</a>!
   </p>
 
   <p>
@@ -259,7 +289,7 @@
 
   <p>
     <small>2006-02-20</small>
-    I hope nobody minds the little line I added at the bottom of each RSS box… Of course, it’s not totally altruistic, but probably some people will find it informative. However, if you want to prevent it from being displayed simply add <code>.rssbox-promo {display: none;}</code> to your stylesheet.
+    I hope nobody minds the little line I added at the bottom of each RSS box… Of course, it’s not totally altruistic, but probably some people will find it informative. However, if you want to prevent it from being displayed simply add <code>.rssbox-promo {'{'}display: none;{'}'}</code> to your stylesheet.
   </p>
 
   <p>
@@ -279,7 +309,7 @@
 
   <p>
     <small>2004-04-26</small>
-    Last efforts to officially release the <a href='//p3k.org/source/rss-box'>code</a> to the open source community. There have been some bugs in the (image) rendering framework which I fixed so    far. I now include a dynamically rendered list of sites using (or pointing to) this script to give some examples for the curious at heart (me included). Finally, there’s a <a href='//p3k.org/source/rss-box/branches/2.0/README'>README</a> file with a short installation guide to make the script run on your own server.
+    Last efforts to officially release the <a href='https://p3k.org/source/rss-box'>code</a> to the open source community. There have been some bugs in the (image) rendering framework which I fixed so    far. I now include a dynamically rendered list of sites using (or pointing to) this script to give some examples for the curious at heart (me included). Finally, there’s a <a href='https://p3k.org/source/rss-box/branches/2.0/README'>README</a> file with a short installation guide to make the script run on your own server.
   </p>
 
   <p>
@@ -364,33 +394,3 @@
     Fixed a little bug reported by &#102;&#114;&#101;&#100;&#105;&#64;&#101;&#109;&#97;&#105;&#108;&#46;&#101;&#101; that caused diacritic characters to be displayed as entity codes.
   </p>
 </details>
-
-<style>
-  h3 {
-    display: inline-block;
-  }
-
-  h3 + p, summary + * {
-    margin-top: 0;
-  }
-
-  summary {
-    outline: none;
-  }
-
-  li + li {
-    margin-top: 0.5em;
-  }
-
-  small {
-    display: inline-block;
-    margin-right: 0.5em;
-    color: #bbb;
-  }
-
-  code {
-    background-color: #ffc;
-    font-size: 0.8em;
-    font-weight: 200;
-  }
-</style>

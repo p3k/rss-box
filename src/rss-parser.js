@@ -11,7 +11,6 @@ function RssParser() {
     if (document.implementation.createDocument) {
       const parser = new DOMParser();
       doc = parser.parseFromString(xml, 'application/xml');
-      if (getChildElement('parsererror', doc.documentElement)) throw error;
     } else if (window.ActiveXObject) {
       doc = new window.ActiveXObject('Microsoft.XMLDOM');
       doc.async = 'false';
@@ -246,6 +245,9 @@ function RssParser() {
   return {
     parse: function(xml) {
       const doc = getDocument(xml);
+
+      if (!doc || getChildElement('parsererror', doc.documentElement)) throw error;
+
       const root = doc.documentElement;
       const type = root.nodeName;
 

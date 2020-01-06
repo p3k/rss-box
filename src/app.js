@@ -1,64 +1,25 @@
-import RssStore from './RssStore';
-import { description, version } from '../package.json';
+import { config, feed } from './stores';
+import { urls } from './urls';
 
 import App from '../components/App.html';
-import { keys, urls } from './settings';
-import polyfill from './polyfill.io';
 
-polyfill(() => {
-  const getQuery = () => {
-    const query = [];
-
-    keys.forEach(key => {
-      const value = store.get(key);
-      if (!value) return;
-      query.push(key + '=' + encodeURIComponent(value));
-    });
-
-    return query.join('&');
-  };
-
-  const store = new RssStore();
-
-  store.compute('code', keys, () => {
-    const query = getQuery().replace(/&/g, '&amp;');
-    return `<script async defer src='${urls.app}/main.js?${query}'></script>`;
-  });
-
-  new App({
-    target: document.querySelector('main'),
-    store
-  });
-
-  const query = location.search;
-  let url;
-
-  if (query && query.startsWith('?url=')) {
-    const parts = query.substr(5).split('&');
-    url = decodeURIComponent(parts[0]);
-  }
-
-  store.set({
-    align: 'initial',
-    appDescription: description,
-    appVersion: version,
-    boxFillColor: '#ffead2',
-    compact: false,
-    fontFace: '10pt sans-serif',
-    frameColor: '#b3a28e',
-    headless: false,
-    height: '',
-    linkColor: '#2c7395',
-    maxItems: 7,
-    radius: 5,
-    showXmlButton: true,
-    textColor: '#95412b',
-    titleBarColor: '#90a8b3',
-    titleBarTextColor: '#ffead2',
-    url: url || urls.default,
-    width: ''
-  });
-
-  // For debugging
-  //window.store = store;
+void new App({
+  target: document.querySelector('main'),
+  props: { feed, config }
 });
+
+const query = location.search;
+let url;
+
+config.subscribe(state => {
+  if (url === state.url) return;
+  url = state.url;
+  feed.fetch(url, feed);
+});
+
+if (query && query.startsWith('?url=')) {
+  const parts = query.substr(5).split('&');
+  config.set({ url: decodeURIComponent(parts[0]) });
+} else {
+  config.set({ url: urls.feed });
+}
