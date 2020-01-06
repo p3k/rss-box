@@ -8,6 +8,7 @@ git clone --recurse-submodules https://github.com/p3k/rss-box.git
 cd rss-box
 yarn install
 yarn run app
+xdg-open http://localhost:8000 # … or open your browser manually with this URL
 ```
 
 Coded in JavaScript by Tobi Schäfer between 2001 and 2020.
