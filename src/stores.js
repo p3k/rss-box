@@ -48,10 +48,10 @@ function fetchFeed(url) {
   fetch(urls.proxy + '?url=' + encodeURIComponent(url), { headers, referrerPolicy: 'no-referrer' })
     .then(res => {
       if (res.status > 399) throw Error(statusCodes[res.status]);
-      return res.text();
-    }).then(json => {
+      return res.json();
+    })
+    .then(data => {
       const parser = RssParser();
-      const data = JSON.parse(json);
       const rss = parser.parse(data.content);
 
       if (!rss.date) rss.date = new Date(data.headers.date);
