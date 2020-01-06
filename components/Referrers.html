@@ -1,6 +1,9 @@
 <script>
   import { onMount } from 'svelte';
   import { referrers } from '../src/stores';
+  import { urls } from '../src/urls';
+
+  import RssIcon from './RssIcon.html';
 
   onMount(() => {
     if ('open' in document.createElement('details') === false) {
@@ -20,6 +23,36 @@
   function load() {
     referrers.fetch();
   }
+
+  function injectFeedUrl(event) {
+    const referrer = $referrers[event.target.dataset.index];
+    const data = referrer.metadata;
+
+    if (!data || !data.feedUrls) return;
+
+    let index;
+
+    if (event.metaKey) {
+      // Cycle through the index of the feedUrls array to allow accessing multiple feed urls via one icon
+      event.preventDefault();
+      index = parseInt(event.target.dataset.feedIndex, 10) + 1;
+      if (index >= data.feedUrls.length) index = 0;
+      event.target.dataset.feedIndex = index;
+    } else {
+      // Inject the feed url with the current index into the link element’s href attribute
+      index = event.target.dataset.feedIndex;
+      const feedUrl = `${ urls.app }/?url=${ data.feedUrls[index] }`;
+      if (event.target.href === feedUrl) return;
+      event.target.href = feedUrl;
+    }
+  }
+
+  function appLinkClass(index) {
+    const referrer = $referrers[index];
+    const data = referrer.metadata;
+
+    if (!data || !data.feedUrls) return 'warn';
+  }
 </script>
 
 <style>
@@ -28,7 +61,7 @@
   }
 
   code {
-    margin-right: 0.5em;
+    margin-right: 0.3em;
     color: #bbb;
     font-size: 0.7em;
     white-space: pre;
@@ -41,14 +74,40 @@
   .referrer {
     white-space: nowrap;
   }
+
+  .appLink {
+    position: relative;
+    top: 2px;
+    color: #ffa600;
+  }
+
+  .appLink.warn {
+    pointer-events: none;
+  }
+
+  .appLink :global(svg) {
+    pointer-events: none;
+  }
+
+  .appLink.warn :global(svg) {
+    color: #ddd;
+  }
 </style>
 
 <details on:toggle={ load }>
   <summary></summary>
   { #if $referrers.length }
-    { #each $referrers as referrer }
+    { #each $referrers as referrer, index }
       <div class='referrer'>
         <code>{ format(referrer.percentage) }</code>
+        <a href='.'
+            class='appLink { appLinkClass(index) }'
+            data-index={ index }
+            data-feed-index='0'
+            on:mouseover={ injectFeedUrl }
+            on:click={ injectFeedUrl }>
+          <RssIcon/>
+        </a>
         <a href='{ referrer.url }'>{ referrer.host }</a>
       </div>
     { /each }

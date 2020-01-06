@@ -86,6 +86,7 @@ function fetchReferrers() {
           }
 
           data.total += item.hits;
+          data.metadata = item.metadata || { feedUrls: [] };
         }
         return accu;
       }, []);

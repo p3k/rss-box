@@ -54,6 +54,7 @@ ready(() => {
   // Earlier versions used protocol-less URLs like `//p3k.org/rss`
   const search = urls.app.replace(/^https?:/, '');
   const scripts = Array.apply(null, document.querySelectorAll('script[src*="' + search + '"]'));
+  const feedUrls = [];
 
   scripts.forEach(script => {
     const query = script.src.split('?')[1];
@@ -85,9 +86,14 @@ ready(() => {
 
     // Only for IE11
     script.parentNode.removeChild(script);
+
+    if (data.url !== urls.feed && feedUrls.indexOf(data.url) < 0) {
+      feedUrls.push(data.url);
+    }
   });
 
   if (location.href.indexOf(urls.app) < 0) {
-    fetch(urls.referrers + '&url=' + encodeURIComponent(location.href));
+    const metadata = JSON.stringify({ feedUrls });
+    fetch(urls.referrers + '&url=' + encodeURIComponent(location.href) + '&metadata=' + encodeURIComponent(metadata));
   }
 });
