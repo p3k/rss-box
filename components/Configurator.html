@@ -23,6 +23,8 @@
 
   function reload(event) {
     event.preventDefault();
+    // The app’s subcription only triggers a fetch when the url has changed
+    config.set({ url: null });
     config.set({ url: document.querySelector('input[name="url"]').value });
   }
 
@@ -123,7 +125,7 @@
         <label on:click={ label }>Feed URL</label>
       </td>
       <td>
-        <input type='url' value={ $config.url } name='url' required on:change={ update }>
+        <input type='url' value={ $config.url } name='url' required on:change={ reload }>
       </td>
     </tr>
     <tr>
