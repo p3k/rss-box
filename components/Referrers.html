@@ -5,6 +5,9 @@
 
   import RssIcon from './RssIcon.html';
 
+  // Stores coming in via props
+  export let config;
+
   onMount(() => {
     if ('open' in document.createElement('details') === false) {
       load();
@@ -24,34 +27,43 @@
     referrers.fetch();
   }
 
-  function injectFeedUrl(event) {
+  function updateFeedLink(event) {
+    event.preventDefault();
+
     const referrer = $referrers[event.target.dataset.index];
     const data = referrer.metadata;
 
     if (!data || !data.feedUrls) return;
 
-    let index;
+    let feedUrl = event.target.href;
+    let index = data.feedUrls.indexOf(feedUrl) + 1;
+
+    if (index >= data.feedUrls.length) index = 0;
+
+    feedUrl = data.feedUrls[index];
+
+    if (event.target.href === feedUrl) return;
+
+    event.target.href = feedUrl;
+  }
+
+  function clickFeedLink(event) {
+    event.preventDefault();
 
     if (event.metaKey) {
-      // Cycle through the index of the feedUrls array to allow accessing multiple feed urls via one icon
-      event.preventDefault();
-      index = parseInt(event.target.dataset.feedIndex, 10) + 1;
-      if (index >= data.feedUrls.length) index = 0;
-      event.target.dataset.feedIndex = index;
+      // Cycle through the feedUrls array to allow accessing multiple feed urls via one icon
+      updateFeedLink(event);
     } else {
-      // Inject the feed url with the current index into the link element’s href attribute
-      index = event.target.dataset.feedIndex;
-      const feedUrl = `${ urls.app }/?url=${ data.feedUrls[index] }`;
-      if (event.target.href === feedUrl) return;
-      event.target.href = feedUrl;
+      // Update the config store with the feed url to load the corresponding rss box
+      $config.url = event.target.href;
     }
   }
 
-  function appLinkClass(index) {
+  function getFeedLinkDisabledState(index) {
     const referrer = $referrers[index];
     const data = referrer.metadata;
 
-    if (!data || !data.feedUrls) return 'warn';
+    if (!data || !data.feedUrls) return 'disabled';
   }
 </script>
 
@@ -75,21 +87,21 @@
     white-space: nowrap;
   }
 
-  .appLink {
+  .feedLink {
     position: relative;
     top: 2px;
     color: #ffa600;
   }
 
-  .appLink.warn {
+  .feedLink[disabled] {
     pointer-events: none;
   }
 
-  .appLink :global(svg) {
+  .feedLink :global(svg) {
     pointer-events: none;
   }
 
-  .appLink.warn :global(svg) {
+  .feedLink[disabled] :global(svg) {
     color: #ddd;
   }
 </style>
@@ -101,11 +113,11 @@
       <div class='referrer'>
         <code>{ format(referrer.percentage) }</code>
         <a href='.'
-            class='appLink { appLinkClass(index) }'
+            class='feedLink'
+            disabled={ getFeedLinkDisabledState(index) }
             data-index={ index }
-            data-feed-index='0'
-            on:mouseover={ injectFeedUrl }
-            on:click={ injectFeedUrl }>
+            on:mouseover|once={ updateFeedLink }
+            on:click={ clickFeedLink }>
           <RssIcon/>
         </a>
         <a href='{ referrer.url }'>{ referrer.host }</a>
