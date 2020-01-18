@@ -9,8 +9,18 @@
   export let config;
 </script>
 
+<style>
+  .loading {
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: 3s;
+    transition-timing-function: ease-out;
+    pointer-events: none;
+  }
+</style>
+
 <div class='row'>
-  <div class='col c2'>
+  <div class='col c2' class:loading={ $feed.loading }>
     <Box { feed } { config }/>
   </div>
   <div class='col c5'>
