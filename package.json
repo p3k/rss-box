@@ -11,7 +11,7 @@
     "client:install": "if [ ! -e src/local.js ]; then echo 'export const urls = {};' > src/local.js; fi",
     "client:status-codes": "node -e \"console.log('export default ' + JSON.stringify(require('http').STATUS_CODES))\" > src/status-codes.js",
     "install": "yarn client:install; yarn server:install",
-    "roxy": "python -c \"import sys, os; os.system('curl -I http://localhost:8080/roxy?url=%s' % sys.argv[1])\"",
+    "roxy": "python -c \"import sys, os; os.system('curl -I http://localhost:8001/roxy?url=%s' % sys.argv[1])\"",
     "server": "(trap 'kill 0' INT TERM EXIT; cd services; make server & yarn server:datastore & yarn client)",
     "server:datastore": "(cd services; make datastore)",
     "server:deploy": "(cd services; make upload)",

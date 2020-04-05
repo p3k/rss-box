@@ -1,2 +1,57 @@
-!function(){"use strict";var r={app:"https://p3k.org/rss",proxy:"https://p3k-services.appspot.com/roxy",referrers:"https://p3k-services.appspot.com/ferris?group=rssbox",feed:"https://blog.p3k.org/stories.xml"},e="http://localhost",t={app:e+":8000",proxy:e+":8080/roxy",referrers:e+":8080/ferris?group=rssbox",feed:"https://blog.p3k.org/stories.xml"};Object.keys(r).forEach((function(e){e in t&&(t[e]=r[e])}));var o="__rssbox_viewer_"+"20.01.06".replace(/\D/g,"_")+"_init__";window[o]||(window[o]=!0,function(r){var e=document.createElement("script");e.src="https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&features="+encodeURIComponent(["fetch","Object.assign","Promise","String.prototype.padStart","String.prototype.startsWith","Array.prototype.fill","Array.from"].join()),e.crossOrigin="anonymous",e.onload=r,document.head.appendChild(e)}((function(){var r=document.createElement("script");r.defer=r.async=!0,r.src=t.app+"/box.js",document.head.appendChild(r)})))}();
+(function () {
+  'use strict';
+
+  const urls = {};
+
+  const baseUrl = 'http://localhost';
+
+  const urls$1 = {
+    app: baseUrl + ':8000',
+    proxy: baseUrl + ':8001/roxy',
+    referrers: baseUrl + ':8001/ferris?group=rssbox',
+    feed: 'https://blog.p3k.org/stories.xml'
+  };
+
+  Object.keys(urls).forEach(key => {
+    if (key in urls$1) urls$1[key] = urls[key];
+  });
+
+  var version = "20.01.06";
+
+  var polyfill = callback => {
+
+    const features = [
+      'fetch',
+      'Object.assign',
+      'Promise',
+      'String.prototype.padStart',
+      'String.prototype.startsWith',
+      'Array.prototype.fill',
+      'Array.from'
+    ];
+
+    const script = document.createElement('script');
+    script.src = 'https://cdn.polyfill.io/v3/polyfill.min.js?flags=gated&features=' + encodeURIComponent(features.join());
+    script.crossOrigin = 'anonymous';
+    script.onload = callback;
+
+    document.head.appendChild(script);
+  };
+
+  // This is the entrypoint for embedded box scripts
+
+  const id = `__rssbox_viewer_${version.replace(/\D/g, '_')}_init__`;
+
+  if (!window[id]) {
+    window[id] = true;
+
+    polyfill(() => {
+      const script = document.createElement('script');
+      script.defer = script.async = true;
+      script.src = urls$1.app + '/box.js';
+      document.head.appendChild(script);
+    });
+  }
+
+}());
 //# sourceMappingURL=main.js.map
