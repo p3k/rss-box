@@ -6,18 +6,15 @@
   "scripts": {
     "app": "(trap 'kill 0' INT TERM EXIT; yarn server & yarn build -w)",
     "build": "rollup -c",
+    "watch": "rollup -cw",
     "client": "serve -l 8000 dist",
     "client:deploy": "rsync -avz --delete dist/ p3k:/var/www/p3k.org/rss/",
     "client:install": "if [ ! -e src/local.js ]; then echo 'export const urls = {};' > src/local.js; fi",
     "client:status-codes": "node -e \"console.log('export default ' + JSON.stringify(require('http').STATUS_CODES))\" > src/status-codes.js",
     "install": "yarn client:install; yarn server:install",
     "roxy": "python -c \"import sys, os; os.system('curl -I http://localhost:8001/roxy?url=%s' % sys.argv[1])\"",
-    "server": "(trap 'kill 0' INT TERM EXIT; cd services; make server & yarn server:datastore & yarn client)",
-    "server:datastore": "(cd services; make datastore)",
-    "server:deploy": "(cd services; make upload)",
-    "server:index": "(cd services; make index)",
+    "server": "(trap 'kill 0' INT TERM EXIT; cd services; make server & yarn client)",
     "server:install": "git submodule init; yarn server:update; (cd services; make install)",
-    "server:tasks": "(cd services; make tasks)",
     "server:update": "git submodule update --remote --merge"
   },
   "repository": {
