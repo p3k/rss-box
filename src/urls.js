@@ -4,8 +4,8 @@ export const baseUrl = 'http://localhost';
 
 export const urls = {
   app: baseUrl + ':8000',
-  proxy: baseUrl + ':8001/roxy',
-  referrers: baseUrl + ':8001/ferris?group=rssbox',
+  proxy: baseUrl + ':8000/roxy',
+  referrers: baseUrl + ':8000/ferris?group=rss-box',
   feed: 'https://blog.p3k.org/stories.xml'
 };
 
