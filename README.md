@@ -11,7 +11,10 @@ yarn run app
 xdg-open http://localhost:8000 # … or open your browser manually with this URL
 ```
 
-Coded in JavaScript by Tobi Schäfer between 2001 and 2020.
+📷 [Screenshot](img/screenshot.png)  
+🧐 [Original installation](https://p3k.org/rss)
+
+Coded in JavaScript by Tobi Schäfer between 2001 and 2021.
 
 The author cannot be held responsible for anything that this software might or might not do.
 
@@ -19,4 +22,4 @@ The author cannot be held responsible for anything that this software might or m
 
 This project is tested in various browsers using [BrowserStack](https://www.browserstack.com).
 
-<a href='https://www.browserstack.com'><img height=50 src='Browserstack-logo.svg'></a>
+<a href='https://www.browserstack.com'><img height=50 src='img/browserstack-logo.svg'></a>
