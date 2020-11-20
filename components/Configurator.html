@@ -80,14 +80,10 @@
     outline: none;
   }
 
-  input[type='color'] {
-    width: 108px;
-    height: 30px;
-    padding: 1px 3px;
-  }
-
   button {
-    width: 100px;
+    width: 7em;
+    height: 2.5em;
+    box-sizing: border-box;
   }
 
   .top {
@@ -100,10 +96,18 @@
 
   [name=url], [name=fontFace], [name=code] {
     width: 90%;
+    height: 2.5em;
+    box-sizing: border-box;
   }
 
   [type=color], [type=number] {
     width: 7em;
+    height: 2.5em;
+    box-sizing: border-box;
+  }
+
+  input[type='color'] {
+    padding: 3px;
   }
 
   [name=code] {
