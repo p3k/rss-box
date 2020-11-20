@@ -30,7 +30,11 @@ const plugins = () => [
   commonjs(),
   json(),
 
-  production && buble({ objectAssign: true }),
+  production && buble({
+    objectAssign: true,
+    transforms: { dangerousForOf: true }
+  }),
+
   production && terser()
 ];
 
