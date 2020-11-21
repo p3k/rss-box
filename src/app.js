@@ -1,7 +1,7 @@
 import { config, feed } from './stores';
 import { urls } from './urls';
 
-import App from '../components/App.html';
+import App from './components/App.html';
 
 void new App({
   target: document.querySelector('main'),

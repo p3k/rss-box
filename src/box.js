@@ -4,7 +4,7 @@ import { ConfigStore, FeedStore } from './stores';
 import { urls } from './urls';
 import getNativeObject from './native.js';
 
-import Box from '../components/Box.html';
+import Box from './components/Box.html';
 
 // These are backwards-compatible settings
 const defaults = {
