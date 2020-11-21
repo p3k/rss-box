@@ -4,7 +4,7 @@
   "description": "RSS Box Viewer",
   "main": "src/app.js",
   "scripts": {
-    "app": "(trap 'kill 0' INT TERM EXIT; yarn server & yarn build -w)",
+    "app": "(trap 'kill 0' INT TERM EXIT; yarn server & yarn watch)",
     "build": "rollup -c",
     "watch": "rollup -cw",
     "client": "serve -l 8000 dist",
