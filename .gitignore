@@ -1,4 +1,5 @@
 \.*
+!\.gitlab-ci\.yml
 /node_modules/
 src/local\.js
 dist/test*
