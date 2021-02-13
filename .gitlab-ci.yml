@@ -4,6 +4,6 @@ pages:
   - echo 'Nothing to do...'
   artifacts:
     paths:
-    - dist
+    - public
   only:
   - main
