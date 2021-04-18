@@ -23,8 +23,8 @@ const config = name => {
 };
 
 const plugins = () => [
-  replace({ __BUILD_MODE__: production ? 'prod' : 'dev' }),
-  svelte({ dev: !production }),
+  replace({ __BUILD_MODE__: production ? 'prod' : 'dev', preventAssignment: false }),
+  svelte({ compilerOptions: { dev: !production }, extensions: ['.html'], emitCss: false }),
 
   resolve(),
   commonjs(),
