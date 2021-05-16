@@ -1,32 +1,32 @@
 <script>
-  import { onMount } from 'svelte';
-  import { urls } from '../urls';
+  import { onMount } from "svelte";
+  import { urls } from "../urls";
 
-  import LinkIcon from './LinkIcon.html';
-  import RssIcon from './RssIcon.html';
-  import PaperclipIcon from './PaperclipIcon.html';
+  import LinkIcon from "./LinkIcon.html";
+  import RssIcon from "./RssIcon.html";
+  import PaperclipIcon from "./PaperclipIcon.html";
 
   // Stores coming in via props
   export let feed;
   export let config;
 
   onMount(() => {
-    const staticId = 'rssbox-static-stylesheet';
-    const dynamicId = 'rssbox-dynamic-stylesheet';
+    const staticId = "rssbox-static-stylesheet";
+    const dynamicId = "rssbox-dynamic-stylesheet";
 
     let staticCss = window[staticId];
     let dynamicCss = window[dynamicId];
 
     if (!staticCss) {
-      staticCss = document.createElement('link');
+      staticCss = document.createElement("link");
       staticCss.id = staticId;
-      staticCss.rel = 'stylesheet';
-      staticCss.href = urls.app + '/box.css';
+      staticCss.rel = "stylesheet";
+      staticCss.href = urls.app + "/box.css";
       document.head.appendChild(staticCss);
     }
 
     if (!dynamicCss) {
-      dynamicCss = document.createElement('style');
+      dynamicCss = document.createElement("style");
       dynamicCss.id = dynamicId;
       document.head.appendChild(dynamicCss);
     }
@@ -46,7 +46,7 @@
   });
 
   function kb(bytes) {
-    return (bytes / 1000).toFixed(2) + '\u200akB';
+    return (bytes / 1000).toFixed(2) + "\u200akB";
   }
 
   function load(data) {
@@ -58,8 +58,8 @@
         const factor = image.width > maxWidth ? maxWidth / image.width : 1;
 
         fulfill({
-          width: (image.width * factor) + 'px',
-          height: (image.height * factor) + 'px'
+          width: (image.width * factor) + "px",
+          height: (image.height * factor) + "px"
         });
       };
 
@@ -67,9 +67,9 @@
     });
   }
 
-  $: height = $config.height && $config.height > -1 ? $config.height + 'px' : '100%';
-  $: width = $config.width ? $config.width + 'px' : '100%';
-  $: itemTitleClass = !$config.compact ? 'bold' : '';
+  $: height = $config.height && $config.height > -1 ? $config.height + "px" : "100%";
+  $: width = $config.width ? $config.width + "px" : "100%";
+  $: itemTitleClass = !$config.compact ? "bold" : "";
 </script>
 
 <style>
@@ -206,7 +206,7 @@
             <aside>
               { #if item.source }
                 <a href='{ item.source.url }' title='{ item.source.title }' class='rssbox-source'>
-                  { #if item.source.url.endsWith('.xml') }
+                  { #if item.source.url.endsWith(".xml") }
                     <RssIcon/>
                   { :else }
                     <LinkIcon/>

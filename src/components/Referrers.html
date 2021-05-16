@@ -1,26 +1,21 @@
 <script>
-  import { onMount } from 'svelte';
-  import { referrers } from '../stores';
-  import { urls } from '../urls';
+  import { onMount } from "svelte";
+  import { referrers } from "../stores";
 
-  import RssIcon from './RssIcon.html';
+  import RssIcon from "./RssIcon.html";
 
   // Stores coming in via props
   export let config;
 
   onMount(() => {
-    if ('open' in document.createElement('details') === false) {
+    if ("open" in document.createElement("details") === false) {
       load();
     }
   });
 
   function format(float) {
-    if (float < 0.01) return '< 0.01';
+    if (float < 0.01) return "< 0.01";
     return float.toFixed(2).padStart(6);
-  }
-
-  function update(event) {
-    if (event.target.open && !loaded) load();
   }
 
   function load() {
@@ -63,7 +58,7 @@
     const referrer = $referrers[index];
     const data = referrer.metadata;
 
-    if (!data || !data.feedUrls) return 'disabled';
+    if (!data || !data.feedUrls) return "disabled";
   }
 </script>
 
