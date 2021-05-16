@@ -71,7 +71,11 @@ function fetchReferrers() {
     .then(res => res.json())
     .then(data => {
       const hosts = data.reduce((accu, item) => {
-        if (item.url.startsWith("http") && !item.url.startsWith(urls.app)) {
+        if (
+          item.url.startsWith("http") &&
+          !item.url.startsWith(urls.app) &&
+          item.url.indexOf("atari-embeds.googleusercontent.com") < 0
+        ) {
           const url = item.url.replace(/^([^.]*)www\./, "$1");
           const host = url.split("/")[2];
           let data = accu[host];
