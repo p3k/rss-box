@@ -101,7 +101,7 @@
   }
 </style>
 
-<details on:toggle={ load }>
+<details id="referrers" on:toggle={ load }>
   <summary></summary>
   { #if $referrers.length }
     { #each $referrers as referrer, index }
