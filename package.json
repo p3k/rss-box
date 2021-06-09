@@ -37,7 +37,7 @@
     "domready": "^1.0.8",
     "eslint": "^7.26.0",
     "eslint-plugin-svelte3": "^3.2.0",
-    "rollup": "^2.48.0",
+    "rollup": "^2.51.1",
     "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",
     "serve": "^11.3.2",
