@@ -107,6 +107,7 @@
     { #each $referrers as referrer, index }
       <div class='referrer'>
         <code>{ format(referrer.percentage) }</code>
+        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
         <a href='.'
             class='feedLink'
             disabled={ getFeedLinkDisabledState(index) }
