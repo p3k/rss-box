@@ -1,9 +1,9 @@
 import { config, feed } from "./stores";
 import { urls } from "./urls";
 
-import App from "./components/App.html";
+import App from "./components/App.svelte";
 
-void new App({
+const app = new App({
   target: document.querySelector("main"),
   props: { feed, config }
 });
@@ -23,3 +23,5 @@ if (query && query.startsWith("?url=")) {
 } else {
   config.set({ url: urls.feed });
 }
+
+export default app;

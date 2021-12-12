@@ -1,8 +1,8 @@
 <script>
-  import About from "./About.html";
-  import Ad from "./Ad.html";
-  import Box from "./Box.html";
-  import Configurator from "./Configurator.html";
+  import About from "./About.svelte";
+  import Ad from "./Ad.svelte";
+  import Box from "./Box.svelte";
+  import Configurator from "./Configurator.svelte";
 
   // Stores coming in via props
   export let feed;

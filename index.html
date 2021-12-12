@@ -5,7 +5,7 @@
 
 <link rel='apple-touch-icon' sizes='180x180' href='img/rss.png'>
 <link rel='shortcut icon' href='img/rss.png'>
-<link rel='stylesheet' href='min.css'>
+<link rel='stylesheet' href='src/min.css'>
 
 <!-- Polyfills need to be loaded already here because app.js is already using Promise et al. -->
 <script src='./polyfill.io.js'></script>
@@ -32,4 +32,4 @@
   </noscript>
 </main>
 
-<script async defer src='app.js'></script>
+<script type='module' src='/src/app.js' async defer></script>

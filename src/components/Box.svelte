@@ -2,9 +2,9 @@
   import { onMount } from "svelte";
   import { urls } from "../urls";
 
-  import LinkIcon from "./LinkIcon.html";
-  import RssIcon from "./RssIcon.html";
-  import PaperclipIcon from "./PaperclipIcon.html";
+  import LinkIcon from "./LinkIcon.svelte";
+  import RssIcon from "./RssIcon.svelte";
+  import PaperclipIcon from "./PaperclipIcon.svelte";
 
   // Stores coming in via props
   export let feed;

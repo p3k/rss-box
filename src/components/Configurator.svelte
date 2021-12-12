@@ -2,7 +2,7 @@
 <script>
   import { urls } from "../urls";
 
-  import Referrers from "./Referrers.html";
+  import Referrers from "./Referrers.svelte";
 
   // Stores coming in via props
   export let feed;

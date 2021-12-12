@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { referrers } from "../stores";
 
-  import RssIcon from "./RssIcon.html";
+  import RssIcon from "./RssIcon.svelte";
 
   // Stores coming in via props
   export let config;

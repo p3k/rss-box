@@ -8,7 +8,7 @@
     "start": "(trap 'kill 0' INT TERM EXIT; npm run server & npm run watch)",
     "build": "rollup -c",
     "watch": "rollup -cw",
-    "client": "serve -l 8000 dist",
+    "client": "vite",
     "client:install": "if [ ! -e src/local.js ]; then echo 'export const urls = {};' > src/local.js; fi",
     "client:publish": "rsync -avz --delete dist/ p3k:/var/www/p3k.org/rss/",
     "client:status-codes": "node -e \"console.log('export default ' + JSON.stringify(require('http').STATUS_CODES, null, '  '))\" > src/status-codes.js",

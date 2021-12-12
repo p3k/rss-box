@@ -1,7 +1,7 @@
 <script>
   import { app } from "../stores";
-  import Changes from "./Changes.html";
-  import Github from "./Github.html";
+  import Changes from "./Changes.svelte";
+  import Github from "./Github.svelte";
 
   // Stores coming in via props
   export let config;
