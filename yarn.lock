@@ -1322,10 +1322,10 @@ supports-color@^7.0.0, supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-svelte@=3.40.0:
-  version "3.40.0"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.40.0.tgz#777d47b0aad840bb4dd2eea74400e8caccfb7a5a"
-  integrity sha512-PCof5NCkxw7ZIkypiHwmjk8jCnnlmJ62NQIcGr/keBCOCx2FdAYmpjLjAey8hGy58xKK4WtwLUgFNcQZK2fPLQ==
+svelte@=3.51.0:
+  version "3.51.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.51.0.tgz#a1a0afb25dc518217f353dd73ea6471c128ddf84"
+  integrity sha512-PBITYIrsNOuW+Dtds00gSY68raNZQn7i59Dg/fjgf6WwyawPKeBwle692coO7ILZqSO+UJe9899aDn9sMdeOHA==
 
 terser@^5.0.0:
   version "5.5.0"
