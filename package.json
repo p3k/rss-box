@@ -35,7 +35,7 @@
     "@rollup/plugin-node-resolve": "^13.0.0",
     "@rollup/plugin-replace": "^3.0.0",
     "domready": "^1.0.8",
-    "eslint": "^8.4.1",
+    "eslint": "^8.27.0",
     "eslint-plugin-svelte3": "^3.2.0",
     "rollup": "^2.61.1",
     "rollup-plugin-svelte": "^7.1.0",
