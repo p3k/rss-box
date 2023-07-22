@@ -4,7 +4,7 @@
   "description": "RSS Box Viewer",
   "main": "src/app.js",
   "scripts": {
-    "app": "(trap 'kill 0' INT TERM EXIT; yarn server & yarn watch)",
+    "start": "(trap 'kill 0' INT TERM EXIT; npm run server & npm run watch)",
     "build": "rollup -c",
     "watch": "rollup -cw",
     "client": "serve -l 8000 dist",
@@ -12,10 +12,10 @@
     "client:publish": "rsync -avz --delete dist/ p3k:/var/www/p3k.org/rss/",
     "client:status-codes": "node -e \"console.log('export default ' + JSON.stringify(require('http').STATUS_CODES, null, '  '))\" > src/status-codes.js",
     "delint": "eslint --fix *.js src/**/*.{js,html}",
-    "install": "yarn client:install; yarn server:install",
+    "install": "npm run client:install; npm run server:install",
     "roxy": "python -c \"import sys, os; os.system('curl -I http://localhost:8000/roxy?url=%s' % sys.argv[1])\"",
-    "server": "dir=$PWD; (cd services; mod_wsgi-express start-server wsgi.py --document-root \"$dir/dist\")",
-    "server:install": "git submodule init; yarn server:update; (cd services; make install)",
+    "server": "dir=$PWD; (cd services; .venv/bin/mod_wsgi-express start-server wsgi.py --document-root \"$dir/dist\")",
+    "server:install": "git submodule init; npm run server:update; (cd services; make install)",
     "server:update": "git submodule update --remote --merge"
   },
   "repository": {

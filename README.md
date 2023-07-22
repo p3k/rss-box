@@ -6,8 +6,8 @@ RSS Box Viewer provides a simple way to embed RSS feeds as elegant boxes in any 
 ```sh
 git clone --recurse-submodules https://github.com/p3k/rss-box.git
 cd rss-box
-yarn install
-yarn run app
+npm install
+npm start
 xdg-open http://localhost:8000 # … or open your browser manually with this URL
 ```
 
