@@ -3,7 +3,7 @@
 ## Prerequisites
 
 * Git
-* Yarn
+* NodeJS
 * Python 3 incl. header files
 * Apache 2.4 incl. header files
 
@@ -25,13 +25,13 @@ source /path/to/virtual-environment/bin/activate
 
 ```sh
 # This installs both, server (Python) and client (NodeJS) dependencies
-yarn install
+npm install
 ```
 
 ## Run App in Development Mode
 
 ```sh
-yarn app
+npm start
 # In another terminal (alternatively, enter the URL in your browser, manually)
 xdg-open http://localhost:8000
 ```
@@ -39,7 +39,7 @@ xdg-open http://localhost:8000
 ## Rebuild Production Files
 
 ```sh
-yarn build
+npm run build
 # The built files are located in the `dist` directory
 ```
 
