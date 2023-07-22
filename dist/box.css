@@ -44,9 +44,10 @@
 }
 
 .rssbox-item-content img:not([height='1']),
+.rssbox-item-content embed,
 .rssbox-item-content iframe,
 .rssbox-item-content object,
-.rssbox-item-content embed {
+.rssbox-item-content video {
   width: 100%;
   height: auto;
   margin-top: 0.5em;
