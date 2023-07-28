@@ -1,10 +1,10 @@
 <script>
   import { onMount } from "svelte";
-  import { urls } from "../urls";
+  import { urls } from "./urls";
 
-  import LinkIcon from "./LinkIcon.svelte";
-  import RssIcon from "./RssIcon.svelte";
-  import PaperclipIcon from "./PaperclipIcon.svelte";
+  import LinkIcon from "./lib/LinkIcon.svelte";
+  import RssIcon from "./lib/RssIcon.svelte";
+  import PaperclipIcon from "./lib/PaperclipIcon.svelte";
 
   // Stores coming in via props
   export let feed;
@@ -21,7 +21,7 @@
       staticCss = document.createElement("link");
       staticCss.id = staticId;
       staticCss.rel = "stylesheet";
-      staticCss.href = urls.app + "/box.css";
+      staticCss.href = `${urls.app}/assets/box.css`;
       document.head.appendChild(staticCss);
     }
 
@@ -157,12 +157,33 @@
   }
 </style>
 
-<div data-link-color='{ $config.linkColor }' class='rssbox rssBox' style='max-width: { width }; border-color: { $config.frameColor }; border-radius: { $config.radius }px; font: { $config.fontFace }; float: { $config.align };'>
+<div
+  data-link-color='{ $config.linkColor }'
+  class='rssbox rssBox'
+  style='
+    max-width: { width };
+    border-color: { $config.frameColor };
+    border-radius: { $config.radius }px;
+    font: { $config.fontFace };
+    float: { $config.align };
+  '
+>
   { #if !$config.headless }
-    <div class='rssbox-titlebar' style='color: { $config.titleBarTextColor }; background-color: { $config.titleBarColor }; border-bottom-color: { $config.frameColor };'>
+    <div
+      class='rssbox-titlebar'
+      style='
+        color: { $config.titleBarTextColor };
+        background-color: { $config.titleBarColor };
+        border-bottom-color: { $config.frameColor };
+      '
+    >
       { #if $config.showXmlButton }
         <div class='rssbox-icon'>
-          <a href='{ $config.url }' title='{ $feed.format } { $feed.version }' style='color: { $config.titleBarTextColor }'>
+          <a
+            href='{ $config.url }'
+            title='{ $feed.format } { $feed.version }'
+            style='color: { $config.titleBarTextColor }'
+          >
             <RssIcon/>
           </a>
         </div>
@@ -178,18 +199,32 @@
     </div>
   { /if }
 
-  <div class='rssbox-content rssBoxContent' style='background-color: { $config.boxFillColor }; height: { height };'>
+  <div
+    class='rssbox-content rssBoxContent'
+    style='background-color: { $config.boxFillColor }; height: { height };'
+  >
     { #if $feed.image && !$config.compact }
       { #await load($feed.image) then image }
         <a href='{ $feed.image.link }' title='{ $feed.image.title }'>
-          <div alt='{ $feed.image.description }' class='rssbox-image' style='background-image: url({ $feed.image.source }); width: { image.width }; height: { image.height };'></div>
+          <div
+            alt='{ $feed.image.description }'
+            class='rssbox-image'
+            style='
+              background-image: url({ $feed.image.source });
+              width: { image.width };
+              height: { image.height };
+            '
+          />
         </a>
       { /await }
     { /if }
 
     { #each $feed.items as item, index }
       { #if index < $config.maxItems }
-        <div class='rssbox-item-content rssBoxItemContent' style='color: { $config.textColor }'>
+        <div
+          class='rssbox-item-content rssBoxItemContent'
+          style='color: { $config.textColor }'
+        >
           { #if item.title }
             <div class='rssbox-item-title { itemTitleClass }'>
               { #if item.link }
@@ -205,7 +240,11 @@
           { #if !$config.compact }
             <aside>
               { #if item.source }
-                <a href='{ item.source.url }' title='{ item.source.title }' class='rssbox-source'>
+                <a
+                  href='{ item.source.url }'
+                  title='{ item.source.title }'
+                  class='rssbox-source'
+                >
                   { #if item.source.url.endsWith(".xml") }
                     <RssIcon/>
                   { :else }
@@ -216,7 +255,11 @@
 
               { #if item.enclosures }
                 { #each item.enclosures as enclosure }
-                  <a href='{ enclosure.url }' title='{ kb(enclosure.length) } { enclosure.type }' class='rssbox-enclosure'>
+                  <a
+                    href='{ enclosure.url }'
+                    title='{ kb(enclosure.length) } { enclosure.type }'
+                    class='rssbox-enclosure'
+                  >
                     <PaperclipIcon/>
                   </a>
                 { /each }
@@ -230,7 +273,12 @@
 
     { #if $feed.input }
       <form class='rssbox-form' method='get' action='{ $feed.input.link }'>
-        <input type='text' name='{ $feed.input.name }' placeholder='Enter search &amp; hit return…' data-placeholder='{ $feed.input.description }'>
+        <input
+          type='text'
+          name='{ $feed.input.name }'
+          placeholder='Enter search &amp; hit return…'
+          data-placeholder='{ $feed.input.description }'
+        >
       </form>
     { /if }
     <div class='rssbox-promo rssBoxPromo'>

@@ -1,8 +1,8 @@
 <script>
-  import About from "./About.svelte";
-  import Ad from "./Ad.svelte";
+  import About from "./lib/About.svelte";
+  import Ad from "./lib/Ad.svelte";
   import Box from "./Box.svelte";
-  import Configurator from "./Configurator.svelte";
+  import Configurator from "./lib/Configurator.svelte";
 
   // Stores coming in via props
   export let feed;
@@ -16,6 +16,12 @@
     transition-duration: 3s;
     transition-timing-function: ease-out;
     pointer-events: none;
+  }
+
+  *::-ms-backdrop, .loading {
+    opacity: 1;
+    transition: none;
+    pointer-events: initial;
   }
 </style>
 

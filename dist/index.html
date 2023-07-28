@@ -3,13 +3,13 @@
 <meta charset='utf-8'>
 <meta name='viewport' content='width=device-width'>
 
-<link rel='apple-touch-icon' sizes='180x180' href='img/rss.png'>
-<link rel='shortcut icon' href='img/rss.png'>
-<link rel='stylesheet' href='src/min.css'>
+<link rel='apple-touch-icon' sizes='180x180' href='assets/rss.png'>
+<link rel='shortcut icon' href='assets/rss.png'>
+<link rel='stylesheet' href='assets/min.css'>
 
 <!-- Polyfills need to be loaded already here because app.js is already using Promise et al. -->
-<script src='./polyfill.io.js'></script>
-<script>polyfill.io();</script>
+<!--script type="module" src='/src/polyfill.io.js'></script>
+<script>polyfill.io();</script-->
 
 <style>
   body {
@@ -32,4 +32,4 @@
   </noscript>
 </main>
 
-<script type='module' src='/src/app.js' async defer></script>
+<script type='module' src='./app.js' async defer></script>

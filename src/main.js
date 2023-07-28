@@ -1,6 +1,8 @@
 // This is the entrypoint for embedded box scripts
 // All it does is to once load the framework which does the actual work
 
+//import "core-js";
+
 import { urls } from "./urls";
 import { version } from "../package.json";
 import polyfill from "./polyfill.io";

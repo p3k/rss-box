@@ -45,7 +45,7 @@
     Object.keys($config).forEach(key => {
       let value = $config[key];
       if (value === null || value === undefined) value = "";
-      query.push(key + "=" + encodeURIComponent(value));
+      query.push(`${ key }=${ encodeURIComponent(value) }`);
     });
 
     return query.join("&");

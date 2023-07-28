@@ -5,19 +5,21 @@
   "type": "module",
   "main": "src/app.js",
   "scripts": {
-    "start": "(trap 'kill 0' INT TERM EXIT; npm run server & npm run watch)",
-    "build": "rollup -c",
-    "watch": "rollup -cw",
-    "client": "vite",
-    "client:install": "if [ ! -e src/local.js ]; then echo 'export const urls = {};' > src/local.js; fi",
-    "client:publish": "rsync -avz --delete dist/ p3k:/var/www/p3k.org/rss/",
-    "client:status-codes": "node -e \"console.log('export default ' + JSON.stringify(require('http').STATUS_CODES, null, '  '))\" > src/status-codes.js",
-    "delint": "eslint --fix *.js src/**/*.{js,html}",
-    "install": "npm run client:install; npm run server:install",
-    "roxy": "python -c \"import sys, os; os.system('curl -I http://localhost:8000/roxy?url=%s' % sys.argv[1])\"",
-    "server": "dir=$PWD; (cd services; .venv/bin/mod_wsgi-express start-server wsgi.py --document-root \"$dir/dist\")",
-    "server:install": "git submodule init; npm run server:update; (cd services; make install)",
-    "server:update": "git submodule update --remote --merge"
+    "install": "npm run install:server; npm run install:local",
+    "start": "concurrently --kill-others 'npm:server' 'npm:watch'",
+    "build": "npm run build:copy; rollup --config",
+    "build:copy": "cp -Rp src/index.html src/assets dist",
+    "build:status-codes": "node -e 'console.log(`export default ${JSON.stringify(require(`http`).STATUS_CODES, null, ` `)};`)'",
+    "clean": "rm -r dist/*",
+    "delint": "eslint --fix *.js src/**/*.{js,svelte}",
+    "install:local": "if [ ! -e src/local.js ]; then echo 'export const urls = {};' > src/local.js; fi",
+    "install:server": "git submodule init; npm run server:update; (cd services; make install)",
+    "publish": "rsync --archive --verbose --del dist/ p3k:/var/www/p3k.org/rss/",
+    "roxy": "python -c \"import sys, os; os.system('curl --head http://localhost:8000/roxy?url=%s' % sys.argv[1])\"",
+    "server": "dir=$PWD; (cd services; .venv/bin/mod_wsgi-express start-server wsgi.py --document-root \"$dir/dist\" --access-log --log-to-terminal)",
+    "server:update": "git submodule update --remote --merge",
+    "watch": "npm run build -- --watch",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -30,68 +32,22 @@
   },
   "homepage": "https://github.com/p3k/rss-box#readme",
   "devDependencies": {
-    "@rollup/plugin-buble": "^1.0.2",
+    "@babel/core": "^7.22.9",
+    "@babel/preset-env": "^7.22.9",
+    "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-commonjs": "^25.0.3",
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-replace": "^5.0.2",
+    "@rollup/plugin-terser": "^0.4.3",
+    "concurrently": "^8.2.0",
+    "core-js": "^3.31.1",
     "domready": "^1.0.8",
     "eslint": "^8.4.1",
-    "eslint-plugin-svelte3": "^4.0.0",
+    "eslint-plugin-svelte": "^2.32.4",
     "rollup": "^3.26.3",
     "rollup-plugin-svelte": "^7.1.0",
-    "rollup-plugin-terser": "^7.0.2",
     "serve": "^14.2.0",
-    "svelte": "=3.40.0"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "amd": true,
-      "browser": true,
-      "es6": true,
-      "node": true
-    },
-    "parserOptions": {
-      "ecmaVersion": 2019,
-      "sourceType": "module"
-    },
-    "extends": [
-      "eslint:recommended"
-    ],
-    "rules": {
-      "indent": [
-        "error",
-        2
-      ],
-      "linebreak-style": [
-        "error",
-        "unix"
-      ],
-      "no-trailing-spaces": "error",
-      "max-len": [
-        "error",
-        120
-      ],
-      "quotes": [
-        "error",
-        "double"
-      ],
-      "semi": [
-        "error",
-        "always"
-      ]
-    },
-    "plugins": [
-      "svelte3"
-    ],
-    "overrides": [
-      {
-        "files": [
-          "src/components/*.html"
-        ],
-        "processor": "svelte3/svelte3"
-      }
-    ]
+    "svelte": "^4.0.5"
   }
 }
