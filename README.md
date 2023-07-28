@@ -1,5 +1,4 @@
-RSS Box Viewer
-==============
+# RSS Box Viewer
 
 RSS Box Viewer provides a simple way to embed RSS feeds as elegant boxes in any HTML document via an automagically generated JavaScript tag.
 

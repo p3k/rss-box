@@ -13,7 +13,8 @@ const defaultError = {
   items: [
     {
       title: "Oops, something went wrong…",
-      description: "An error occurred while processing the request to the RSS Box Viewer."
+      description:
+        "An error occurred while processing the request to the RSS Box Viewer."
     },
     {
       title: "The following error message was returned:",
@@ -23,9 +24,9 @@ const defaultError = {
   ]
 };
 
-export default function(url, message) {
+export default function (url, message) {
   const error = Object.assign({}, defaultError);
-  error.link = urls.app + "?url=" + url;
+  error.link = `${urls.app}?url=${url}`;
   error.items[1].description = message;
   error.items[2].description = `
     Most likely, this might have happened because of a non-existent or invalid RSS feed URL.

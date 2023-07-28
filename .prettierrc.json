@@ -1,0 +1,7 @@
+{
+  "arrowParens": "avoid",
+  "quoteProps": "consistent",
+  "plugins": ["prettier-plugin-svelte"],
+  "proseWrap": "preserve",
+  "trailingComma": "none"
+}

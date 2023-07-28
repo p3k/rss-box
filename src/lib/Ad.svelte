@@ -7,16 +7,18 @@
   document.head.appendChild(script);
 </script>
 
+<ins
+  class="adsbygoogle"
+  style="display:block"
+  data-ad-client="ca-pub-3965028043153138"
+  data-ad-slot="6370257451"
+  data-ad-format="auto"
+  data-full-width-responsive="true"
+></ins>
+
 <style>
   ins {
     overflow: hidden;
     margin-bottom: 1em;
   }
 </style>
-
-<ins class='adsbygoogle'
-     style='display:block'
-     data-ad-client='ca-pub-3965028043153138'
-     data-ad-slot='6370257451'
-     data-ad-format='auto'
-     data-full-width-responsive='true'></ins>

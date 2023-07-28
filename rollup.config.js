@@ -26,7 +26,10 @@ const config = name => {
 };
 
 const plugins = () => [
-  replace({ __BUILD_MODE__: production ? "prod" : "dev", preventAssignment: false }),
+  replace({
+    __BUILD_MODE__: production ? "prod" : "dev",
+    preventAssignment: false
+  }),
 
   svelte({
     compilerOptions: { dev: !production },
@@ -41,25 +44,27 @@ const plugins = () => [
   commonjs(),
   json(),
 
-  production && babel({
-    babelHelpers: "bundled",
-    exclude: ["node_modules/@babel/**", "node_modules/core-js/**"],
-    extensions: [".js", ".mjs", ".html", ".svelte"],
-    presets: [
-      [
-        "@babel/preset-env",
-        {
-          corejs: "3.31.1",
-          targets: "> 0.25%, not dead, IE 11",
-          useBuiltIns: "usage"
-        }
+  production &&
+    babel({
+      babelHelpers: "bundled",
+      exclude: ["node_modules/@babel/**", "node_modules/core-js/**"],
+      extensions: [".js", ".mjs", ".html", ".svelte"],
+      presets: [
+        [
+          "@babel/preset-env",
+          {
+            corejs: "3.31.1",
+            targets: "> 0.25%, not dead, IE 11",
+            useBuiltIns: "usage"
+          }
+        ]
       ]
-    ]
-  }),
+    }),
 
-  production && terser({
-    sourceMap: { url: "inline" }
-  })
+  production &&
+    terser({
+      sourceMap: { url: "inline" }
+    })
 ];
 
 export default [

@@ -11,15 +11,17 @@
     "build:copy": "cp -Rp src/index.html src/assets dist",
     "build:status-codes": "node -e 'console.log(`export default ${JSON.stringify(require(`http`).STATUS_CODES, null, ` `)};`)'",
     "clean": "rm -r dist/*",
-    "delint": "eslint --fix *.js src/**/*.{js,svelte}",
+    "delint": "npm run delint:css; npm run delint:js; prettier --write src/**/*.{css,html,js,md,svelte}",
+    "delint:css": "stylelint --fix src/**/*.{css,html,svelte}",
+    "delint:js": "eslint --cache --fix src/**/*.{js,svelte}",
     "install:local": "if [ ! -e src/local.js ]; then echo 'export const urls = {};' > src/local.js; fi",
     "install:server": "git submodule init; npm run server:update; (cd services; make install)",
+    "prepare": "husky install",
     "publish": "rsync --archive --verbose --del dist/ p3k:/var/www/p3k.org/rss/",
     "roxy": "python -c \"import sys, os; os.system('curl --head http://localhost:8000/roxy?url=%s' % sys.argv[1])\"",
     "server": "dir=$PWD; (cd services; .venv/bin/mod_wsgi-express start-server wsgi.py --document-root \"$dir/dist\" --access-log --log-to-terminal)",
     "server:update": "git submodule update --remote --merge",
-    "watch": "npm run build -- --watch",
-    "prepare": "husky install"
+    "watch": "npm run build -- --watch"
   },
   "repository": {
     "type": "git",
@@ -43,11 +45,22 @@
     "concurrently": "^8.2.0",
     "core-js": "^3.31.1",
     "domready": "^1.0.8",
-    "eslint": "^8.4.1",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "8.9.0",
     "eslint-plugin-svelte": "^2.32.4",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "prettier": "3.0.0",
+    "prettier-plugin-svelte": "3.0.3",
     "rollup": "^3.26.3",
     "rollup-plugin-svelte": "^7.1.0",
     "serve": "^14.2.0",
+    "stylelint": "^15.10.2",
+    "stylelint-config-html": "1.1.0",
+    "stylelint-config-standard": "^34.0.0",
     "svelte": "^4.0.5"
+  },
+  "lint-staged": {
+    "*.{css,html,js,md,svelte}": "npm run delint"
   }
 }

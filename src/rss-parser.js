@@ -3,7 +3,7 @@ function RssParser() {
   const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
   const ISO_DATE_PATTERN = /([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9:]+).*$/;
 
-  const getDocument = function(xml) {
+  const getDocument = function (xml) {
     if (!xml) return;
 
     let doc;
@@ -20,14 +20,14 @@ function RssParser() {
     return doc;
   };
 
-  const getChildElement = function(name, parent, namespace) {
+  const getChildElement = function (name, parent, namespace) {
     if (!name || !parent) return null;
     let method = "getElementsByTagName";
     if (namespace) method += "NS";
     return parent[method](name, namespace)[0];
   };
 
-  const getText = function(node) {
+  const getText = function (node) {
     if (!node) return "";
     if (node.length) node = node[0];
     return node.textContent;
@@ -35,7 +35,7 @@ function RssParser() {
 
   const error = Error("Malformed RSS syntax");
 
-  const parseRss = function(root, type) {
+  const parseRss = function (root, type) {
     const rss = { items: [] };
     const channel = getChildElement("channel", root);
 
@@ -51,33 +51,38 @@ function RssParser() {
 
     rss.image = image
       ? {
-        source: getText(getChildElement("url", image)) || image.getAttributeNS(RDF_NAMESPACE, "resource"),
-        title: getText(getChildElement("title", image)),
-        link: getText(getChildElement("link", image)),
-        width: getText(getChildElement("width", image)),
-        height: getText(getChildElement("height", image)),
-        description: getText(getChildElement("description", image))
-      }
+          source:
+            getText(getChildElement("url", image)) ||
+            image.getAttributeNS(RDF_NAMESPACE, "resource"),
+          title: getText(getChildElement("title", image)),
+          link: getText(getChildElement("link", image)),
+          width: getText(getChildElement("width", image)),
+          height: getText(getChildElement("height", image)),
+          description: getText(getChildElement("description", image))
+        }
       : "";
 
     if (type === "rdf:RDF") {
       const date = channel.getElementsByTagNameNS(DC_NAMESPACE, "date");
       rss.date = getDate(getText(date));
-      rss.rights = getText(channel.getElementsByTagNameNS(DC_NAMESPACE, "creator"));
+      rss.rights = getText(
+        channel.getElementsByTagNameNS(DC_NAMESPACE, "creator")
+      );
 
       const textInput = getChildElement("textinput", root);
 
       rss.input = textInput
         ? {
-          link: getText(getChildElement("link", textInput)),
-          description: getText(getChildElement("description", textInput)),
-          name: getText(getChildElement("name", textInput)),
-          title: getText(getChildElement("title", textInput))
-        }
+            link: getText(getChildElement("link", textInput)),
+            description: getText(getChildElement("description", textInput)),
+            name: getText(getChildElement("name", textInput)),
+            title: getText(getChildElement("title", textInput))
+          }
         : "";
     } else {
       rss.date = getDate(
-        getText(getChildElement("lastBuildDate", channel)) || getText(getChildElement("pubDate", channel))
+        getText(getChildElement("lastBuildDate", channel)) ||
+          getText(getChildElement("pubDate", channel))
       );
       rss.rights = getText(getChildElement("copyright", channel));
     }
@@ -89,7 +94,9 @@ function RssParser() {
       const item = {
         title: getText(getChildElement("title", node)),
         description: getText(getChildElement("description", node)),
-        link: getText(getChildElement("link", node)) || getText(getChildElement("guid", node))
+        link:
+          getText(getChildElement("link", node)) ||
+          getText(getChildElement("guid", node))
       };
 
       if (!item.description) {
@@ -111,7 +118,7 @@ function RssParser() {
     return rss;
   };
 
-  const parseAtom = function(root) {
+  const parseAtom = function (root) {
     const rss = { items: [] };
 
     rss.format = "Atom";
@@ -142,7 +149,7 @@ function RssParser() {
     return rss;
   };
 
-  const parseScriptingNews = function(root) {
+  const parseScriptingNews = function (root) {
     const rss = { items: [] };
     const channel = getChildElement("header", root);
 
@@ -155,7 +162,8 @@ function RssParser() {
     rss.link = getText(getChildElement("channelLink", channel));
 
     rss.date = getDate(
-      getText(getChildElement("lastBuildDate", channel)) || getText(getChildElement("pubDate", channel))
+      getText(getChildElement("lastBuildDate", channel)) ||
+        getText(getChildElement("pubDate", channel))
     );
 
     const imageUrl = getChildElement("imageUrl", channel);
@@ -176,7 +184,10 @@ function RssParser() {
     items.forEach(node => {
       const item = { title: "" };
 
-      item.description = getText(getChildElement("text", node)).replace(/\n/g, " ");
+      item.description = getText(getChildElement("text", node)).replace(
+        /\n/g,
+        " "
+      );
 
       const link = getChildElement("link", node);
 
@@ -187,7 +198,11 @@ function RssParser() {
         if (text) {
           item.description = item.description.replace(
             new RegExp(text),
-            "<a href=\"" + getText(getChildElement("url", node)) + "\">" + text + "</a>"
+            '<a href="' +
+              getText(getChildElement("url", node)) +
+              '">' +
+              text +
+              "</a>"
           );
         }
         item.link = getText(getChildElement("url", link));
@@ -200,10 +215,13 @@ function RssParser() {
     return rss;
   };
 
-  const addItemExtensions = function(node, item) {
+  const addItemExtensions = function (node, item) {
     const source = getChildElement("source", node);
     // Create a native Array from HTMLCollection
-    const enclosures = Array.apply(null, node.getElementsByTagName("enclosure"));
+    const enclosures = Array.apply(
+      null,
+      node.getElementsByTagName("enclosure")
+    );
     const category = getChildElement("category", node);
 
     if (source) {
@@ -231,7 +249,7 @@ function RssParser() {
     return item;
   };
 
-  const getDate = function(str) {
+  const getDate = function (str) {
     let millis = Date.parse(str);
 
     if (isNaN(millis)) {
@@ -243,23 +261,24 @@ function RssParser() {
   };
 
   return {
-    parse: function(xml) {
+    parse: function (xml) {
       const doc = getDocument(xml);
 
-      if (!doc || getChildElement("parsererror", doc.documentElement)) throw error;
+      if (!doc || getChildElement("parsererror", doc.documentElement))
+        throw error;
 
       const root = doc.documentElement;
       const type = root.nodeName;
 
       switch (type) {
-      case "feed":
-        return parseAtom(root);
+        case "feed":
+          return parseAtom(root);
 
-      case "scriptingNews":
-        return parseScriptingNews(root);
+        case "scriptingNews":
+          return parseScriptingNews(root);
 
-      default:
-        return parseRss(root, type);
+        default:
+          return parseRss(root, type);
       }
     }
   };

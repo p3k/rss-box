@@ -9,9 +9,18 @@
   font-size: inherit;
 }
 
-.rssbox h1, .rssbox h2, .rssbox h3, .rssbox h4, .rssbox h5, .rssbox h6 {
+.rssbox h1,
+.rssbox h2,
+.rssbox h3,
+.rssbox h4,
+.rssbox h5,
+.rssbox h6 {
   margin-top: 0.8em;
   font-size: 1em;
+}
+
+.rssbox-titlebar a {
+  color: #000;
 }
 
 .rssbox a {
@@ -24,10 +33,6 @@
 
 .rssbox small {
   line-height: 1em;
-}
-
-.rssbox-titlebar a {
-  color: #000;
 }
 
 .rssbox-item-content {
@@ -43,7 +48,7 @@
   font-size: 0.8em;
 }
 
-.rssbox-item-content img:not([height='1']),
+.rssbox-item-content img:not([height="1"]),
 .rssbox-item-content embed,
 .rssbox-item-content iframe,
 .rssbox-item-content object,

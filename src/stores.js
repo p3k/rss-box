@@ -45,7 +45,10 @@ function fetchFeed(url) {
     ].join()
   });
 
-  fetch(urls.proxy + "?url=" + encodeURIComponent(url), { headers, referrerPolicy: "no-referrer" })
+  fetch(`${urls.proxy}?url=${encodeURIComponent(url)}`, {
+    headers,
+    referrerPolicy: "no-referrer"
+  })
     .then(res => {
       if (res.status > 399) throw Error(statusCodes[res.status]);
       return res.json();
@@ -95,7 +98,7 @@ function fetchReferrers() {
         return accu;
       }, []);
 
-      const total = hosts.reduce((accu, item) => accu += item.total, 0);
+      const total = hosts.reduce((accu, item) => (accu += item.total), 0);
 
       const referrers = hosts.map(item => {
         item.percentage = (item.total / total) * 100;
@@ -112,20 +115,11 @@ export const formatDate = date => {
 
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
 
-  const day = date
-    .getDate()
-    .toString()
-    .padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
 
-  const hours = date
-    .getHours()
-    .toString()
-    .padStart(2, "0");
+  const hours = date.getHours().toString().padStart(2, "0");
 
-  const minutes = date
-    .getMinutes()
-    .toString()
-    .padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
 
   return `${date.getFullYear()}-${month}-${day}, ${hours}:${minutes}h`;
 };

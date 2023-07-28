@@ -36,18 +36,15 @@
 
       if (!color) return;
 
-      let rule =
-        `.rssbox[data-link-color="${ color }"] a {
-          color: ${ color };
+      let rule = `.rssbox[data-link-color="${color}"] a {
+          color: ${color};
         }`;
 
       if (dynamicCss.innerHTML.indexOf(rule) < 0) dynamicCss.innerHTML += rule;
     });
   });
 
-  function kb(bytes) {
-    return (bytes / 1000).toFixed(2) + "\u200akB";
-  }
+  const kb = bytes => `${(bytes / 1000).toFixed(2)}\u200akB`;
 
   function load(data) {
     return new Promise(fulfill => {
@@ -58,8 +55,8 @@
         const factor = image.width > maxWidth ? maxWidth / image.width : 1;
 
         fulfill({
-          width: (image.width * factor) + "px",
-          height: (image.height * factor) + "px"
+          width: `${image.width * factor}px`,
+          height: `${image.height * factor}px`
         });
       };
 
@@ -67,10 +64,146 @@
     });
   }
 
-  $: height = $config.height && $config.height > -1 ? $config.height + "px" : "100%";
-  $: width = $config.width ? $config.width + "px" : "100%";
+  $: height =
+    $config.height && $config.height > -1 ? `${$config.height}px` : "100%";
+  $: width = $config.width ? `${$config.width}px` : "100%";
   $: itemTitleClass = !$config.compact ? "bold" : "";
 </script>
+
+<div
+  data-link-color={$config.linkColor}
+  class="rssbox rssBox"
+  style="
+    max-width: {width};
+    border-color: {$config.frameColor};
+    border-radius: {$config.radius}px;
+    font: {$config.fontFace};
+    float: {$config.align};
+  "
+>
+  {#if !$config.headless}
+    <div
+      class="rssbox-titlebar"
+      style="
+        color: {$config.titleBarTextColor};
+        background-color: {$config.titleBarColor};
+        border-bottom-color: {$config.frameColor};
+      "
+    >
+      {#if $config.showXmlButton}
+        <div class="rssbox-icon">
+          <a
+            href={$config.url}
+            title="{$feed.format} {$feed.version}"
+            style="color: {$config.titleBarTextColor}"
+          >
+            <RssIcon />
+          </a>
+        </div>
+      {/if}
+      <div>
+        <a href={$feed.link} style="color: {$config.titleBarTextColor};">
+          {$feed.title}
+        </a>
+      </div>
+      <div class="rssbox-date">
+        {feed.formatDate($feed.date)}
+      </div>
+    </div>
+  {/if}
+
+  <div
+    class="rssbox-content rssBoxContent"
+    style="background-color: {$config.boxFillColor}; height: {height};"
+  >
+    {#if $feed.image && !$config.compact}
+      {#await load($feed.image) then image}
+        <a href={$feed.image.link} title={$feed.image.title}>
+          <div
+            alt={$feed.image.description}
+            class="rssbox-image"
+            style="
+              background-image: url({$feed.image.source});
+              width: {image.width};
+              height: {image.height};
+            "
+          />
+        </a>
+      {/await}
+    {/if}
+
+    {#each $feed.items as item, index}
+      {#if index < $config.maxItems}
+        <div
+          class="rssbox-item-content rssBoxItemContent"
+          style="color: {$config.textColor}"
+        >
+          {#if item.title}
+            <div class="rssbox-item-title {itemTitleClass}">
+              {#if item.link}
+                <a href={item.link}>
+                  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                  {@html item.title}
+                </a>
+              {:else}
+                <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                {@html item.title}
+              {/if}
+            </div>
+          {/if}
+
+          {#if !$config.compact}
+            <aside>
+              {#if item.source}
+                <a
+                  href={item.source.url}
+                  title={item.source.title}
+                  class="rssbox-source"
+                >
+                  {#if item.source.url.endsWith(".xml")}
+                    <RssIcon />
+                  {:else}
+                    <LinkIcon />
+                  {/if}
+                </a>
+              {/if}
+
+              {#if item.enclosures}
+                {#each item.enclosures as enclosure}
+                  <a
+                    href={enclosure.url}
+                    title="{kb(enclosure.length)} {enclosure.type}"
+                    class="rssbox-enclosure"
+                  >
+                    <PaperclipIcon />
+                  </a>
+                {/each}
+              {/if}
+            </aside>
+            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+            {@html item.description}
+          {/if}
+        </div>
+      {/if}
+    {/each}
+
+    {#if $feed.input}
+      <form class="rssbox-form" method="get" action={$feed.input.link}>
+        <input
+          type="text"
+          name={$feed.input.name}
+          placeholder="Enter search &amp; hit return…"
+          data-placeholder={$feed.input.description}
+        />
+      </form>
+    {/if}
+    <div class="rssbox-promo rssBoxPromo">
+      <a href={urls.app} style="color: {$config.textColor}">
+        RSS Box by p3k.org
+      </a>
+    </div>
+  </div>
+</div>
 
 <style>
   .rssbox {
@@ -80,7 +213,7 @@
     font-family: sans-serif;
     overflow: hidden;
     border-radius: 0;
-    -moz-border-radius: 0;
+    -moz-border-radius: 0; /* stylelint-disable-line property-no-vendor-prefix */
   }
 
   .rssbox-icon {
@@ -136,7 +269,8 @@
     font-weight: bold;
   }
 
-  .rssbox-enclosure, .rssbox-source {
+  .rssbox-enclosure,
+  .rssbox-source {
     display: block;
     width: 1em;
   }
@@ -156,133 +290,3 @@
     letter-spacing: 0.01em;
   }
 </style>
-
-<div
-  data-link-color='{ $config.linkColor }'
-  class='rssbox rssBox'
-  style='
-    max-width: { width };
-    border-color: { $config.frameColor };
-    border-radius: { $config.radius }px;
-    font: { $config.fontFace };
-    float: { $config.align };
-  '
->
-  { #if !$config.headless }
-    <div
-      class='rssbox-titlebar'
-      style='
-        color: { $config.titleBarTextColor };
-        background-color: { $config.titleBarColor };
-        border-bottom-color: { $config.frameColor };
-      '
-    >
-      { #if $config.showXmlButton }
-        <div class='rssbox-icon'>
-          <a
-            href='{ $config.url }'
-            title='{ $feed.format } { $feed.version }'
-            style='color: { $config.titleBarTextColor }'
-          >
-            <RssIcon/>
-          </a>
-        </div>
-      { /if }
-      <div>
-        <a href='{ $feed.link }' style='color: { $config.titleBarTextColor };'>
-          { $feed.title }
-        </a>
-      </div>
-      <div class='rssbox-date'>
-        { feed.formatDate($feed.date) }
-      </div>
-    </div>
-  { /if }
-
-  <div
-    class='rssbox-content rssBoxContent'
-    style='background-color: { $config.boxFillColor }; height: { height };'
-  >
-    { #if $feed.image && !$config.compact }
-      { #await load($feed.image) then image }
-        <a href='{ $feed.image.link }' title='{ $feed.image.title }'>
-          <div
-            alt='{ $feed.image.description }'
-            class='rssbox-image'
-            style='
-              background-image: url({ $feed.image.source });
-              width: { image.width };
-              height: { image.height };
-            '
-          />
-        </a>
-      { /await }
-    { /if }
-
-    { #each $feed.items as item, index }
-      { #if index < $config.maxItems }
-        <div
-          class='rssbox-item-content rssBoxItemContent'
-          style='color: { $config.textColor }'
-        >
-          { #if item.title }
-            <div class='rssbox-item-title { itemTitleClass }'>
-              { #if item.link }
-                <a href='{ item.link }'>
-                  {@html item.title }
-                </a>
-              { :else }
-                {@html item.title }
-              { /if }
-            </div>
-          { /if }
-
-          { #if !$config.compact }
-            <aside>
-              { #if item.source }
-                <a
-                  href='{ item.source.url }'
-                  title='{ item.source.title }'
-                  class='rssbox-source'
-                >
-                  { #if item.source.url.endsWith(".xml") }
-                    <RssIcon/>
-                  { :else }
-                    <LinkIcon/>
-                  { /if }
-                </a>
-              { /if }
-
-              { #if item.enclosures }
-                { #each item.enclosures as enclosure }
-                  <a
-                    href='{ enclosure.url }'
-                    title='{ kb(enclosure.length) } { enclosure.type }'
-                    class='rssbox-enclosure'
-                  >
-                    <PaperclipIcon/>
-                  </a>
-                { /each }
-              { /if }
-            </aside>
-            {@html item.description }
-          { /if }
-        </div>
-      { /if }
-    { /each }
-
-    { #if $feed.input }
-      <form class='rssbox-form' method='get' action='{ $feed.input.link }'>
-        <input
-          type='text'
-          name='{ $feed.input.name }'
-          placeholder='Enter search &amp; hit return…'
-          data-placeholder='{ $feed.input.description }'
-        >
-      </form>
-    { /if }
-    <div class='rssbox-promo rssBoxPromo'>
-      <a href='{ urls.app }' style='color: { $config.textColor }'>RSS Box by p3k.org</a>
-    </div>
-  </div>
-</div>

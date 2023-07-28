@@ -2,10 +2,10 @@
 
 ## Prerequisites
 
-* Git
-* NodeJS
-* Python 3 incl. header files
-* Apache 2.4 incl. header files
+- Git
+- NodeJS
+- Python 3 incl. header files
+- Apache 2.4 incl. header files
 
 ## Clone Repository
 

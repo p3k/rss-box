@@ -1,47 +1,47 @@
-import ready from "domready";
+import ready from 'domready';
 
-import { ConfigStore, FeedStore } from "./stores";
-import { urls } from "./urls";
-import getNativeObject from "./native.js";
+import { ConfigStore, FeedStore } from './stores';
+import { urls } from './urls';
+import getNativeObject from './native.js';
 
-import Box from "./Box.svelte";
+import Box from './Box.svelte';
 
 // These are backwards-compatible settings
 const defaults = {
-  align: "initial",
-  boxFillColor: "#fff",
+  align: 'initial',
+  boxFillColor: '#fff',
   compact: false,
-  fontFace: "inherit",
-  frameColor: "#000",
+  fontFace: 'inherit',
+  frameColor: '#000',
   headless: false,
-  height: "",
-  linkColor: "",
+  height: '',
+  linkColor: '',
   maxItems: 7,
   radius: 0,
   showXmlButton: false,
-  textColor: "#000",
-  titleBarColor: "#add8e6",
-  titleBarTextColor: "#000",
-  width: "200"
+  textColor: '#000',
+  titleBarColor: '#add8e6',
+  titleBarTextColor: '#000',
+  width: '200'
 };
 
-const keys = [...Object.keys(defaults), "url"];
+const keys = [...Object.keys(defaults), 'url'];
 
 ready(() => {
-  const reduce = getNativeObject("Array").prototype.reduce;
+  const reduce = getNativeObject('Array').prototype.reduce;
 
   const getNativeValue = value => {
-    if (value === "true") return true;
-    if (value === "false") return false;
+    if (value === 'true') return true;
+    if (value === 'false') return false;
     return value;
   };
 
   const parseQuery = query => {
-    const parts = query.split("&");
+    const parts = query.split('&');
     return reduce.call(
       parts,
       (data, pair) => {
-        const [key, value] = pair.split("=");
+        const [key, value] = pair.split('=');
         if (keys.indexOf(key) > -1) {
           data[key] = getNativeValue(decodeURIComponent(value));
         }
@@ -52,12 +52,15 @@ ready(() => {
   };
 
   // Earlier versions used protocol-less URLs like `//p3k.org/rss`
-  const search = urls.app.replace(/^https?:/, "");
-  const scripts = Array.apply(null, document.querySelectorAll("script[src*=\"" + search + "\"]"));
+  const search = urls.app.replace(/^https?:/, '');
+  const scripts = Array.apply(
+    null,
+    document.querySelectorAll('script[src*="' + search + '"]')
+  );
   const feedUrls = [];
 
   scripts.forEach(script => {
-    const query = script.src.split("?")[1];
+    const query = script.src.split('?')[1];
 
     if (!query) return;
 
@@ -75,7 +78,7 @@ ready(() => {
     feed.fetch(data.url, feed);
 
     const parent = script.parentNode;
-    const container = document.createElement("div");
+    const container = document.createElement('div');
 
     parent.insertBefore(container, script);
 
@@ -94,6 +97,12 @@ ready(() => {
 
   if (location.href.indexOf(urls.app) < 0) {
     const metadata = JSON.stringify({ feedUrls });
-    fetch(urls.referrers + "&url=" + encodeURIComponent(location.href) + "&metadata=" + encodeURIComponent(metadata));
+    fetch(
+      urls.referrers +
+        '&url=' +
+        encodeURIComponent(location.href) +
+        '&metadata=' +
+        encodeURIComponent(metadata)
+    );
   }
 });

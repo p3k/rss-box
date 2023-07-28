@@ -62,6 +62,31 @@
   }
 </script>
 
+<details id="referrers" on:toggle={load}>
+  <summary></summary>
+  {#if $referrers.length}
+    {#each $referrers as referrer, index}
+      <div class="referrer">
+        <code>{format(referrer.percentage)}</code>
+        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+        <a
+          href="."
+          class="feed-link"
+          disabled={getFeedLinkDisabledState(index)}
+          data-index={index}
+          on:mouseover|once={updateFeedLink}
+          on:click={clickFeedLink}
+        >
+          <RssIcon />
+        </a>
+        <a href={referrer.url}>{referrer.host}</a>
+      </div>
+    {/each}
+  {:else}
+    Loading…
+  {/if}
+</details>
+
 <style>
   details {
     line-height: 1.2em;
@@ -82,44 +107,23 @@
     white-space: nowrap;
   }
 
-  .feedLink {
+  .feed-link {
     position: relative;
     top: 2px;
     color: #ffa600;
   }
 
-  .feedLink[disabled] {
+  .feed-link[disabled] {
     pointer-events: none;
   }
 
-  .feedLink :global(svg) {
+  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+  .feed-link :global(svg) {
     pointer-events: none;
   }
 
-  .feedLink[disabled] :global(svg) {
+  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+  .feed-link[disabled] :global(svg) {
     color: #ddd;
   }
 </style>
-
-<details id="referrers" on:toggle={ load }>
-  <summary></summary>
-  { #if $referrers.length }
-    { #each $referrers as referrer, index }
-      <div class='referrer'>
-        <code>{ format(referrer.percentage) }</code>
-        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-        <a href='.'
-            class='feedLink'
-            disabled={ getFeedLinkDisabledState(index) }
-            data-index={ index }
-            on:mouseover|once={ updateFeedLink }
-            on:click={ clickFeedLink }>
-          <RssIcon/>
-        </a>
-        <a href='{ referrer.url }'>{ referrer.host }</a>
-      </div>
-    { /each }
-  { :else }
-    Loading…
-  { /if }
-</details>
