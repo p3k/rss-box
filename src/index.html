@@ -20,6 +20,11 @@
   a:hover {
     text-decoration: underline;
   }
+
+  /* Fix the min.css button size */
+  .btn {
+    font-size: 14px;
+  }
 </style>
 
 <main>
@@ -35,6 +40,8 @@ Load the polyfills for IE 11
 Source: <https://tanalin.com/en/articles/ie-version-js/>
 -->
 <script src="./polyfill.io.js"></script>
-<script>polyfill.io();</script>
+<script>
+  polyfill.io();
+</script>
 
 <script src="./app.js" async defer></script>
