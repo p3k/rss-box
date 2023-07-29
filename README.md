@@ -17,6 +17,14 @@ Coded in JavaScript by Tobi Schäfer between 2001 and 2021.
 
 The author cannot be held responsible for anything that this software might or might not do.
 
+## Resources
+
+- [@babel/preset-env](https://babeljs.io/docs/babel-preset-env)
+- [Create a Polyfill bundle](https://polyfill.io/v3/url-builder)
+- [Prettier options](https://prettier.io/docs/en/options.htm)
+- [Rollup configuration options](https://rollupjs.org/configuration-options/)
+- [Svelte introduction](https://svelte.dev/docs/introduction)
+
 ---
 
 This project is tested in various browsers using [BrowserStack](https://www.browserstack.com).
