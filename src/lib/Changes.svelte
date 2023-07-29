@@ -9,9 +9,19 @@
     with version&nbsp;4! 🚀
   </p>
   <p>
-    As a bonus, optimized code for the embedded RSS box is available for
-    “modern” browsers.
+    As a bonus, <a
+      href="https://github.com/p3k/rss-box/tree/main/dist/box-esm.js"
+      >optimized code</a
+    >
+    for the embedded RSS box is available for “modern” browsers. And don’t worry,
+    Internet Explorer 11 remains supported. <i>#helpTheAged</i>
   </p>
+  <ul>
+    <li>Replaced Bublé with Babel</li>
+    <li>Updated min.css</li>
+    <li>Added a CSS linter</li>
+    <li>Enabled automatic delinting on Git commit</li>
+  </ul>
 
   <p>
     <small>2023-07-22</small>
