@@ -11,20 +11,6 @@ import svelte from "rollup-plugin-svelte";
 
 const production = !process.env.ROLLUP_WATCH;
 
-const config = name => {
-  return {
-    input: `src/${name}.js`,
-    output: {
-      name,
-      sourcemap: true,
-      format: "iife",
-      file: `dist/${name}.js`,
-      inlineDynamicImports: true
-    },
-    plugins: plugins()
-  };
-};
-
 const plugins = () => [
   replace({
     __BUILD_MODE__: production ? "prod" : "dev",
@@ -45,31 +31,60 @@ const plugins = () => [
   json(),
 
   production &&
-    babel({
-      babelHelpers: "bundled",
-      exclude: ["node_modules/@babel/**", "node_modules/core-js/**"],
-      extensions: [".js", ".mjs", ".html", ".svelte"],
-      presets: [
-        [
-          "@babel/preset-env",
-          {
-            corejs: "3.31.1",
-            targets: "> 0.25%, not dead, IE 11",
-            useBuiltIns: "usage"
-          }
-        ]
-      ]
-    }),
-
-  production &&
     terser({
-      sourceMap: { url: "inline" }
+      sourceMap: production || { url: "inline" }
     })
 ];
+
+const config = (name, output) => {
+  return {
+    input: `src/${name}.js`,
+    output: {
+      name,
+      sourcemap: true,
+      format: "iife",
+      file: `dist/${output || name}.js`,
+      inlineDynamicImports: true
+    },
+    plugins: [
+      ...plugins(),
+
+      babel({
+        babelHelpers: "bundled",
+        exclude: ["node_modules/@babel/**", "node_modules/core-js/**"],
+        extensions: [".js", ".mjs", ".html", ".svelte"],
+        presets: [
+          [
+            "@babel/preset-env",
+            {
+              corejs: "3.31.1",
+              targets: "> 0.25%, not dead, IE 11",
+              useBuiltIns: "entry"
+            }
+          ]
+        ]
+      })
+    ]
+  };
+};
+
+const modern = (name, output) => {
+  return {
+    input: `src/${name}.js`,
+    output: {
+      name,
+      sourcemap: true,
+      format: "esm",
+      file: `dist/${output || name}.js`
+    },
+    plugins: plugins()
+  };
+};
 
 export default [
   config("app"),
   config("box"),
+  modern("box", "box-esm"),
   config("main"),
   config("polyfill.io")
 ];
