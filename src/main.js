@@ -3,27 +3,20 @@
 
 import { urls } from "./urls";
 import { version } from "../package.json";
+import polyfill from "./polyfill.io";
 
 const id = `__rssbox_viewer_${version.replace(/\D/g, "_")}_init__`;
 
 if (!window[id]) {
   window[id] = true;
 
-  let filename = "box.js";
-
-  // Load the polyfills for IE 11
-  // Source: <https://tanalin.com/en/articles/ie-version-js/>
-  if (window.msCrypto) {
+  polyfill(() => {
+    // Target modern browsers and IE 11 differently
+    // Source: <https://tanalin.com/en/articles/ie-version-js/>
+    const filename = window.msCrypto ? "box.js" : "box-esm.js";
     const script = document.createElement("script");
-    script.async = script.defer = false;
-    script.src = `${urls.app}/polyfill.io.js`;
+    script.async = script.defer = true;
+    script.src = `${urls.app}/${filename}`;
     document.head.appendChild(script);
-  } else {
-    filename = "box-esm.js";
-  }
-
-  const script = document.createElement("script");
-  script.async = script.defer = true;
-  script.src = `${urls.app}/${filename}`;
-  document.head.appendChild(script);
+  });
 }

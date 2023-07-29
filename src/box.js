@@ -27,85 +27,80 @@ const defaults = {
 
 const keys = [...Object.keys(defaults), "url"];
 
-// Prepare the polyfill loader if defined; use a stub otherwise
-const polyfill = window.polyfill?.io || (callback => callback());
+ready(() => {
+  const reduce = getNativeObject("Array").prototype.reduce;
 
-ready(() =>
-  polyfill(() => {
-    const reduce = getNativeObject("Array").prototype.reduce;
+  const getNativeValue = value => {
+    if (value === "true") return true;
+    if (value === "false") return false;
+    return value;
+  };
 
-    const getNativeValue = value => {
-      if (value === "true") return true;
-      if (value === "false") return false;
-      return value;
-    };
-
-    const parseQuery = query => {
-      const parts = query.split("&");
-      return reduce.call(
-        parts,
-        (data, pair) => {
-          const [key, value] = pair.split("=");
-          if (keys.indexOf(key) > -1) {
-            data[key] = getNativeValue(decodeURIComponent(value));
-          }
-          return data;
-        },
-        {}
-      );
-    };
-
-    // Earlier versions used protocol-less URLs like `//p3k.org/rss`
-    const search = urls.app.replace(/^https?:/, "");
-    const scripts = Array.apply(
-      null,
-      document.querySelectorAll(`script[src*="${search}"]`)
+  const parseQuery = query => {
+    const parts = query.split("&");
+    return reduce.call(
+      parts,
+      (data, pair) => {
+        const [key, value] = pair.split("=");
+        if (keys.indexOf(key) > -1) {
+          data[key] = getNativeValue(decodeURIComponent(value));
+        }
+        return data;
+      },
+      {}
     );
-    const feedUrls = [];
+  };
 
-    scripts.forEach(script => {
-      const query = script.src.split("?")[1];
+  // Earlier versions used protocol-less URLs like `//p3k.org/rss`
+  const search = urls.app.replace(/^https?:/, "");
+  const scripts = Array.apply(
+    null,
+    document.querySelectorAll(`script[src*="${search}"]`)
+  );
+  const feedUrls = [];
 
-      if (!query) return;
+  scripts.forEach(script => {
+    const query = script.src.split("?")[1];
 
-      let data = parseQuery(query);
+    if (!query) return;
 
-      if (!data.url) data.url = urls.feed;
+    let data = parseQuery(query);
 
-      data = Object.assign({}, defaults, data);
+    if (!data.url) data.url = urls.feed;
 
-      // Create new stores for each box to prevent multiple boxes getting the same data
-      const feed = FeedStore();
-      const config = ConfigStore();
+    data = Object.assign({}, defaults, data);
 
-      config.set(data);
-      feed.fetch(data.url, feed);
+    // Create new stores for each box to prevent multiple boxes getting the same data
+    const feed = FeedStore();
+    const config = ConfigStore();
 
-      const parent = script.parentNode;
-      const container = document.createElement("div");
+    config.set(data);
+    feed.fetch(data.url, feed);
 
-      parent.insertBefore(container, script);
+    const parent = script.parentNode;
+    const container = document.createElement("div");
 
-      void new Box({
-        target: container,
-        props: { feed, config }
-      });
+    parent.insertBefore(container, script);
 
-      // Only for IE11
-      script.parentNode.removeChild(script);
-
-      if (data.url !== urls.feed && feedUrls.indexOf(data.url) < 0) {
-        feedUrls.push(data.url);
-      }
+    void new Box({
+      target: container,
+      props: { feed, config }
     });
 
-    if (location.href.indexOf(urls.app) < 0) {
-      const metadata = JSON.stringify({ feedUrls });
-      fetch(
-        `${urls.referrers}&url=${encodeURIComponent(
-          location.href
-        )}&metadata=${encodeURIComponent(metadata)}`
-      );
+    // Only for IE11
+    script.parentNode.removeChild(script);
+
+    if (data.url !== urls.feed && feedUrls.indexOf(data.url) < 0) {
+      feedUrls.push(data.url);
     }
-  })
-);
+  });
+
+  if (location.href.indexOf(urls.app) < 0) {
+    const metadata = JSON.stringify({ feedUrls });
+    fetch(
+      `${urls.referrers}&url=${encodeURIComponent(
+        location.href
+      )}&metadata=${encodeURIComponent(metadata)}`
+    );
+  }
+});
