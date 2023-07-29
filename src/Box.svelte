@@ -19,9 +19,9 @@
 
     if (!staticCss) {
       staticCss = document.createElement("link");
+      staticCss.href = `${urls.app}/assets/box.css`;
       staticCss.id = staticId;
       staticCss.rel = "stylesheet";
-      staticCss.href = `${urls.app}/assets/box.css`;
       document.head.appendChild(staticCss);
     }
 
