@@ -18,6 +18,7 @@
     "install:server": "git submodule init; npm run server:update; (cd services; make install)",
     "prepare": "husky install",
     "publish": "npm run build; rsync --archive --verbose --del dist/ p3k:/var/www/p3k.org/rss/",
+    "release": "npm version --no-git-tag $v; npm run build; git commit --all --message 'Rebuild dist files'; npm version --allow-same-version $v",
     "roxy": "python -c \"import sys, os; os.system('curl --head http://localhost:8000/roxy?url=%s' % sys.argv[1])\"",
     "server": "dir=$PWD; (cd services; .venv/bin/mod_wsgi-express start-server wsgi.py --document-root \"$dir/dist\" --access-log --log-to-terminal)",
     "server:update": "git submodule update --remote --merge",
