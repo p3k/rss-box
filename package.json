@@ -14,6 +14,7 @@
     "delint": "npm run delint:css; npm run delint:js; prettier --write src/**/*.{css,html,js,md,svelte}",
     "delint:css": "stylelint --fix src/**/*.{css,html,svelte}",
     "delint:js": "eslint --cache --fix src/**/*.{js,svelte}",
+    "hash": "cat $file | openssl dgst -sha384 -binary | openssl base64 -A",
     "install:local": "if [ ! -e src/local.js ]; then echo 'export const urls = {};' > src/local.js; fi",
     "install:server": "git submodule init; npm run server:update; (cd services; make install)",
     "prepare": "husky install",
