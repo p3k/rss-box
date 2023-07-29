@@ -363,10 +363,8 @@
           cols="10"
           rows="3"
           readonly
-          on:click={copy}
+          on:click={copy}>{code($config)}</textarea
         >
-          {code($config)}
-        </textarea>
       </td>
     </tr>
     <tr>
