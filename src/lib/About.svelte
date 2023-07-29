@@ -2,6 +2,7 @@
   import { app } from "../stores";
   import Changes from "./Changes.svelte";
   import Github from "./Github.svelte";
+  import KoFi from "./KoFi.svelte";
 
   // Stores coming in via props
   export let config;
@@ -36,7 +37,7 @@
     host an installation on your own server
   </a>
   and/or support the project with your
-  <a href="http://flattr.com/thing/681881/JavaScript-RSS-Box-Viewer">
+  <a href="https://ko-fi.com/p3kofi">
     donation
   </a>.
 </p>
@@ -98,7 +99,7 @@
 </p>
 
 <p>
-  <Github />
+  <KoFi />
 </p>
 
 <Changes />
@@ -114,6 +115,9 @@
     href="mailto:&#109;&#97;&#105;&#108;&#43;&#114;&#115;&#115;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103;"
     >&#109;&#97;&#105;&#108;&#43;&#114;&#115;&#115;&#64;&#112;&#51;&#107;&#46;&#111;&#114;&#103;</a
   >.
+</p>
+<p>
+  <Github />
 </p>
 
 <h3>License</h3>
