@@ -10,15 +10,9 @@
 ## Clone Repository
 
 ```sh
-git clone https://github.com/p3k/rss-box.git
+git clone --recurse-submodules https://github.com/p3k/rss-box.git
 cd rss-box
-```
-
-## Create Virtual Environment
-
-```sh
-python3 -m venv /path/to/virtual-environment
-source /path/to/virtual-environment/bin/activate
+npm install
 ```
 
 ## Install Dependencies
@@ -27,6 +21,8 @@ source /path/to/virtual-environment/bin/activate
 # This installs both, server (Python) and client (NodeJS) dependencies
 npm install
 ```
+
+> 💡 The script creates a virtual environment and installs the Python dependencies there.
 
 ## Run App in Development Mode
 
@@ -49,13 +45,13 @@ npm run build
 // src/local.js
 export const urls = {
   // The base URL of the installation
-  app: 'https://host.domain.tld/rss-box-viewer',
+  app: "https://host.domain.tld/rss-box-viewer",
   // The JSON proxy for retrieving feeds
-  proxy: 'https://host.domain.tld/json-services/roxy',
+  proxy: "https://host.domain.tld/json-services/roxy",
   // The referrer counter
-  referrers: 'https://host.domain.tld/json-services/ferris?group=rss-box',
+  referrers: "https://host.domain.tld/json-services/ferris?group=rss-box",
   // The feed to be displayed by default when opening the base URL
-  feed: 'https://host.domain.tld/default-feed.xml'
+  feed: "https://host.domain.tld/default-feed.xml"
 };
 ```
 
