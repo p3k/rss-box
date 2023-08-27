@@ -74,6 +74,9 @@
   data-link-color={$config.linkColor}
   class="rssbox rssBox"
   style="
+
+    --titlebar-color: {$config.titleBarColor};
+
     max-width: {width};
     border-color: {$config.frameColor};
     border-radius: {$config.radius}px;
@@ -263,6 +266,11 @@
     background-position: left center;
     background-repeat: no-repeat;
     background-size: contain;
+  }
+
+  .rssbox-item-content :global(blockquote) {
+    padding-inline-start: 0.5em;
+    border-inline-start: 2px dotted var(--titlebar-color);
   }
 
   .rssbox-item-title.bold {
