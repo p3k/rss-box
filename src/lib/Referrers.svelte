@@ -101,10 +101,14 @@
 
   summary {
     outline: none;
+    color: #bbb;
   }
 
   .referrer {
+    max-width: 20rem;
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .feed-link {
