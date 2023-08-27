@@ -37,9 +37,7 @@
     host an installation on your own server
   </a>
   and/or support the project with your
-  <a href="https://ko-fi.com/p3kofi">
-    donation
-  </a>.
+  <a href="https://ko-fi.com/p3kofi">donation</a>.
 </p>
 
 <p>
@@ -47,29 +45,23 @@
   feeds of version
   <a
     href="http://cyber.law.harvard.edu/rss/examples/sampleRss091.xml"
-    on:click={goto}
-  >
-    0.91
-  </a>,
+    on:click={goto}>0.91</a
+  >,
   <a
     href="http://cyber.law.harvard.edu/rss/examples/sampleRss092.xml"
-    on:click={goto}
-  >
-    0.92
-  </a>,
+    on:click={goto}>0.92</a
+  >,
   <a href="http://rss.orf.at/fm4.xml" on:click={goto}>1.0</a>
   and
   <a href="http://blog.p3k.org/stories.xml" on:click={goto}>2.0</a>
   as well as even the good old legacy format
   <a
     href="http://essaysfromexodus.scripting.com/xml/scriptingNews2.xml"
-    on:click={goto}
-  >
-    Scripting News 2
-  </a>. There is also basic support for
-  <a href="https://www.theregister.co.uk/headlines.atom" on:click={goto}>
-    Atom 1.0
-  </a>.
+    on:click={goto}>Scripting News 2</a
+  >. There is also basic support for
+  <a href="https://www.theregister.co.uk/headlines.atom" on:click={goto}
+    >Atom 1.0</a
+  >.
 </p>
 
 <p>
