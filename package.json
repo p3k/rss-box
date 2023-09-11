@@ -48,7 +48,7 @@
     "concurrently": "^8.2.0",
     "core-js": "^3.31.1",
     "domready": "^1.0.8",
-    "eslint": "^8.46.0",
+    "eslint": "^8.48.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-svelte": "^2.32.4",
     "husky": "^8.0.3",
