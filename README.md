@@ -29,4 +29,4 @@ The author cannot be held responsible for anything that this software might or m
 
 This project is tested in various browsers using [BrowserStack](https://www.browserstack.com).
 
-<a href='https://www.browserstack.com'><img height=50 src='img/browserstack.svg'></a>
+<a href='https://www.browserstack.com'><img height=50 src='https://raw.githubusercontent.com/p3k/rss-box/main/img/browserstack.svg'></a>
