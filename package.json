@@ -45,7 +45,7 @@
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-replace": "^5.0.2",
     "@rollup/plugin-terser": "^0.4.3",
-    "concurrently": "^8.2.0",
+    "concurrently": "^8.2.1",
     "core-js": "^3.31.1",
     "domready": "^1.0.8",
     "eslint": "^8.48.0",
