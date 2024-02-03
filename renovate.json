@@ -3,9 +3,10 @@
   "extends": [
     "config:base",
     "npm:unpublishSafe",
+    ":automergeAll",
     ":disableRateLimiting",
     ":pinVersions",
-    ":semanticCommitsDisabled"    
+    ":semanticCommitsDisabled"
   ],
   "labels": ["dependencies"]
 }
