@@ -27,6 +27,7 @@ The author cannot be held responsible for anything that this software might or m
 
 ---
 
+[![CodeQL](https://github.com/p3k/rss-box/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/p3k/rss-box/actions/workflows/codeql-analysis.yml)
 [![Build production artifact](https://github.com/p3k/rss-box/actions/workflows/build.yml/badge.svg)](https://github.com/p3k/rss-box/actions/workflows/build.yml)
 
 This project is tested in various browsers using [BrowserStack](https://www.browserstack.com).
