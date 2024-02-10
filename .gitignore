@@ -5,5 +5,5 @@
 .vscode
 /node_modules/
 src/local\.js
-dist/test*
+dist
 yarn-error.log
