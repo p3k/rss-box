@@ -13,7 +13,7 @@
     "delint:css": "stylelint --fix src/**/*.{css,html,svelte}",
     "delint:js": "eslint --cache --fix src/**/*.{js,svelte}",
     "deploy": "wait",
-    "deploy:staging": "npm run build && rsync --archive --del --exclude .ssh --info=stats dist/ -- rss-box:/home/rss-box/stage",
+    "deploy:staging": "npm run build && rsync --archive --del --exclude .ssh --info=stats dist/ -- rss-box:/home/rss-box/staging",
     "digest": "cat $file | openssl dgst -sha384 -binary | openssl base64 -A",
     "install": "npm run install:server; npm run install:local",
     "install:local": "if [ ! -e src/local.js ]; then echo 'export const urls = {};' > src/local.js; fi",
