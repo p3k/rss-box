@@ -17,6 +17,17 @@ jobs:
       url: https://p3k.org/rss-staging
 
     steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+
+    - name: Configure environment
+      run: |
+        echo "${{ vars.LOCAL_JS }}" > local.js
+
     - name: Setup SSH agent
       run: |
         ssh-agent -a $SSH_AUTH_SOCK > /dev/null
@@ -25,10 +36,7 @@ jobs:
         echo "${{ vars.SSH_CONFIG }}" > ~/.ssh/config
         echo "${{ vars.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
 
-    - name: Setup environment configuration
-      run: |
-        echo "${{ vars.LOCAL_JS }}" > local.js
-
     - name: Publish to staging environment
       run: |
+        npm ci --ignore-scripts
         npm run deploy:staging
