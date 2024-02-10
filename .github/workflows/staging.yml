@@ -1,4 +1,4 @@
-name: Publish production artifact to staging area
+name: Publish to staging environment
 
 on:
   push:
@@ -25,6 +25,10 @@ jobs:
         echo "${{ vars.SSH_CONFIG }}" > ~/.ssh/config
         echo "${{ vars.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
 
-    - name: ublish to staging environment
+    - name: Setup environment configuration
+      run: |
+        echo "${{ vars.LOCAL_JS }}" > local.js
+
+    - name: Publish to staging environment
       run: |
         npm run deploy:staging
