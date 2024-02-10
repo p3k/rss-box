@@ -26,15 +26,15 @@ jobs:
 
     - name: Configure environment
       run: |
-        echo "${{ vars.LOCAL_JS }}" > src/local.js
+        echo '${{ vars.LOCAL_JS }}' > src/local.js
 
     - name: Setup SSH agent
       run: |
         ssh-agent -a $SSH_AUTH_SOCK > /dev/null
         ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
         mkdir -p ~/.ssh
-        echo "${{ vars.SSH_CONFIG }}" > ~/.ssh/config
-        echo "${{ vars.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+        echo '${{ vars.SSH_CONFIG }}' > ~/.ssh/config
+        echo '${{ vars.KNOWN_HOSTS }}' > ~/.ssh/known_hosts
 
     - name: Publish to staging environment
       run: |
