@@ -1,4 +1,4 @@
-name: Build production artifact
+name: Build distribution files
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-    - name: Build
+    - name: Install and build
       run: |
         npm ci --ignore-scripts
         npm run install:local
