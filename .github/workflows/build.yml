@@ -1,23 +1,13 @@
 name: Build production artifact
 
 on:
-  push:
-    branches: 
-      - "main"
   pull_request:
-    branches: 
-      - "main"
-
-env:
-  SSH_AUTH_SOCK: /tmp/ssh-agent.sock
+    branches:
+      - "renovate/**"
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    environment:
-      name: staging
-      url: https://p3k.org/rss-staging
 
     strategy:
       matrix:
@@ -32,17 +22,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-    - name: Setup SSH agent
-      run: |
-        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-        ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
-        mkdir -p ~/.ssh
-        echo "${{ vars.SSH_CONFIG }}" > ~/.ssh/config
-        echo "${{ vars.KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-
-    - name: Build and publish to staging environment
+    - name: Build
       run: |
         npm ci --ignore-scripts
         npm run install:local
-        npm run deploy:staging
 
