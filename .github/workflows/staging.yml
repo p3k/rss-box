@@ -14,7 +14,7 @@ jobs:
 
     environment:
       name: staging
-      url: https://p3k.org/rss-staging
+      url: ${{ vars.BASE_URL }}/rss-staging
 
     steps:
     - uses: actions/checkout@v4
@@ -26,7 +26,13 @@ jobs:
 
     - name: Configure environment
       run: |
-        echo '${{ vars.LOCAL_JS }}' > src/local.js
+        cat << .end > src/local.js
+          export const urls = {
+            app: "${{ vars.BASE_URL }}/rss-staging",
+            proxy: "${{ vars.BASE_URL }}/json/roxy",
+            referrers: "${{ vars.BASE_URL }}/json/ferris?group=rss-box"
+          };
+        .end
 
     - name: Setup SSH agent
       run: |
