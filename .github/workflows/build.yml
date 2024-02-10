@@ -2,9 +2,11 @@ name: Build production artifact
 
 on:
   push:
-    branches: [ "main" ]
+    branches: 
+      - "main"
   pull_request:
-    branches: [ "main" ]
+    branches: 
+      - "main"
 
 env:
   SSH_AUTH_SOCK: /tmp/ssh-agent.sock
