@@ -26,7 +26,7 @@ jobs:
 
     - name: Configure environment
       run: |
-        echo "${{ vars.LOCAL_JS }}" > local.js
+        echo "${{ vars.LOCAL_JS }}" > src/local.js
 
     - name: Setup SSH agent
       run: |
