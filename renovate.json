@@ -9,6 +9,8 @@
     ":semanticCommitsDisabled"
   ],
 
+  "labels": ["dependency"],
+
   "osvVulnerabilityAlerts": true,
   "vulnerabilityAlerts": {
     "labels": ["urgent"],
@@ -20,5 +22,7 @@
     "automerge": true
   },
 
-  "labels": ["dependency"]
+  "git-submodules": {
+    "enabled": true
+  }
 }
