@@ -61,7 +61,7 @@
     "stylelint": "16.3.1",
     "stylelint-config-html": "1.1.0",
     "stylelint-config-standard": "36.0.0",
-    "svelte": "4.2.13"
+    "svelte": "4.2.14"
   },
   "lint-staged": {
     "*.{css,html,js,md,svelte}": "npm run delint"
