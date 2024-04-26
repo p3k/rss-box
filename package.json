@@ -50,7 +50,7 @@
     "domready": "1.0.8",
     "eslint": "9.1.1",
     "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-svelte": "2.37.0",
+    "eslint-plugin-svelte": "2.38.0",
     "husky": "9.0.11",
     "lint-staged": "15.2.2",
     "prettier": "3.2.5",
