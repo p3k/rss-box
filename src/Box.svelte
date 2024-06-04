@@ -123,7 +123,8 @@
       {#await load($feed.image) then image}
         <a href={$feed.image.link} title={$feed.image.title}>
           <div
-            alt={$feed.image.description}
+            role="img"
+            aria-label={$feed.image.description}
             class="rssbox-image"
             style="
               background-image: url({$feed.image.source});
