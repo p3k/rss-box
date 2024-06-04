@@ -42,6 +42,12 @@ jobs:
         echo '${{ vars.SSH_CONFIG }}' > ~/.ssh/config
         echo '${{ vars.KNOWN_HOSTS }}' > ~/.ssh/known_hosts
 
+    - name: Bump version number
+      run: |
+        date=$(date +"%y.%-m.%-d")
+        jq < package.json | jq ".version |= \"$date\"" > package.json.tmp
+        mv package.json.tmp package.json
+
     - name: Publish to staging environment
       run: |
         npm ci --ignore-scripts
