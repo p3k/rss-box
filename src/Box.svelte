@@ -243,8 +243,7 @@
   .rssbox-content {
     height: auto;
     padding: 0.5em;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
     background-color: #fff;
     clear: both;
     -ms-overflow-style: -ms-autohiding-scrollbar;
@@ -269,8 +268,8 @@
   }
 
   .rssbox-item-content :global(blockquote) {
-    padding-inline-start: 0.5em;
-    border-inline-start: 2px dotted var(--titlebar-color);
+    font-family: serif;
+    font-style: italic;
   }
 
   .rssbox-item-title.bold {
