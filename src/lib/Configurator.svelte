@@ -54,9 +54,7 @@
     const query = getQuery().replace(/&/g, "&amp;");
     // Need to be careful with the script-end-tag to prevent template error
     // See https://github.com/sveltejs/svelte/issues/3840
-    return `<script async defer src='${
-      urls.app
-    }/main.js?${query}'>${"<"}/script>`;
+    return `<script async defer src='${urls.app}/main.js?${query}'>${"<"}/script>`;
   }
 </script>
 
