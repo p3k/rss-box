@@ -1,10 +1,9 @@
 name: Deploy (Production)
 
-on:
-  workflow_dispatch: {}
-  push:
-    branches:
-      - main
+on: workflow_dispatch
+
+env:
+  SSH_AUTH_SOCK: /tmp/ssh-agent.sock
 
 jobs:
   deploy:
