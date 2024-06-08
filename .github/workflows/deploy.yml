@@ -1,0 +1,28 @@
+name: Deploy (Production)
+
+on:
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: p3k.org
+      url: https://p3k.org/rss
+
+    steps:
+      - name: Setup SSH agent
+        run: |
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+          mkdir -p ~/.ssh
+          echo '${{ vars.SSH_CONFIG }}' > ~/.ssh/config
+          echo '${{ vars.SSH_KNOWN_HOSTS }}' > ~/.ssh/known_hosts
+
+      - name: Copy files from stage to production
+        run: ssh rss-box deploy
+
