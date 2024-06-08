@@ -1,4 +1,4 @@
-name: Publish to staging environment
+name: Deploy (Stage)
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     environment:
-      name: staging
+      name: stage
       url: ${{ vars.BASE_URL }}/rss-staging
 
     steps:
@@ -40,7 +40,7 @@ jobs:
         ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
         mkdir -p ~/.ssh
         echo '${{ vars.SSH_CONFIG }}' > ~/.ssh/config
-        echo '${{ vars.KNOWN_HOSTS }}' > ~/.ssh/known_hosts
+        echo '${{ vars.SSH_KNOWN_HOSTS }}' > ~/.ssh/known_hosts
 
     - name: Bump version number
       run: |
