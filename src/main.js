@@ -9,11 +9,21 @@ const id = `__rssbox_viewer_${version.replace(/\D/g, "_")}_init__`;
 if (!window[id]) {
   window[id] = true;
 
+  const load = (filename, callback) => {
+    const script = document.createElement("script");
+    script.async = script.defer = true;
+    script.src = `${urls.app}/${filename}`;
+    if (callback) {
+      script.onload = callback;
+    }
+    document.head.appendChild(script);
+  };
+
   // Target modern browsers and IE 11 differently
   // Source: <https://tanalin.com/en/articles/ie-version-js/>
-  const filename = window.msCrypto ? "box.js" : "box-esm.js";
-  const script = document.createElement("script");
-  script.async = script.defer = true;
-  script.src = `${urls.app}/${filename}`;
-  document.head.appendChild(script);
+  if (window.msCrypto) {
+    load("polyfills", () => load("box.js"));
+  } else {
+    load("box-esm.js");
+  };
 }

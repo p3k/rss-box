@@ -86,5 +86,5 @@ export default [
   config("box"),
   modern("box", "box-esm"),
   config("main"),
-  config("polyfill.io")
+  config("polyfills")
 ];

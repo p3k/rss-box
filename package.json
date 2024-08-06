@@ -36,6 +36,10 @@
     "url": "https://github.com/p3k/rss-box/issues"
   },
   "homepage": "https://github.com/p3k/rss-box#readme",
+  "dependencies": {
+    "domready": "1.0.8",
+    "whatwg-fetch": "^3.6.20"
+  },
   "devDependencies": {
     "@babel/core": "7.25.2",
     "@babel/preset-env": "7.25.3",
@@ -47,7 +51,6 @@
     "@rollup/plugin-terser": "0.4.4",
     "concurrently": "8.2.2",
     "core-js": "3.37.1",
-    "domready": "1.0.8",
     "eslint": "9.8.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-svelte": "2.43.0",

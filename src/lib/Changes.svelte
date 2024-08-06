@@ -4,6 +4,26 @@
   </summary>
 
   <p>
+    <small>2024-08-06</small>
+    Oh my, even though I read about the
+    <a href="https://www.theregister.com/2024/06/25/polyfillio_china_crisis/"
+      >polyfill.io debacle</a
+    >
+    I totally forgot I am using it in this project for the IE11 compatibility! 😭
+  </p>
+  <p>
+    <strong>Apologies, and a lot of them!</strong> I sincerely hope nobody caught
+    a nasty software virus 🍀
+  </p>
+  <p>
+    I removed any requests to the cdn.polyfill.io domain – and any reference to
+    polyfill.io altogether.
+  </p>
+  <p>
+    The IE11 compatibility is defunct now; I tried some things with core-js but
+    something is still missing 🤷 Maybe later.
+  </p>
+  <p>
     <small>2023-07-29</small>
     So I worked a few days on making the Svelte upgrade work – and now got it running
     with version&nbsp;4! 🚀

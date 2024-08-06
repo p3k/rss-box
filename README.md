@@ -20,7 +20,7 @@ The author cannot be held responsible for anything that this software might or m
 ## Resources
 
 - [@babel/preset-env](https://babeljs.io/docs/babel-preset-env)
-- [Create a Polyfill bundle](https://polyfill.io/v3/url-builder)
+- [Polyfills with Babel and core-js](https://github.com/zloirock/core-js?tab=readme-ov-file#babel)
 - [Prettier options](https://prettier.io/docs/en/options.htm)
 - [Rollup configuration options](https://rollupjs.org/configuration-options/)
 - [Svelte introduction](https://svelte.dev/docs/introduction)
