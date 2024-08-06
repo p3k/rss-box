@@ -38,7 +38,7 @@
   "homepage": "https://github.com/p3k/rss-box#readme",
   "dependencies": {
     "domready": "1.0.8",
-    "whatwg-fetch": "^3.6.20"
+    "whatwg-fetch": "3.6.20"
   },
   "devDependencies": {
     "@babel/core": "7.25.2",
