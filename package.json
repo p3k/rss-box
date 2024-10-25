@@ -41,8 +41,8 @@
     "whatwg-fetch": "3.6.20"
   },
   "devDependencies": {
-    "@babel/core": "7.25.8",
-    "@babel/preset-env": "7.25.8",
+    "@babel/core": "7.25.9",
+    "@babel/preset-env": "7.25.9",
     "@rollup/plugin-babel": "6.0.4",
     "@rollup/plugin-commonjs": "28.0.1",
     "@rollup/plugin-json": "6.1.0",
