@@ -51,20 +51,20 @@
     "@rollup/plugin-terser": "0.4.4",
     "concurrently": "9.1.0",
     "core-js": "3.39.0",
-    "eslint": "9.15.0",
+    "eslint": "9.16.0",
     "eslint-config-prettier": "9.1.0",
-    "eslint-plugin-svelte": "2.46.0",
+    "eslint-plugin-svelte": "2.46.1",
     "husky": "9.1.7",
     "lint-staged": "15.2.10",
-    "prettier": "3.4.1",
+    "prettier": "3.4.2",
     "prettier-plugin-svelte": "3.3.2",
-    "rollup": "4.27.4",
+    "rollup": "4.28.0",
     "rollup-plugin-svelte": "7.2.2",
     "serve": "14.2.4",
     "stylelint": "16.11.0",
     "stylelint-config-html": "1.1.0",
     "stylelint-config-standard": "36.0.1",
-    "svelte": "5.2.10"
+    "svelte": "4.2.19"
   },
   "lint-staged": {
     "*.{css,html,js,md,svelte}": "npm run delint"
