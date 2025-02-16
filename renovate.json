@@ -3,6 +3,7 @@
   "extends": [
     "config:recommended",
     "npm:unpublishSafe",
+    "schedule:daily",
     ":automergeMajor",
     ":pinVersions",
     ":semanticCommitsDisabled"
