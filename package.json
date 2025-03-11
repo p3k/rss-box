@@ -51,7 +51,7 @@
     "@rollup/plugin-terser": "0.4.4",
     "concurrently": "9.1.2",
     "core-js": "3.41.0",
-    "eslint": "9.21.0",
+    "eslint": "9.22.0",
     "eslint-config-prettier": "10.0.2",
     "eslint-plugin-svelte": "3.0.3",
     "husky": "9.1.7",
