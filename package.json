@@ -63,7 +63,7 @@
     "serve": "14.2.4",
     "stylelint": "16.17.0",
     "stylelint-config-html": "1.1.0",
-    "stylelint-config-standard": "37.0.0",
+    "stylelint-config-standard": "38.0.0",
     "svelte": "4.2.19"
   },
   "lint-staged": {
