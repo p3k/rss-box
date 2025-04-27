@@ -1,0 +1,48 @@
+{
+	"folders": [
+    {
+      "path": ".."
+    },
+    {
+      "path": "../services"
+    }
+  ],
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+        "name": "Start",
+        "request": "launch",
+        "runtimeArgs": [
+          "run-script",
+          "start"
+        ],
+        "runtimeVersion": "22.15.0",
+        "runtimeExecutable": "npm",
+        "skipFiles": [
+          "<node_internals>/**"
+        ],
+        "type": "node"
+      }
+		]
+  },
+  "settings": {
+    "python.defaultInterpreterPath": "./services/.venv/bin/python",
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.python",
+    },
+    "[svelte]": {
+      "editor.defaultFormatter": "svelte.svelte-vscode"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "github.vscode-github-actions",
+      "github.vscode-pull-request-github",
+      "esbenp.prettier-vscode",
+      "svelte.svelte-vscode",
+      "ms-python.debugpy",
+      "ms-python.pylint"
+    ]
+  }
+}
