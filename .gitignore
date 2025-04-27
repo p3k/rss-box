@@ -1,9 +1,9 @@
 .db
 .eslintcache
 .husky
-.idea
-.vscode
+
 /node_modules/
-src/local\.js
+
 dist
+src/local\.js
 yarn-error.log
