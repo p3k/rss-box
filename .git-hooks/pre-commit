@@ -1,0 +1,26 @@
+#!/bin/sh
+
+staged_files=$(git diff --diff-filter=d --name-only --cached)
+
+# shellcheck disable=SC2086
+npx prettier --cache --check $staged_files
+exit_code=$?
+
+# shellcheck disable=SC2046
+# shellcheck disable=SC2086
+files=$(find $staged_files -regex '.*\.\(js\|mjs\|svelte\)$')
+if test -n "$files"; then
+  # shellcheck disable=SC2086
+  npx eslint --cache $files
+fi
+exit_code=$((exit_code + $?))
+
+# shellcheck disable=SC2086
+files=$(find $staged_files -regex '.*\.\(css\|html\|svelte\)$')
+if test -n "$files"; then
+  # shellcheck disable=SC2086
+  npx stylelint --allow-empty-input --cache $files
+fi
+exit_code=$((exit_code + $?))
+
+exit $exit_code

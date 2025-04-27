@@ -1,6 +1,6 @@
 .db
 .eslintcache
-.husky
+.stylelintcache
 
 /node_modules/
 
