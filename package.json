@@ -6,9 +6,9 @@
   "main": "src/app.js",
   "scripts": {
     "build": "npm run clean; npm run build:copy; rollup --config",
-    "build:copy": "cp -Rp src/index.html src/assets dist",
+    "build:copy": "mkdir -p dist && cp -Rp src/index.html src/assets dist",
     "build:status-codes": "node -e 'console.log(`export default ${JSON.stringify(require(`http`).STATUS_CODES, null, ` `)};`)'",
-    "clean": "rm -r dist/*",
+    "clean": "rm -fr dist",
     "delint": "npm run delint:css; npm run delint:js; prettier --write src/**/*.{css,html,js,md,svelte}",
     "delint:css": "stylelint --fix src/**/*.{css,html,svelte}",
     "delint:js": "eslint --cache --fix src/**/*.{js,svelte}",
