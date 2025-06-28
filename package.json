@@ -53,7 +53,7 @@
     "eslint-plugin-svelte": "3.9.3",
     "globals": "16.2.0",
     "lint-staged": "16.1.2",
-    "prettier": "3.6.0",
+    "prettier": "3.6.2",
     "prettier-plugin-svelte": "3.4.0",
     "rollup": "4.44.0",
     "rollup-plugin-svelte": "7.2.2",
