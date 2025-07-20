@@ -50,7 +50,7 @@
     "core-js": "3.44.0",
     "eslint": "9.31.0",
     "eslint-config-prettier": "10.1.5",
-    "eslint-plugin-svelte": "3.10.1",
+    "eslint-plugin-svelte": "3.11.0",
     "globals": "16.3.0",
     "lint-staged": "16.1.2",
     "prettier": "3.6.2",
