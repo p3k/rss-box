@@ -54,7 +54,7 @@
     "globals": "16.5.0",
     "lint-staged": "16.2.7",
     "prettier": "3.7.4",
-    "prettier-plugin-svelte": "3.4.0",
+    "prettier-plugin-svelte": "3.4.1",
     "rollup": "4.53.3",
     "rollup-plugin-svelte": "7.2.3",
     "serve": "14.2.5",
