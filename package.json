@@ -47,7 +47,7 @@
     "@rollup/plugin-replace": "6.0.3",
     "@rollup/plugin-terser": "0.4.4",
     "concurrently": "9.2.1",
-    "core-js": "3.47.0",
+    "core-js": "3.48.0",
     "eslint": "9.39.2",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-svelte": "3.14.0",
