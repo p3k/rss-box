@@ -20,5 +20,11 @@
   },
   "git-submodules": {
     "enabled": true
-  }
+  },
+  "packageRules": [
+    {
+      "matchPackageNames": ["svelte"],
+      "allowedVersions": "^4.0.0"
+    }
+  ]
 }
