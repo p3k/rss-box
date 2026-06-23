@@ -55,7 +55,7 @@
     "lint-staged": "17.0.7",
     "prettier": "3.8.4",
     "prettier-plugin-svelte": "4.0.0",
-    "rollup": "4.62.0",
+    "rollup": "4.62.2",
     "rollup-plugin-svelte": "7.2.3",
     "serve": "14.2.6",
     "stylelint": "17.13.0",
