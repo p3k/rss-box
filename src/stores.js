@@ -57,8 +57,6 @@ function fetchFeed(url) {
       const parser = RssParser();
       const rss = parser.parse(data.content);
 
-      if (!rss.date) rss.date = new Date(data.headers.date);
-
       store.set({ ...rss, loading: false });
     })
     .catch(message => {
