@@ -24,13 +24,24 @@ const defaultError = {
   ]
 };
 
+// The descriptions are rendered as HTML, so anything coming from outside
+// (the feed URL is taken from the query string) must not be inserted as is
+const escapeHtml = text =>
+  String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
 export default function (url, message) {
   const error = Object.assign({}, defaultError);
-  error.link = `${urls.app}?url=${url}`;
-  error.items[1].description = message;
+  const encodedUrl = encodeURIComponent(url);
+  error.link = `${urls.app}?url=${encodedUrl}`;
+  error.items[1].description = escapeHtml(message);
   error.items[2].description = `
     Most likely, this might have happened because of a non-existent or invalid RSS feed URL.
-    <a href="https://validator.w3.org/feed/check.cgi?url=${url}">Please check</a> and
+    <a href="https://validator.w3.org/feed/check.cgi?url=${encodedUrl}">Please check</a> and
     possibly correct your input, then try again.
   `;
   return error;
