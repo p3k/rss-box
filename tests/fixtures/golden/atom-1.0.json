@@ -8,7 +8,7 @@
     {
       "title": "Entry whose first link is not the alternate",
       "description": "",
-      "link": "https://atom.example/second/comments"
+      "link": "https://atom.example/second"
     }
   ],
   "format": "Atom",
@@ -16,5 +16,6 @@
   "title": "Example Atom Feed",
   "description": "An Atom feed with a few entries",
   "image": "",
-  "date": "2024-09-19T12:00:00.000Z"
+  "link": "https://atom.example/",
+  "date": "2024-09-06T10:00:00.000Z"
 }

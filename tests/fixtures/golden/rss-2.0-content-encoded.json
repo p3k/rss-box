@@ -2,7 +2,7 @@
   "items": [
     {
       "title": "Only content:encoded",
-      "description": "",
+      "description": "<p>The full text of the post.</p>",
       "link": "https://fulltext.example/only-content",
       "enclosures": []
     },
