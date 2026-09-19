@@ -1,0 +1,35 @@
+{
+  "items": [
+    {
+      "title": "Hello & welcome",
+      "description": "<p>The first <em>paragraph</em>.</p><p><img src=\"https://blog.example/a.jpg\" alt=\"\"></p>",
+      "link": "https://blog.example/hello",
+      "enclosures": [],
+      "category": {
+        "domain": "",
+        "content": "News"
+      }
+    },
+    {
+      "title": "An item that only has a guid",
+      "description": "Plain text description.",
+      "link": "tag:blog.example,2024:2",
+      "enclosures": []
+    }
+  ],
+  "format": "RSS",
+  "version": "2.0",
+  "title": "Example Blog",
+  "description": "Thoughts and things",
+  "link": "https://blog.example/",
+  "image": {
+    "source": "https://blog.example/logo.png",
+    "title": "Example Blog",
+    "link": "https://blog.example/",
+    "width": "144",
+    "height": "48",
+    "description": ""
+  },
+  "date": "2024-09-06T11:30:00.000Z",
+  "rights": "© 2024 Example Blog"
+}

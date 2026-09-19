@@ -21,6 +21,7 @@
     "start": "concurrently --kill-others 'npm:server' 'npm:watch'",
     "server": "dir=$PWD; (cd services; .venv/bin/mod_wsgi-express start-server wsgi.py --document-root \"$dir/dist\" --access-log --log-to-terminal)",
     "server:update": "git submodule update --remote --merge",
+    "test": "node --import ./tests/register.js --test \"tests/**/*.test.js\"",
     "watch": "npm run build -- --watch"
   },
   "repository": {
@@ -52,6 +53,7 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-svelte": "3.23.0",
     "globals": "17.12.0",
+    "jsdom": "30.1.0",
     "lint-staged": "17.5.1",
     "prettier": "3.9.6",
     "prettier-plugin-svelte": "4.0.0",

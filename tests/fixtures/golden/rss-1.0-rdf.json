@@ -1,0 +1,37 @@
+{
+  "items": [
+    {
+      "title": "Morning show",
+      "description": "Today’s morning show has a new guest.",
+      "link": "http://radio.example/news/1",
+      "enclosures": []
+    },
+    {
+      "title": "Evening session",
+      "description": "Live from the studio tonight.",
+      "link": "http://radio.example/news/2",
+      "enclosures": []
+    }
+  ],
+  "format": "RSS",
+  "version": "1.0",
+  "title": "Radio Example",
+  "description": "Programme news from a small station.",
+  "link": "http://radio.example/",
+  "image": {
+    "source": "http://radio.example/logo.png",
+    "title": "",
+    "link": "",
+    "width": "",
+    "height": "",
+    "description": ""
+  },
+  "date": "2004-05-06T07:08:09.000Z",
+  "rights": "Radio Example editorial team",
+  "input": {
+    "link": "",
+    "description": "",
+    "name": "",
+    "title": ""
+  }
+}

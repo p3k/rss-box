@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<scriptingNews>
+  <header>
+    <scriptingNewsVersion>2.0b1</scriptingNewsVersion>
+    <channelTitle>Example Scripting News</channelTitle>
+    <channelDescription>The good old legacy format</channelDescription>
+    <channelLink>http://scripting.example/</channelLink>
+    <lastBuildDate>Tue, 01 Jan 2002 08:00:00 GMT</lastBuildDate>
+    <imageUrl>http://scripting.example/logo.gif</imageUrl>
+    <imageTitle>Example logo</imageTitle>
+    <imageLink>http://scripting.example/</imageLink>
+    <imageWidth>100</imageWidth>
+    <imageHeight>40</imageHeight>
+    <imageCaption>The example logo</imageCaption>
+  </header>
+  <item>
+    <text>Please read the manifesto about the open web,
+which is not very long.</text>
+    <link>
+      <linetext>the manifesto</linetext>
+      <url>http://scripting.example/manifesto</url>
+    </link>
+  </item>
+  <item>
+    <text>An item without a link.</text>
+  </item>
+</scriptingNews>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="0.91">
+  <channel>
+    <title>Sample Weblog</title>
+    <link>http://weblog.example/</link>
+    <description>Notes from a small server.</description>
+    <language>en-us</language>
+    <copyright>Copyright 2001 Sample Weblog</copyright>
+    <lastBuildDate>Mon, 08 Oct 2001 10:11:12 GMT</lastBuildDate>
+    <image>
+      <url>http://weblog.example/logo.gif</url>
+      <title>Sample Weblog</title>
+      <link>http://weblog.example/</link>
+      <width>88</width>
+      <height>31</height>
+      <description>The weblog’s logo</description>
+    </image>
+    <item>
+      <title>First post</title>
+      <link>http://weblog.example/2001/10/08/first</link>
+      <description>Hello &lt;b&gt;world&lt;/b&gt;, this is the first post.</description>
+    </item>
+    <item>
+      <title>Second post</title>
+      <link>http://weblog.example/2001/10/09/second</link>
+      <description>A second post with an &amp;amp; entity.</description>
+    </item>
+  </channel>
+</rss>

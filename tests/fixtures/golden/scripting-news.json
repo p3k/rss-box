@@ -1,0 +1,29 @@
+{
+  "items": [
+    {
+      "title": "",
+      "description": "Please read <a href=\"http://scripting.example/manifesto\">the manifesto</a> about the open web, which is not very long.",
+      "link": "http://scripting.example/manifesto",
+      "enclosures": []
+    },
+    {
+      "title": "",
+      "description": "An item without a link.",
+      "enclosures": []
+    }
+  ],
+  "format": "Scripting News",
+  "version": "2.0b1",
+  "title": "Example Scripting News",
+  "description": "The good old legacy format",
+  "link": "http://scripting.example/",
+  "date": "2002-01-01T08:00:00.000Z",
+  "image": {
+    "source": "http://scripting.example/logo.gif",
+    "title": "Example logo",
+    "link": "http://scripting.example/",
+    "width": "100",
+    "height": "40",
+    "description": "The example logo"
+  }
+}

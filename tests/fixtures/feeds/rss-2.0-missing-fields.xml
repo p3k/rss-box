@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Sparse Feed</title>
+    <item>
+      <title>Only a title and a description</title>
+      <description>Neither the channel nor this item carries a date.</description>
+    </item>
+    <item>
+      <title>Second item</title>
+      <link>https://sparse.example/second</link>
+      <description>Second description.</description>
+    </item>
+  </channel>
+</rss>

@@ -2,3 +2,4 @@ dist
 node_modules
 services
 src/assets/min.css
+tests/fixtures
