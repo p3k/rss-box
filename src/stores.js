@@ -67,46 +67,67 @@ function fetchFeed(url) {
     });
 }
 
+const isHttpUrl = url => typeof url === "string" && /^https?:\/\//i.test(url);
+
+// Referrers are reported by whichever pages embed a box, so anything they send
+// must be treated with care – e.g. a `javascript:` URL is not a feed
+const getFeedUrls = metadata =>
+  metadata && Array.isArray(metadata.feedUrls)
+    ? metadata.feedUrls.filter(isHttpUrl)
+    : [];
+
 function fetchReferrers() {
   const store = this;
 
-  fetch(urls.referrers)
+  return fetch(urls.referrers)
     .then(res => res.json())
     .then(data => {
-      const hosts = data.reduce((accu, item) => {
+      const hosts = [];
+
+      // Host names are arbitrary text, so keep them from clashing with any
+      // property name (`length`, `constructor` etc.)
+      const hostsByName = Object.create(null);
+
+      data.forEach(item => {
         if (
-          item.url.startsWith("http") &&
-          !item.url.startsWith(urls.app) &&
-          item.url.indexOf("atari-embeds.googleusercontent.com") < 0
+          !isHttpUrl(item.url) ||
+          item.url.startsWith(urls.app) ||
+          item.url.indexOf("atari-embeds.googleusercontent.com") >= 0
         ) {
-          const url = item.url.replace(/^([^.]*)www\./, "$1");
-          const host = url.split("/")[2];
-          let data = accu[host];
-
-          if (!data) {
-            data = { host, url, hits: item.hits, total: 0 };
-            accu[host] = data;
-            accu.push(data);
-          } else if (item.hits > data.hits) {
-            data.url = item.url;
-            data.hits = item.hits;
-          }
-
-          data.total += item.hits;
-          data.metadata = item.metadata || { feedUrls: [] };
+          return;
         }
-        return accu;
-      }, []);
 
-      const total = hosts.reduce((accu, item) => (accu += item.total), 0);
+        const url = item.url.replace(/^([^.]*)www\./, "$1");
+        const host = url.split("/")[2];
+        let referrer = hostsByName[`@${host}`];
 
-      const referrers = hosts.map(item => {
-        item.percentage = (item.total / total) * 100;
-        return item;
+        if (!referrer) {
+          referrer = { host, url, hits: item.hits, total: 0 };
+          hostsByName[`@${host}`] = referrer;
+          hosts.push(referrer);
+        } else if (item.hits > referrer.hits) {
+          referrer.url = item.url;
+          referrer.hits = item.hits;
+        }
+
+        const feedUrls = getFeedUrls(item.metadata);
+
+        referrer.total += item.hits;
+        referrer.metadata = feedUrls.length ? { feedUrls } : {};
+      });
+
+      const total = hosts.reduce((sum, referrer) => sum + referrer.total, 0);
+
+      const referrers = hosts.map(referrer => {
+        referrer.percentage = (referrer.total / total) * 100;
+        return referrer;
       });
 
       referrers.sort((a, b) => b.percentage - a.percentage);
       store.set(referrers);
+    })
+    .catch(message => {
+      console.error(message);
     });
 }
 
