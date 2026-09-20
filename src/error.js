@@ -1,3 +1,4 @@
+import { escapeHtml } from "./sanitize";
 import { urls } from "./urls";
 
 const defaultError = {
@@ -24,14 +25,6 @@ const defaultError = {
 
 // The descriptions are rendered as HTML, so anything coming from outside
 // (the feed URL is taken from the query string) must not be inserted as is
-const escapeHtml = text =>
-  String(text)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-
 export default function (url, message) {
   // Copy the items, too: every box needs its own error message
   const error = {

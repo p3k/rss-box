@@ -12,6 +12,7 @@ import {
   sanitizeHtml,
   sanitizeUrl
 } from "../src/sanitize.js";
+import { assertHarmless, elements } from "./harmless.js";
 import { RssParser } from "../src/rss-parser.js";
 
 const parse = html => {
@@ -22,72 +23,13 @@ const parse = html => {
 
 const sanitized = html => parse(sanitizeHtml(html));
 
-const elements = root => [...root.querySelectorAll("*")];
-
-// Whitespace and control characters are ignored within URL schemes
-const scheme = value =>
-  // eslint-disable-next-line no-control-regex
-  value.replace(/[\u0000-\u0020]/g, "").toLowerCase();
-
-// Nothing in here may run code, no matter how the browser reads it
-const assertHarmless = (root, description) => {
-  for (const element of elements(root)) {
-    for (const { name, value } of [...element.attributes]) {
-      assert.ok(
-        !/^on/i.test(name),
-        `${description}: <${element.localName} ${name}>`
-      );
-      assert.notEqual(name.toLowerCase(), "srcdoc", description);
-
-      if (
-        ["href", "src", "data", "action", "formaction", "xlink:href"].includes(
-          name
-        )
-      ) {
-        assert.ok(
-          !/^(javascript|vbscript|data):/.test(scheme(value)) ||
-            (element.localName === "img" &&
-              /^data:image\//.test(scheme(value))),
-          `${description}: <${element.localName} ${name}="${value}">`
-        );
-      }
-    }
-  }
-
-  for (const tag of [
-    "script",
-    "style",
-    "link",
-    "base",
-    "meta",
-    "form",
-    "input",
-    "button",
-    "svg",
-    "math"
-  ]) {
-    assert.equal(
-      root.querySelectorAll(tag).length,
-      0,
-      `${description}: <${tag}> is left`
-    );
-  }
-
-  for (const frame of root.querySelectorAll("iframe")) {
-    assert.ok(
-      frame.hasAttribute("sandbox"),
-      `${description}: unsandboxed iframe`
-    );
-  }
-};
-
 describe("sanitize", () => {
   it("runs on a browser that supports the sanitizer", () => {
     assert.ok(DOMPurify.isSupported);
   });
 
   describe("sanitizeHtml", () => {
-    // Includes the classic mutation attacks, which depend on the browser\u2019s parser
+    // Includes the classic mutation attacks, which depend on the browser’s parser
     const attacks = {
       "script": "<script>alert(1)</script>",
       "event handler": "<img src=x onerror=alert(1)>",
@@ -139,7 +81,7 @@ describe("sanitize", () => {
     for (const [description, attack] of Object.entries(attacks)) {
       it(`neutralizes ${description}`, () => {
         assertHarmless(sanitized(attack), description);
-        // \u2026 also when the markup is nested in some more
+        // … also when the markup is nested in some more
         assertHarmless(sanitized(`<div><p>${attack}</p></div>`), description);
       });
     }
