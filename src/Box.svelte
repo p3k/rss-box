@@ -67,7 +67,12 @@
   $: height =
     $config.height && $config.height > -1 ? `${$config.height}px` : "100%";
   $: width = $config.width ? `${$config.width}px` : "100%";
-  $: itemTitleClass = !$config.compact ? "bold" : "";
+  // An error message is only useful in full, so the settings that shorten the
+  // box (which is up to the embedding page) do not apply to it
+  $: isError = $feed.format === "Error";
+  $: compact = $config.compact && !isError;
+  $: maxItems = isError ? $feed.items.length : $config.maxItems;
+  $: itemTitleClass = !compact ? "bold" : "";
 </script>
 
 <div
@@ -137,7 +142,7 @@
     {/if}
 
     {#each $feed.items as item, index}
-      {#if index < $config.maxItems}
+      {#if index < maxItems}
         <div
           class="rssbox-item-content rssBoxItemContent"
           style="color: {$config.textColor}"
@@ -156,7 +161,7 @@
             </div>
           {/if}
 
-          {#if !$config.compact}
+          {#if !compact}
             <aside>
               {#if item.source}
                 <a

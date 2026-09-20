@@ -2,8 +2,6 @@ import { urls } from "./urls";
 
 const defaultError = {
   loading: false,
-  compact: false,
-  maxItems: 3,
   format: "Error",
   version: "⚡",
   title: "RSS Box Error",

@@ -4,6 +4,7 @@ import { tick } from "svelte";
 
 import "./dom.js";
 import Box from "../src/Box.svelte";
+import error from "../src/error.js";
 import { ConfigStore, FeedStore } from "../src/stores.js";
 
 const items = [1, 2, 3].map(number => ({
@@ -73,5 +74,31 @@ describe("Box", () => {
 
     assert.deepEqual(itemTitles(target), ["Title 1", "Title 2", "Title 3"]);
     assert.ok(!target.textContent.includes("Description"));
+  });
+
+  // The message would be useless if the embedding page could hide parts of it
+  describe("showing an error", () => {
+    const failed = () => error("https://feed.example/feed.xml", "Not Found");
+    const itemCount = target =>
+      target.querySelectorAll(".rssbox-item-content").length;
+
+    it("shows the error message in compact mode", async () => {
+      const target = await render({
+        feed: failed(),
+        config: { compact: true }
+      });
+
+      assert.ok(target.textContent.includes("Not Found"));
+    });
+
+    it("shows the whole error regardless of `maxItems`", async () => {
+      const target = await render({
+        feed: failed(),
+        config: { maxItems: 1 }
+      });
+
+      assert.equal(itemCount(target), 3);
+      assert.ok(target.textContent.includes("Not Found"));
+    });
   });
 });
