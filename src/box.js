@@ -1,5 +1,6 @@
 import ready from "domready";
 
+import { getPingUrl, getQueryOf, parseQuery } from "./embed";
 import { ConfigStore, FeedStore } from "./stores";
 import { urls } from "./urls";
 import getNativeObject from "./native.js";
@@ -30,27 +31,6 @@ const keys = [...Object.keys(defaults), "url"];
 ready(() => {
   const reduce = getNativeObject("Array").prototype.reduce;
 
-  const getNativeValue = value => {
-    if (value === "true") return true;
-    if (value === "false") return false;
-    return value;
-  };
-
-  const parseQuery = query => {
-    const parts = query.split("&");
-    return reduce.call(
-      parts,
-      (data, pair) => {
-        const [key, value] = pair.split("=");
-        if (keys.indexOf(key) > -1) {
-          data[key] = getNativeValue(decodeURIComponent(value));
-        }
-        return data;
-      },
-      {}
-    );
-  };
-
   // Earlier versions used protocol-less URLs like `//p3k.org/rss`
   const search = urls.app.replace(/^https?:/, "");
   const scripts = Array.apply(
@@ -60,11 +40,11 @@ ready(() => {
   const feedUrls = [];
 
   scripts.forEach(script => {
-    const query = script.src.split("?")[1];
+    const query = getQueryOf(script.src);
 
     if (!query) return;
 
-    let data = parseQuery(query);
+    let data = parseQuery(query, keys, reduce);
 
     if (!data.url) data.url = urls.feed;
 
@@ -96,11 +76,6 @@ ready(() => {
   });
 
   if (location.href.indexOf(urls.app) < 0) {
-    const metadata = JSON.stringify({ feedUrls });
-    fetch(
-      `${urls.referrers}&url=${encodeURIComponent(
-        location.href
-      )}&metadata=${encodeURIComponent(metadata)}`
-    );
+    fetch(getPingUrl(urls.referrers, location.href, feedUrls));
   }
 });

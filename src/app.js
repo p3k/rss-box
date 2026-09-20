@@ -1,3 +1,4 @@
+import { parseQuery } from "./embed";
 import { config, feed } from "./stores";
 import { urls } from "./urls";
 
@@ -8,7 +9,6 @@ const app = new App({
   props: { feed, config }
 });
 
-const query = location.search;
 let url;
 
 config.subscribe(state => {
@@ -17,11 +17,8 @@ config.subscribe(state => {
   feed.fetch(url, feed);
 });
 
-if (query && query.startsWith("?url=")) {
-  const parts = query.substr(5).split("&");
-  config.set({ url: decodeURIComponent(parts[0]) });
-} else {
-  config.set({ url: urls.feed });
-}
+const { url: requestedUrl } = parseQuery(location.search.slice(1), ["url"]);
+
+config.set({ url: requestedUrl || urls.feed });
 
 export default app;
