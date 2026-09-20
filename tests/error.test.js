@@ -31,4 +31,16 @@ describe("error", () => {
       "Error: &lt;b&gt;Oops&lt;/b&gt; &amp; more"
     );
   });
+
+  // Several boxes on one page fail independently of each other
+  it("does not share its state with other errors", () => {
+    const first = error("https://first.example/feed.xml", "First message");
+    const second = error("https://second.example/feed.xml", "Second message");
+
+    assert.notEqual(first.items, second.items);
+    assert.equal(first.items[1].description, "First message");
+    assert.equal(second.items[1].description, "Second message");
+    assert.ok(first.items[2].description.includes("first.example"));
+    assert.ok(second.items[2].description.includes("second.example"));
+  });
 });

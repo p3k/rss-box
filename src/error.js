@@ -35,7 +35,11 @@ const escapeHtml = text =>
     .replace(/'/g, "&#39;");
 
 export default function (url, message) {
-  const error = Object.assign({}, defaultError);
+  // Copy the items, too: every box needs its own error message
+  const error = {
+    ...defaultError,
+    items: defaultError.items.map(item => ({ ...item }))
+  };
   const encodedUrl = encodeURIComponent(url);
   error.link = `${urls.app}?url=${encodedUrl}`;
   error.items[1].description = escapeHtml(message);
