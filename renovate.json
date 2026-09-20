@@ -25,6 +25,11 @@
     {
       "matchPackageNames": ["svelte"],
       "allowedVersions": "^4.0.0"
+    },
+    {
+      "description": "DOMPurify 3 dropped Internet Explorer 11 and passes markup on unsanitized there instead of failing",
+      "matchPackageNames": ["dompurify"],
+      "allowedVersions": "^2.5.0"
     }
   ]
 }

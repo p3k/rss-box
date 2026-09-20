@@ -36,6 +36,7 @@
   "homepage": "https://github.com/p3k/rss-box#readme",
   "dependencies": {
     "domready": "1.0.8",
+    "dompurify": "2.5.9",
     "whatwg-fetch": "3.6.20"
   },
   "devDependencies": {
