@@ -1,3 +1,5 @@
+import { escapeHtml } from "./sanitize";
+
 function RssParser() {
   const DC_NAMESPACE = "http://purl.org/dc/elements/1.1/";
   const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
@@ -196,14 +198,16 @@ function RssParser() {
           .replace(/\n/g, " ")
           .trim();
         if (text) {
-          item.description = item.description.replace(
-            new RegExp(text),
+          const anchor =
             '<a href="' +
-              getText(getChildElement("url", node)) +
-              '">' +
-              text +
-              "</a>"
-          );
+            escapeHtml(getText(getChildElement("url", node))) +
+            '">' +
+            text +
+            "</a>";
+
+          // The text is looked for as it is – not as a regular expression –
+          // and the anchor is used as it is, `$&` and the like included
+          item.description = item.description.replace(text, () => anchor);
         }
         item.link = getText(getChildElement("url", link));
       }

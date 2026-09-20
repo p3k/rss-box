@@ -56,4 +56,32 @@ describe("RssParser", () => {
       });
     }
   });
+
+  describe("linking the text of a Scripting News item", () => {
+    const link = (text, description) =>
+      RssParser().parse(
+        `<scriptingNews>
+          <header><channelTitle>Title</channelTitle></header>
+          <item>
+            <text>${description}</text>
+            <link><linetext>${text}</linetext><url>http://example.org/</url></link>
+          </item>
+        </scriptingNews>`
+      ).items[0].description;
+
+    // Used to be taken for a regular expression and to reject the whole feed
+    it("finds a text that looks like a regular expression", () => {
+      assert.equal(
+        link("C++", "I like C++ a lot"),
+        'I like <a href="http://example.org/">C++</a> a lot'
+      );
+    });
+
+    it("links only the first occurrence", () => {
+      assert.equal(
+        link("it", "it is it"),
+        '<a href="http://example.org/">it</a> is it'
+      );
+    });
+  });
 });
