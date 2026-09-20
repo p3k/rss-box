@@ -105,16 +105,27 @@ function RssParser() {
         channel.getElementsByTagNameNS(DC_NAMESPACE, "creator")
       );
 
-      const textInput = getChildElement("textinput", root);
+      // The channel only references the text input, its data is a sibling of
+      // the channel; some feeds (wrongly) put it into the channel, though
+      const textInput =
+        getChildElements("textinput", root)[0] ||
+        getChildElement("textinput", root);
 
-      rss.input = textInput
-        ? {
-            link: getText(getChildElement("link", textInput)),
-            description: getText(getChildElement("description", textInput)),
-            name: getText(getChildElement("name", textInput)),
-            title: getText(getChildElement("title", textInput))
-          }
-        : "";
+      rss.input = "";
+
+      if (textInput) {
+        const input = {
+          link: getText(getChildElement("link", textInput)),
+          description: getText(getChildElement("description", textInput)),
+          name: getText(getChildElement("name", textInput)),
+          title: getText(getChildElement("title", textInput))
+        };
+
+        // Without a target and a field name the form could not be submitted
+        if (input.link && input.name) {
+          rss.input = input;
+        }
+      }
     } else {
       rss.date = getDate(
         getText(getChildElement("lastBuildDate", channel)) ||
