@@ -16,8 +16,8 @@
   "format": "RSS",
   "version": "2.0",
   "title": "Sparse Feed",
-  "description": "Neither the channel nor this item carries a date.",
-  "link": "https://sparse.example/second",
+  "description": "",
+  "link": "",
   "image": "",
   "date": "2024-09-19T12:00:00.000Z",
   "rights": ""

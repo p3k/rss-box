@@ -15,9 +15,9 @@
   ],
   "format": "RSS",
   "version": "2.0",
-  "title": "First item",
-  "description": "The first item’s description.",
-  "link": "https://untitled.example/first",
+  "title": "",
+  "description": "",
+  "link": "",
   "image": "",
   "date": "2024-09-04T10:00:00.000Z",
   "rights": ""

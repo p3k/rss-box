@@ -69,6 +69,12 @@ function RssParser() {
     return node.textContent;
   };
 
+  // The text of a direct child, so a missing element is not confused with a
+  // like-named one of an item or entry
+  const getOwnText = function (name, parent) {
+    return getText(getChildElements(name, parent)[0]);
+  };
+
   const error = Error("Malformed RSS syntax");
 
   const parseRss = function (root, type) {
@@ -79,9 +85,9 @@ function RssParser() {
 
     rss.format = "RSS";
     rss.version = type === "rdf:RDF" ? "1.0" : root.getAttribute("version");
-    rss.title = getText(getChildElement("title", channel));
-    rss.description = getText(getChildElement("description", channel));
-    rss.link = getText(getChildElement("link", channel));
+    rss.title = getOwnText("title", channel);
+    rss.description = getOwnText("description", channel);
+    rss.link = getOwnText("link", channel);
 
     const image = getChildElement("image", channel);
 
@@ -127,6 +133,8 @@ function RssParser() {
         }
       }
     } else {
+      // Deliberately not limited to the channel’s own elements: a feed without
+      // a date of its own shows the date of its first item
       rss.date = getDate(
         getText(getChildElement("lastBuildDate", channel)) ||
           getText(getChildElement("pubDate", channel))
@@ -172,8 +180,8 @@ function RssParser() {
 
     rss.format = "Atom";
     rss.version = "1.0";
-    rss.title = getText(getChildElement("title", root));
-    rss.description = getText(getChildElement("subtitle", root));
+    rss.title = getOwnText("title", root);
+    rss.description = getOwnText("subtitle", root);
     rss.image = "";
 
     const link = getAtomLink(root);
