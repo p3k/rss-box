@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Hostile Feed</title>
+    <link>javascript:alert(0)</link>
+    <description>Markup and URLs an attacker might smuggle in</description>
+    <lastBuildDate>Sat, 07 Sep 2024 08:00:00 GMT</lastBuildDate>
+    <item>
+      <title>&lt;img src=x onerror=alert(1)&gt;</title>
+      <link>javascript:alert(document.domain)</link>
+      <description>&lt;script&gt;alert(2)&lt;/script&gt;&lt;a href="javascript:alert(3)"&gt;click&lt;/a&gt;&lt;iframe srcdoc="&amp;lt;script&amp;gt;alert(4)&amp;lt;/script&amp;gt;"&gt;&lt;/iframe&gt;</description>
+      <enclosure url="javascript:alert(5)" length="1" type="text/html" />
+      <source url="data:text/html,x">A data URL source</source>
+    </item>
+    <item>
+      <title>Harmless neighbour</title>
+      <link>https://hostile.example/harmless</link>
+      <description>&lt;p&gt;Just a paragraph with &lt;a href="https://hostile.example/"&gt;a normal link&lt;/a&gt;.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

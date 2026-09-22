@@ -1,0 +1,57 @@
+{
+  "items": [
+    {
+      "title": "Episode one",
+      "description": "The very first episode.",
+      "link": "http://podcast.example/1",
+      "source": {
+        "url": "http://other.example/rss.xml",
+        "title": "Other Feed"
+      },
+      "enclosures": [
+        {
+          "url": "http://podcast.example/1.mp3",
+          "length": "1234567",
+          "type": "audio/mpeg"
+        }
+      ],
+      "category": {
+        "domain": "http://podcast.example/categories",
+        "content": "Talk"
+      }
+    },
+    {
+      "title": "Episode two",
+      "description": "Two enclosures and a plain source link.",
+      "link": "http://podcast.example/2",
+      "source": {
+        "url": "http://other.example/",
+        "title": "Other Site"
+      },
+      "enclosures": [
+        {
+          "url": "http://podcast.example/2.mp3",
+          "length": "7654321",
+          "type": "audio/mpeg"
+        },
+        {
+          "url": "http://podcast.example/2.ogg",
+          "length": "6543210",
+          "type": "audio/ogg"
+        }
+      ],
+      "category": {
+        "domain": "",
+        "content": "Uncategorized"
+      }
+    }
+  ],
+  "format": "RSS",
+  "version": "0.92",
+  "title": "Sample Podcast",
+  "description": "Audio, sources and categories.",
+  "link": "http://podcast.example/",
+  "image": "",
+  "date": "2001-10-09T08:00:00.000Z",
+  "rights": ""
+}

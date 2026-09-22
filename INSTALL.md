@@ -32,6 +32,22 @@ npm start
 xdg-open http://localhost:8000
 ```
 
+## Run Tests
+
+The tests use Node’s built-in test runner and require the Node version given in `.nvmrc`.
+
+```sh
+nvm use
+npm test
+```
+
+Some tests compare their results with “golden” files in `tests/fixtures/golden`. After an intended change of behavior, review and update them with:
+
+```sh
+UPDATE_GOLDEN=1 npm test
+git diff tests/fixtures/golden
+```
+
 ## Rebuild Production Files
 
 ```sh

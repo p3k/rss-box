@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns="http://purl.org/rss/1.0/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel rdf:about="http://radio.example/feed.rdf">
+    <title>Radio Example</title>
+    <link>http://radio.example/</link>
+    <description>Programme news from a small station.</description>
+    <dc:date>2004-05-06T07:08:09+00:00</dc:date>
+    <dc:creator>Radio Example editorial team</dc:creator>
+    <image rdf:resource="http://radio.example/logo.png" />
+    <items>
+      <rdf:Seq>
+        <rdf:li rdf:resource="http://radio.example/news/1" />
+        <rdf:li rdf:resource="http://radio.example/news/2" />
+      </rdf:Seq>
+    </items>
+    <textinput rdf:resource="http://radio.example/search" />
+  </channel>
+  <image rdf:about="http://radio.example/logo.png">
+    <title>Radio Example</title>
+    <link>http://radio.example/</link>
+    <url>http://radio.example/logo.png</url>
+  </image>
+  <item rdf:about="http://radio.example/news/1">
+    <title>Morning show</title>
+    <link>http://radio.example/news/1</link>
+    <description>Today’s morning show has a new guest.</description>
+    <dc:date>2004-05-06T06:00:00+00:00</dc:date>
+  </item>
+  <item rdf:about="http://radio.example/news/2">
+    <title>Evening session</title>
+    <link>http://radio.example/news/2</link>
+    <description>Live from the studio tonight.</description>
+    <dc:date>2004-05-05T20:00:00+00:00</dc:date>
+  </item>
+  <textinput rdf:about="http://radio.example/search">
+    <title>Search</title>
+    <description>Search the archive</description>
+    <name>q</name>
+    <link>http://radio.example/search</link>
+  </textinput>
+</rdf:RDF>
