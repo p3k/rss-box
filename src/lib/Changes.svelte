@@ -64,13 +64,13 @@
     <small>2020-11-20</small>
     Because
     <a href="https://cloud.google.com/appengine/">Big G is monetizing</a>
-    (if not fully abandoning) one project serving the common good after another,
-    I rewrote the
+    (if not fully abandoning) one project serving the common good after another, I
+    rewrote the
     <a href="https://github.com/p3k/json3k">JSONP services for mod_wsgi</a>
     to run on my own server from now on. Not much news on the front-end side, just
     the usual dependency upgrade and some minor fixes. I hope everything works as
-    it should be and wish everyone all the best, especially to those who need it
-    most in these pandemic times.
+    it should be and wish everyone all the best, especially to those who need it most
+    in these pandemic times.
   </p>
 
   <p>
@@ -168,10 +168,10 @@
 
   <p>
     <small>2012-10-26</small>
-    Added section about Creative Commons License, below. In other words: you can
-    now legally run my code on your own server. (You even could remove the tiny reference
-    to this page in the footer of the box.) However, I would like to ask you for
-    two things if you want to do so:
+    Added section about Creative Commons License, below. In other words: you can now
+    legally run my code on your own server. (You even could remove the tiny reference
+    to this page in the footer of the box.) However, I would like to ask you for two
+    things if you want to do so:
   </p>
   <ul>
     <li>
@@ -275,9 +275,9 @@
 
   <p>
     <small>2012-05-19</small>
-    Apologies for the RSS Boxes not showing up on your pages during the last few
-    days. I made a stupid mistake that caused only the setup page to render correctly
-    – and I did not check any embedded script.
+    Apologies for the RSS Boxes not showing up on your pages during the last few days.
+    I made a stupid mistake that caused only the setup page to render correctly –
+    and I did not check any embedded script.
     <i>Bummer!</i>
   </p>
   <p>
@@ -293,9 +293,9 @@
     disconnected from the version as of 2009. Each is using their own codebase, the
     legacy code was not modified at all and thus, it is not affected by any recent
     changes. You can check which version you are using by looking at the script URL.
-    If it contains the string “proxy.r” you get the “classic” RSS Box rendering.
-    The modernized version calls “index.js”. Nevertheless, you cannot setup boxes
-    with the old URL anymore.
+    If it contains the string “proxy.r” you get the “classic” RSS Box rendering. The
+    modernized version calls “index.js”. Nevertheless, you cannot setup boxes with
+    the old URL anymore.
   </p>
 
   <p>
@@ -411,9 +411,9 @@
     <small>2008-02-01</small>
     Completely revised server- and client-side code. XML rendering is now done in
     the browser which speeds up things and decreases the load on the server. Furthermore,
-    the list of referrers is now loaded on demand via AJAX and thus not rendered
-    with every request. Finally, I retouched the setup form interface and cleaned
-    up both HTML and CSS.
+    the list of referrers is now loaded on demand via AJAX and thus not rendered with
+    every request. Finally, I retouched the setup form interface and cleaned up both
+    HTML and CSS.
   </p>
 
   <p>
@@ -421,8 +421,8 @@
     I am very glad that my old little script is gaining even more attention after
     all these years…
     <i>Thank you very much indeed!</i>
-    Since there are coming in more and more of the same requests and I am really
-    not able to handle them (apologies!), here is some advice for everyone:
+    Since there are coming in more and more of the same requests and I am really not
+    able to handle them (apologies!), here is some advice for everyone:
   </p>
   <ol>
     <li>
@@ -446,9 +446,9 @@
 
   <p>
     <small>2006-06-13</small>
-    Did some minor bug fixing again (amongst others replacing single quotes with
-    &apos; and not &quot; entities). Furthermore (and finally), I removed the “RC”
-    (as in “Release Candidate”) from the document title…
+    Did some minor bug fixing again (amongst others replacing single quotes with &apos;
+    and not &quot; entities). Furthermore (and finally), I removed the “RC” (as in
+    “Release Candidate”) from the document title…
   </p>
 
   <p>
@@ -469,25 +469,25 @@
 
   <p>
     <small>2006-04-20</small>
-    Andrew Pam brought up a serious issue that probably might have affected some
-    more people already: the viewer does not support UTF-8 (or Unicode, resp.) Unfortunately,
+    Andrew Pam brought up a serious issue that probably might have affected some more
+    people already: the viewer does not support UTF-8 (or Unicode, resp.) Unfortunately,
     this is “built-in” into the underlying scripting language (aka Rebol). I’m sorry
     to cancel those tickets… :(
   </p>
 
   <p>
     <small>2006-04-13</small>
-    Fixed a bug reported by Mando Gomez that caused feeds using the &lt;guid&gt;
-    element being displayed without item links… Don’t forget to check out Mando’s
-    excellent website
+    Fixed a bug reported by Mando Gomez that caused feeds using the &lt;guid&gt; element
+    being displayed without item links… Don’t forget to check out Mando’s excellent
+    website
     <a href="http://www.mandolux.com/">mandolux</a>!
   </p>
 
   <p>
     <small>2006-04-12</small>
-    Obviously Sam Ruby changed his feed format from scriptingNews to Atom; which
-    renders my example link above pretty useless… So far I don’t know about any other
-    scriptingNews feed, do you?
+    Obviously Sam Ruby changed his feed format from scriptingNews to Atom; which renders
+    my example link above pretty useless… So far I don’t know about any other scriptingNews
+    feed, do you?
   </p>
 
   <p>
@@ -495,7 +495,7 @@
     I hope nobody minds the little line I added at the bottom of each RSS box… Of
     course, it’s not totally altruistic, but probably some people will find it informative.
     However, if you want to prevent it from being displayed simply add
-    <code>.rssbox-promo {"{"}display: none;{"}"}</code>
+    <code>.rssbox-promo {"{"}display: none;}</code>
     to your stylesheet.
   </p>
 
@@ -508,8 +508,8 @@
 
   <p>
     <small>2005-11-16</small>
-    Just testing Google’s AdSense for a while. Since this page generates most of
-    my traffic I wanted to see myself what a banner can do here. Hope you don’t mind.
+    Just testing Google’s AdSense for a while. Since this page generates most of my
+    traffic I wanted to see myself what a banner can do here. Hope you don’t mind.
   </p>
 
   <p>
@@ -525,17 +525,17 @@
     Last efforts to officially release the
     <a href="https://p3k.org/source/rss-box">code</a>
     to the open source community. There have been some bugs in the (image) rendering
-    framework which I fixed so far. I now include a dynamically rendered list of
-    sites using (or pointing to) this script to give some examples for the curious
-    at heart (me included). Finally, there’s a
+    framework which I fixed so far. I now include a dynamically rendered list of sites
+    using (or pointing to) this script to give some examples for the curious at heart
+    (me included). Finally, there’s a
     <a href="https://p3k.org/source/rss-box/branches/2.0/README">README</a>
     file with a short installation guide to make the script run on your own server.
   </p>
 
   <p>
     <small>2004-01-28</small>
-    When something goes wrong (most of the time this might be a wrong URL, ie. a
-    404 as result) an
+    When something goes wrong (most of the time this might be a wrong URL, ie. a 404
+    as result) an
     <a href="./?url=error">“error” box</a>
     will be displayed to signal the failure. Increased version up to 1.0 and labeled
     it as release candidate (RC).
@@ -548,8 +548,8 @@
     <i>without</i>
     PHP, that is). Everything needed is now in
     <del>CVS</del>
-    SVN so everybody can download from there. Potentially, a few minor bug fixes
-    might follow short-term. Uh, and the HTML code is
+    SVN so everybody can download from there. Potentially, a few minor bug fixes might
+    follow short-term. Uh, and the HTML code is
     <a href="http://validator.w3.org/check?uri=http%3A%2F%2Fp3k.org%2Frss%2F">
       valid XHTML 1.0
     </a>
@@ -590,8 +590,8 @@
     If you want a more compact view of the RSS box you can get it now using the corresponding
     checkbox. If it is enabled the descriptions of each item will not be displayed
     &#8211; given that the item title is defined (otherwise there would not be much
-    to see). Additionally, the channel image (if defined) will not be displayed.
-    Thanks &#106;&#115;&#121;&#101;&#111;&#64;&#99;&#111;&#109;&#112;&#117;&#115;&#101;&#114;&#118;&#101;&#46;&#99;&#111;&#109;
+    to see). Additionally, the channel image (if defined) will not be displayed. Thanks
+    &#106;&#115;&#121;&#101;&#111;&#64;&#99;&#111;&#109;&#112;&#117;&#115;&#101;&#114;&#118;&#101;&#46;&#99;&#111;&#109;
     for the suggestions!
   </p>
 
