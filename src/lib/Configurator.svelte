@@ -1,4 +1,5 @@
 <script>
+  import { sanitizeUrl } from "../sanitize";
   import { urls } from "../urls";
 
   import Referrers from "./Referrers.svelte";
@@ -105,7 +106,7 @@
         {#if $feed.loading}
           Loading...
         {:else}
-          <a href={$config.url}>{$feed.format} {$feed.version}</a>
+          <a href={sanitizeUrl($config.url)}>{$feed.format} {$feed.version}</a>
         {/if}
       </td>
     </tr>

@@ -1,5 +1,6 @@
 <script>
   import { onMount } from "svelte";
+  import { cssUrl, sanitizeHtml, sanitizeUrl } from "./sanitize";
   import { urls } from "./urls";
 
   import LinkIcon from "./lib/LinkIcon.svelte";
@@ -48,6 +49,13 @@
 
   function load(data) {
     return new Promise(fulfill => {
+      const source = sanitizeUrl(data.source);
+
+      // An image from an unsafe URL is never loaded, so it is never shown
+      if (!source) {
+        return;
+      }
+
       const image = new Image();
 
       image.onload = () => {
@@ -60,7 +68,7 @@
         });
       };
 
-      image.src = data.source;
+      image.src = source;
     });
   }
 
@@ -101,7 +109,7 @@
       {#if $config.showXmlButton}
         <div class="rssbox-icon">
           <a
-            href={$config.url}
+            href={sanitizeUrl($config.url)}
             title="{$feed.format} {$feed.version}"
             style="color: {$config.titleBarTextColor}"
           >
@@ -110,7 +118,10 @@
         </div>
       {/if}
       <div>
-        <a href={$feed.link} style="color: {$config.titleBarTextColor};">
+        <a
+          href={sanitizeUrl($feed.link)}
+          style="color: {$config.titleBarTextColor};"
+        >
           {$feed.title}
         </a>
       </div>
@@ -126,13 +137,13 @@
   >
     {#if $feed.image && !$config.compact}
       {#await load($feed.image) then image}
-        <a href={$feed.image.link} title={$feed.image.title}>
+        <a href={sanitizeUrl($feed.image.link)} title={$feed.image.title}>
           <div
             role="img"
             aria-label={$feed.image.description}
             class="rssbox-image"
             style="
-              background-image: url({$feed.image.source});
+              background-image: {cssUrl($feed.image.source)};
               width: {image.width};
               height: {image.height};
             "
@@ -150,13 +161,13 @@
           {#if item.title}
             <div class="rssbox-item-title {itemTitleClass}">
               {#if item.link}
-                <a href={item.link}>
+                <a href={sanitizeUrl(item.link)}>
                   <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                  {@html item.title}
+                  {@html sanitizeHtml(item.title)}
                 </a>
               {:else}
                 <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-                {@html item.title}
+                {@html sanitizeHtml(item.title)}
               {/if}
             </div>
           {/if}
@@ -165,11 +176,11 @@
             <aside>
               {#if item.source}
                 <a
-                  href={item.source.url}
+                  href={sanitizeUrl(item.source.url)}
                   title={item.source.title}
                   class="rssbox-source"
                 >
-                  {#if item.source.url.endsWith(".xml")}
+                  {#if (item.source.url || "").endsWith(".xml")}
                     <RssIcon />
                   {:else}
                     <LinkIcon />
@@ -180,7 +191,7 @@
               {#if item.enclosures}
                 {#each item.enclosures as enclosure}
                   <a
-                    href={enclosure.url}
+                    href={sanitizeUrl(enclosure.url)}
                     title="{kb(enclosure.length)} {enclosure.type}"
                     class="rssbox-enclosure"
                   >
@@ -190,14 +201,18 @@
               {/if}
             </aside>
             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-            {@html item.description}
+            {@html sanitizeHtml(item.description)}
           {/if}
         </div>
       {/if}
     {/each}
 
     {#if $feed.input}
-      <form class="rssbox-form" method="get" action={$feed.input.link}>
+      <form
+        class="rssbox-form"
+        method="get"
+        action={sanitizeUrl($feed.input.link)}
+      >
         <input
           type="text"
           name={$feed.input.name}

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<scriptingNews>
+  <header>
+    <scriptingNewsVersion>2.0b1</scriptingNewsVersion>
+    <channelTitle>Scripting News With Special Characters</channelTitle>
+    <channelDescription>Link texts that are not plain words, URLs that are not plain either</channelDescription>
+    <channelLink>http://scripting.example/</channelLink>
+    <lastBuildDate>Tue, 01 Jan 2002 08:00:00 GMT</lastBuildDate>
+  </header>
+  <item>
+    <text>The (beta) release is out.</text>
+    <link>
+      <linetext>(beta)</linetext>
+      <url>http://scripting.example/beta</url>
+    </link>
+  </item>
+  <item>
+    <text>Read the notes for details.</text>
+    <link>
+      <linetext>the notes</linetext>
+      <url>http://scripting.example/notes?a=1&amp;b="2"</url>
+    </link>
+  </item>
+  <item>
+    <text>Costs $&amp; and $1 more.</text>
+    <link>
+      <linetext>$&amp; and $1</linetext>
+      <url>http://scripting.example/costs</url>
+    </link>
+  </item>
+</scriptingNews>
