@@ -7,7 +7,7 @@
   // Stores coming in via props
   export let config;
 
-  function goto() {
+  function goto(event) {
     event.preventDefault();
     config.set({ url: event.target.href });
   }

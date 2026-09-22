@@ -45,7 +45,10 @@
     Object.keys($config).forEach(key => {
       let value = $config[key];
       if (value === null || value === undefined) value = "";
-      query.push(`${key}=${encodeURIComponent(value)}`);
+
+      // Single quotes are left alone by `encodeURIComponent`, but they would
+      // end the attribute of the code they are put into
+      query.push(`${key}=${encodeURIComponent(value).replace(/'/g, "%27")}`);
     });
 
     return query.join("&");
