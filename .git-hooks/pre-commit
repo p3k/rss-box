@@ -2,8 +2,13 @@
 
 staged_files=$(git diff --diff-filter=d --name-only --cached)
 
+# shellcheck disable=SC2046
 # shellcheck disable=SC2086
-npx prettier --cache --check $staged_files
+files=$(find $staged_files -regex '.*\.\(css\|html\|js\|json\|md\|mjs\|svelte\|ya?ml\)$')
+if test -n "$files"; then
+  # shellcheck disable=SC2086
+  npx prettier --cache --check $files
+fi
 exit_code=$?
 
 # shellcheck disable=SC2046
