@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Sparse Atom Feed</title>
+  <link rel="self" href="https://sparse-atom.example/feed.atom" />
+  <id>tag:sparse-atom.example,2024:feed</id>
+  <entry>
+    <title>Entry with a link without rel</title>
+    <link href="https://sparse-atom.example/plain" />
+    <id>tag:sparse-atom.example,2024:1</id>
+    <summary>Links without a rel attribute are alternates.</summary>
+  </entry>
+  <entry>
+    <title>Entry with an enclosure link only</title>
+    <link rel="enclosure" href="https://sparse-atom.example/file.mp3" />
+    <id>tag:sparse-atom.example,2024:2</id>
+    <summary>There is nothing else to link to.</summary>
+  </entry>
+</feed>
