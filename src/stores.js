@@ -28,10 +28,28 @@ const ObjectStore = defaultState => {
   };
 };
 
+const defaultFeed = () => ({
+  date: new Date(),
+  description: "",
+  format: "",
+  image: "",
+  input: "",
+  items: [],
+  link: "",
+  loading: false,
+  title: "",
+  version: ""
+});
+
 function fetchFeed(url) {
   if (!url) return;
 
   const store = this;
+
+  // Responses may arrive in a different order than the requests were sent, so
+  // only the one for the latest request is taken into account
+  const request = (store.latestRequest = (store.latestRequest || 0) + 1);
+  const isOutdated = () => request !== store.latestRequest;
 
   store.set({ loading: true });
 
@@ -45,7 +63,7 @@ function fetchFeed(url) {
     ].join()
   });
 
-  fetch(`${urls.proxy}?url=${encodeURIComponent(url)}`, {
+  return fetch(`${urls.proxy}?url=${encodeURIComponent(url)}`, {
     headers,
     referrerPolicy: "no-referrer"
   })
@@ -54,13 +72,22 @@ function fetchFeed(url) {
       return res.json();
     })
     .then(data => {
+      if (isOutdated()) {
+        return;
+      }
+
       const parser = RssParser();
       const rss = parser.parse(data.content);
 
-      store.set({ ...rss, loading: false });
+      // Start from scratch, as no kind of feed provides all of the fields
+      store.set({ ...defaultFeed(), ...rss, loading: false });
     })
     .catch(message => {
-      store.set(error(url, message));
+      if (isOutdated()) {
+        return;
+      }
+
+      store.set({ ...defaultFeed(), ...error(url, message) });
       console.error(message);
     });
 }
@@ -146,18 +173,7 @@ export const ConfigStore = () => {
 };
 
 export const FeedStore = () => {
-  const store = ObjectStore({
-    date: new Date(),
-    description: "",
-    format: "",
-    image: "",
-    input: "",
-    items: [],
-    link: "",
-    loading: false,
-    title: "",
-    version: ""
-  });
+  const store = ObjectStore(defaultFeed());
 
   store.fetch = fetchFeed.bind(store);
   store.formatDate = formatDate.bind(store);
