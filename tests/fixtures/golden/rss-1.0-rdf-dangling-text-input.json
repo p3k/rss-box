@@ -1,0 +1,18 @@
+{
+  "items": [
+    {
+      "title": "Only item",
+      "description": "The only item.",
+      "link": "http://dangling.example/1",
+      "enclosures": []
+    }
+  ],
+  "format": "RSS",
+  "version": "1.0",
+  "title": "Dangling Text Input",
+  "description": "The channel references a text input that does not exist.",
+  "link": "http://dangling.example/",
+  "image": "",
+  "date": "2004-05-06T07:08:09.000Z",
+  "input": ""
+}
