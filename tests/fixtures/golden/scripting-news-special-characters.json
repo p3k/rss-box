@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "title": "",
+      "description": "The <a href=\"http://scripting.example/beta\">(beta)</a> release is out.",
+      "link": "http://scripting.example/beta",
+      "enclosures": []
+    },
+    {
+      "title": "",
+      "description": "Read <a href=\"http://scripting.example/notes?a=1&amp;b=&quot;2&quot;\">the notes</a> for details.",
+      "link": "http://scripting.example/notes?a=1&b=\"2\"",
+      "enclosures": []
+    },
+    {
+      "title": "",
+      "description": "Costs <a href=\"http://scripting.example/costs\">$& and $1</a> more.",
+      "link": "http://scripting.example/costs",
+      "enclosures": []
+    }
+  ],
+  "format": "Scripting News",
+  "version": "2.0b1",
+  "title": "Scripting News With Special Characters",
+  "description": "Link texts that are not plain words, URLs that are not plain either",
+  "link": "http://scripting.example/",
+  "date": "2002-01-01T08:00:00.000Z"
+}

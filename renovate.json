@@ -35,6 +35,11 @@
       "description": "Version 4 of the plugin requires Svelte 5 and crashes on Svelte 4 components",
       "matchPackageNames": ["prettier-plugin-svelte"],
       "allowedVersions": "^3.0.0"
+    },
+    {
+      "description": "DOMPurify 3 dropped Internet Explorer 11 and passes markup on unsanitized there instead of failing",
+      "matchPackageNames": ["dompurify"],
+      "allowedVersions": "^2.5.0"
     }
   ]
 }
