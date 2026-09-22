@@ -25,6 +25,16 @@
     {
       "matchPackageNames": ["svelte"],
       "allowedVersions": "^4.0.0"
+    },
+    {
+      "description": "@rollup/plugin-babel requires Babel 7 and makes the installation fail with Babel 8; Babel 8 also removed the `useBuiltIns` option of the build",
+      "matchPackageNames": ["@babel/core", "@babel/preset-env"],
+      "allowedVersions": "^7.0.0"
+    },
+    {
+      "description": "Version 4 of the plugin requires Svelte 5 and crashes on Svelte 4 components",
+      "matchPackageNames": ["prettier-plugin-svelte"],
+      "allowedVersions": "^3.0.0"
     }
   ]
 }
