@@ -41,10 +41,32 @@ const defaultFeed = () => ({
   version: ""
 });
 
+// Prevents the proxy from being abused for SSRF: only plain http(s) URLs
+// pointing outside of loopback/private/link-local ranges (which also covers
+// cloud metadata endpoints such as 169.254.169.254) are allowed through
+const isSafeFeedUrl = url => {
+  if (typeof url !== "string" || !/^https?:\/\//i.test(url)) return false;
+
+  try {
+    const { hostname } = new URL(url);
+
+    return !/^(127\.|10\.|172\.(1[6-9]|2\d|3[01])\.|192\.168\.|169\.254\.|0\.0\.0\.0$|localhost$|\[?::1\]?$)/i.test(
+      hostname
+    );
+  } catch {
+    return false;
+  }
+};
+
 function fetchFeed(url) {
   if (!url) return;
 
   const store = this;
+
+  if (!isSafeFeedUrl(url)) {
+    store.set({ ...defaultFeed(), ...error(url, "Invalid feed URL") });
+    return;
+  }
 
   // Responses may arrive in a different order than the requests were sent, so
   // only the one for the latest request is taken into account
