@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="0.92">
+  <channel>
+    <title>Sample Podcast</title>
+    <link>http://podcast.example/</link>
+    <description>Audio, sources and categories.</description>
+    <lastBuildDate>Tue, 09 Oct 2001 08:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Episode one</title>
+      <link>http://podcast.example/1</link>
+      <description>The very first episode.</description>
+      <enclosure url="http://podcast.example/1.mp3" length="1234567" type="audio/mpeg" />
+      <source url="http://other.example/rss.xml">Other Feed</source>
+      <category domain="http://podcast.example/categories">Talk</category>
+    </item>
+    <item>
+      <title>Episode two</title>
+      <link>http://podcast.example/2</link>
+      <description>Two enclosures and a plain source link.</description>
+      <enclosure url="http://podcast.example/2.mp3" length="7654321" type="audio/mpeg" />
+      <enclosure url="http://podcast.example/2.ogg" length="6543210" type="audio/ogg" />
+      <source url="http://other.example/">Other Site</source>
+      <category>Uncategorized</category>
+    </item>
+  </channel>
+</rss>

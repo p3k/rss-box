@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "title": "First post",
+      "description": "Hello <b>world</b>, this is the first post.",
+      "link": "http://weblog.example/2001/10/08/first",
+      "enclosures": []
+    },
+    {
+      "title": "Second post",
+      "description": "A second post with an &amp; entity.",
+      "link": "http://weblog.example/2001/10/09/second",
+      "enclosures": []
+    }
+  ],
+  "format": "RSS",
+  "version": "0.91",
+  "title": "Sample Weblog",
+  "description": "Notes from a small server.",
+  "link": "http://weblog.example/",
+  "image": {
+    "source": "http://weblog.example/logo.gif",
+    "title": "Sample Weblog",
+    "link": "http://weblog.example/",
+    "width": "88",
+    "height": "31",
+    "description": "The weblog’s logo"
+  },
+  "date": "2001-10-08T10:11:12.000Z",
+  "rights": "Copyright 2001 Sample Weblog"
+}

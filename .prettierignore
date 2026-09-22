@@ -5,3 +5,4 @@ node_modules
 services
 src/assets/min.css
 .nvmrc
+tests/fixtures

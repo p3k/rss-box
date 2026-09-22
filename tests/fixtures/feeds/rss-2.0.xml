@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Example Blog</title>
+    <link>https://blog.example/</link>
+    <atom:link href="https://blog.example/feed.xml" rel="self" type="application/rss+xml" />
+    <description>Thoughts and things</description>
+    <copyright>© 2024 Example Blog</copyright>
+    <pubDate>Fri, 06 Sep 2024 12:00:00 +0200</pubDate>
+    <lastBuildDate>Fri, 06 Sep 2024 13:30:00 +0200</lastBuildDate>
+    <image>
+      <url>https://blog.example/logo.png</url>
+      <title>Example Blog</title>
+      <link>https://blog.example/</link>
+      <width>144</width>
+      <height>48</height>
+    </image>
+    <item>
+      <title>Hello &amp; welcome</title>
+      <link>https://blog.example/hello</link>
+      <guid isPermaLink="true">https://blog.example/hello</guid>
+      <pubDate>Fri, 06 Sep 2024 12:00:00 +0200</pubDate>
+      <description><![CDATA[<p>The first <em>paragraph</em>.</p><p><img src="https://blog.example/a.jpg" alt=""></p>]]></description>
+      <category>News</category>
+    </item>
+    <item>
+      <title>An item that only has a guid</title>
+      <guid isPermaLink="false">tag:blog.example,2024:2</guid>
+      <pubDate>Thu, 05 Sep 2024 09:00:00 +0200</pubDate>
+      <description>Plain text description.</description>
+    </item>
+  </channel>
+</rss>

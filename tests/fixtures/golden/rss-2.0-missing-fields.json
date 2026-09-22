@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "title": "Only a title and a description",
+      "description": "Neither the channel nor this item carries a date.",
+      "link": "",
+      "enclosures": []
+    },
+    {
+      "title": "Second item",
+      "description": "Second description.",
+      "link": "https://sparse.example/second",
+      "enclosures": []
+    }
+  ],
+  "format": "RSS",
+  "version": "2.0",
+  "title": "Sparse Feed",
+  "description": "Neither the channel nor this item carries a date.",
+  "link": "https://sparse.example/second",
+  "image": "",
+  "date": "2024-09-19T12:00:00.000Z",
+  "rights": ""
+}

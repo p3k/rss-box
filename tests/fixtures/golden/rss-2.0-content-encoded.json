@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "title": "Only content:encoded",
+      "description": "",
+      "link": "https://fulltext.example/only-content",
+      "enclosures": []
+    },
+    {
+      "title": "Description and content:encoded",
+      "description": "The excerpt wins if present.",
+      "link": "https://fulltext.example/both",
+      "enclosures": []
+    }
+  ],
+  "format": "RSS",
+  "version": "2.0",
+  "title": "Full Text Blog",
+  "description": "Items carry their text in content:encoded",
+  "link": "https://fulltext.example/",
+  "image": "",
+  "date": "2024-09-07T08:00:00.000Z",
+  "rights": ""
+}

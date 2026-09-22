@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "title": "First entry",
+      "description": "A short summary.",
+      "link": "https://atom.example/first"
+    },
+    {
+      "title": "Entry whose first link is not the alternate",
+      "description": "",
+      "link": "https://atom.example/second/comments"
+    }
+  ],
+  "format": "Atom",
+  "version": "1.0",
+  "title": "Example Atom Feed",
+  "description": "An Atom feed with a few entries",
+  "image": "",
+  "date": "2024-09-19T12:00:00.000Z"
+}

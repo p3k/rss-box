@@ -1,0 +1,34 @@
+{
+  "items": [
+    {
+      "title": "<img src=x onerror=alert(1)>",
+      "description": "<script>alert(2)</script><a href=\"javascript:alert(3)\">click</a><iframe srcdoc=\"&lt;script&gt;alert(4)&lt;/script&gt;\"></iframe>",
+      "link": "javascript:alert(document.domain)",
+      "source": {
+        "url": "data:text/html,x",
+        "title": "A data URL source"
+      },
+      "enclosures": [
+        {
+          "url": "javascript:alert(5)",
+          "length": "1",
+          "type": "text/html"
+        }
+      ]
+    },
+    {
+      "title": "Harmless neighbour",
+      "description": "<p>Just a paragraph with <a href=\"https://hostile.example/\">a normal link</a>.</p>",
+      "link": "https://hostile.example/harmless",
+      "enclosures": []
+    }
+  ],
+  "format": "RSS",
+  "version": "2.0",
+  "title": "Hostile Feed",
+  "description": "Markup and URLs an attacker might smuggle in",
+  "link": "javascript:alert(0)",
+  "image": "",
+  "date": "2024-09-07T08:00:00.000Z",
+  "rights": ""
+}
