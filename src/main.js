@@ -25,5 +25,5 @@ if (!window[id]) {
     load("polyfills", () => load("box.js"));
   } else {
     load("box-esm.js");
-  };
+  }
 }
