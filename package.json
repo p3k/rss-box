@@ -54,7 +54,6 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-svelte": "3.23.0",
     "globals": "17.12.0",
-    "lint-staged": "17.5.1",
     "prettier": "3.9.6",
     "prettier-plugin-svelte": "3.5.2",
     "rollup": "4.63.3",
@@ -64,10 +63,5 @@
     "stylelint-config-html": "2.0.0",
     "stylelint-config-standard": "40.0.0",
     "svelte": "4.2.19"
-  },
-  "lint-staged": {
-    "*.{css,html,js,json,md,mjs,svelte}": "prettier --check",
-    "*.{js,mjs,svelte}": "eslint",
-    "*.{css,html,svelte}": "stylelint --allow-empty-input"
   }
 }
