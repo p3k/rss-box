@@ -37,9 +37,10 @@
       "allowedVersions": "^3.0.0"
     },
     {
-      "description": "DOMPurify 3 dropped Internet Explorer 11 and passes markup on unsanitized there instead of failing",
+      "description": "DOMPurify 3 dropped Internet Explorer 11 and passes markup on unsanitized there instead of failing; a vulnerability alert can still propose it outside allowedVersions, so also stop it from automerging",
       "matchPackageNames": ["dompurify"],
-      "allowedVersions": "^2.5.0"
+      "allowedVersions": "^2.5.0",
+      "automerge": false
     }
   ]
 }
