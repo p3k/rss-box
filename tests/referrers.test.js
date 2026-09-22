@@ -81,6 +81,22 @@ describe("referrers", () => {
       );
     });
 
+    // A substring check would also match a host that merely mentions the
+    // noisy host somewhere else in the URL
+    it("only skips a nasty host by its actual hostname", async () => {
+      const result = await fetchReferrers([
+        {
+          url: "https://evil.example/?x=atari-embeds.googleusercontent.com",
+          hits: 1
+        }
+      ]);
+
+      assert.deepEqual(
+        result.map(referrer => referrer.host),
+        ["evil.example"]
+      );
+    });
+
     // Anybody can register a referrer, and host names are arbitrary text
     it("copes with host names that are also property names", async () => {
       const names = [
