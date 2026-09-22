@@ -18,7 +18,12 @@
     return float.toFixed(2).padStart(6);
   }
 
-  function load() {
+  function load(event) {
+    // Closing the list does not call for fresh data
+    if (event && !event.target.open) {
+      return;
+    }
+
     referrers.fetch();
   }
 
