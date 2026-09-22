@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "title": "First item",
+      "description": "The first item’s description.",
+      "link": "https://untitled.example/first",
+      "enclosures": []
+    },
+    {
+      "title": "Second item",
+      "description": "The second item’s description.",
+      "link": "https://untitled.example/second",
+      "enclosures": []
+    }
+  ],
+  "format": "RSS",
+  "version": "2.0",
+  "title": "",
+  "description": "",
+  "link": "",
+  "image": "",
+  "date": "2024-09-04T10:00:00.000Z",
+  "rights": ""
+}

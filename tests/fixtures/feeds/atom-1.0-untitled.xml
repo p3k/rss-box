@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>tag:untitled-atom.example,2024:feed</id>
+  <updated>2024-09-06T10:00:00Z</updated>
+  <entry>
+    <title>Only entry</title>
+    <link href="https://untitled-atom.example/only" />
+    <id>tag:untitled-atom.example,2024:1</id>
+    <summary>The only entry.</summary>
+  </entry>
+</feed>
