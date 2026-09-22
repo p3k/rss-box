@@ -2,21 +2,41 @@
 
 staged_files=$(git diff --diff-filter=d --name-only --cached)
 
+# A staged path can also be a submodule, which is a directory on disk (not a
+# regular file) even though git reports it just like a plain path; `find`
+# would otherwise recurse into it and pick up whatever happens to live
+# there (a virtualenv, node_modules, …), not anything actually being
+# committed
 # shellcheck disable=SC2086
-npx prettier --cache --check $staged_files
+staged_files=$(printf '%s\n' $staged_files | while IFS= read -r f; do
+  test -f "$f" && printf '%s\n' "$f"
+done)
+
+# `find` with no path defaults to the current directory, so this returns
+# nothing instead of searching everything when there is nothing left to check
+matching_files() {
+  if test -n "$staged_files"; then
+    # shellcheck disable=SC2046
+    # shellcheck disable=SC2086
+    find $staged_files -regex "$1"
+  fi
+}
+
+files=$(matching_files '.*\.\(css\|html\|js\|json\|md\|mjs\|svelte\|ya?ml\)$')
+if test -n "$files"; then
+  # shellcheck disable=SC2086
+  npx prettier --cache --check $files
+fi
 exit_code=$?
 
-# shellcheck disable=SC2046
-# shellcheck disable=SC2086
-files=$(find $staged_files -regex '.*\.\(js\|mjs\|svelte\)$')
+files=$(matching_files '.*\.\(js\|mjs\|svelte\)$')
 if test -n "$files"; then
   # shellcheck disable=SC2086
   npx eslint --cache $files
 fi
 exit_code=$((exit_code + $?))
 
-# shellcheck disable=SC2086
-files=$(find $staged_files -regex '.*\.\(css\|html\|svelte\)$')
+files=$(matching_files '.*\.\(css\|html\|svelte\)$')
 if test -n "$files"; then
   # shellcheck disable=SC2086
   npx stylelint --allow-empty-input --cache $files
