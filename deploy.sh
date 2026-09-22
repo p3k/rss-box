@@ -2,6 +2,11 @@
 
 # Use this script as forced command of an authorized SSH key:
 # command="/path/to/deploy.sh",restrict ssh-ed25519 AAAAC3NzaC…
+#
+# This copy is the source of truth, but nothing syncs it to the server
+# automatically — the SSH key the deploy workflow uses is deliberately
+# restricted to running this script, not overwriting it. After a change
+# here, copy it to the server by hand.
 
 # How many timestamped backups `deploy` keeps before pruning older ones
 KEEP_BACKUPS=5
