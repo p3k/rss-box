@@ -1,6 +1,6 @@
 {
   "name": "rss-box",
-  "version": "24.8.6",
+  "version": "26.9.22",
   "description": "RSS Box Viewer",
   "type": "module",
   "main": "src/app.js",
