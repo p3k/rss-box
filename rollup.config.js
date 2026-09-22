@@ -3,7 +3,6 @@
 import babel from "@rollup/plugin-babel";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
-import replace from "@rollup/plugin-replace";
 import resolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 
@@ -12,11 +11,6 @@ import svelte from "rollup-plugin-svelte";
 const production = !process.env.ROLLUP_WATCH;
 
 const plugins = () => [
-  replace({
-    __BUILD_MODE__: production ? "prod" : "dev",
-    preventAssignment: false
-  }),
-
   svelte({
     compilerOptions: { dev: !production },
     emitCss: false

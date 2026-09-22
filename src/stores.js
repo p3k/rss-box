@@ -98,7 +98,7 @@ function fetchReferrers() {
         return accu;
       }, []);
 
-      const total = hosts.reduce((accu, item) => (accu += item.total), 0);
+      const total = hosts.reduce((accu, item) => accu + item.total, 0);
 
       const referrers = hosts.map(item => {
         item.percentage = (item.total / total) * 100;

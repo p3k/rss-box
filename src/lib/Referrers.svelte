@@ -121,12 +121,10 @@
     pointer-events: none;
   }
 
-  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
   .feed-link :global(svg) {
     pointer-events: none;
   }
 
-  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
   .feed-link[disabled] :global(svg) {
     color: #ddd;
   }

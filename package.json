@@ -9,18 +9,19 @@
     "build:copy": "mkdir -p dist && cp -Rp src/index.html src/assets dist",
     "build:status-codes": "node -e 'console.log(`export default ${JSON.stringify(require(`http`).STATUS_CODES, null, ` `)};`)'",
     "clean": "rm -fr dist",
-    "deploy": "wait",
     "deploy:staging": "npm run build && rsync --archive --del --exclude .ssh --info=stats dist/ -- rss-box:/",
     "digest": "cat $file | openssl dgst -sha384 -binary | openssl base64 -A",
+    "format": "prettier --write .",
     "install": "npm run install:server; npm run install:local",
     "install:local": "if [ ! -e src/local.js ]; then echo 'export const urls = {};' > src/local.js; fi",
-    "install:server": "git submodule init; npm run server:update; (cd services; make install)",
+    "install:server": "git submodule init; git submodule update; (cd services; make install)",
+    "lint": "eslint . && stylelint --allow-empty-input \"src/**/*.{css,html,svelte}\" && prettier --check .",
     "prepare": "git config core.hooksPath .git-hooks",
     "release": "npm version --no-git-tag $v; npm run build; git commit --all --message 'Rebuild dist files'; npm version --allow-same-version $v",
     "roxy": "python -c \"import sys, os; os.system('curl --head http://localhost:8000/roxy?url=%s' % sys.argv[1])\"",
     "start": "concurrently --kill-others 'npm:server' 'npm:watch'",
     "server": "dir=$PWD; (cd services; .venv/bin/mod_wsgi-express start-server wsgi.py --document-root \"$dir/dist\" --access-log --log-to-terminal)",
-    "server:update": "git submodule update --remote --merge",
+    "submodule:update": "git submodule update --remote --merge",
     "watch": "npm run build -- --watch"
   },
   "repository": {
@@ -38,13 +39,13 @@
     "whatwg-fetch": "3.6.20"
   },
   "devDependencies": {
-    "@babel/core": "8.0.1",
-    "@babel/preset-env": "8.0.2",
+    "@babel/core": "7.29.7",
+    "@babel/preset-env": "7.29.7",
+    "@eslint/js": "10.0.1",
     "@rollup/plugin-babel": "7.1.0",
     "@rollup/plugin-commonjs": "29.0.3",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-node-resolve": "16.0.3",
-    "@rollup/plugin-replace": "6.0.3",
     "@rollup/plugin-terser": "1.0.0",
     "concurrently": "10.0.3",
     "core-js": "3.50.0",
@@ -52,9 +53,8 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-svelte": "3.23.0",
     "globals": "17.12.0",
-    "lint-staged": "17.5.1",
-    "prettier": "3.9.8",
-    "prettier-plugin-svelte": "4.0.0",
+    "prettier": "3.9.6",
+    "prettier-plugin-svelte": "3.5.2",
     "rollup": "4.63.3",
     "rollup-plugin-svelte": "7.2.3",
     "serve": "14.2.6",
@@ -62,8 +62,5 @@
     "stylelint-config-html": "2.0.0",
     "stylelint-config-standard": "40.0.0",
     "svelte": "4.2.19"
-  },
-  "lint-staged": {
-    "*.{css,html,js,md,svelte}": "npm run delint"
   }
 }
