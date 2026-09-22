@@ -9,7 +9,6 @@
     "build:copy": "mkdir -p dist && cp -Rp src/index.html src/assets dist",
     "build:status-codes": "node -e 'console.log(`export default ${JSON.stringify(require(`http`).STATUS_CODES, null, ` `)};`)'",
     "clean": "rm -fr dist",
-    "deploy": "wait",
     "deploy:staging": "npm run build && rsync --archive --del --exclude .ssh --info=stats dist/ -- rss-box:/",
     "digest": "cat $file | openssl dgst -sha384 -binary | openssl base64 -A",
     "format": "prettier --write .",
