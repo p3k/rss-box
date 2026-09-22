@@ -2,9 +2,11 @@
 // - extensionless relative imports like `./error`
 // - named imports from JSON files like `import { version } from "../package.json"`
 // - `src/local.js`, which is generated per installation and must not influence the tests
+// - Svelte components, compiled for the DOM like the Rollup plugin does
 
 import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
+import { compile } from "svelte/compiler";
 
 const EMPTY_LOCAL_URLS = "data:text/javascript,export const urls = {};";
 
@@ -47,6 +49,18 @@ export async function load(url, context, nextLoad) {
         ...namedExports
       ].join("\n")
     };
+  }
+
+  if (url.endsWith(".svelte")) {
+    const filename = fileURLToPath(url);
+
+    const { js } = compile(readFileSync(filename, "utf8"), {
+      filename,
+      generate: "dom",
+      css: "external"
+    });
+
+    return { format: "module", shortCircuit: true, source: js.code };
   }
 
   return nextLoad(url, context);
