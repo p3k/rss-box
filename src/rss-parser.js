@@ -1,6 +1,7 @@
 function RssParser() {
   const DC_NAMESPACE = "http://purl.org/dc/elements/1.1/";
   const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+  const CONTENT_NAMESPACE = "http://purl.org/rss/1.0/modules/content/";
   const ISO_DATE_PATTERN = /([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9:]+).*$/;
 
   const getDocument = function (xml) {
@@ -22,9 +23,44 @@ function RssParser() {
 
   const getChildElement = function (name, parent, namespace) {
     if (!name || !parent) return null;
-    let method = "getElementsByTagName";
-    if (namespace) method += "NS";
-    return parent[method](name, namespace)[0];
+
+    // The namespace variant takes the namespace URI first, then the local name
+    const elements = namespace
+      ? parent.getElementsByTagNameNS(namespace, name)
+      : parent.getElementsByTagName(name);
+
+    return elements[0];
+  };
+
+  // Unlike `getChildElement` this ignores all nested elements
+  const getChildElements = function (name, parent) {
+    const elements = [];
+
+    for (let node = parent.firstChild; node; node = node.nextSibling) {
+      if (node.nodeType === 1 && node.nodeName === name) {
+        elements.push(node);
+      }
+    }
+
+    return elements;
+  };
+
+  // Prefers the alternate link (which is the default relation) over links like
+  // `self` or `replies`; with `fallback` any link is better than none
+  const getAtomLink = function (parent, fallback) {
+    const links = getChildElements("link", parent);
+
+    for (let index = 0; index < links.length; index++) {
+      const rel = links[index].getAttribute("rel");
+
+      if (!rel || rel === "alternate") {
+        return links[index].getAttribute("href");
+      }
+    }
+
+    if (fallback && links.length) {
+      return links[0].getAttribute("href");
+    }
   };
 
   const getText = function (node) {
@@ -100,7 +136,9 @@ function RssParser() {
       };
 
       if (!item.description) {
-        let content = getText(getChildElement("encoded", node, "content"));
+        let content = getText(
+          getChildElement("encoded", node, CONTENT_NAMESPACE)
+        );
         if (content) {
           item.description = content;
         } else {
@@ -127,10 +165,13 @@ function RssParser() {
     rss.description = getText(getChildElement("subtitle", root));
     rss.image = "";
 
-    const link = getChildElement("link:not([self])", root);
-    if (link) rss.link = link.getAttribute("href");
+    const link = getAtomLink(root);
 
-    rss.date = getDate(getChildElement("updated", root));
+    if (link) {
+      rss.link = link;
+    }
+
+    rss.date = getDate(getText(getChildElements("updated", root)[0]));
 
     const entries = Array.apply(null, root.getElementsByTagName("entry"));
 
@@ -140,8 +181,11 @@ function RssParser() {
         description: getText(getChildElement("summary", node))
       };
 
-      const link = getChildElement("link", node);
-      if (link) item.link = link.getAttribute("href");
+      const link = getAtomLink(node, true);
+
+      if (link) {
+        item.link = link;
+      }
 
       rss.items.push(item);
     });

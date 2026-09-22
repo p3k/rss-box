@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "title": "Entry with a link without rel",
+      "description": "Links without a rel attribute are alternates.",
+      "link": "https://sparse-atom.example/plain"
+    },
+    {
+      "title": "Entry with an enclosure link only",
+      "description": "There is nothing else to link to.",
+      "link": "https://sparse-atom.example/file.mp3"
+    }
+  ],
+  "format": "Atom",
+  "version": "1.0",
+  "title": "Sparse Atom Feed",
+  "description": "",
+  "image": "",
+  "date": "2024-09-19T12:00:00.000Z"
+}
