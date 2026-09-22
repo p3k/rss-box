@@ -4,6 +4,29 @@
   </summary>
 
   <p>
+    <small>2026-09-22</small>
+    A big batch of changes this time, most of it security-flavored: the JSONP proxy
+    now properly rejects requests to internal/private addresses instead of blindly
+    fetching whatever URL it’s handed (yes, DNS rebinding included), and feed content
+    going into a box is now actually sanitized instead of trusted at face value 😬
+    On top of that, I found and fixed a pile of parser bugs, made sure boxes on the
+    same page can’t mix up each other’s errors anymore, and gave the referrers list
+    a proper look-over. Also discovered the build tooling had quietly stopped working
+    a while back – thanks, automatic dependency updates – and got everything running
+    again.
+  </p>
+  <ul>
+    <li>Hardened the JSONP proxy against SSRF, including DNS rebinding</li>
+    <li>Added proper sanitization for everything a feed provides</li>
+    <li>Fixed namespaced element lookups and Atom links and dates</li>
+    <li>Fixed RSS 1.0 feeds with unusual text inputs</li>
+    <li>Boxes no longer show each other’s errors or feed data</li>
+    <li>Hardened and fixed the referrers list</li>
+    <li>Got the build tooling working again and pinned the flaky bits</li>
+    <li>Added a proper deploy script instead of doing it by hand</li>
+  </ul>
+
+  <p>
     <small>2024-08-06</small>
     Oh my, even though I read about the
     <a href="https://www.theregister.com/2024/06/25/polyfillio_china_crisis/"
