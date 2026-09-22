@@ -101,6 +101,20 @@ const getFeedUrls = metadata =>
     ? metadata.feedUrls.filter(isHttpUrl)
     : [];
 
+// Hosts that generate referrer noise rather than real visits (e.g. preview
+// crawlers). A substring check on the raw URL would also match a host that
+// merely mentions one of these in its path or query string, so the actual
+// hostname is compared instead
+const nastyHosts = ["atari-embeds.googleusercontent.com"];
+
+const isNastyReferrer = url => {
+  try {
+    return nastyHosts.includes(new URL(url).hostname);
+  } catch {
+    return false;
+  }
+};
+
 function fetchReferrers() {
   const store = this;
 
@@ -117,7 +131,7 @@ function fetchReferrers() {
         if (
           !isHttpUrl(item.url) ||
           item.url.startsWith(urls.app) ||
-          item.url.indexOf("atari-embeds.googleusercontent.com") >= 0
+          isNastyReferrer(item.url)
         ) {
           return;
         }
