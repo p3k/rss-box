@@ -5,9 +5,6 @@ on:
     branches:
       - "main"
 
-env:
-  SSH_AUTH_SOCK: /tmp/ssh-agent.sock
-
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -18,6 +15,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v7.0.1
+      with:
+        submodules: true
+        fetch-depth: 0
 
     - name: Use Node.js
       uses: actions/setup-node@v7.0.0
@@ -34,13 +34,14 @@ jobs:
           };
         .end
 
-    - name: Setup SSH agent
-      run: |
-        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-        ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
-        mkdir -p ~/.ssh
-        echo '${{ vars.SSH_CONFIG }}' > ~/.ssh/config
-        echo '${{ vars.SSH_KNOWN_HOSTS }}' > ~/.ssh/known_hosts
+    # Neither of these needs SSH access. Keeping them as their own steps,
+    # before the SSH agent below even starts, means a compromised npm
+    # dependency running here has no way to reach the deploy key at all.
+    - name: Install dependencies
+      run: npm ci --ignore-scripts
+
+    - name: Build
+      run: npm run build
 
     - name: Bump version number
       run: |
@@ -48,7 +49,35 @@ jobs:
         jq < package.json | jq ".version |= \"$date\"" > package.json.tmp
         mv package.json.tmp package.json
 
-    - name: Publish to staging environment
+    - name: Check whether the services submodule changed
+      id: services
       run: |
-        npm ci --ignore-scripts
-        npm run deploy:staging
+        if git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" | grep -qx services; then
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "changed=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Setup SSH agent
+      run: |
+        ssh-agent -a /tmp/ssh-agent.sock > /dev/null
+        echo "SSH_AUTH_SOCK=/tmp/ssh-agent.sock" >> "$GITHUB_ENV"
+        ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
+        mkdir -p ~/.ssh
+        echo '${{ vars.SSH_CONFIG }}' > ~/.ssh/config
+        echo '${{ vars.SSH_KNOWN_HOSTS }}' > ~/.ssh/known_hosts
+
+    - name: Publish to staging environment
+      run: rsync --archive --del --exclude .ssh --info=stats dist/ -- rss-box:/
+
+    - name: Publish services
+      if: steps.services.outputs.changed == 'true'
+      run: |
+        # .entrecote holds the live referrer database — never sync over it.
+        # The services-update/ destination (vs. the frontend's plain "/")
+        # is how deploy.sh on the server tells the two apart.
+        rsync --archive --del --info=stats \
+          --exclude .git --exclude .github --exclude .venv \
+          --exclude __pycache__ --exclude .entrecote \
+          services/ -- rss-box:services-update/
+        ssh rss-box deploy-services

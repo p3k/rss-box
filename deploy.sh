@@ -3,23 +3,55 @@
 # Use this script as forced command of an authorized SSH key:
 # command="/path/to/deploy.sh",restrict ssh-ed25519 AAAAC3NzaC…
 #
+# Needs a passwordless sudo rule scoped to exactly the one command it needs
+# to reload Apache, e.g. in /etc/sudoers.d/rss-box-deploy:
+# rss-box ALL=(root) NOPASSWD: /usr/bin/systemctl reload apache2
+#
 # This copy is the source of truth, but nothing syncs it to the server
 # automatically — the SSH key the deploy workflow uses is deliberately
 # restricted to running this script, not overwriting it. After a change
 # here, copy it to the server by hand.
 
-# How many timestamped backups `deploy` keeps before pruning older ones
+# How many timestamped backups `deploy`/`deploy-services` keep before
+# pruning older ones
 KEEP_BACKUPS=5
 
-# Puts $1 in place as $HOME/production. Renaming within the same filesystem
-# is close to instantaneous, unlike a recursive delete or copy, so this
-# keeps the window without a production directory as short as possible.
-replace_production() {
-  if test -d "$HOME"/production; then
-    mv "$HOME"/production "$HOME"/production.previous
+# Puts $2 in place as $HOME/$1. Renaming within the same filesystem is close
+# to instantaneous, unlike a recursive delete or copy, so this keeps the
+# window without that directory in place as short as possible.
+replace_dir() {
+  if test -d "$HOME/$1"; then
+    mv "$HOME/$1" "$HOME/$1.previous"
   fi
-  mv "$1" "$HOME"/production
-  rm -rf "$HOME"/production.previous
+  mv "$2" "$HOME/$1"
+  rm -rf "$HOME/$1.previous"
+}
+
+# Creates a timestamped backup of $HOME/$1, if it currently exists
+backup_dir() {
+  if test -d "$HOME/$1"; then
+    date=$(date +'%Y-%m-%d.%s%4N')
+    echo "Create backup $HOME/$1-$date…"
+    cp -Rp "$HOME/$1" "$HOME/$1-$date"
+  fi
+}
+
+# Removes backups of $HOME/$1 beyond the newest $KEEP_BACKUPS
+prune_backups() {
+  find "$HOME" -maxdepth 1 -type d -name "$1-*.*" | sort | head -n -"$KEEP_BACKUPS" | while IFS= read -r old; do
+    rm -rf "$old"
+  done
+}
+
+# Restores $HOME/$1 from its latest backup, if any
+revert_dir() {
+  backup="$(find "$HOME" -maxdepth 1 -type d -name "$1-*.*" 2>/dev/null | sort | tail -1)"
+  if test -z "$backup"; then
+    echo 'No backup available.'
+    return 1
+  fi
+  echo "Revert to latest backup $backup…"
+  replace_dir "$1" "$backup"
 }
 
 case "$SSH_ORIGINAL_COMMAND" in
@@ -28,36 +60,70 @@ case "$SSH_ORIGINAL_COMMAND" in
     ;;
 
   deploy)
-    if test -d "$HOME"/production; then
-      date=$(date +'%Y-%m-%d.%s%4N')
-      echo "Create backup $HOME/production-$date…"
-      cp -Rp "$HOME"/production "$HOME"/production-"$date"
-    fi
+    backup_dir production
     echo 'Copy files from stage to production…'
     cp -Rp "$HOME"/staging "$HOME"/production.update
     echo 'Patch configuration…'
     find "$HOME"/production.update -type f -print0 | xargs -0 sed -i 's|/rss-staging|/rss|g'
-    replace_production "$HOME"/production.update
-    echo 'Prune old backups…'
-    find "$HOME" -maxdepth 1 -type d -name 'production-*.*' | sort | head -n -"$KEEP_BACKUPS" | while IFS= read -r old; do
-      rm -rf "$old"
-    done
+    replace_dir production "$HOME"/production.update
+    prune_backups production
     echo 'Done.'
     ;;
 
   revert)
-    backup="$(find "$HOME" -maxdepth 1 -type d -name 'production-*.*' 2>/dev/null | sort | tail -1)"
+    revert_dir production || exit
+    echo 'Done.'
+    ;;
+
+  deploy-services)
+    backup_dir services
+    echo 'Installing dependencies…'
+    (cd "$HOME"/services.update && make install) || exit 1
+    if test -d "$HOME"/services/.entrecote; then
+      # .entrecote is the live referrer database; it is never part of a
+      # deploy and must survive the swap below, not get discarded along
+      # with the rest of the old services directory
+      echo 'Carrying over the referrer database…'
+      mv "$HOME"/services/.entrecote "$HOME"/services.update/.entrecote
+    fi
+    echo 'Swapping in the new services…'
+    replace_dir services "$HOME"/services.update
+    echo 'Reloading Apache…'
+    sudo systemctl reload apache2
+    prune_backups services
+    echo 'Done.'
+    ;;
+
+  revert-services)
+    backup="$(find "$HOME" -maxdepth 1 -type d -name 'services-*.*' 2>/dev/null | sort | tail -1)"
     if test -z "$backup"; then
       echo 'No backup available.'
-      exit
+      exit 1
+    fi
+    if test -d "$HOME"/services/.entrecote; then
+      # Keep the current, live referrer database rather than the stale
+      # snapshot the backup happens to carry
+      echo 'Carrying over the referrer database…'
+      rm -rf "$backup"/.entrecote
+      mv "$HOME"/services/.entrecote "$backup"/.entrecote
     fi
     echo "Revert to latest backup $backup…"
-    replace_production "$backup"
+    replace_dir services "$backup"
+    echo 'Reloading Apache…'
+    sudo systemctl reload apache2
     echo 'Done.'
     ;;
 
   *)
-    # Allow any rsync command but restrict it to the staging directory
-    rrsync -wo /home/rss-box/staging
+    # Allow any rsync command, restricted to one of two directories
+    # depending on which one the client asked for
+    case "$SSH_ORIGINAL_COMMAND" in
+      *services-update*)
+        rrsync -wo "$HOME"/services.update
+        ;;
+      *)
+        rrsync -wo "$HOME"/staging
+        ;;
+    esac
     ;;
 esac
