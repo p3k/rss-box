@@ -60,8 +60,9 @@ jobs:
 
     - name: Setup SSH agent
       run: |
-        ssh-agent -a /tmp/ssh-agent.sock > /dev/null
-        echo "SSH_AUTH_SOCK=/tmp/ssh-agent.sock" >> "$GITHUB_ENV"
+        export SSH_AUTH_SOCK=/tmp/ssh-agent.sock
+        echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
+        ssh-agent -a "$SSH_AUTH_SOCK" > /dev/null
         ssh-add - <<< "${{ secrets.SSH_PRIVATE_KEY }}"
         mkdir -p ~/.ssh
         echo '${{ vars.SSH_CONFIG }}' > ~/.ssh/config
