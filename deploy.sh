@@ -76,18 +76,23 @@ case "$SSH_ORIGINAL_COMMAND" in
     ;;
 
   deploy-services)
+    # rrsync confines the client to $HOME/services.update, but it applies
+    # the client's own destination argument (services-update/, matched
+    # below) relative to that root rather than discarding it — so the
+    # actual content lands one level deeper than the restricted root
+    new_services="$HOME"/services.update/services-update
     backup_dir services
     echo 'Installing dependencies…'
-    (cd "$HOME"/services.update && make install) || exit 1
+    (cd "$new_services" && make install) || exit 1
     if test -d "$HOME"/services/.entrecote; then
       # .entrecote is the live referrer database; it is never part of a
       # deploy and must survive the swap below, not get discarded along
       # with the rest of the old services directory
       echo 'Carrying over the referrer database…'
-      mv "$HOME"/services/.entrecote "$HOME"/services.update/.entrecote
+      mv "$HOME"/services/.entrecote "$new_services"/.entrecote
     fi
     echo 'Swapping in the new services…'
-    replace_dir services "$HOME"/services.update
+    replace_dir services "$new_services"
     echo 'Reloading Apache…'
     sudo systemctl reload apache2
     prune_backups services
