@@ -75,6 +75,18 @@ jobs:
     - name: Publish to staging environment
       run: rsync --archive --del --exclude .ssh --info=stats dist/ -- rss-box:/
 
+    - name: Verify deploy.sh on the server is current
+      if: steps.services.outputs.changed == 'true'
+      run: |
+        expected=$(sha256sum deploy.sh | cut -d ' ' -f 1)
+        actual=$(ssh rss-box version)
+        if test "$actual" != "$expected"; then
+          echo "deploy.sh on the server (sha256 $actual) doesn't match this repo's copy ($expected)." >&2
+          echo "On the server, run:" >&2
+          echo "  curl -sO https://raw.githubusercontent.com/p3k/rss-box/main/deploy.sh && chmod +x deploy.sh" >&2
+          exit 1
+        fi
+
     - name: Publish services
       if: steps.services.outputs.changed == 'true'
       run: npm run deploy:services
