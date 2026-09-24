@@ -70,6 +70,14 @@ case "$SSH_ORIGINAL_COMMAND" in
     sha256sum "$0" | cut -d ' ' -f 1
     ;;
 
+  # Reports which commit of the services submodule is actually live,
+  # read from a marker file deploy-services leaves behind — lets CI
+  # compare against what's really deployed instead of against the
+  # previous push, which stays blind to a deploy that failed partway
+  services-version)
+    cat "$HOME"/services/.rss-box-services-revision 2>/dev/null || true
+    ;;
+
   deploy)
     backup_dir production
     echo 'Copy files from stage to production…'
