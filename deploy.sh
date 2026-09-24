@@ -84,6 +84,15 @@ case "$SSH_ORIGINAL_COMMAND" in
     backup_dir services
     echo 'Installing dependencies…'
     (cd "$new_services" && make install) || exit 1
+    # Freshly rsynced content, and the venv make install just created,
+    # comes out owned by this account's own default group — the live
+    # app runs as www-data and needs at least read+traverse access to
+    # actually import any of this once it's swapped in below. mv (in
+    # replace_dir) never touches ownership, so this has to happen now,
+    # before the swap, not once as a one-off fix after the fact.
+    chgrp -R www-data "$new_services"
+    find "$new_services" -type d -exec chmod g+rx {} +
+    find "$new_services" -type f -exec chmod g+r {} +
     if test -d "$HOME"/services/.entrecote; then
       # .entrecote is the live referrer database; it is never part of a
       # deploy and must survive the swap below, not get discarded along
@@ -94,6 +103,13 @@ case "$SSH_ORIGINAL_COMMAND" in
     echo 'Swapping in the new services…'
     replace_dir services "$new_services"
     echo 'Reloading Apache…'
+    # A plain reload only reloads Apache's own config — it does not by
+    # itself make mod_wsgi re-import the application. mod_wsgi's daemon
+    # mode watches the WSGI script's mtime and does a graceful worker
+    # restart when it changes, which is the actual "pick up the new
+    # code" signal; confirmed the reload alone was not enough by seeing
+    # stale behavior survive several real deploys against production.
+    touch "$HOME"/services/wsgi.py
     sudo systemctl reload apache2
     prune_backups services
     echo 'Done.'
@@ -115,6 +131,7 @@ case "$SSH_ORIGINAL_COMMAND" in
     echo "Revert to latest backup $backup…"
     replace_dir services "$backup"
     echo 'Reloading Apache…'
+    touch "$HOME"/services/wsgi.py
     sudo systemctl reload apache2
     echo 'Done.'
     ;;
