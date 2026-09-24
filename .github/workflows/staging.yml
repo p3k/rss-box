@@ -81,7 +81,9 @@ jobs:
         expected=$(sha256sum deploy.sh | cut -d ' ' -f 1)
         actual=$(ssh rss-box version)
         if test "$actual" != "$expected"; then
-          echo "deploy.sh on the server (sha256 $actual) doesn't match this repo's copy ($expected) — copy the latest version to the server before this can deploy safely." >&2
+          echo "deploy.sh on the server (sha256 $actual) doesn't match this repo's copy ($expected)." >&2
+          echo "On the server, run:" >&2
+          echo "  curl -sO https://raw.githubusercontent.com/p3k/rss-box/main/deploy.sh && chmod +x deploy.sh" >&2
           exit 1
         fi
 
