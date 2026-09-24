@@ -84,6 +84,15 @@ case "$SSH_ORIGINAL_COMMAND" in
     backup_dir services
     echo 'Installing dependencies…'
     (cd "$new_services" && make install) || exit 1
+    # Freshly rsynced content, and the venv make install just created,
+    # comes out owned by this account's own default group — the live
+    # app runs as www-data and needs at least read+traverse access to
+    # actually import any of this once it's swapped in below. mv (in
+    # replace_dir) never touches ownership, so this has to happen now,
+    # before the swap, not once as a one-off fix after the fact.
+    chgrp -R www-data "$new_services"
+    find "$new_services" -type d -exec chmod g+rx {} +
+    find "$new_services" -type f -exec chmod g+r {} +
     if test -d "$HOME"/services/.entrecote; then
       # .entrecote is the live referrer database; it is never part of a
       # deploy and must survive the swap below, not get discarded along
