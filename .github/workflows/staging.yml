@@ -27,10 +27,14 @@ jobs:
     - name: Configure environment
       run: |
         cat << .end > src/local.js
+          // Keep the days value here equal to referrerDays in src/urls.js —
+          // this whole file replaces that module's urls export wholesale
+          // rather than merging into it, so its own default query param
+          // never reaches a deployed build otherwise
           export const urls = {
             app: "${{ vars.BASE_URL }}/rss-staging",
             proxy: "${{ vars.BASE_URL }}/json/roxy",
-            referrers: "${{ vars.BASE_URL }}/json/ferris?group=rss-box"
+            referrers: "${{ vars.BASE_URL }}/json/ferris?group=rss-box&days=30"
           };
         .end
 
@@ -73,12 +77,4 @@ jobs:
 
     - name: Publish services
       if: steps.services.outputs.changed == 'true'
-      run: |
-        # .entrecote holds the live referrer database — never sync over it.
-        # The services-update/ destination (vs. the frontend's plain "/")
-        # is how deploy.sh on the server tells the two apart.
-        rsync --archive --del --info=stats \
-          --exclude .git --exclude .github --exclude .venv \
-          --exclude __pycache__ --exclude .entrecote \
-          services/ -- rss-box:services-update/
-        ssh rss-box deploy-services
+      run: npm run deploy:services

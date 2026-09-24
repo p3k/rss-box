@@ -1,6 +1,6 @@
 <script>
   import { sanitizeUrl } from "../sanitize";
-  import { urls } from "../urls";
+  import { referrerDays, urls } from "../urls";
 
   import Referrers from "./Referrers.svelte";
 
@@ -375,7 +375,7 @@
         <label
           for="referrers"
           on:click={clickLabel}
-          title="since midnight (GMT)"
+          title={`from the last ${referrerDays} days`}
         >
           Referrers
         </label>
