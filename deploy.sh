@@ -10,7 +10,10 @@
 # This copy is the source of truth, but nothing syncs it to the server
 # automatically — the SSH key the deploy workflow uses is deliberately
 # restricted to running this script, not overwriting it. After a change
-# here, copy it to the server by hand.
+# here, copy it to the server by hand. CI checks the server's copy
+# against this one (the `version` case below) before every deploy that
+# depends on it, so a forgotten copy fails loudly instead of silently
+# running stale logic.
 
 # How many timestamped backups `deploy`/`deploy-services` keep before
 # pruning older ones
@@ -57,6 +60,14 @@ revert_dir() {
 case "$SSH_ORIGINAL_COMMAND" in
   ping)
     echo pong
+    ;;
+
+  # Lets a caller check whether the copy of this script running on the
+  # server actually matches what it expects — nothing keeps them in sync
+  # automatically (see the note at the top), and a stale copy here can
+  # silently miss fixes to deploy/deploy-services/revert-services
+  version)
+    sha256sum "$0" | cut -d ' ' -f 1
     ;;
 
   deploy)
