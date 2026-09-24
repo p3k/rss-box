@@ -27,7 +27,10 @@ jobs:
       - name: Verify deploy.sh on the server is current
         run: |
           expected=$(sha256sum deploy.sh | cut -d ' ' -f 1)
-          actual=$(ssh rss-box version)
+          # A too-old server has no `version` case at all, so this call
+          # itself can fail — || true keeps that from tripping bash's -e
+          # before the comparison below gets to print the real reason
+          actual=$(ssh rss-box version || true)
           if test "$actual" != "$expected"; then
             echo "deploy.sh on the server (sha256 $actual) doesn't match this repo's copy ($expected)." >&2
             echo "On the server, run:" >&2
