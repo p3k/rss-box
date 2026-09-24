@@ -103,6 +103,22 @@ case "$SSH_ORIGINAL_COMMAND" in
     backup_dir services
     echo 'Installing dependencies…'
     (cd "$new_services" && make install) || exit 1
+    if test -d "$HOME"/services/.entrecote; then
+      # .entrecote is the live referrer database; it is never part of a
+      # deploy and must survive the swap below, not get discarded along
+      # with the rest of the old services directory. Carried over before
+      # the permission sweep below, not after, so it actually gets swept
+      # too instead of silently keeping whatever it had before.
+      echo 'Carrying over the referrer database…'
+      # make install's own .entrecote target already created a fresh,
+      # empty one here, since it's excluded from rsync — mv treats an
+      # existing directory as somewhere to move INTO, not something to
+      # replace, so that empty one has to go first or the real data
+      # ends up nested one level too deep (.entrecote/.entrecote) and
+      # invisible to the app instead of taking its place
+      rmdir "$new_services"/.entrecote 2>/dev/null || true
+      mv "$HOME"/services/.entrecote "$new_services"/.entrecote
+    fi
     # Freshly rsynced content, and the venv make install just created,
     # comes out owned by this account's own default group — the live
     # app runs as www-data and needs at least read+traverse access to
@@ -112,13 +128,13 @@ case "$SSH_ORIGINAL_COMMAND" in
     chgrp -R www-data "$new_services"
     find "$new_services" -type d -exec chmod g+rx {} +
     find "$new_services" -type f -exec chmod g+r {} +
-    if test -d "$HOME"/services/.entrecote; then
-      # .entrecote is the live referrer database; it is never part of a
-      # deploy and must survive the swap below, not get discarded along
-      # with the rest of the old services directory
-      echo 'Carrying over the referrer database…'
-      mv "$HOME"/services/.entrecote "$new_services"/.entrecote
-    fi
+    # .entrecote is the one path the live app actually writes to at
+    # runtime — the referrer database itself, and the lock file PupDB
+    # creates to guard concurrent access to it — so unlike the rest of
+    # services, which is only ever read, it specifically needs group
+    # write too.
+    chmod g+w "$new_services"/.entrecote
+    find "$new_services"/.entrecote -type f -exec chmod g+w {} +
     echo 'Swapping in the new services…'
     replace_dir services "$new_services"
     echo 'Reloading Apache…'
