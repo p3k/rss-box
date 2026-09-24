@@ -94,6 +94,13 @@ case "$SSH_ORIGINAL_COMMAND" in
     echo 'Swapping in the new services…'
     replace_dir services "$new_services"
     echo 'Reloading Apache…'
+    # A plain reload only reloads Apache's own config — it does not by
+    # itself make mod_wsgi re-import the application. mod_wsgi's daemon
+    # mode watches the WSGI script's mtime and does a graceful worker
+    # restart when it changes, which is the actual "pick up the new
+    # code" signal; confirmed the reload alone was not enough by seeing
+    # stale behavior survive several real deploys against production.
+    touch "$HOME"/services/wsgi.py
     sudo systemctl reload apache2
     prune_backups services
     echo 'Done.'
@@ -115,6 +122,7 @@ case "$SSH_ORIGINAL_COMMAND" in
     echo "Revert to latest backup $backup…"
     replace_dir services "$backup"
     echo 'Reloading Apache…'
+    touch "$HOME"/services/wsgi.py
     sudo systemctl reload apache2
     echo 'Done.'
     ;;
