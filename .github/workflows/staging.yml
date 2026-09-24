@@ -73,12 +73,4 @@ jobs:
 
     - name: Publish services
       if: steps.services.outputs.changed == 'true'
-      run: |
-        # .entrecote holds the live referrer database — never sync over it.
-        # The services-update/ destination (vs. the frontend's plain "/")
-        # is how deploy.sh on the server tells the two apart.
-        rsync --archive --del --info=stats \
-          --exclude .git --exclude .github --exclude .venv \
-          --exclude __pycache__ --exclude .entrecote \
-          services/ -- rss-box:services-update/
-        ssh rss-box deploy-services
+      run: npm run deploy:services
