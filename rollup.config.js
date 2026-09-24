@@ -31,6 +31,19 @@ const plugins = () => [
 ];
 
 const config = (name, output) => {
+  // polyfills.js is always loaded before any of the other IE11 bundles
+  // (see index.html and main.js), so it's the only one that needs
+  // useBuiltIns at all — "entry" here expands the broad core-js/stable
+  // import in that file into everything the declared target lacks,
+  // unconditionally, which is the right approach for a shared bootstrap
+  // file. The other bundles would otherwise each independently detect
+  // and re-inject their own copies of the same polyfills polyfills.js
+  // already guarantees are in place by the time they run — pure
+  // duplication, not additional coverage. Syntax transpilation (arrow
+  // functions etc.) is controlled by `targets` below and happens either
+  // way, regardless of useBuiltIns.
+  const useBuiltIns = name === "polyfills" ? "entry" : false;
+
   return {
     input: `src/${name}.js`,
     output: {
@@ -51,9 +64,11 @@ const config = (name, output) => {
           [
             "@babel/preset-env",
             {
-              corejs: "3.31.1",
+              // corejs only has an effect (and only warns otherwise) when
+              // useBuiltIns isn't false
+              ...(useBuiltIns && { corejs: "3.31.1" }),
               targets: "> 0.25%, not dead, IE 11",
-              useBuiltIns: "entry"
+              useBuiltIns
             }
           ]
         ]
