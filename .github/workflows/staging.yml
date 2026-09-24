@@ -53,15 +53,6 @@ jobs:
         jq < package.json | jq ".version |= \"$date\"" > package.json.tmp
         mv package.json.tmp package.json
 
-    - name: Check whether the services submodule changed
-      id: services
-      run: |
-        if git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" | grep -qx services; then
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-        else
-          echo "changed=false" >> "$GITHUB_OUTPUT"
-        fi
-
     - name: Setup SSH agent
       run: |
         export SSH_AUTH_SOCK=/tmp/ssh-agent.sock
@@ -71,6 +62,23 @@ jobs:
         mkdir -p ~/.ssh
         echo '${{ vars.SSH_CONFIG }}' > ~/.ssh/config
         echo '${{ vars.SSH_KNOWN_HOSTS }}' > ~/.ssh/known_hosts
+
+    # Compares against what the server actually has deployed, not against
+    # the previous push — a git-diff-based check would look at
+    # github.event.before, which already includes the submodule bump the
+    # moment it lands on main, regardless of whether the deploy afterward
+    # actually succeeded. A failed deploy would then go unnoticed and
+    # never get retried by any later, unrelated push.
+    - name: Check whether services needs a fresh deploy
+      id: services
+      run: |
+        local_revision=$(git -C services rev-parse HEAD)
+        remote_revision=$(ssh rss-box services-version || true)
+        if test "$local_revision" != "$remote_revision"; then
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "changed=false" >> "$GITHUB_OUTPUT"
+        fi
 
     - name: Publish to staging environment
       run: rsync --archive --del --exclude .ssh --info=stats dist/ -- rss-box:/
@@ -92,4 +100,9 @@ jobs:
 
     - name: Publish services
       if: steps.services.outputs.changed == 'true'
-      run: npm run deploy:services
+      run: |
+        # Travels along in the same rsync payload, ends up inside the
+        # live services/ directory after deploy-services swaps it in —
+        # that's what the check above reads back next time
+        git -C services rev-parse HEAD > services/.rss-box-services-revision
+        npm run deploy:services
