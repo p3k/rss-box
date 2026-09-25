@@ -4,6 +4,23 @@
   </summary>
 
   <p>
+    <small>2026-09-25</small>
+    IE11 compatibility is back 🦕 — properly this time, not the polyfill.io shortcut
+    that got me into trouble below. Also gave the referrers list an actual data policy:
+    it now shows anything from the last 30 days regardless of hit count, and quietly
+    prunes anything untouched for 90 – no more me periodically nuking the whole thing
+    by hand because loading it got tedious. Along the way I found and fixed a couple
+    of real deploy bugs that had been silently serving stale code and, at one point,
+    quietly nesting the referrer database inside itself 🫠
+  </p>
+  <ul>
+    <li>Restored IE11 compatibility, without any third-party CDN this time</li>
+    <li>Referrers now show the last 30 days regardless of hit count</li>
+    <li>Referrer data is pruned automatically after 90 days of inactivity</li>
+    <li>Fixed a couple of deploy bugs that were silently serving stale code</li>
+  </ul>
+
+  <p>
     <small>2026-09-22</small>
     A big batch of changes this time, most of it security-flavored: the JSONP proxy
     now properly rejects requests to internal/private addresses instead of blindly
