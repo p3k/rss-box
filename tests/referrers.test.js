@@ -215,10 +215,102 @@ describe("referrers", () => {
       await tick();
 
       const disabled = [...target.querySelectorAll(".feed-link")].map(link =>
-        link.hasAttribute("disabled")
+        link.classList.contains("disabled")
       );
 
       assert.deepEqual(disabled, [false, true, true]);
+    });
+
+    it("does nothing when a disabled feed link is clicked", async () => {
+      const config = ConfigStore();
+      const target = document.createElement("div");
+      document.body.appendChild(target);
+      boxes.push(new Referrers({ target, props: { config } }));
+
+      await fetchReferrers([
+        { url: "http://a.example/", hits: 1, metadata: {} }
+      ]);
+      await tick();
+
+      const link = target.querySelector(".feed-link");
+      link.dispatchEvent(new window.MouseEvent("click", { cancelable: true }));
+
+      assert.equal(get(config).url, "");
+    });
+
+    it("initializes the feed link href on the first hover only", async () => {
+      const config = ConfigStore();
+      const target = document.createElement("div");
+      document.body.appendChild(target);
+      boxes.push(new Referrers({ target, props: { config } }));
+
+      await fetchReferrers([
+        {
+          url: "http://a.example/",
+          hits: 1,
+          metadata: {
+            feedUrls: [
+              "https://a.example/feed.xml",
+              "https://a.example/feed2.xml"
+            ]
+          }
+        }
+      ]);
+      await tick();
+
+      const link = target.querySelector(".feed-link");
+      link.dispatchEvent(new window.MouseEvent("mouseover"));
+      assert.equal(link.href, "https://a.example/feed.xml");
+
+      // A second hover must not cycle it forward again — that's only
+      // meta-click's job, not a plain re-hover's
+      link.dispatchEvent(new window.MouseEvent("mouseover"));
+      assert.equal(link.href, "https://a.example/feed.xml");
+    });
+
+    it("loads the feed when an enabled feed link is clicked", async () => {
+      const config = ConfigStore();
+      const target = document.createElement("div");
+      document.body.appendChild(target);
+      boxes.push(new Referrers({ target, props: { config } }));
+
+      await fetchReferrers([
+        {
+          url: "http://a.example/",
+          hits: 1,
+          metadata: { feedUrls: ["https://a.example/feed.xml"] }
+        }
+      ]);
+      await tick();
+
+      const link = target.querySelector(".feed-link");
+      link.dispatchEvent(new window.MouseEvent("click", { cancelable: true }));
+
+      assert.equal(get(config).url, link.href);
+    });
+
+    it("resolves the link correctly even when the click targets the icon rather than the anchor", async () => {
+      const config = ConfigStore();
+      const target = document.createElement("div");
+      document.body.appendChild(target);
+      boxes.push(new Referrers({ target, props: { config } }));
+
+      await fetchReferrers([
+        {
+          url: "http://a.example/",
+          hits: 1,
+          metadata: { feedUrls: ["https://a.example/feed.xml"] }
+        }
+      ]);
+      await tick();
+
+      const link = target.querySelector(".feed-link");
+      const icon = link.querySelector("svg");
+      icon.dispatchEvent(
+        new window.MouseEvent("click", { bubbles: true, cancelable: true })
+      );
+
+      assert.equal(get(config).url, link.href);
     });
   });
 });
