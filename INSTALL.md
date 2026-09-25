@@ -57,6 +57,8 @@ npm run build
 
 ## Customize URLs
 
+`src/local.js` is created automatically (empty) by `npm install` if it doesn't already exist, and is ignored by Git — it's meant for your own local/deployment-specific overrides. It **replaces** `urls.js`'s corresponding entries wholesale rather than merging into them, so an override has to restate a full URL (including any query string) rather than just the part that differs:
+
 ```js
 // src/local.js
 export const urls = {
@@ -64,30 +66,66 @@ export const urls = {
   app: "https://host.domain.tld/rss-box-viewer",
   // The JSON proxy for retrieving feeds
   proxy: "https://host.domain.tld/json-services/roxy",
-  // The referrer counter
-  referrers: "https://host.domain.tld/json-services/ferris?group=rss-box",
+  // The referrer counter. `days` bounds how far back referrers are
+  // shown; keep it in sync with referrerDays in src/urls.js
+  referrers:
+    "https://host.domain.tld/json-services/ferris?group=rss-box&days=30",
   // The feed to be displayed by default when opening the base URL
   feed: "https://host.domain.tld/default-feed.xml"
 };
 ```
 
-## Configure Apache Webserver
+## Configure the Backend (Services)
 
-```apache
-# Replace with actual path!
-LoadModule wsgi_module "/path/to/virtual-environment/lib/python3…/site-packages/mod_wsgi/server/mod_wsgi-py3….so"
+The referrer counter and feed proxy (`services/`, the `p3k/json3k` submodule) run under Apache/mod_wsgi, entirely independently of this frontend. See [`services/README.md`](services/README.md) for its Apache/WSGI configuration.
 
-WSGIRestrictEmbedded On
-WSGISocketPrefix /var/run/apache2/wsgi
+## Deploying
 
-WSGIDaemonProcess services python-home=/path/to/virtual-environment python-path=/path/to/rss-box/services
+This is the setup behind the `Deploy (Stage)`/`Deploy (Production)` GitHub Actions workflows and the `npm run deploy:*` scripts — most of it only matters if you're standing up your own deployment target, not for local development.
 
-WSGIScriptAlias /services /path/to/rss-box/services/wsgi.py process-group=services
+### Forced-command SSH key
 
-<Location /services>
-   WSGIApplicationGroup %{GLOBAL}
-   Require all granted
-</Location>
+CI (and any manual deploy) reaches the server through one SSH key, restricted to running [`deploy.sh`](deploy.sh) and nothing else — it can't run arbitrary commands, including rewriting `deploy.sh` itself. Add it to the deploy account's `authorized_keys`:
+
+```
+command="/path/to/deploy.sh",restrict ssh-ed25519 AAAA... (public key content)
 ```
 
-Please refer to the [mod_wsgi User Guide](https://modwsgi.readthedocs.io/en/master/user-guides/virtual-environments.html) for details.
+`deploy.sh`'s `deploy-services` case also needs a passwordless sudo rule to reload Apache, e.g. in `/etc/sudoers.d/rss-box-deploy`:
+
+```
+rss-box ALL=(root) NOPASSWD: /usr/bin/systemctl reload apache2
+```
+
+**Nothing syncs `deploy.sh` to the server automatically** — that's deliberate, so a compromised CI credential can never rewrite the one script that limits what it's allowed to do. After any change to it, copy it over by hand:
+
+```sh
+curl -sO https://raw.githubusercontent.com/p3k/rss-box/main/deploy.sh && chmod +x deploy.sh
+```
+
+CI checks the server's copy against the repo's before every deploy that depends on it (the `version` case in `deploy.sh`) and refuses to proceed — with that same command — if they don't match, rather than silently running stale logic.
+
+### GitHub Actions configuration
+
+The `Deploy (Stage)` and `Deploy (Production)` workflows need, per environment (`stage`/`p3k.org`):
+
+- `SSH_PRIVATE_KEY` (secret) — the private half of the forced-command key above
+- `SSH_CONFIG` (var) — an `~/.ssh/config` snippet defining the `rss-box` host alias these workflows `ssh`/`rsync` against, e.g.:
+  ```
+  Host rss-box
+    HostName your.server.tld
+    User rss-box
+  ```
+- `SSH_KNOWN_HOSTS` (var) — that host's known-hosts entry (`ssh-keyscan your.server.tld`)
+- `BASE_URL` (var, stage only) — the origin the staging build's URLs are generated against, e.g. `https://your.server.tld`
+
+### Manual deploys
+
+```sh
+npm run deploy:staging   # builds and rsyncs dist/ to staging
+npm run deploy:services  # rsyncs services/ and runs deploy-services on the server
+```
+
+Both use whatever `src/local.js` currently contains, so for a manual deploy, temporarily replace it with the target environment's real URLs (matching what `staging.yml`'s "Configure environment" step generates) before running either, and restore it afterward — don't deploy a build carrying your local dev URLs.
+
+Production is promoted from whatever's currently on staging, via the `Deploy (Production)` GitHub Actions workflow (`workflow_dispatch` — not triggered automatically by any push).
