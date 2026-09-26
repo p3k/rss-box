@@ -22,4 +22,5 @@ jobs:
       run: |
         npm ci --ignore-scripts
         npm run install:local
+        npm run install:environment
         npm run build
