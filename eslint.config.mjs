@@ -32,7 +32,12 @@ export default [
   },
 
   {
-    files: ["rollup.config.js", "eslint.config.mjs", "tests/**/*.js"],
+    files: [
+      "rollup.config.js",
+      "eslint.config.mjs",
+      "tests/**/*.js",
+      "scripts/**/*.mjs"
+    ],
     languageOptions: {
       globals: {
         ...globals.node
