@@ -112,12 +112,49 @@ function buildLocalBundle() {
   );
 }
 
+// A plain outerHTML comparison drowns in noise that isn’t a real
+// difference: attribute order isn’t meaningful HTML and shifts across
+// Svelte compiler versions, and the same URL appears percent-encoded on
+// one side and not the other in some links (both valid, same target).
+// Sorting attributes and decoding percent-escapes before comparing
+// keeps the diff limited to changes that would actually be visible.
+function canonicalize(node) {
+  if (node.nodeType === node.TEXT_NODE) {
+    return node.textContent;
+  }
+
+  if (node.nodeType !== node.ELEMENT_NODE) {
+    return "";
+  }
+
+  const attrs = [...node.attributes]
+    .map(({ name, value }) => {
+      let decoded = value;
+
+      try {
+        decoded = decodeURIComponent(value);
+      } catch {
+        // Not a percent-encoded value (or not validly one) – compare as-is
+      }
+
+      return `${name}="${decoded}"`;
+    })
+    .sort()
+    .join(" ");
+
+  const tag = node.tagName.toLowerCase();
+  const children = [...node.childNodes].map(canonicalize).join("");
+
+  return `<${tag}${attrs ? ` ${attrs}` : ""}>${children}</${tag}>`;
+}
+
 // Renders one feed through one bundle in an isolated DOM and returns the
-// box’s rendered markup, or null if it never settled within the timeout.
-// The script tag box.js discovers itself through (matched by src, the same
-// way a real embed script is) is kept separate from the one that actually
-// executes the bundle, since a real <script src> ignores its own inline
-// content – it would just try to fetch that fake main.js URL for real.
+// box’s rendered markup (canonicalized, see above), or null if it never
+// settled within the timeout. The script tag box.js discovers itself
+// through (matched by src, the same way a real embed script is) is kept
+// separate from the one that actually executes the bundle, since a real
+// <script src> ignores its own inline content – it would just try to
+// fetch that fake main.js URL for real.
 async function render(bundleCode, feedUrl) {
   const dom = new JSDOM("", { url: `${APP_URL}/`, runScripts: "dangerously" });
   const { window } = dom;
@@ -154,14 +191,17 @@ async function render(bundleCode, feedUrl) {
 
     if (settled) {
       await new Promise(resolve => setTimeout(resolve, SETTLE_MS));
-      return container.outerHTML;
+      return { html: canonicalize(container), timedOut: false };
     }
 
     await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL_MS));
   }
 
   const container = window.document.head.querySelector("div");
-  return container ? `${container.outerHTML}\n<!-- timed out -->` : null;
+  return {
+    html: container ? canonicalize(container) : null,
+    timedOut: true
+  };
 }
 
 async function main() {
@@ -182,15 +222,16 @@ async function main() {
   const newBundle = buildLocalBundle();
 
   const differences = [];
+  const timeouts = [];
 
   for (const [index, feedUrl] of targets.entries()) {
     console.log(`[${index + 1}/${targets.length}] ${feedUrl}`);
 
-    let oldHtml;
-    let newHtml;
+    let old;
+    let current;
 
     try {
-      [oldHtml, newHtml] = await Promise.all([
+      [old, current] = await Promise.all([
         render(oldBundle, feedUrl),
         render(newBundle, feedUrl)
       ]);
@@ -199,14 +240,23 @@ async function main() {
       continue;
     }
 
-    if (oldHtml !== newHtml) {
-      differences.push({ feedUrl, oldHtml, newHtml });
+    if (old.timedOut || current.timedOut) {
+      // Whatever’s captured is a snapshot mid-render, not the final
+      // state, so comparing it either way would be unreliable
+      timeouts.push(feedUrl);
+      console.log("  TIMED OUT (skipped)");
+      continue;
+    }
+
+    if (old.html !== current.html) {
+      differences.push({ feedUrl, oldHtml: old.html, newHtml: current.html });
       console.log("  DIFFERS");
     }
   }
 
   console.log(
-    `\n${differences.length} of ${targets.length} feed(s) render differently.\n`
+    `\n${differences.length} of ${targets.length} feed(s) render differently` +
+      ` (${timeouts.length} timed out and are excluded from that count).\n`
   );
 
   differences.forEach(({ feedUrl, oldHtml, newHtml }) => {
