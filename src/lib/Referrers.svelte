@@ -31,10 +31,10 @@
     event.preventDefault();
 
     // currentTarget (always the <a> this listener is bound to) rather than
-    // target (whatever element hit-testing landed on) — the icon inside is
+    // target (whatever element hit-testing landed on) – the icon inside is
     // pointer-events: none precisely so clicks resolve to the <a>, but that
     // depends on the browser cascading pointer-events through the SVG
-    // correctly, which isn't worth relying on when currentTarget sidesteps
+    // correctly, which isn’t worth relying on when currentTarget sidesteps
     // the question entirely
     const link = event.currentTarget;
     const referrer = $referrers[link.dataset.index];
@@ -55,11 +55,11 @@
   }
 
   function initializeFeedLink(event) {
-    // Only the very first hover should set the initial feed URL — a
-    // later re-hover must not cycle it forward again, that's meta-click's
-    // job. Svelte's |once event modifier relies on the native
+    // Only the very first hover should set the initial feed URL – a
+    // later re-hover must not cycle it forward again, that’s meta-click’s
+    // job. Svelte’s |once event modifier relies on the native
     // addEventListener options object ({ once: true }), which IE11 never
-    // implemented at all — checking the actual attribute here does the
+    // implemented at all – checking the actual attribute here does the
     // same job without depending on that.
     if (event.currentTarget.getAttribute("href") !== ".") return;
     updateFeedLink(event);
@@ -83,9 +83,9 @@
 
   // Checked here rather than relying on the disabled attribute, which does
   // nothing on an <a> in any standards-compliant browser but is uniquely
-  // still enforced by IE11 on any element — meaning it silently blocked
+  // still enforced by IE11 on any element – meaning it silently blocked
   // clicks there even on rows that should have been clickable, since the
-  // CSS pointer-events fallback below doesn't apply to HTML elements in
+  // CSS pointer-events fallback below doesn’t apply to HTML elements in
   // IE11 either
   function isFeedLinkDisabled(index) {
     const referrer = $referrers[index];
@@ -155,7 +155,7 @@
   }
 
   /* Targets every descendant explicitly rather than relying on
-     inheritance from the svg rule alone — IE11 has documented
+     inheritance from the svg rule alone – IE11 has documented
      inconsistencies inheriting pointer-events through intermediate SVG
      structural elements (RssIcon nests its path inside a <g>), so a real
      click landing on the drawn path pixels could hit-test to the path
