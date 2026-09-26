@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# Catches the two typography mistakes that keep slipping into commit
+# messages despite being written down as a preference: straight
+# apostrophes in contractions/possessives, and em-dashes (this project
+# uses en-dash for both ranges and parenthetical breaks, never em-dash).
+# Both are unambiguous enough to check automatically without false
+# positives on legitimate code/quoting in the message.
+
+message_file=$1
+
+straight_apostrophes=$(grep -noE "[A-Za-z]'[A-Za-z]" "$message_file")
+em_dashes=$(grep -n "—" "$message_file")
+
+if test -n "$straight_apostrophes" || test -n "$em_dashes"; then
+  echo "commit-msg: typography issue in the commit message" >&2
+  if test -n "$straight_apostrophes"; then
+    echo "Straight apostrophe found (use ' instead of '):" >&2
+    echo "$straight_apostrophes" | sed 's/^/  /' >&2
+  fi
+  if test -n "$em_dashes"; then
+    echo "Em-dash found (use – instead of —):" >&2
+    echo "$em_dashes" | sed 's/^/  /' >&2
+  fi
+  exit 1
+fi
