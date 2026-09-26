@@ -5,5 +5,6 @@
 /node_modules/
 
 dist
+src/environment\.js
 src/local\.js
 yarn-error.log

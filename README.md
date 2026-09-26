@@ -13,7 +13,7 @@ xdg-open http://localhost:8000 # … or open your browser manually with this URL
 📷 [Screenshot](img/screenshot.png)  
 🧐 [Original installation](https://p3k.org/rss)
 
-Coded in JavaScript by Tobi Schäfer between 2001 and 2021.
+Coded in JavaScript by Tobi Schäfer since 2001.
 
 The author cannot be held responsible for anything that this software might or might not do.
 

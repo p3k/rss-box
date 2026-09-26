@@ -26,9 +26,15 @@ jobs:
 
     - name: Configure environment
       run: |
-        cat << .end > src/local.js
-          // Keep the days value here equal to referrerDays in src/urls.js —
-          // this whole file replaces that module's urls export wholesale
+        # local.js is a developer’s own override, never this workflow’s
+        # concern – stubbed empty here only because npm ci --ignore-scripts
+        # skips the install step that would otherwise create it, and
+        # urls.js always imports it
+        echo 'export const urls = {};' > src/local.js
+
+        cat << .end > src/environment.js
+          // Keep the days value here equal to referrerDays in src/urls.js –
+          // this whole file replaces that module’s urls export wholesale
           // rather than merging into it, so its own default query param
           // never reaches a deployed build otherwise
           export const urls = {
@@ -64,7 +70,7 @@ jobs:
         echo '${{ vars.SSH_KNOWN_HOSTS }}' > ~/.ssh/known_hosts
 
     # Compares against what the server actually has deployed, not against
-    # the previous push — a git-diff-based check would look at
+    # the previous push – a git-diff-based check would look at
     # github.event.before, which already includes the submodule bump the
     # moment it lands on main, regardless of whether the deploy afterward
     # actually succeeded. A failed deploy would then go unnoticed and
@@ -83,26 +89,14 @@ jobs:
     - name: Publish to staging environment
       run: rsync --archive --del --exclude .ssh --info=stats dist/ -- rss-box:/
 
-    - name: Verify deploy.sh on the server is current
-      if: steps.services.outputs.changed == 'true'
-      run: |
-        expected=$(sha256sum deploy.sh | cut -d ' ' -f 1)
-        # A too-old server has no `version` case at all, so this call
-        # itself can fail — || true keeps that from tripping bash's -e
-        # before the comparison below gets to print the real reason
-        actual=$(ssh rss-box version || true)
-        if test "$actual" != "$expected"; then
-          echo "deploy.sh on the server (sha256 $actual) doesn't match this repo's copy ($expected)." >&2
-          echo "On the server, run:" >&2
-          echo "  curl -sO https://raw.githubusercontent.com/p3k/rss-box/main/deploy.sh && chmod +x deploy.sh" >&2
-          exit 1
-        fi
-
+    # npm run deploy:services checks this itself now (predeploy:services
+    # runs verify-deploy-sh.sh), so this no longer needs its own step –
+    # manual deploys go through the exact same check this way, too.
     - name: Publish services
       if: steps.services.outputs.changed == 'true'
       run: |
         # Travels along in the same rsync payload, ends up inside the
-        # live services/ directory after deploy-services swaps it in —
-        # that's what the check above reads back next time
+        # live services/ directory after deploy-services swaps it in –
+        # that’s what the check above reads back next time
         git -C services rev-parse HEAD > services/.rss-box-services-revision
         npm run deploy:services
