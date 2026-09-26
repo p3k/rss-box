@@ -1,24 +1,25 @@
 // Module hooks that let Node load the sources the way the bundler sees them:
 // - extensionless relative imports like `./error`
 // - named imports from JSON files like `import { version } from "../package.json"`
-// - `src/local.js`, which is generated per installation and must not influence the tests
+// - `src/local.js`/`src/environment.js`, generated per installation or by CI
+//   and must not influence the tests
 // - Svelte components, compiled for the DOM like the Rollup plugin does
 
 import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { compile } from "svelte/compiler";
 
-const EMPTY_LOCAL_URLS = "data:text/javascript,export const urls = {};";
+const EMPTY_URLS = "data:text/javascript,export const urls = {};";
 
 export async function resolve(specifier, context, nextResolve) {
   const { parentURL } = context;
 
   if (
-    specifier === "./local" &&
+    (specifier === "./local" || specifier === "./environment") &&
     parentURL &&
     parentURL.endsWith("/src/urls.js")
   ) {
-    return { url: EMPTY_LOCAL_URLS, shortCircuit: true };
+    return { url: EMPTY_URLS, shortCircuit: true };
   }
 
   if (specifier.startsWith(".") && parentURL && !/\.\w+$/.test(specifier)) {

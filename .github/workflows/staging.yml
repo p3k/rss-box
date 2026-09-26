@@ -26,7 +26,13 @@ jobs:
 
     - name: Configure environment
       run: |
-        cat << .end > src/local.js
+        # local.js is a developer’s own override, never this workflow’s
+        # concern – stubbed empty here only because npm ci --ignore-scripts
+        # skips the install step that would otherwise create it, and
+        # urls.js always imports it
+        echo 'export const urls = {};' > src/local.js
+
+        cat << .end > src/environment.js
           // Keep the days value here equal to referrerDays in src/urls.js –
           // this whole file replaces that module’s urls export wholesale
           // rather than merging into it, so its own default query param
