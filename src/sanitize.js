@@ -86,6 +86,21 @@ export const cssUrl = url => {
 export const createSanitizer = purify => {
   // Without a DOM (or in an ancient browser) DOMPurify offers nothing but this
   if (purify.isSupported) {
+    // iframe/object/embed aren’t in DOMPurify’s own default allow-list (we
+    // add them below), so real element children – not just text – trigger
+    // its mutation-XSS protection: it removes the whole node rather than
+    // risk them. Feeds commonly carry legacy “if your browser can’t show
+    // this” fallback markup inside these exact tags (a link, an image),
+    // which no modern browser ever uses – clearing it here, before that
+    // check runs, keeps the actual embed instead of losing it entirely.
+    purify.addHook("uponSanitizeElement", (node, data) => {
+      if (["iframe", "object", "embed"].includes(data.tagName)) {
+        while (node.firstChild) {
+          node.removeChild(node.firstChild);
+        }
+      }
+    });
+
     purify.addHook("afterSanitizeAttributes", node => {
       const tag = node.nodeName.toLowerCase();
 

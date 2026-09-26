@@ -155,6 +155,21 @@ describe("sanitize", () => {
         );
       });
 
+      it("keeps the player even when it carries legacy fallback markup", () => {
+        // Real element children (not just text) of an iframe/object/embed
+        // trigger DOMPurify’s own mutation-XSS protection, which removes
+        // the whole node rather than risk them – exactly what a feed’s
+        // old “if your browser cannot show this” fallback link looks like
+        const [frame] = sanitized(
+          '<iframe src="https://bandcamp.com/EmbeddedPlayer/album=1"><a href="https://bandcamp.com/">fallback</a></iframe>'
+        ).querySelectorAll("iframe");
+
+        assert.equal(
+          frame.getAttribute("src"),
+          "https://bandcamp.com/EmbeddedPlayer/album=1"
+        );
+      });
+
       it("keeps protocol-relative URLs, which old players use", () => {
         const [frame] = sanitized(
           '<iframe src="//player.vimeo.com/video/1"></iframe>'
