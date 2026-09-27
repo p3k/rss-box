@@ -1,0 +1,42 @@
+{
+  "items": [
+    {
+      "title": "First item",
+      "link": "https://jsonfeed.example/first",
+      "enclosures": [],
+      "description": "<p>The full content.</p>"
+    },
+    {
+      "title": "Plain text only, no HTML",
+      "link": "https://jsonfeed.example/second",
+      "enclosures": [],
+      "description": "1 &lt; 2 &amp; 3 &gt; 1"
+    },
+    {
+      "title": "Item with an attachment",
+      "link": "https://jsonfeed.example/third",
+      "enclosures": [
+        {
+          "url": "https://jsonfeed.example/episode.mp3",
+          "length": 123456,
+          "type": "audio/mpeg"
+        }
+      ],
+      "description": "Falls back to the summary when there is no content field"
+    }
+  ],
+  "format": "JSON Feed",
+  "version": "1.1",
+  "title": "Example JSON Feed",
+  "description": "A JSON Feed with a few items",
+  "link": "https://jsonfeed.example/",
+  "image": {
+    "source": "https://jsonfeed.example/icon.png",
+    "title": "",
+    "link": "",
+    "width": "",
+    "height": "",
+    "description": ""
+  },
+  "date": "2024-09-06T10:00:00.000Z"
+}
