@@ -27,7 +27,7 @@
   text-decoration: none;
 }
 
-.rssbox a:hover {
+.rssbox a[href]:hover {
   text-decoration: underline;
 }
 
