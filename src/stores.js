@@ -126,9 +126,20 @@ const getFeedUrls = metadata => {
 // hostname is compared instead
 const nastyHosts = ["atari-embeds.googleusercontent.com"];
 
+// Google’s sandboxed embed frames (e.g. for Sign-In buttons) get a
+// different, randomly-generated host label per instance – a real example
+// looks like 1042703800-atari-embeds.googleusercontent.com – so this can
+// only ever be matched by suffix, never listed as an exact host above
+const nastyHostSuffixes = ["-atari-embeds.googleusercontent.com"];
+
 const isNastyReferrer = url => {
   try {
-    return nastyHosts.includes(new URL(url).hostname);
+    const hostname = new URL(url).hostname;
+
+    return (
+      nastyHosts.includes(hostname) ||
+      nastyHostSuffixes.some(suffix => hostname.endsWith(suffix))
+    );
   } catch {
     return false;
   }

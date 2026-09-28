@@ -97,6 +97,23 @@ describe("referrers", () => {
       );
     });
 
+    // Google’s sandboxed embed frames get a different, randomly-generated
+    // host label per instance, so this can never be listed as one exact host
+    it("skips a nasty host with a per-instance random prefix too", async () => {
+      const result = await fetchReferrers([
+        {
+          url: "https://1042703800-atari-embeds.googleusercontent.com/x",
+          hits: 1
+        },
+        { url: "https://kept.example/", hits: 1 }
+      ]);
+
+      assert.deepEqual(
+        result.map(referrer => referrer.host),
+        ["kept.example"]
+      );
+    });
+
     // Anybody can register a referrer, and host names are arbitrary text
     it("copes with host names that are also property names", async () => {
       const names = [
