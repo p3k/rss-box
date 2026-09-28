@@ -53,6 +53,12 @@ function fetchFeed(url) {
 
   store.set({ loading: true });
 
+  // The CORS-safelisted length limit for a single header value is 128
+  // characters (see the Fetch spec) – past that, this becomes a
+  // preflighted request instead of a simple one. The proxy now answers
+  // preflights correctly either way (see json3k), but a box is embedded
+  // on far too many pages to add a round trip to every single one of
+  // them just for this, so this stays deliberately short
   const headers = new Headers({
     Accept: [
       "application/rss+xml",
@@ -60,8 +66,7 @@ function fetchFeed(url) {
       "application/atom+xml",
       "application/feed+json",
       "application/xml;q=0.9",
-      "text/xml;q=0.8",
-      "application/json;q=0.9"
+      "text/xml;q=0.8"
     ].join()
   });
 
