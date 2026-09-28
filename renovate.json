@@ -4,7 +4,7 @@
     "config:recommended",
     "security:minimumReleaseAgeNpm",
     "schedule:daily",
-    ":automergeMajor",
+    ":automergeMinor",
     ":pinVersions",
     ":semanticCommitsDisabled"
   ],
