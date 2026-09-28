@@ -4,6 +4,12 @@
   </summary>
 
   <p>
+    <small>2026-09-28</small>
+    Added support for <a href="https://www.jsonfeed.org/">JSON Feed</a> 🎉 – on top
+    of RSS, Atom and Scripting News.
+  </p>
+
+  <p>
     <small>2026-09-25</small>
     IE11 compatibility is back 🦕 – and LLM-assisted coding arrived in this project,
     too. I asked <a href="https://claude.com/product/claude-code">Claude</a> to help
