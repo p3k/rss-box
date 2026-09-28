@@ -85,6 +85,36 @@ describe("FeedStore", () => {
     });
   });
 
+  describe("the request sent to the proxy", () => {
+    // A box is embedded on countless third-party pages, each a different
+    // origin, so this request is always cross-origin. A header value over
+    // 128 characters (see the Fetch spec’s CORS-safelisted request-header
+    // definition) turns it from a plain request into a preflighted one –
+    // and unlike a plain request, a preflighted one silently fails on any
+    // origin the proxy doesn’t answer an OPTIONS request correctly for.
+    // Caught in production once already; this is here so it can’t happen
+    // silently again.
+    it("keeps every CORS-safelisted header within the 128-character limit", async () => {
+      let sentHeaders;
+      mock.method(globalThis, "fetch", async (url, init) => {
+        sentHeaders = init.headers;
+        return response(rss("Title"));
+      });
+
+      const feed = FeedStore();
+      await feed.fetch("https://blog.example/feed.xml");
+
+      for (const name of ["accept", "accept-language", "content-language"]) {
+        const value = sentHeaders.get(name);
+        if (!value) continue;
+        assert.ok(
+          value.length <= 128,
+          `${name} is ${value.length} characters – over the 128-character CORS-safelist limit`
+        );
+      }
+    });
+  });
+
   describe("failing to fetch a feed", () => {
     it("shows the error instead of the previous feed", async () => {
       respondWith(fixture("rss-1.0-rdf.xml"), "this is not a feed");
