@@ -153,6 +153,25 @@ describe("referrers", () => {
       assert.deepEqual(metadata["d.example"], {});
     });
 
+    // At least one referrer in the wild sends feedUrls JSON-encoded twice
+    // over, rather than as a real array – recovered the same way a bare,
+    // non-JSON string (like a lone URL) still is not, above
+    it("recovers feed URLs that are JSON-encoded twice over", async () => {
+      const result = await fetchReferrers([
+        {
+          url: "http://e.example/",
+          hits: 1,
+          metadata: {
+            feedUrls: '["https://e.example/feed.xml", "javascript:alert(1)"]'
+          }
+        }
+      ]);
+
+      assert.deepEqual(result[0].metadata, {
+        feedUrls: ["https://e.example/feed.xml"]
+      });
+    });
+
     it("survives a failing request", async () => {
       mock.method(globalThis, "fetch", async () => {
         throw new Error("Network down");
@@ -262,8 +281,8 @@ describe("referrers", () => {
       link.dispatchEvent(new window.MouseEvent("mouseover"));
       assert.equal(link.href, "https://a.example/feed.xml");
 
-      // A second hover must not cycle it forward again — that's only
-      // meta-click's job, not a plain re-hover's
+      // A second hover must not cycle it forward again – that’s only
+      // meta-click’s job, not a plain re-hover’s
       link.dispatchEvent(new window.MouseEvent("mouseover"));
       assert.equal(link.href, "https://a.example/feed.xml");
     });

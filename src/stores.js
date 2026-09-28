@@ -103,10 +103,22 @@ const isHttpUrl = url => typeof url === "string" && /^https?:\/\//i.test(url);
 
 // Referrers are reported by whichever pages embed a box, so anything they send
 // must be treated with care – e.g. a `javascript:` URL is not a feed
-const getFeedUrls = metadata =>
-  metadata && Array.isArray(metadata.feedUrls)
-    ? metadata.feedUrls.filter(isHttpUrl)
-    : [];
+const getFeedUrls = metadata => {
+  let feedUrls = metadata && metadata.feedUrls;
+
+  // At least one referrer in the wild has this JSON-encoded twice over,
+  // rather than as a real array – presumably from some old or non-standard
+  // client that double-stringified it before this ever reached ferris
+  if (typeof feedUrls === "string") {
+    try {
+      feedUrls = JSON.parse(feedUrls);
+    } catch {
+      feedUrls = null;
+    }
+  }
+
+  return Array.isArray(feedUrls) ? feedUrls.filter(isHttpUrl) : [];
+};
 
 // Hosts that generate referrer noise rather than real visits (e.g. preview
 // crawlers). A substring check on the raw URL would also match a host that

@@ -70,7 +70,7 @@ ready(() => {
     // Only for IE11
     script.parentNode.removeChild(script);
 
-    if (data.url !== urls.feed && feedUrls.indexOf(data.url) < 0) {
+    if (feedUrls.indexOf(data.url) < 0) {
       feedUrls.push(data.url);
     }
   });

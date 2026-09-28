@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { before, describe, it, mock } from "node:test";
 
 import "./dom.js";
+import { urls } from "../src/urls.js";
 
 const feed = readFileSync(
   new URL("./fixtures/feeds/rss-2.0.xml", import.meta.url),
@@ -36,6 +37,7 @@ describe("the embed script", () => {
       <script src="http://localhost:8000/main.js?url=https%3A%2F%2Fa.example%2Ffeed.xml&maxItems=2&fontFace=100%"></script>
       <p>Between the boxes</p>
       <script src="http://localhost:8000/main.js?url=https://b.example/feed?id=5&compact=true"></script>
+      <script src="http://localhost:8000/main.js?compact=true"></script>
       <script src="http://localhost:8000/main.js"></script>
       <script src="https://elsewhere.example/other.js?url=ignored"></script>`;
 
@@ -44,11 +46,11 @@ describe("the embed script", () => {
   });
 
   it("replaces every script tag that asks for a box with a box", () => {
-    assert.equal(document.querySelectorAll(".rssbox").length, 2);
+    assert.equal(document.querySelectorAll(".rssbox").length, 3);
     assert.equal(
       document.querySelectorAll('script[src*="localhost:8000"]').length,
       1,
-      "only the one without any settings is left"
+      "only the one without any settings at all is left"
     );
     assert.equal(
       document.querySelectorAll('script[src*="elsewhere.example"]').length,
@@ -76,11 +78,12 @@ describe("the embed script", () => {
 
     assert.deepEqual(requested.sort(), [
       "https://a.example/feed.xml",
-      "https://b.example/feed?id=5"
+      "https://b.example/feed?id=5",
+      urls.feed
     ]);
   });
 
-  it("tells the referrer service which page shows which feeds", () => {
+  it("tells the referrer service which page shows which feeds, including the default one", () => {
     const pings = fetched.filter(url => url.includes("/ferris?"));
 
     assert.equal(pings.length, 1);
@@ -89,7 +92,11 @@ describe("the embed script", () => {
 
     assert.equal(ping.searchParams.get("group"), "rss-box");
     assert.deepEqual(JSON.parse(ping.searchParams.get("metadata")), {
-      feedUrls: ["https://a.example/feed.xml", "https://b.example/feed?id=5"]
+      feedUrls: [
+        "https://a.example/feed.xml",
+        "https://b.example/feed?id=5",
+        urls.feed
+      ]
     });
   });
 
