@@ -121,25 +121,20 @@ const getFeedUrls = metadata => {
 };
 
 // Hosts that generate referrer noise rather than real visits (e.g. preview
-// crawlers). A substring check on the raw URL would also match a host that
-// merely mentions one of these in its path or query string, so the actual
-// hostname is compared instead
+// crawlers). Matched against just the hostname, not the raw URL – the raw
+// URL’s path/query is arbitrary text the referring page can put anything
+// in, but the hostname is DNS-constrained, so a substring match on it
+// alone doesn’t reopen that risk. Google’s sandboxed embed frames (e.g.
+// for Sign-In buttons) are why this has to be a substring at all: each
+// instance gets a different, randomly-generated label in front of it,
+// e.g. 1042703800-atari-embeds.googleusercontent.com
 const nastyHosts = ["atari-embeds.googleusercontent.com"];
-
-// Google’s sandboxed embed frames (e.g. for Sign-In buttons) get a
-// different, randomly-generated host label per instance – a real example
-// looks like 1042703800-atari-embeds.googleusercontent.com – so this can
-// only ever be matched by suffix, never listed as an exact host above
-const nastyHostSuffixes = ["-atari-embeds.googleusercontent.com"];
 
 const isNastyReferrer = url => {
   try {
     const hostname = new URL(url).hostname;
 
-    return (
-      nastyHosts.includes(hostname) ||
-      nastyHostSuffixes.some(suffix => hostname.endsWith(suffix))
-    );
+    return nastyHosts.some(host => hostname.includes(host));
   } catch {
     return false;
   }
