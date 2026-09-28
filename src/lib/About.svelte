@@ -59,9 +59,11 @@
     href="http://essaysfromexodus.scripting.com/xml/scriptingNews2.xml"
     on:click={goto}>Scripting News 2</a
   >. There is also basic support for
-  <a href="https://www.theregister.co.uk/headlines.atom" on:click={goto}
+  <a href="https://www.tbray.org/ongoing/ongoing.atom" on:click={goto}
     >Atom 1.0</a
-  >.
+  >
+  and
+  <a href="https://www.jsonfeed.org/feed.json" on:click={goto}>JSON Feed</a>.
 </p>
 
 <p>

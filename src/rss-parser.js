@@ -79,6 +79,17 @@ function RssParser() {
 
   const error = Error("Malformed RSS syntax");
 
+  // Deliberately not limited to the channel’s own elements (getChildElement
+  // searches all descendants): a feed without a date of its own ends up
+  // showing the date of its first item instead, as a side effect of that
+  // broader search rather than a separate fallback of its own
+  const getChannelDate = function (channel) {
+    return getDate(
+      getText(getChildElement("lastBuildDate", channel)) ||
+        getText(getChildElement("pubDate", channel))
+    );
+  };
+
   const parseRss = function (root, type) {
     const rss = { items: [] };
     const channel = getChildElement("channel", root);
@@ -135,12 +146,7 @@ function RssParser() {
         }
       }
     } else {
-      // Deliberately not limited to the channel’s own elements: a feed without
-      // a date of its own shows the date of its first item
-      rss.date = getDate(
-        getText(getChildElement("lastBuildDate", channel)) ||
-          getText(getChildElement("pubDate", channel))
-      );
+      rss.date = getChannelDate(channel);
       rss.rights = getText(getChildElement("copyright", channel));
     }
 
@@ -226,10 +232,7 @@ function RssParser() {
     rss.description = getText(getChildElement("channelDescription", channel));
     rss.link = getText(getChildElement("channelLink", channel));
 
-    rss.date = getDate(
-      getText(getChildElement("lastBuildDate", channel)) ||
-        getText(getChildElement("pubDate", channel))
-    );
+    rss.date = getChannelDate(channel);
 
     const imageUrl = getChildElement("imageUrl", channel);
 
@@ -316,6 +319,77 @@ function RssParser() {
     return item;
   };
 
+  // A substring check on an attacker-controlled, URL-shaped value is easy to
+  // fool (e.g. "https://evil.example/jsonfeed.org/x") – parsing it and
+  // comparing the actual host avoids that
+  const isJsonFeedVersion = function (value) {
+    try {
+      return new URL(value).hostname === "jsonfeed.org";
+    } catch {
+      return false;
+    }
+  };
+
+  const parseJsonFeed = function (data) {
+    const rss = { items: [] };
+
+    rss.format = "JSON Feed";
+    rss.version = String(data.version).split("/").pop() || "";
+    // Plain text per spec, but rendered as HTML downstream like every other format
+    rss.title = escapeHtml(data.title || "");
+    rss.description = data.description || "";
+    rss.link = data.home_page_url || data.feed_url || "";
+
+    // Unlike RSS/Scripting News, icon/favicon are bare URLs with none of the
+    // other image metadata – Box.svelte only ever reads the actual loaded
+    // image’s own dimensions anyway, never these fields, so leaving them
+    // empty renders exactly like a sparse RSS image already does
+    const icon = data.icon || data.favicon;
+
+    rss.image = icon
+      ? {
+          source: icon,
+          title: "",
+          link: "",
+          width: "",
+          height: "",
+          description: ""
+        }
+      : "";
+
+    data.items.forEach(node => {
+      if (!node || typeof node !== "object") return;
+
+      const item = {
+        title: escapeHtml(node.title || ""),
+        link: node.url || node.external_url || "",
+        enclosures: []
+      };
+
+      if (node.content_html) {
+        item.description = node.content_html;
+      } else {
+        item.description = escapeHtml(node.content_text || node.summary || "");
+      }
+
+      if (Array.isArray(node.attachments)) {
+        item.enclosures = node.attachments.map(attachment => ({
+          url: attachment.url,
+          length: attachment.size_in_bytes,
+          type: attachment.mime_type
+        }));
+      }
+
+      rss.items.push(item);
+    });
+
+    // No date of its own, same as RSS falling back to its first item’s date
+    const first = data.items[0] || {};
+    rss.date = getDate(first.date_published || first.date_modified);
+
+    return rss;
+  };
+
   const getDate = function (str) {
     let millis = Date.parse(str);
 
@@ -329,6 +403,32 @@ function RssParser() {
 
   return {
     parse: function (xml) {
+      // Valid XML never parses as JSON – `<` alone already rules it out – so
+      // trying this first is safe for every other format and costs nothing
+      // when it isn’t JSON at all
+      let data;
+      let isJson = true;
+
+      try {
+        data = JSON.parse(xml);
+      } catch {
+        isJson = false;
+      }
+
+      if (isJson) {
+        if (
+          !data ||
+          typeof data !== "object" ||
+          !Array.isArray(data.items) ||
+          typeof data.version !== "string" ||
+          !isJsonFeedVersion(data.version)
+        ) {
+          throw error;
+        }
+
+        return parseJsonFeed(data);
+      }
+
       const doc = getDocument(xml);
 
       if (!doc || getChildElement("parsererror", doc.documentElement))

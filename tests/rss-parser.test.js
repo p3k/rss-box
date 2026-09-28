@@ -27,7 +27,7 @@ describe("RssParser", () => {
   // requests that fix these things – and nowhere else.
   describe("parses the fixture feeds", () => {
     const names = readdirSync(feedsDir)
-      .filter(name => name.endsWith(".xml"))
+      .filter(name => name.endsWith(".xml") || name.endsWith(".json"))
       .sort();
 
     for (const name of names) {
@@ -45,7 +45,14 @@ describe("RssParser", () => {
       "plain text": "just some text",
       "truncated XML": "<rss><channel></rss>",
       "an unrelated document": "<html/>",
-      "a Scripting News document without header": "<scriptingNews/>"
+      "a Scripting News document without header": "<scriptingNews/>",
+      "JSON that isn’t a JSON Feed": '{"foo": "bar"}',
+      "a JSON Feed without items":
+        '{"version": "https://jsonfeed.org/version/1.1"}',
+      // A version string merely containing "jsonfeed.org" (e.g. in the path
+      // of an unrelated host) must not be enough on its own
+      "a version string that only mentions jsonfeed.org, from elsewhere":
+        '{"version": "https://evil.example/jsonfeed.org/version/1", "items": []}'
     };
 
     for (const [description, xml] of Object.entries(cases)) {

@@ -58,8 +58,10 @@ function fetchFeed(url) {
       "application/rss+xml",
       "application/rdf+xml",
       "application/atom+xml",
+      "application/feed+json",
       "application/xml;q=0.9",
-      "text/xml;q=0.8"
+      "text/xml;q=0.8",
+      "application/json;q=0.9"
     ].join()
   });
 
