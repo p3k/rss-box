@@ -23,8 +23,10 @@
   },
   "packageRules": [
     {
+      "description": "Svelte 5 needs every component rewritten against an incompatible API and re-verified against Internet Explorer 11 from scratch; a vulnerability alert can still propose it outside allowedVersions, so also stop it from automerging",
       "matchPackageNames": ["svelte"],
-      "allowedVersions": "^4.0.0"
+      "allowedVersions": "^4.0.0",
+      "automerge": false
     },
     {
       "description": "@rollup/plugin-babel requires Babel 7 and makes the installation fail with Babel 8; Babel 8 also removed the `useBuiltIns` option of the build",
