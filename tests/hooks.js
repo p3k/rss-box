@@ -1,7 +1,7 @@
 // Module hooks that let Node load the sources the way the bundler sees them:
 // - extensionless relative imports like `./error`
 // - named imports from JSON files like `import { version } from "../package.json"`
-// - `src/local.js`/`src/environment.js`, generated per installation or by CI
+// - `local.js`/`src/environment.js`, generated per installation or by CI
 //   and must not influence the tests
 // - Svelte components, compiled for the DOM like the Rollup plugin does
 
@@ -15,7 +15,7 @@ export async function resolve(specifier, context, nextResolve) {
   const { parentURL } = context;
 
   if (
-    (specifier === "./local" || specifier === "./environment") &&
+    (specifier === "../local" || specifier === "./environment") &&
     parentURL &&
     parentURL.endsWith("/src/urls.js")
   ) {

@@ -1,5 +1,5 @@
 import { urls as environmentUrls } from "./environment";
-import { urls as localUrls } from "./local";
+import { urls as localUrls } from "../local";
 
 export const baseUrl = "http://localhost";
 
