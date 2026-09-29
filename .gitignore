@@ -6,5 +6,5 @@
 
 dist
 src/environment\.js
-src/local\.js
+/local\.json
 yarn-error.log
