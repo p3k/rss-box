@@ -57,7 +57,9 @@ npm run build
 
 ## Customize URLs
 
-`src/local.js` is created automatically (empty) by `npm install` if it doesn’t already exist, and is ignored by Git – it’s meant for your own personal overrides, e.g. pointing your local dev environment at a real backend instead of running `services/` locally. (`src/environment.js`, created the same way, is the equivalent CI uses to configure a deployed build – not something you’d normally touch by hand; see “Manual deploys” below.) Either one **replaces** `urls.js`'s corresponding entries wholesale rather than merging into them, so an override has to restate a full URL (including any query string) rather than just the part that differs:
+`src/local.js` is created automatically (empty) by `npm install` if it doesn’t already exist, and is ignored by Git – it’s meant for your own personal overrides, e.g. pointing your local dev environment at a real backend instead of running `services/` locally. (`src/environment.js`, created the same way, is the equivalent CI uses to configure a deployed build – not something you’d normally touch by hand; see “Manual deploys” below.) An override **replaces** `urls.js`'s corresponding entry wholesale rather than merging into it, so it has to restate a full URL (including any query string) rather than just the part that differs:
+
+`src/local.js` only takes effect when you build with `npm run start:local` (instead of `npm start`) or `npm run watch -- --configLocal` (instead of a plain `npm run watch`) – a regular `npm start`, `npm run watch` or `npm run build` ignores it entirely, so leftover personal overrides can never leak into a deployed build by accident.
 
 ```js
 // src/local.js
@@ -126,6 +128,6 @@ npm run deploy:staging   # builds and rsyncs dist/ to staging
 npm run deploy:services  # rsyncs services/ and runs deploy-services on the server
 ```
 
-Both use whatever `src/environment.js` currently contains, so for a manual deploy, temporarily replace it with the target environment’s real URLs (matching what `staging.yml`'s "Configure environment" step generates) before running either, and restore it to empty afterward – don’t deploy a build carrying stale environment URLs. `src/local.js` is untouched by this – leave your own overrides there as they are.
+Both use whatever `src/environment.js` currently contains, so for a manual deploy, temporarily replace it with the target environment’s real URLs (matching what `staging.yml`'s "Configure environment" step generates) before running either, and restore it to empty afterward – don’t deploy a build carrying stale environment URLs. `src/local.js` is untouched by this, and – since `npm run deploy:staging` builds with a plain `npm run build` – never applied either, so your own overrides there are safe to leave as they are.
 
 Production is promoted from whatever’s currently on staging, via the `Deploy (Production)` GitHub Actions workflow (`workflow_dispatch` – not triggered automatically by any push).

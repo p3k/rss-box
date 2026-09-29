@@ -8,14 +8,15 @@ export const baseUrl = "http://localhost";
 // tooltip tells people to expect
 export const referrerDays = 30;
 
-// environment.js (CI-owned, e.g. staging’s build config) is applied
-// before local.js (a developer’s own override), so a personal override
-// always wins even if both happen to set the same key
+// local.js (a developer’s own override) only applies when a build opts in
+// with `--configLocal` (see rollup.config.js and INSTALL.md) – otherwise a
+// colliding key would silently override environment.js’s real value in any
+// regular or staging build
 export const urls = {
   app: `${baseUrl}:8000`,
   proxy: `${baseUrl}:8000/roxy`,
   referrers: `${baseUrl}:8000/ferris?group=rss-box&days=${referrerDays}`,
   feed: "https://blog.p3k.org/stories.xml",
   ...environmentUrls,
-  ...localUrls
+  ...(process.env.USE_LOCAL_OVERRIDES ? localUrls : {})
 };

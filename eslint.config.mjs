@@ -43,5 +43,16 @@ export default [
         ...globals.node
       }
     }
+  },
+
+  {
+    // `process.env.USE_LOCAL_OVERRIDES` is a build-time literal, replaced by
+    // rollup.config.js before this ever reaches a browser (see there)
+    files: ["src/urls.js"],
+    languageOptions: {
+      globals: {
+        process: "readonly"
+      }
+    }
   }
 ];
