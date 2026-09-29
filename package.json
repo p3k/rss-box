@@ -23,7 +23,7 @@
     "release": "npm version --no-git-tag $v; npm run build; git commit --all --message 'Rebuild dist files'; npm version --allow-same-version $v",
     "roxy": "python -c \"import sys, os; os.system('curl --head http://localhost:8000/roxy?url=%s' % sys.argv[1])\"",
     "start": "concurrently --kill-others 'npm:server' 'npm:watch'",
-    "start:local": "concurrently --kill-others 'npm:server' 'npm run watch -- --local'",
+    "start:local": "concurrently --kill-others 'npm:server' 'npm run watch -- --config-local'",
     "server": "dir=$PWD; (cd services; .venv/bin/mod_wsgi-express start-server wsgi.py --document-root \"$dir/dist\" --access-log --log-to-terminal)",
     "submodule:update": "git submodule update --remote --merge",
     "test": "node --import ./tests/register.js --test \"tests/**/*.test.js\"",

@@ -64,7 +64,7 @@ npm run build
 - `referrers` – the referrer counter; `days` bounds how far back referrers are shown, keep it in sync with `referrerDays` in `src/urls.js`
 - `feed` – the feed to be displayed by default when opening the base URL
 
-`local.json` only takes effect when you build with `npm run start:local` (instead of `npm start`) or `npm run watch -- --local` (instead of a plain `npm run watch`) – a regular `npm start`, `npm run watch` or `npm run build` ignores it entirely, so leftover personal overrides can never leak into a deployed build by accident.
+`local.json` only takes effect when you build with `npm run start:local` (instead of `npm start`) or `npm run watch -- --config-local` (instead of a plain `npm run watch`) – a regular `npm start`, `npm run watch` or `npm run build` ignores it entirely, so leftover personal overrides can never leak into a deployed build by accident.
 
 ```json
 {

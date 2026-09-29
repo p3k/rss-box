@@ -14,11 +14,15 @@ const production = !process.env.ROLLUP_WATCH;
 export default commandLineArgs => {
   // `local.json` (see INSTALL.md) must never end up in a real build by
   // accident, so it only takes effect when a developer explicitly opts in
-  // with `--local`, e.g. `npm run watch -- --local`. This is
-  // injected as a literal so dead-code elimination strips the `localUrls`
-  // branch (and its import) from every other build entirely, rather than
-  // merely leaving it unreachable at runtime
-  const useLocalOverrides = Boolean(commandLineArgs.local);
+  // with `--config-local`, e.g. `npm run watch -- --config-local`. A flag
+  // not prefixed with `config` triggers a noisy "unrecognized option"
+  // warning from Rollup’s own CLI (repeated once per build target, and
+  // again on every rebuild in watch mode) – this is the one prefix Rollup
+  // itself exempts from that check. The value is injected as a literal so
+  // dead-code elimination strips the `localUrls` branch (and its import)
+  // from every other build entirely, rather than merely leaving it
+  // unreachable at runtime
+  const useLocalOverrides = Boolean(commandLineArgs["config-local"]);
 
   const plugins = () => [
     replace({
