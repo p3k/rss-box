@@ -14,11 +14,11 @@ const production = !process.env.ROLLUP_WATCH;
 export default commandLineArgs => {
   // `local.json` (see INSTALL.md) must never end up in a real build by
   // accident, so it only takes effect when a developer explicitly opts in
-  // with `--configLocal`, e.g. `npm run watch -- --configLocal`. This is
+  // with `--local`, e.g. `npm run watch -- --local`. This is
   // injected as a literal so dead-code elimination strips the `localUrls`
   // branch (and its import) from every other build entirely, rather than
   // merely leaving it unreachable at runtime
-  const useLocalOverrides = Boolean(commandLineArgs.configLocal);
+  const useLocalOverrides = Boolean(commandLineArgs.local);
 
   const plugins = () => [
     replace({
