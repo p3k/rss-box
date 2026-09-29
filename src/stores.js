@@ -103,20 +103,38 @@ const isHttpUrl = url => typeof url === "string" && /^https?:\/\//i.test(url);
 
 // Referrers are reported by whichever pages embed a box, so anything they send
 // must be treated with care – e.g. a `javascript:` URL is not a feed
-const getFeedUrls = metadata =>
-  metadata && Array.isArray(metadata.feedUrls)
-    ? metadata.feedUrls.filter(isHttpUrl)
-    : [];
+const getFeedUrls = metadata => {
+  let feedUrls = metadata && metadata.feedUrls;
+
+  // At least one referrer in the wild has this JSON-encoded twice over,
+  // rather than as a real array – presumably from some old or non-standard
+  // client that double-stringified it before this ever reached ferris
+  if (typeof feedUrls === "string") {
+    try {
+      feedUrls = JSON.parse(feedUrls);
+    } catch {
+      feedUrls = null;
+    }
+  }
+
+  return Array.isArray(feedUrls) ? feedUrls.filter(isHttpUrl) : [];
+};
 
 // Hosts that generate referrer noise rather than real visits (e.g. preview
-// crawlers). A substring check on the raw URL would also match a host that
-// merely mentions one of these in its path or query string, so the actual
-// hostname is compared instead
+// crawlers). Matched against just the hostname, not the raw URL – the raw
+// URL’s path/query is arbitrary text the referring page can put anything
+// in, but the hostname is DNS-constrained, so a substring match on it
+// alone doesn’t reopen that risk. Google’s sandboxed embed frames (e.g.
+// for Sign-In buttons) are why this has to be a substring at all: each
+// instance gets a different, randomly-generated label in front of it,
+// e.g. 1042703800-atari-embeds.googleusercontent.com
 const nastyHosts = ["atari-embeds.googleusercontent.com"];
 
 const isNastyReferrer = url => {
   try {
-    return nastyHosts.includes(new URL(url).hostname);
+    const hostname = new URL(url).hostname;
+
+    return nastyHosts.some(host => hostname.includes(host));
   } catch {
     return false;
   }
