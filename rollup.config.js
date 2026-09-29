@@ -12,7 +12,7 @@ import svelte from "rollup-plugin-svelte";
 const production = !process.env.ROLLUP_WATCH;
 
 export default commandLineArgs => {
-  // `local.js` (see INSTALL.md) must never end up in a real build by
+  // `local.json` (see INSTALL.md) must never end up in a real build by
   // accident, so it only takes effect when a developer explicitly opts in
   // with `--configLocal`, e.g. `npm run watch -- --configLocal`. This is
   // injected as a literal so dead-code elimination strips the `localUrls`

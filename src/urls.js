@@ -1,5 +1,5 @@
 import { urls as environmentUrls } from "./environment";
-import { urls as localUrls } from "../local";
+import localUrls from "../local.json";
 
 export const baseUrl = "http://localhost";
 
@@ -8,7 +8,7 @@ export const baseUrl = "http://localhost";
 // tooltip tells people to expect
 export const referrerDays = 30;
 
-// local.js (a developer’s own override) only applies when a build opts in
+// local.json (a developer’s own override) only applies when a build opts in
 // with `--configLocal` (see rollup.config.js and INSTALL.md) – otherwise a
 // colliding key would silently override environment.js’s real value in any
 // regular or staging build

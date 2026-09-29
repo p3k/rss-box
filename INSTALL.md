@@ -57,24 +57,22 @@ npm run build
 
 ## Customize URLs
 
-`local.js`, at the repository root, is created automatically (empty) by `npm install` if it doesn’t already exist, and is ignored by Git – it’s meant for your own personal overrides, e.g. pointing your local dev environment at a real backend instead of running `services/` locally. (`src/environment.js`, created the same way, is the equivalent CI uses to configure a deployed build – not something you’d normally touch by hand; see “Manual deploys” below. It stays inside `src/` since, unlike `local.js`, it’s meant to be part of the build.) An override **replaces** `urls.js`'s corresponding entry wholesale rather than merging into it, so it has to restate a full URL (including any query string) rather than just the part that differs:
+`local.json`, at the repository root, is created automatically (an empty object) by `npm install` if it doesn’t already exist, and is ignored by Git – it’s meant for your own personal overrides, e.g. pointing your local dev environment at a real backend instead of running `services/` locally. (`src/environment.js`, created the same way, is the equivalent CI uses to configure a deployed build – not something you’d normally touch by hand; see “Manual deploys” below. It stays inside `src/` since, unlike `local.json`, it’s meant to be part of the build.) An override **replaces** `urls.js`'s corresponding entry wholesale rather than merging into it, so it has to restate a full URL (including any query string) rather than just the part that differs. Only the keys you actually want to override need to be present:
 
-`local.js` only takes effect when you build with `npm run start:local` (instead of `npm start`) or `npm run watch -- --configLocal` (instead of a plain `npm run watch`) – a regular `npm start`, `npm run watch` or `npm run build` ignores it entirely, so leftover personal overrides can never leak into a deployed build by accident.
+- `app` – the base URL of the installation
+- `proxy` – the JSON proxy for retrieving feeds
+- `referrers` – the referrer counter; `days` bounds how far back referrers are shown, keep it in sync with `referrerDays` in `src/urls.js`
+- `feed` – the feed to be displayed by default when opening the base URL
 
-```js
-// local.js
-export const urls = {
-  // The base URL of the installation
-  app: "https://host.domain.tld/rss-box-viewer",
-  // The JSON proxy for retrieving feeds
-  proxy: "https://host.domain.tld/json-services/roxy",
-  // The referrer counter. `days` bounds how far back referrers are
-  // shown; keep it in sync with referrerDays in src/urls.js
-  referrers:
-    "https://host.domain.tld/json-services/ferris?group=rss-box&days=30",
-  // The feed to be displayed by default when opening the base URL
-  feed: "https://host.domain.tld/default-feed.xml"
-};
+`local.json` only takes effect when you build with `npm run start:local` (instead of `npm start`) or `npm run watch -- --configLocal` (instead of a plain `npm run watch`) – a regular `npm start`, `npm run watch` or `npm run build` ignores it entirely, so leftover personal overrides can never leak into a deployed build by accident.
+
+```json
+{
+  "app": "https://host.domain.tld/rss-box-viewer",
+  "proxy": "https://host.domain.tld/json-services/roxy",
+  "referrers": "https://host.domain.tld/json-services/ferris?group=rss-box&days=30",
+  "feed": "https://host.domain.tld/default-feed.xml"
+}
 ```
 
 ## Configure the Backend (Services)
@@ -128,6 +126,6 @@ npm run deploy:staging   # builds and rsyncs dist/ to staging
 npm run deploy:services  # rsyncs services/ and runs deploy-services on the server
 ```
 
-Both use whatever `src/environment.js` currently contains, so for a manual deploy, temporarily replace it with the target environment’s real URLs (matching what `staging.yml`'s "Configure environment" step generates) before running either, and restore it to empty afterward – don’t deploy a build carrying stale environment URLs. `local.js` is untouched by this, and – since `npm run deploy:staging` builds with a plain `npm run build` – never applied either, so your own overrides there are safe to leave as they are.
+Both use whatever `src/environment.js` currently contains, so for a manual deploy, temporarily replace it with the target environment’s real URLs (matching what `staging.yml`'s "Configure environment" step generates) before running either, and restore it to empty afterward – don’t deploy a build carrying stale environment URLs. `local.json` is untouched by this, and – since `npm run deploy:staging` builds with a plain `npm run build` – never applied either, so your own overrides there are safe to leave as they are.
 
 Production is promoted from whatever’s currently on staging, via the `Deploy (Production)` GitHub Actions workflow (`workflow_dispatch` – not triggered automatically by any push).
