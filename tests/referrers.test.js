@@ -97,6 +97,23 @@ describe("referrers", () => {
       );
     });
 
+    // Google’s sandboxed embed frames get a different, randomly-generated
+    // host label per instance, so this can never be listed as one exact host
+    it("skips a nasty host with a per-instance random prefix too", async () => {
+      const result = await fetchReferrers([
+        {
+          url: "https://1042703800-atari-embeds.googleusercontent.com/x",
+          hits: 1
+        },
+        { url: "https://kept.example/", hits: 1 }
+      ]);
+
+      assert.deepEqual(
+        result.map(referrer => referrer.host),
+        ["kept.example"]
+      );
+    });
+
     // Anybody can register a referrer, and host names are arbitrary text
     it("copes with host names that are also property names", async () => {
       const names = [
@@ -151,6 +168,25 @@ describe("referrers", () => {
       assert.deepEqual(metadata["b.example"], {});
       assert.deepEqual(metadata["c.example"], {});
       assert.deepEqual(metadata["d.example"], {});
+    });
+
+    // At least one referrer in the wild sends feedUrls JSON-encoded twice
+    // over, rather than as a real array – recovered the same way a bare,
+    // non-JSON string (like a lone URL) still is not, above
+    it("recovers feed URLs that are JSON-encoded twice over", async () => {
+      const result = await fetchReferrers([
+        {
+          url: "http://e.example/",
+          hits: 1,
+          metadata: {
+            feedUrls: '["https://e.example/feed.xml", "javascript:alert(1)"]'
+          }
+        }
+      ]);
+
+      assert.deepEqual(result[0].metadata, {
+        feedUrls: ["https://e.example/feed.xml"]
+      });
     });
 
     it("survives a failing request", async () => {
@@ -308,8 +344,8 @@ describe("referrers", () => {
       link.dispatchEvent(new window.MouseEvent("mouseover"));
       assert.equal(link.href, "https://a.example/feed.xml");
 
-      // A second hover must not cycle it forward again — that's only
-      // meta-click's job, not a plain re-hover's
+      // A second hover must not cycle it forward again – that’s only
+      // meta-click’s job, not a plain re-hover’s
       link.dispatchEvent(new window.MouseEvent("mouseover"));
       assert.equal(link.href, "https://a.example/feed.xml");
     });
