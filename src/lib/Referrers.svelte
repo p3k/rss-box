@@ -97,7 +97,9 @@
 
 <details id="referrers" on:toggle={load}>
   <summary></summary>
-  {#if $referrers.length}
+  {#if !Array.isArray($referrers)}
+    Loading…
+  {:else if $referrers.length}
     {#each $referrers as referrer, index}
       <div class="referrer">
         <code>{format(referrer.percentage)}</code>
@@ -115,7 +117,7 @@
       </div>
     {/each}
   {:else}
-    Loading…
+    No referrers yet.
   {/if}
 </details>
 

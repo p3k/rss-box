@@ -243,7 +243,10 @@ export const FeedStore = () => {
 export const app = readable({ description, version });
 export const config = ConfigStore();
 export const feed = FeedStore();
-export const referrers = writable([]);
+
+// Unset until the first response actually arrives, so a request still in
+// flight can be told apart from one that resolved with no referrers at all
+export const referrers = writable();
 
 referrers.fetch = fetchReferrers.bind(referrers);
 

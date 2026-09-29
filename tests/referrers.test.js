@@ -23,7 +23,7 @@ const fetchReferrers = async data => {
 
 describe("referrers", () => {
   beforeEach(() => {
-    referrers.set([]);
+    referrers.set(undefined);
     mock.method(console, "error", () => {});
   });
 
@@ -195,9 +195,28 @@ describe("referrers", () => {
       });
 
       await referrers.fetch();
-      assert.deepEqual(get(referrers), []);
+      assert.equal(get(referrers), undefined);
 
       await fetchReferrers({ not: "a list" });
+      assert.equal(get(referrers), undefined);
+    });
+
+    // $referrers.length alone can’t tell a request still in flight apart
+    // from one that resolved with no referrers at all
+    it("stays unset until the first response arrives", async () => {
+      let resolveFetch;
+
+      mock.method(
+        globalThis,
+        "fetch",
+        () => new Promise(resolve => (resolveFetch = resolve))
+      );
+
+      const fetchPromise = referrers.fetch();
+      assert.equal(get(referrers), undefined);
+
+      resolveFetch(new Response(JSON.stringify([])));
+      await fetchPromise;
       assert.deepEqual(get(referrers), []);
     });
   });
@@ -234,6 +253,33 @@ describe("referrers", () => {
 
       toggle(target, false);
       assert.equal(globalThis.fetch.mock.callCount(), 1);
+    });
+
+    it("shows a loading state while a request is in flight, then an empty state once it resolves with nothing", async () => {
+      let resolveFetch;
+
+      mock.method(
+        globalThis,
+        "fetch",
+        () => new Promise(resolve => (resolveFetch = resolve))
+      );
+
+      const target = render();
+      const fetchPromise = referrers.fetch();
+      await tick();
+
+      assert.ok(
+        target.querySelector("details").textContent.includes("Loading…")
+      );
+
+      resolveFetch(new Response(JSON.stringify([])));
+      await fetchPromise;
+      await tick();
+
+      const text = target.querySelector("details").textContent;
+
+      assert.ok(!text.includes("Loading…"));
+      assert.ok(text.includes("No referrers yet."));
     });
 
     it("disables the feed links of referrers without feed URLs", async () => {
