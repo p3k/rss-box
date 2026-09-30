@@ -27,7 +27,24 @@
     referrers.fetch();
   }
 
-  function updateFeedLink(event) {
+  function initializeFeedLink(event) {
+    // Only the very first hover should set the initial feed URL – a later
+    // re-hover must not reset it. A referrer with more than one feed URL
+    // never reaches this at all: its select sits on top of the icon and
+    // owns the click/hover there instead (see hasMultipleFeedUrls)
+    const link = event.currentTarget;
+
+    if (link.getAttribute("href") !== ".") return;
+
+    const referrer = $referrers[link.dataset.index];
+    const data = referrer.metadata;
+
+    if (!data || !data.feedUrls) return;
+
+    link.href = data.feedUrls[0];
+  }
+
+  function clickFeedLink(event) {
     event.preventDefault();
 
     // currentTarget (always the <a> this listener is bound to) rather than
@@ -37,48 +54,19 @@
     // correctly, which isn’t worth relying on when currentTarget sidesteps
     // the question entirely
     const link = event.currentTarget;
-    const referrer = $referrers[link.dataset.index];
-    const data = referrer.metadata;
-
-    if (!data || !data.feedUrls) return;
-
-    let feedUrl = link.href;
-    let index = data.feedUrls.indexOf(feedUrl) + 1;
-
-    if (index >= data.feedUrls.length) index = 0;
-
-    feedUrl = data.feedUrls[index];
-
-    if (link.href === feedUrl) return;
-
-    link.href = feedUrl;
-  }
-
-  function initializeFeedLink(event) {
-    // Only the very first hover should set the initial feed URL – a
-    // later re-hover must not cycle it forward again, that’s meta-click’s
-    // job. Svelte’s |once event modifier relies on the native
-    // addEventListener options object ({ once: true }), which IE11 never
-    // implemented at all – checking the actual attribute here does the
-    // same job without depending on that.
-    if (event.currentTarget.getAttribute("href") !== ".") return;
-    updateFeedLink(event);
-  }
-
-  function clickFeedLink(event) {
-    event.preventDefault();
-
-    const link = event.currentTarget;
 
     if (isFeedLinkDisabled(link.dataset.index)) return;
 
-    if (event.metaKey) {
-      // Cycle through the feedUrls array to allow accessing multiple feed urls via one icon
-      updateFeedLink(event);
-    } else {
-      // Update the config store with the feed url to load the corresponding rss box
-      $config.url = link.href;
-    }
+    // Update the config store with the feed url to load the corresponding rss box
+    $config.url = link.href;
+  }
+
+  function selectFeedUrl(event) {
+    const select = event.currentTarget;
+    const link = select.parentElement.querySelector(".feed-link");
+
+    link.href = select.value;
+    $config.url = select.value;
   }
 
   // Checked here rather than relying on the disabled attribute, which does
@@ -93,6 +81,13 @@
 
     return !data || !data.feedUrls;
   }
+
+  function hasMultipleFeedUrls(index) {
+    const referrer = $referrers[index];
+    const data = referrer.metadata;
+
+    return Boolean(data && data.feedUrls && data.feedUrls.length > 1);
+  }
 </script>
 
 <details id="referrers" on:toggle={load}>
@@ -103,16 +98,32 @@
     {#each $referrers as referrer, index}
       <div class="referrer">
         <code>{format(referrer.percentage)}</code>
-        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-        <a
-          href="."
-          class="feed-link {isFeedLinkDisabled(index) ? 'disabled' : ''}"
-          data-index={index}
-          on:mouseover={initializeFeedLink}
-          on:click={clickFeedLink}
-        >
-          <RssIcon />
-        </a>
+        <span class="feed-link-wrapper">
+          <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+          <a
+            href="."
+            class="feed-link {isFeedLinkDisabled(index) ? 'disabled' : ''}"
+            data-index={index}
+            on:mouseover={initializeFeedLink}
+            on:click={clickFeedLink}
+          >
+            <RssIcon />
+          </a>
+          {#if hasMultipleFeedUrls(index)}
+            <!-- Covers the icon completely so a click there opens this
+                 select’s native dropdown directly, instead of needing its
+                 own separate, visible click target next to the icon -->
+            <select
+              class="feed-select"
+              data-index={index}
+              on:change={selectFeedUrl}
+            >
+              {#each referrer.metadata.feedUrls as feedUrl, feedIndex}
+                <option value={feedUrl}>{feedIndex + 1}</option>
+              {/each}
+            </select>
+          {/if}
+        </span>
         <a href={referrer.url}>{referrer.host}</a>
       </div>
     {/each}
@@ -147,13 +158,48 @@
 
   .feed-link {
     display: inline-block;
-    position: relative;
-    top: 2px;
     color: #ffa600;
   }
 
   .feed-link.disabled {
     pointer-events: none;
+  }
+
+  /* Carries the position/offset .feed-link itself used to have, so a
+     .feed-select absolutely positioned against this wrapper lines up with
+     the icon exactly rather than sitting 2px off from its own local
+     position: relative offset */
+  .feed-link-wrapper {
+    display: inline-block;
+    position: relative;
+    top: 2px;
+  }
+
+  .feed-select {
+    position: absolute;
+    /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties -- inset isn’t supported in IE11, which this app still targets */
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  /* The select itself is invisible (see .feed-select above) – this only
+     reaches the options shown in its open dropdown, tying that back to
+     the icon’s own color. Browsers vary widely in how much of a native
+     select’s open popup can be styled at all (IE11 essentially none of
+     it), so this is a best-effort touch rather than full control over it */
+  .feed-select option {
+    background-color: #ffa600;
+    color: #fff;
+    font-weight: bold;
   }
 
   /* Targets every descendant explicitly rather than relying on
