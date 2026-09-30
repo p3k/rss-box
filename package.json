@@ -41,6 +41,7 @@
   "homepage": "https://github.com/p3k/rss-box#readme",
   "dependencies": {
     "classlist.js": "1.1.20150312",
+    "custom-event-polyfill": "1.0.7",
     "dompurify": "2.5.9",
     "domready": "1.0.8",
     "whatwg-fetch": "3.6.20"
