@@ -50,6 +50,9 @@
   </noscript>
 </main>
 
-<!-- Load the polyfills for IE 11 and other older browsers -->
-<script src="./polyfills.js"></script>
+<!-- Load the polyfills for IE 11 and other older browsers. nomodule is
+     ignored by any browser that doesn’t understand it (IE 11 included),
+     which loads this normally – module-aware browsers skip it entirely,
+     since they don’t need any of it -->
+<script nomodule src="./polyfills.js"></script>
 <script src="./app.js" async defer></script>
