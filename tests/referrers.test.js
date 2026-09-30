@@ -303,6 +303,105 @@ describe("referrers", () => {
       assert.deepEqual(disabled, [false, true, true]);
     });
 
+    it("only renders a feed-select for referrers with more than one feed URL", async () => {
+      const target = render();
+
+      await fetchReferrers([
+        {
+          url: "http://a.example/",
+          hits: 3,
+          metadata: {
+            feedUrls: [
+              "https://a.example/feed.xml",
+              "https://a.example/feed2.xml"
+            ]
+          }
+        },
+        {
+          url: "http://b.example/",
+          hits: 2,
+          metadata: { feedUrls: ["https://b.example/feed.xml"] }
+        },
+        { url: "http://c.example/", hits: 1, metadata: {} }
+      ]);
+      await tick();
+
+      const hasSelect = [...target.querySelectorAll(".referrer")].map(
+        row => row.querySelector(".feed-select") !== null
+      );
+
+      assert.deepEqual(hasSelect, [true, false, false]);
+    });
+
+    it("labels feed-select options by position and loads the chosen URL immediately", async () => {
+      const config = ConfigStore();
+      const target = document.createElement("div");
+      document.body.appendChild(target);
+      boxes.push(new Referrers({ target, props: { config } }));
+
+      await fetchReferrers([
+        {
+          url: "http://a.example/",
+          hits: 1,
+          metadata: {
+            feedUrls: [
+              "https://a.example/feed.xml",
+              "https://a.example/feed2.xml",
+              "https://a.example/feed3.xml"
+            ]
+          }
+        }
+      ]);
+      await tick();
+
+      const select = target.querySelector(".feed-select");
+      const labels = [...select.querySelectorAll("option")].map(
+        option => option.textContent
+      );
+
+      assert.deepEqual(labels, ["1", "2", "3"]);
+
+      select.value = "https://a.example/feed3.xml";
+      select.dispatchEvent(new window.Event("change"));
+
+      assert.equal(get(config).url, "https://a.example/feed3.xml");
+      assert.equal(
+        target.querySelector(".feed-link").href,
+        "https://a.example/feed3.xml"
+      );
+    });
+
+    it("loads whichever feed URL the select last chose, not just the first one, when the icon is clicked", async () => {
+      const config = ConfigStore();
+      const target = document.createElement("div");
+      document.body.appendChild(target);
+      boxes.push(new Referrers({ target, props: { config } }));
+
+      await fetchReferrers([
+        {
+          url: "http://a.example/",
+          hits: 1,
+          metadata: {
+            feedUrls: [
+              "https://a.example/feed.xml",
+              "https://a.example/feed2.xml"
+            ]
+          }
+        }
+      ]);
+      await tick();
+
+      const select = target.querySelector(".feed-select");
+
+      select.value = "https://a.example/feed2.xml";
+      select.dispatchEvent(new window.Event("change"));
+
+      const link = target.querySelector(".feed-link");
+      link.dispatchEvent(new window.MouseEvent("click", { cancelable: true }));
+
+      assert.equal(get(config).url, "https://a.example/feed2.xml");
+    });
+
     it("does nothing when a disabled feed link is clicked", async () => {
       const config = ConfigStore();
       const target = document.createElement("div");
@@ -326,16 +425,14 @@ describe("referrers", () => {
       document.body.appendChild(target);
       boxes.push(new Referrers({ target, props: { config } }));
 
+      // A referrer with more than one feed URL is covered by its select and
+      // never actually receives a hover in a real browser (see
+      // hasMultipleFeedUrls) – this only still matters for a single URL
       await fetchReferrers([
         {
           url: "http://a.example/",
           hits: 1,
-          metadata: {
-            feedUrls: [
-              "https://a.example/feed.xml",
-              "https://a.example/feed2.xml"
-            ]
-          }
+          metadata: { feedUrls: ["https://a.example/feed.xml"] }
         }
       ]);
       await tick();
@@ -344,8 +441,7 @@ describe("referrers", () => {
       link.dispatchEvent(new window.MouseEvent("mouseover"));
       assert.equal(link.href, "https://a.example/feed.xml");
 
-      // A second hover must not cycle it forward again – that’s only
-      // meta-click’s job, not a plain re-hover’s
+      // A second hover must not change it again
       link.dispatchEvent(new window.MouseEvent("mouseover"));
       assert.equal(link.href, "https://a.example/feed.xml");
     });
