@@ -22,7 +22,7 @@ if (!window[id]) {
   // Target modern browsers and IE 11 differently
   // Source: <https://tanalin.com/en/articles/ie-version-js/>
   if (window.msCrypto) {
-    load("polyfills", () => load("box.js"));
+    load("polyfills.js", () => load("box.js"));
   } else {
     load("box-esm.js");
   }
