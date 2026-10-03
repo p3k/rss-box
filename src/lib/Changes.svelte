@@ -4,6 +4,12 @@
   </summary>
 
   <p>
+    <small>2026-10-03</small>
+    A better way to pick between a referrer’s multiple feeds, and a couple more IE11
+    fixes.
+  </p>
+
+  <p>
     <small>2026-09-28</small>
     Added support for <a href="https://www.jsonfeed.org/">JSON Feed</a> 🎉 – on top
     of RSS, Atom and Scripting News.

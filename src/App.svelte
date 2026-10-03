@@ -10,7 +10,7 @@
 </script>
 
 <div class="row">
-  <div class="col c2" class:loading={$feed.loading}>
+  <div class="col c2 {$feed.loading ? 'loading' : ''}">
     <Box {feed} {config} />
   </div>
   <div class="col c5">
@@ -24,7 +24,7 @@
 
 <style>
   .loading {
-    opacity: 0;
+    opacity: 0.3;
     transition-property: opacity;
     transition-duration: 3s;
     transition-timing-function: ease-out;
@@ -32,12 +32,14 @@
   }
 
   /**
-   * Disable transition in IE 11 because it runs *after* the RSS data has loaded 🤷
+   * The transition itself doesn't work correctly in IE 11 – it runs *after*
+   * the RSS data has loaded – so this switches straight to the faded
+   * opacity there instead of animating to it
    * Source: <https://gist.github.com/feo52/9b0658d254b0ad2333d6907e97267e5f>
    */
   *::-ms-backdrop,
   .loading {
-    opacity: 1;
+    opacity: 0.3;
     transition: none;
     pointer-events: initial;
   }
