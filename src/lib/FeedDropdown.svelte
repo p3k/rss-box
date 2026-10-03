@@ -61,10 +61,14 @@
     <RssIcon />
   </button>{#if open}
     {#each feedUrls as feedUrl, index}
+      <!-- class:active would compile to classList.toggle(name, force) –
+           IE11 ignores the second “force” argument entirely and just
+           flips whatever is already there, so every click would drift
+           all the options toward the same state instead of marking only
+           one of them active -->
       <button
         type="button"
-        class="feed-dropdown-option"
-        class:active={index === selectedIndex}
+        class="feed-dropdown-option {index === selectedIndex ? 'active' : ''}"
         title={feedUrl}
         on:click={() => choose(index)}
       >
