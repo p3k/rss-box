@@ -303,7 +303,7 @@ describe("referrers", () => {
       assert.deepEqual(disabled, [false, true, true]);
     });
 
-    it("only renders a feed-select for referrers with more than one feed URL", async () => {
+    it("only renders a feed-dropdown for referrers with more than one feed URL", async () => {
       const target = render();
 
       await fetchReferrers([
@@ -326,14 +326,34 @@ describe("referrers", () => {
       ]);
       await tick();
 
-      const hasSelect = [...target.querySelectorAll(".referrer")].map(
-        row => row.querySelector(".feed-select") !== null
+      const hasDropdown = [...target.querySelectorAll(".referrer")].map(
+        row => row.querySelector(".feed-dropdown-trigger") !== null
       );
 
-      assert.deepEqual(hasSelect, [true, false, false]);
+      assert.deepEqual(hasDropdown, [true, false, false]);
     });
 
-    it("labels feed-select options by position and loads the chosen URL immediately", async () => {
+    it("renders no feed-dropdown options until the trigger is clicked", async () => {
+      const target = render();
+
+      await fetchReferrers([
+        {
+          url: "http://a.example/",
+          hits: 1,
+          metadata: {
+            feedUrls: [
+              "https://a.example/feed.xml",
+              "https://a.example/feed2.xml"
+            ]
+          }
+        }
+      ]);
+      await tick();
+
+      assert.equal(target.querySelector(".feed-dropdown-option"), null);
+    });
+
+    it("labels feed-dropdown options by position, rendered after the trigger and before the host link", async () => {
       const config = ConfigStore();
       const target = document.createElement("div");
       document.body.appendChild(target);
@@ -354,24 +374,66 @@ describe("referrers", () => {
       ]);
       await tick();
 
-      const select = target.querySelector(".feed-select");
-      const labels = [...select.querySelectorAll("option")].map(
-        option => option.textContent
+      const trigger = target.querySelector(".feed-dropdown-trigger");
+
+      trigger.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+      await tick();
+
+      const row = target.querySelector(".referrer");
+      const children = [...row.querySelectorAll(".feed-dropdown-option, a")];
+
+      assert.deepEqual(
+        children.map(child => child.textContent.trim()),
+        ["1", "2", "3", "a.example"]
       );
 
-      assert.deepEqual(labels, ["1", "2", "3"]);
+      const [, , third] = target.querySelectorAll(".feed-dropdown-option");
 
-      select.value = "https://a.example/feed3.xml";
-      select.dispatchEvent(new window.Event("change"));
+      third.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
 
       assert.equal(get(config).url, "https://a.example/feed3.xml");
-      assert.equal(
-        target.querySelector(".feed-link").href,
-        "https://a.example/feed3.xml"
-      );
     });
 
-    it("loads whichever feed URL the select last chose, not just the first one, when the icon is clicked", async () => {
+    it("marks the selected feed-dropdown option as active, and only that one", async () => {
+      const target = render();
+
+      await fetchReferrers([
+        {
+          url: "http://a.example/",
+          hits: 1,
+          metadata: {
+            feedUrls: [
+              "https://a.example/feed.xml",
+              "https://a.example/feed2.xml",
+              "https://a.example/feed3.xml"
+            ]
+          }
+        }
+      ]);
+      await tick();
+
+      const trigger = target.querySelector(".feed-dropdown-trigger");
+
+      trigger.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+      await tick();
+
+      const activeLabels = () =>
+        [...target.querySelectorAll(".feed-dropdown-option")]
+          .filter(option => option.classList.contains("active"))
+          .map(option => option.textContent.trim());
+
+      // The trigger primes the first option, same as loading its URL does
+      assert.deepEqual(activeLabels(), ["1"]);
+
+      const [, , third] = target.querySelectorAll(".feed-dropdown-option");
+
+      third.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+      await tick();
+
+      assert.deepEqual(activeLabels(), ["3"]);
+    });
+
+    it("loads the first feed URL the moment the trigger is clicked, before any option is actively chosen", async () => {
       const config = ConfigStore();
       const target = document.createElement("div");
       document.body.appendChild(target);
@@ -391,15 +453,145 @@ describe("referrers", () => {
       ]);
       await tick();
 
-      const select = target.querySelector(".feed-select");
+      const trigger = target.querySelector(".feed-dropdown-trigger");
 
-      select.value = "https://a.example/feed2.xml";
-      select.dispatchEvent(new window.Event("change"));
+      trigger.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
 
-      const link = target.querySelector(".feed-link");
-      link.dispatchEvent(new window.MouseEvent("click", { cancelable: true }));
+      assert.equal(get(config).url, "https://a.example/feed.xml");
+    });
+
+    it("loads whichever feed URL was last chosen, not just the first one, the next time the trigger is clicked", async () => {
+      const config = ConfigStore();
+      const target = document.createElement("div");
+      document.body.appendChild(target);
+      boxes.push(new Referrers({ target, props: { config } }));
+
+      await fetchReferrers([
+        {
+          url: "http://a.example/",
+          hits: 1,
+          metadata: {
+            feedUrls: [
+              "https://a.example/feed.xml",
+              "https://a.example/feed2.xml"
+            ]
+          }
+        }
+      ]);
+      await tick();
+
+      const trigger = target.querySelector(".feed-dropdown-trigger");
+
+      trigger.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+      await tick();
+
+      const [, second] = target.querySelectorAll(".feed-dropdown-option");
+
+      second.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+      await tick();
+
+      // Closing the dropdown and re-opening it (see the next test for
+      // staying open) must load that same choice again, not reset to the
+      // first
+      document.body.dispatchEvent(
+        new window.MouseEvent("click", { bubbles: true })
+      );
+      await tick();
+      trigger.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
 
       assert.equal(get(config).url, "https://a.example/feed2.xml");
+    });
+
+    it("keeps the feed-dropdown open after choosing an option", async () => {
+      const target = render();
+
+      await fetchReferrers([
+        {
+          url: "http://a.example/",
+          hits: 1,
+          metadata: {
+            feedUrls: [
+              "https://a.example/feed.xml",
+              "https://a.example/feed2.xml"
+            ]
+          }
+        }
+      ]);
+      await tick();
+
+      const trigger = target.querySelector(".feed-dropdown-trigger");
+
+      trigger.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+      await tick();
+
+      const [, second] = target.querySelectorAll(".feed-dropdown-option");
+
+      second.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+      await tick();
+
+      assert.equal(target.querySelectorAll(".feed-dropdown-option").length, 2);
+    });
+
+    it("closes the feed-dropdown when clicking outside of it", async () => {
+      const target = render();
+
+      await fetchReferrers([
+        {
+          url: "http://a.example/",
+          hits: 1,
+          metadata: {
+            feedUrls: [
+              "https://a.example/feed.xml",
+              "https://a.example/feed2.xml"
+            ]
+          }
+        }
+      ]);
+      await tick();
+
+      const trigger = target.querySelector(".feed-dropdown-trigger");
+
+      trigger.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+      await tick();
+      assert.equal(target.querySelectorAll(".feed-dropdown-option").length, 2);
+
+      document.body.dispatchEvent(
+        new window.MouseEvent("click", { bubbles: true })
+      );
+      await tick();
+
+      assert.equal(target.querySelector(".feed-dropdown-option"), null);
+    });
+
+    it("closes the feed-dropdown when Escape is pressed", async () => {
+      const target = render();
+
+      await fetchReferrers([
+        {
+          url: "http://a.example/",
+          hits: 1,
+          metadata: {
+            feedUrls: [
+              "https://a.example/feed.xml",
+              "https://a.example/feed2.xml"
+            ]
+          }
+        }
+      ]);
+      await tick();
+
+      const trigger = target.querySelector(".feed-dropdown-trigger");
+
+      trigger.dispatchEvent(new window.MouseEvent("click", { bubbles: true }));
+      await tick();
+      assert.equal(target.querySelectorAll(".feed-dropdown-option").length, 2);
+
+      document.body.dispatchEvent(
+        new window.KeyboardEvent("keydown", { key: "Escape", bubbles: true })
+      );
+      await tick();
+
+      assert.equal(target.querySelector(".feed-dropdown-option"), null);
     });
 
     it("does nothing when a disabled feed link is clicked", async () => {
@@ -425,9 +617,9 @@ describe("referrers", () => {
       document.body.appendChild(target);
       boxes.push(new Referrers({ target, props: { config } }));
 
-      // A referrer with more than one feed URL is covered by its select and
-      // never actually receives a hover in a real browser (see
-      // hasMultipleFeedUrls) – this only still matters for a single URL
+      // A referrer with more than one feed URL is covered by its
+      // feed-dropdown and never actually receives a hover in a real browser
+      // (see hasMultipleFeedUrls) – this only still matters for a single URL
       await fetchReferrers([
         {
           url: "http://a.example/",

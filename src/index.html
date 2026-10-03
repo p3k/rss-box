@@ -23,6 +23,16 @@
 />
 
 <style>
+  /* Loading a different feed into the box can change its height
+     substantially, which shrinks the whole page. Without this, the
+     browser’s own scroll anchoring reacts by shifting the scroll
+     position to compensate, which can feel like the page jumping
+     around on its own whenever a referrer’s feed changes */
+  html,
+  body {
+    overflow-anchor: none;
+  }
+
   body {
     margin: 0 1%;
     background-color: #fff;
