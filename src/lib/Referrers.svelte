@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { referrers } from "../stores";
 
+  import FeedDropdown from "./FeedDropdown.svelte";
   import RssIcon from "./RssIcon.svelte";
 
   // Stores coming in via props
@@ -30,8 +31,8 @@
   function initializeFeedLink(event) {
     // Only the very first hover should set the initial feed URL – a later
     // re-hover must not reset it. A referrer with more than one feed URL
-    // never reaches this at all: its select sits on top of the icon and
-    // owns the click/hover there instead (see hasMultipleFeedUrls)
+    // never renders this icon at all (see hasMultipleFeedUrls), so this
+    // only ever matters for a single, unambiguous feed URL
     const link = event.currentTarget;
 
     if (link.getAttribute("href") !== ".") return;
@@ -57,16 +58,11 @@
 
     if (isFeedLinkDisabled(link.dataset.index)) return;
 
-    // Update the config store with the feed url to load the corresponding rss box
-    $config.url = link.href;
+    loadFeedUrl(link.href);
   }
 
-  function selectFeedUrl(event) {
-    const select = event.currentTarget;
-    const link = select.parentElement.querySelector(".feed-link");
-
-    link.href = select.value;
-    $config.url = select.value;
+  function loadFeedUrl(url) {
+    $config.url = url;
   }
 
   // Checked here rather than relying on the disabled attribute, which does
@@ -98,7 +94,12 @@
     {#each $referrers as referrer, index}
       <div class="referrer">
         <code>{format(referrer.percentage)}</code>
-        <span class="feed-link-wrapper">
+        {#if hasMultipleFeedUrls(index)}
+          <FeedDropdown
+            feedUrls={referrer.metadata.feedUrls}
+            onSelect={loadFeedUrl}
+          />
+        {:else}
           <!-- svelte-ignore a11y-mouse-events-have-key-events -->
           <a
             href="."
@@ -109,21 +110,7 @@
           >
             <RssIcon />
           </a>
-          {#if hasMultipleFeedUrls(index)}
-            <!-- Covers the icon completely so a click there opens this
-                 select’s native dropdown directly, instead of needing its
-                 own separate, visible click target next to the icon -->
-            <select
-              class="feed-select"
-              data-index={index}
-              on:change={selectFeedUrl}
-            >
-              {#each referrer.metadata.feedUrls as feedUrl, feedIndex}
-                <option value={feedUrl}>{feedIndex + 1}</option>
-              {/each}
-            </select>
-          {/if}
-        </span>
+        {/if}
         <a href={referrer.url}>{referrer.host}</a>
       </div>
     {/each}
@@ -158,48 +145,13 @@
 
   .feed-link {
     display: inline-block;
+    position: relative;
+    top: 2px;
     color: #ffa600;
   }
 
   .feed-link.disabled {
     pointer-events: none;
-  }
-
-  /* Carries the position/offset .feed-link itself used to have, so a
-     .feed-select absolutely positioned against this wrapper lines up with
-     the icon exactly rather than sitting 2px off from its own local
-     position: relative offset */
-  .feed-link-wrapper {
-    display: inline-block;
-    position: relative;
-    top: 2px;
-  }
-
-  .feed-select {
-    position: absolute;
-    /* stylelint-disable-next-line declaration-block-no-redundant-longhand-properties -- inset isn’t supported in IE11, which this app still targets */
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    border: none;
-    opacity: 0;
-    cursor: pointer;
-  }
-
-  /* The select itself is invisible (see .feed-select above) – this only
-     reaches the options shown in its open dropdown, tying that back to
-     the icon’s own color. Browsers vary widely in how much of a native
-     select’s open popup can be styled at all (IE11 essentially none of
-     it), so this is a best-effort touch rather than full control over it */
-  .feed-select option {
-    background-color: #ffa600;
-    color: #fff;
-    font-weight: bold;
   }
 
   /* Targets every descendant explicitly rather than relying on
