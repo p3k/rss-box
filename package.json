@@ -47,7 +47,7 @@
     "whatwg-fetch": "3.6.20"
   },
   "devDependencies": {
-    "@babel/core": "7.29.7",
+    "@babel/core": "7.29.13",
     "@babel/preset-env": "7.29.7",
     "@eslint/js": "10.0.1",
     "@rollup/plugin-babel": "7.1.0",
