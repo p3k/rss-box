@@ -68,7 +68,7 @@
     "rollup": "4.68.8",
     "rollup-plugin-svelte": "7.2.3",
     "serve": "14.2.8",
-    "stylelint": "17.16.0",
+    "stylelint": "18.1.0",
     "stylelint-config-html": "2.0.0",
     "stylelint-config-standard": "40.0.0",
     "svelte": "4.2.19"
